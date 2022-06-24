@@ -27,7 +27,7 @@ else
 endif
 
 # # boost
-boost_modules = dependency('boost', modules: ['filesystem'], static: true)
+#boost_modules = dependency('boost', modules: ['filesystem'], static: true)
 boost_dep     = dependency('boost')
 
 # eigen 3
@@ -43,7 +43,4 @@ endif
 subdir('src')
  
 # add python files
-subdir('py_ext')
-
-# add tests
-subdir('tests')
+#subdir('python')
