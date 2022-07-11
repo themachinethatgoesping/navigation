@@ -38,6 +38,14 @@ if not eigen3_dep.found()
     eigen3_dep = eigen3_project.get_variable('eigen_dep')
 endif
 
+# themachinethatgoesping
+# tools
+tools_dep = dependency('themachinethatgoesping_tools', required: false)
+
+if not tools_dep.found()
+    tools_dep = subproject('tools', default_options: 'default_library=static').get_variable('tools_dep')
+endif
+
 
 # add src
 subdir('src')

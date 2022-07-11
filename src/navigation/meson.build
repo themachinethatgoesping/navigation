@@ -8,11 +8,10 @@ headerdir = projectnamespace + '/navigation'
 
 # -- source files --
 sources = [
-  'vessel.cpp'
 ]
 
 headers = [
-  'vessel.h'
+  'offsets.hpp'
 ]
 
 # -- targets --
@@ -23,7 +22,8 @@ if build_machine.system() != 'linux'
                           boost_dep, 
                           eigen3_dep, 
                           omp_dep,
-                          hinnant_date_dep],
+                          #tools_dep
+                          ],
                         override_options: [
                           'b_lundef=false'
                       ],
@@ -35,7 +35,9 @@ else
                         dependencies : [
                           boost_dep, 
                           eigen3_dep, 
-                          omp_dep],
+                          omp_dep,
+                          #tools_dep
+                          ],
                         override_options: [
                           'b_lundef=false'
                       ],
@@ -50,7 +52,8 @@ navigation_dep = declare_dependency(
   dependencies : [
     boost_dep,
     eigen3_dep,
-    omp_dep
+    omp_dep,
+    #tools_dep
   ],
   link_with : [navigation_lib],
   #include_directories : ['../']
