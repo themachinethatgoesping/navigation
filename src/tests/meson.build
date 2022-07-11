@@ -7,7 +7,7 @@
 testcomponent = 'tools'
 
 sources = [
-    'tutorial.test.cpp'
+    'sensorpositionoffsets.test.cpp'
 ]
 
 foreach source : sources

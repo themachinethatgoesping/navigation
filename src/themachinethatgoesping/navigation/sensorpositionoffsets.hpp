@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 GEOMAR Helmholtz Centre for Ocean Research Kiel
+// SPDX-FileCopyrightText: 2022 Peter Urban, Sven Schorge GEOMAR Helmholtz Centre for Ocean Research Kiel
 // SPDX-FileCopyrightText: 2022 Peter Urban, Ghent University
 //
 // SPDX-License-Identifier: MPL-2.0
@@ -16,7 +16,7 @@ namespace navigation {
  * @brief A structure to set sensor or target offsets relative to the vessel coordinate system
  *
  */
-struct SensorOffsets
+struct SensorPositionOffsets
 {
     double x     = 0.0; ///< in m, positive foorward
     double y     = 0.0; ///< in m, positive starboard
@@ -29,10 +29,10 @@ struct SensorOffsets
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
      */
-    SensorOffsets() = default;
+    SensorPositionOffsets() = default;
 
     /**
-     * @brief Construct a new SensorOffsets object
+     * @brief Construct a new SensorPositionOffsets object
      *
      * @param x in m, positive foorward
      * @param y in m, positive starboard
@@ -41,7 +41,7 @@ struct SensorOffsets
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    SensorOffsets(double x, double y, double z, double yaw, double pitch, double roll)
+    SensorPositionOffsets(double x, double y, double z, double yaw, double pitch, double roll)
         : x(x)
         , y(y)
         , z(z)
@@ -66,9 +66,9 @@ struct SensorOffsets
     }
 
   public:
-    classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__() const
     {
-        classhelpers::ObjectPrinter printer("SensorOffsets");
+        tools::classhelpers::ObjectPrinter printer("SensorPositionOffsets");
 
         printer.register_enum("x", x, "m");
         printer.register_enum("y", y, "m");
@@ -83,7 +83,7 @@ struct SensorOffsets
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorOffsets)
+    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorPositionOffsets)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };

@@ -11,7 +11,7 @@ sources = [
 ]
 
 headers = [
-  'sensoroffsets.hpp'
+  'sensorpositionoffsets.hpp'
 ]
 
 # -- targets --
