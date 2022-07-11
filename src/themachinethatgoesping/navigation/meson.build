@@ -11,7 +11,7 @@ sources = [
 ]
 
 headers = [
-  'offsets.hpp'
+  'sensoroffsets.hpp'
 ]
 
 # -- targets --
@@ -56,7 +56,7 @@ navigation_dep = declare_dependency(
     tools_dep
   ],
   link_with : [navigation_lib],
-  #include_directories : ['../']
+  include_directories : ['../../']
   )
 
 

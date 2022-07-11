@@ -5,8 +5,9 @@
 
 #pragma once
 
+#include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
-#include <themachinethatgoesping/tools/classhelpers.hpp
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -26,7 +27,7 @@ struct SensorOffsets
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
-     * 
+     *
      */
     SensorOffsets() = default;
 
@@ -50,6 +51,41 @@ struct SensorOffsets
     {
     }
 
+  private:
+    // serialization support using bitsery
+    friend bitsery::Access;
+    template<typename S>
+    void serialize(S& s)
+    {
+        s.value8b(x);
+        s.value8b(y);
+        s.value8b(z);
+        s.value8b(yaw);
+        s.value8b(pitch);
+        s.value8b(roll);
+    }
+
+  public:
+    classhelpers::ObjectPrinter __printer__() const
+    {
+        classhelpers::ObjectPrinter printer("SensorOffsets");
+
+        printer.register_enum("x", x, "m");
+        printer.register_enum("y", y, "m");
+        printer.register_enum("z", z, "m");
+        printer.register_enum("yaw", yaw, "°");
+        printer.register_enum("pitch", pitch, "°");
+        printer.register_enum("roll", roll, "°");
+
+        return printer;
+    }
+
+  public:
+    // -- class helper function macros --
+    // define to_binary and from_binary functions (needs the serialize function)
+    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorOffsets)
+    // define info_string and print functions (needs the __printer__ function)
+    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
 
 } // namespace naviation
