@@ -6,24 +6,38 @@
 
 #include <filesystem>
 
-// #include "../themachinethatgoesping/navigation/sensorpositionoffsets.hpp"
+#include "../themachinethatgoesping/navigation/sensorpositionoffsets.hpp"
 
-// // using namespace testing;
-// using namespace std;
-// using namespace themachinethatgoesping::navigation;
+// using namespace testing;
+using namespace std;
+using namespace themachinethatgoesping::navigation;
 
-// #define TESTTAG "[offsets]"
+#define TESTTAG "[offsets]"
 
-// TEST_CASE("SensorPositionOffsets should support common functions", TESTTAG)
-// {
-//     // initialize offsets
-//     auto offsets = SensorPositionOffsets();
+TEST_CASE("SensorPositionOffsets should support common functions", TESTTAG)
+{
+    // initialize offsets
+    auto offsets = SensorPositionOffsets();
 
-//     offsets.x = 1;
-//     offsets.y = 2;
-//     offsets.z = 3;
+    offsets.x = 1;
+    offsets.y = 2;
+    offsets.z = 3;
 
-//     offsets.yaw   = 10;
-//     offsets.pitch = 20;
-//     offsets.roll  = 30;
-// }
+    offsets.yaw   = 10;
+    offsets.pitch = 20;
+    offsets.roll  = 30;
+
+    //test copy
+    REQUIRE(offsets == SensorPositionOffsets(offsets));
+
+    //test binary
+    REQUIRE(offsets == SensorPositionOffsets(offsets.from_binary(offsets.to_binary())));
+
+    //test stream
+    std::stringstream buffer;
+    offsets.to_stream(buffer);
+    REQUIRE(offsets == SensorPositionOffsets(offsets.from_stream(buffer)));
+
+    //test print does not crash
+    REQUIRE(offsets.info_string().size() != 0);
+}

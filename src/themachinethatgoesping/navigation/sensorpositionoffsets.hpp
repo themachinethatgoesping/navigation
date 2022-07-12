@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: 2022 Peter Urban, Sven Schorge GEOMAR Helmholtz Centre for Ocean Research Kiel
-// SPDX-FileCopyrightText: 2022 Peter Urban, Ghent University
+// SPDX-FileCopyrightText: 2022 Peter Urban, Sven Schorge GEOMAR Helmholtz Centre for Ocean Research
+// Kiel SPDX-FileCopyrightText: 2022 Peter Urban, Ghent University
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -7,6 +7,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
+#include <themachinethatgoesping/tools/helpers.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 namespace themachinethatgoesping {
@@ -51,6 +52,20 @@ struct SensorPositionOffsets
     {
     }
 
+    bool operator!=(const SensorPositionOffsets& rhs) const { return !(operator==(rhs)); }
+    bool operator==(const SensorPositionOffsets& rhs) const
+    {
+        if (tools::helpers::approx(x, rhs.x))
+            if (tools::helpers::approx(y, rhs.y))
+                if (tools::helpers::approx(z, rhs.z))
+                    if (tools::helpers::approx(yaw, rhs.yaw))
+                        if (tools::helpers::approx(pitch, rhs.pitch))
+                            if (tools::helpers::approx(roll, rhs.roll))
+                                return true;
+
+        return false;
+    }
+
   private:
     // serialization support using bitsery
     friend bitsery::Access;
@@ -70,12 +85,12 @@ struct SensorPositionOffsets
     {
         tools::classhelpers::ObjectPrinter printer("SensorPositionOffsets");
 
-        printer.register_enum("x", x, "m");
-        printer.register_enum("y", y, "m");
-        printer.register_enum("z", z, "m");
-        printer.register_enum("yaw", yaw, "°");
-        printer.register_enum("pitch", pitch, "°");
-        printer.register_enum("roll", roll, "°");
+        printer.register_value("x", x, "m");
+        printer.register_value("y", y, "m");
+        printer.register_value("z", z, "m");
+        printer.register_value("yaw", yaw, "°");
+        printer.register_value("pitch", pitch, "°");
+        printer.register_value("roll", roll, "°");
 
         return printer;
     }

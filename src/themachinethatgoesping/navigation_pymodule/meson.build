@@ -3,23 +3,22 @@
 # SPDX-License-Identifier: CC0-1.0
 
 # -- module name
-module_name = 'tools'
+module_name = 'navigation'
         
 # -- sources
 sources = [
     'module.cpp',
-    'm_navigation.cpp'
+    'c_sensorpositionoffsets.cpp'
 ]
 
 # define python module
-py_tools = pymod.extension_module(
+py_navigation = pymod.extension_module(
     module_name,
     sources: sources,
     dependencies : [
-        tools_dep,
+        navigation_dep,
         pybind11_dep,
         python3_dep],
-    #link_with : [tools],
     link_language : 'cpp',
     override_options: [
         #'cpp_rtti=true',

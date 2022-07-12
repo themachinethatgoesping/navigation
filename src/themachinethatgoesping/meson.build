@@ -33,7 +33,7 @@ if get_option('build_pythonmodule').enabled()
 
 
         #put module folders here
-        #subdir('navigation_pymodule')
+        subdir('navigation_pymodule')
 
     endif
 endif
