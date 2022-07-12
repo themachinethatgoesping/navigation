@@ -1,0 +1,8 @@
+[wrap-git]
+url = https://github.com/themachinethatgoesping/tools.git
+revision = main
+directory = tools-main
+
+[provide]
+themachinethatgoesping_tools = tools_dep
+
