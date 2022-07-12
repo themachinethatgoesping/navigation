@@ -6,7 +6,7 @@
 #include "docstrings.hpp" //automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
-#include "../navigation/sensorpositionoffsets.hpp"
+#include "../themachinethatgoesping/navigation/sensorpositionoffsets.hpp"
 #include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
 
 // -- include pybind11 headers
