@@ -1,10 +1,13 @@
-# ignore inherited wrap files and folders
+# ignore inherited wrap files
 bitsery*
-Catch2*
 date*
 hinnant-date*
 fmt*
 magic_enum*
 packagecache/*
-pybind11*
-tools-main/*
+
+#ignore filders
+Catch2-*
+eigen3-*
+pybind11-*
+tools-/*
