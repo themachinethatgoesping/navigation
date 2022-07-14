@@ -13,7 +13,7 @@ namespace themachinethatgoesping {
 namespace navigation {
 
 /**
- * @brief A structure to store a georeferenced location (e.g. of a sensor)
+ * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
  *
  */
 struct GeoLocation
