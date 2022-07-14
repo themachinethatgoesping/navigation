@@ -13,19 +13,19 @@ class Test_navigation_GeoLocation:
     #define actual tests (must start with "test_"
     #test case 1
     def test_GeoLocation_should_support_common_functions(self):
-        offsets = GeoLocation(1,2,3,10,20,30)
-        print(offsets)
+        location = GeoLocation(1,2,3,10,20,30)
+        print(location)
 
         #print
-        assert len(str(offsets)) != 0
+        assert len(str(location)) != 0
 
         #copy
-        offsets2 = offsets.copy()
-        assert offsets == offsets2
-        offsets2.latitude = 100
-        assert offsets != offsets2
+        location2 = location.copy()
+        assert location == location2
+        location2.latitude = 100
+        assert location != location2
 
         #binary
-        assert offsets == GeoLocation.from_binary(offsets.to_binary())
+        assert location == GeoLocation.from_binary(location.to_binary())
 
 

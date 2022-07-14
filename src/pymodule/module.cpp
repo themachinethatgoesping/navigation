@@ -8,6 +8,7 @@
 // declare modules
 void init_c_positionaloffsets(pybind11::module& m); // c_positionaloffsets.cpp
 void init_c_geolocation(pybind11::module& m);       // c_geolocation.cpp
+void init_c_geolocationutm(pybind11::module& m);       // c_geolocationutm.cpp
 
 PYBIND11_MODULE(PYTHON_LIB, m)
 {
@@ -17,4 +18,5 @@ PYBIND11_MODULE(PYTHON_LIB, m)
 
     init_c_positionaloffsets(m);
     init_c_geolocation(m);
+    init_c_geolocationutm(m);
 }

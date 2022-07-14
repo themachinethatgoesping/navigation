@@ -12,32 +12,32 @@
 using namespace std;
 using namespace themachinethatgoesping::navigation;
 
-#define TESTTAG "[offsets]"
+#define TESTTAG "[location]"
 
 TEST_CASE("GeoLocation should support common functions", TESTTAG)
 {
-    // initialize offsets
-    auto offsets = GeoLocation();
+    // initialize location
+    auto location = GeoLocation();
 
-    offsets.latitude  = 1;
-    offsets.longitude = 2;
-    offsets.z         = 3;
+    location.latitude  = 1;
+    location.longitude = 2;
+    location.z         = 3;
 
-    offsets.yaw   = 10;
-    offsets.pitch = 20;
-    offsets.roll  = 30;
+    location.yaw   = 10;
+    location.pitch = 20;
+    location.roll  = 30;
 
     // test copy
-    REQUIRE(offsets == GeoLocation(offsets));
+    REQUIRE(location == GeoLocation(location));
 
     // test binary
-    REQUIRE(offsets == GeoLocation(offsets.from_binary(offsets.to_binary())));
+    REQUIRE(location == GeoLocation(location.from_binary(location.to_binary())));
 
     // test stream
     std::stringstream buffer;
-    offsets.to_stream(buffer);
-    REQUIRE(offsets == GeoLocation(offsets.from_stream(buffer)));
+    location.to_stream(buffer);
+    REQUIRE(location == GeoLocation(location.from_stream(buffer)));
 
     // test print does not crash
-    REQUIRE(offsets.info_string().size() != 0);
+    REQUIRE(location.info_string().size() != 0);
 }

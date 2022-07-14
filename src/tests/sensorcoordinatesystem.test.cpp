@@ -17,6 +17,33 @@ using namespace themachinethatgoesping::navigation;
 TEST_CASE("sensorcoordinatesystem should support common functions", TESTTAG)
 {
     // initialize offsets
-    auto scs = SensorCoordinateSystem();
+    SensorCoordinateSystem scs;
 
+    // copy constructor
+    SensorCoordinateSystem scs2(scs);
+}
+
+
+TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTTAG)
+{
+    // initialize offsets
+    SensorCoordinateSystem scs;
+    PositionalOffsets targetOffsets(1,2,3,0,0,0);
+
+    scs.set_targetOffsets("MBES",targetOffsets);
+
+    // double x= 1;
+    // double y= 2;
+    // double depth= 3;
+    // double heave= 4;
+    // double heading = 45;
+    // double yaw = 90;
+    // double pitch = 0;
+    // double roll = 0;
+
+    SECTION("NO_SENSOR_VALUES")
+    {
+    REQUIRE(scs.get_targetDepth("MBES") == 3 );
+    //REQUIRE(scs.get_targetXY("MBES") == Approx(std::make_tuple<double,double>(1,1) ));
+    }
 }

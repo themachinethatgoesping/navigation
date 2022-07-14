@@ -27,7 +27,7 @@ else
 endif
 
 # boost
-boost_dep = dependency('boost')
+boost_dep = dependency('boost', static: true)
 
 # eigen 3
 eigen3_dep = dependency('eigen3', required: false)

@@ -13,6 +13,7 @@ sources = [
 headers = [
   'positionaloffsets.hpp',
   'geolocation.hpp',
+  'geolocationutm.hpp',
   'sensorcoordinatesystem.hpp'
 ]
 

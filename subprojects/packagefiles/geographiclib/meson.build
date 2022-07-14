@@ -56,6 +56,7 @@ geographiclib_library = library(
     meson.project_name(),
     geographiclib_sources,
     include_directories : geographiclib_include_directories,
+    install: true
 )
 
 geographiclib_dep = declare_dependency(

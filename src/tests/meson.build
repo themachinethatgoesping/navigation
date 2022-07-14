@@ -9,6 +9,7 @@ testcomponent = 'tools'
 sources = [
     'positionaloffsets.test.cpp',
     'geolocation.test.cpp',
+    'geolocationutm.test.cpp',
     'sensorcoordinatesystem.test.cpp'
 ]
 

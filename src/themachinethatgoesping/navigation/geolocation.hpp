@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <GeographicLib/Geocentric.hpp>
+#include <GeographicLib/Geodesic.hpp>
+#include <GeographicLib/LocalCartesian.hpp>
+
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 #include <themachinethatgoesping/tools/helpers.hpp>
@@ -11,6 +15,9 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
+
+//foorwad declarations for location conversions
+struct GeoLocationUTM; // defined in geolocationutm.hpp
 
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
@@ -31,6 +38,8 @@ struct GeoLocation
      */
     GeoLocation() = default;
 
+    GeoLocation(const GeoLocationUTM& location_utm); // defined in geolocationutm.hpp
+
     /**
      * @brief Construct a new GeoLocation object
      *
@@ -41,12 +50,7 @@ struct GeoLocation
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    GeoLocation(double latitude,
-                      double longitude,
-                      double z,
-                      double yaw,
-                      double pitch,
-                      double roll)
+    GeoLocation(double latitude, double longitude, double z, double yaw, double pitch, double roll)
         : latitude(latitude)
         , longitude(longitude)
         , z(z)

@@ -7,6 +7,7 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/geolocation.hpp"
+#include "../themachinethatgoesping/navigation/geolocationutm.hpp"
 #include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
 
 // -- include pybind11 headers
@@ -20,9 +21,12 @@ void init_c_geolocation(py::module& m)
 
     py::class_<GeoLocation>(
         m, "GeoLocation", DOC(themachinethatgoesping, navigation, GeoLocation))
+        .def(py::init<const GeoLocationUTM&>(),
+             DOC(themachinethatgoesping, navigation, GeoLocation, GeoLocation_2),
+             py::arg("geolocation_utm")       )   
         .def(
             py::init<double, double, double, double, double, double>(),
-            DOC(themachinethatgoesping, navigation, GeoLocation, GeoLocation_2),
+            DOC(themachinethatgoesping, navigation, GeoLocation, GeoLocation_3),
             py::arg("latitude")     = 0,
             py::arg("longitude")     = 0,
             py::arg("z")     = 0,
