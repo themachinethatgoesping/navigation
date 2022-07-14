@@ -37,7 +37,7 @@ class Test_navigation_GeoLocationUTM:
         assert location == nav.GeoLocationUTM.from_binary(location.to_binary())
 
     
-    def test_GeoLocationUTM_should_support_common_latlon_conversions(self):
+    def test_GeoLocationUTM_should_support_latlon_conversions(self):
         location = nav.GeoLocationUTM(
             5427745.995, 
             314082.699, 

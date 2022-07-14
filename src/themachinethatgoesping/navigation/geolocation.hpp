@@ -13,6 +13,8 @@
 #include <themachinethatgoesping/tools/helpers.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
+#include "navtools.hpp"
+
 namespace themachinethatgoesping {
 namespace navigation {
 
@@ -99,8 +101,8 @@ struct GeoLocation
     {
         tools::classhelpers::ObjectPrinter printer("GeoLocation");
 
-        printer.register_value("latitude", latitude, "positive northwards, °");
-        printer.register_value("longitude", longitude, "positive eastwards, °");
+        printer.register_string("latitude", navtools::latitude_to_string(latitude,navtools::t_latlon_format::seconds,1), "ddd°mm',ss.s''N/S");
+        printer.register_string("longitude", navtools::longitude_to_string(latitude,navtools::t_latlon_format::seconds,1), "ddd°mm',ss.s''E/W");
         printer.register_value("z", z, "positive downwards, m");
         printer.register_value("yaw", yaw, "90 ° at east");
         printer.register_value("pitch", pitch, "° positve bow up");

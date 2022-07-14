@@ -384,9 +384,9 @@ static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSyste
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_use_motionSensorYaw = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_tools_dms_to_string = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_navtools_dms_to_string = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_tools_latitude_to_string =
+static const char *__doc_themachinethatgoesping_navigation_navtools_latitude_to_string =
 R"doc(convert a latitude value to a string
 
 Parameter ``latitude``:
@@ -402,7 +402,7 @@ Parameter ``format``:
 Returns:
     converted latitude string)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_tools_longitude_to_string =
+static const char *__doc_themachinethatgoesping_navigation_navtools_longitude_to_string =
 R"doc(convert a latitude value to a string
 
 Parameter ``latitude``:
@@ -418,13 +418,13 @@ Parameter ``format``:
 Returns:
     converted latitude string)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_tools_t_latlon_format = R"doc(lat/lon format specificaionts)doc";
+static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_format = R"doc(lat/lon format specificaionts)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_tools_t_latlon_format_degrees = R"doc(< lat/lon will be converted to degrees.degrees°N/S E/W)doc";
+static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_format_degrees = R"doc(< lat/lon will be converted to degrees.degrees°N/S E/W)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_tools_t_latlon_format_minutes = R"doc(< lat/lon will be converted to degrees°minutes.minutes'E/S E/W)doc";
+static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_format_minutes = R"doc(< lat/lon will be converted to degrees°minutes.minutes'E/S E/W)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_tools_t_latlon_format_seconds =
+static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_format_seconds =
 R"doc(< lat/lon will be converted to degrees°minutes'seconds.seconds''E/S
 E/W)doc";
 

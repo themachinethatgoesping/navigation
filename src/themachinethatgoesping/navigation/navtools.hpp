@@ -15,7 +15,7 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
-namespace tools {
+namespace navtools {
 
 /**
  * @brief lat/lon format specificaionts
@@ -61,7 +61,7 @@ inline std::string dms_to_string(double dms_value, t_latlon_format format, size_
  * @param format latlon format (degrees°N/S, degrees°minutes'N/S or degrees°minutes'seconds''N/S)
  * @return converted latitude string
  */
-std::string latitude_to_string(double latitude, t_latlon_format format = t_latlon_format::minutes, size_t precission = 6)
+inline std::string latitude_to_string(double latitude, t_latlon_format format = t_latlon_format::minutes, size_t precission = 6)
 {
     char sign = 'N';
     if (latitude < 0)
@@ -79,7 +79,7 @@ std::string latitude_to_string(double latitude, t_latlon_format format = t_latlo
  * @param format latlon format (degrees°N/S, degrees°minutes'N/S or degrees°minutes'seconds''N/S)
  * @return converted latitude string
  */
-std::string longitude_to_string(double longitude, t_latlon_format format = t_latlon_format::minutes, size_t precission = 6)
+inline std::string longitude_to_string(double longitude, t_latlon_format format = t_latlon_format::minutes, size_t precission = 6)
 {
     char sign = 'E';
     if (longitude < 0)
