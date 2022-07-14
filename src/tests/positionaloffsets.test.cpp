@@ -6,7 +6,7 @@
 
 #include <filesystem>
 
-#include "../themachinethatgoesping/navigation/sensorpositionoffsets.hpp"
+#include "../themachinethatgoesping/navigation/positionaloffsets.hpp"
 
 // using namespace testing;
 using namespace std;
@@ -14,10 +14,10 @@ using namespace themachinethatgoesping::navigation;
 
 #define TESTTAG "[offsets]"
 
-TEST_CASE("SensorPositionOffsets should support common functions", TESTTAG)
+TEST_CASE("PositionalOffsets should support common functions", TESTTAG)
 {
     // initialize offsets
-    auto offsets = SensorPositionOffsets();
+    auto offsets = PositionalOffsets();
 
     offsets.x = 1;
     offsets.y = 2;
@@ -28,15 +28,15 @@ TEST_CASE("SensorPositionOffsets should support common functions", TESTTAG)
     offsets.roll  = 30;
 
     //test copy
-    REQUIRE(offsets == SensorPositionOffsets(offsets));
+    REQUIRE(offsets == PositionalOffsets(offsets));
 
     //test binary
-    REQUIRE(offsets == SensorPositionOffsets(offsets.from_binary(offsets.to_binary())));
+    REQUIRE(offsets == PositionalOffsets(offsets.from_binary(offsets.to_binary())));
 
     //test stream
     std::stringstream buffer;
     offsets.to_stream(buffer);
-    REQUIRE(offsets == SensorPositionOffsets(offsets.from_stream(buffer)));
+    REQUIRE(offsets == PositionalOffsets(offsets.from_stream(buffer)));
 
     //test print does not crash
     REQUIRE(offsets.info_string().size() != 0);

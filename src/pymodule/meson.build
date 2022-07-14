@@ -8,7 +8,8 @@ module_name = 'navigation'
 # -- sources
 sources = [
     'module.cpp',
-    'c_sensorpositionoffsets.cpp'
+    'c_positionaloffsets.cpp',
+    'c_geolocation.cpp'
 ]
 
 # define python module

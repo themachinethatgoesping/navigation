@@ -11,7 +11,8 @@ sources = [
 ]
 
 headers = [
-  'sensorpositionoffsets.hpp'
+  'positionaloffsets.hpp',
+  'geolocation.hpp'
 ]
 
 # -- targets --

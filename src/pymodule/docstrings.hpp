@@ -23,14 +23,59 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets =
-R"doc(A structure to set sensor or target offsets relative to the vessel
-coordinate system)doc";
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation = R"doc(A structure to store a georeferenced location (e.g. of a sensor))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_SensorPositionOffsets = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_GeoLocation = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_SensorPositionOffsets_2 =
-R"doc(Construct a new SensorPositionOffsets object
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_GeoLocation_2 =
+R"doc(Construct a new GeoLocation object
+
+Parameter ``latitude``:
+    in °, positive northwards
+
+Parameter ``longitude``:
+    in °, positive eastwards
+
+Parameter ``z``:
+    in m, positive downwards
+
+Parameter ``yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``pitch``:
+    in °, positive means bow up
+
+Parameter ``roll``:
+    in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_latitude = R"doc(< in °, positive northwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_longitude = R"doc(< in °, positive eastwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_operator_eq = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_operator_ne = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_pitch = R"doc(< in °, positive means bow up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_roll = R"doc(< in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_serialize = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_z = R"doc(< in m, positive downwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets =
+R"doc(A structure to store positional offsets (e.g. of a sensor) relative to
+the vessel coordinate system)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_PositionalOffsets = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_PositionalOffsets_2 =
+R"doc(Construct a new PositionalOffsets object
 
 Parameter ``x``:
     in m, positive foorward
@@ -50,25 +95,25 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_operator_eq = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_operator_eq = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_operator_ne = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_operator_ne = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_pitch = R"doc(< in °, positive means bow up)doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_pitch = R"doc(< in °, positive means bow up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_roll = R"doc(< in °, positive means port up)doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_roll = R"doc(< in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_serialize = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_serialize = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_x = R"doc(< in m, positive foorward)doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_x = R"doc(< in m, positive foorward)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_y = R"doc(< in m, positive starboard)doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_y = R"doc(< in m, positive starboard)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorPositionOffsets_z = R"doc(< in m, positive downwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_PositionalOffsets_z = R"doc(< in m, positive downwards)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

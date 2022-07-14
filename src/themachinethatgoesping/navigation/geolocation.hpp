@@ -1,0 +1,112 @@
+// SPDX-FileCopyrightText: 2022 Peter Urban, Sven Schorge GEOMAR Helmholtz Centre for Ocean Research
+// Kiel SPDX-FileCopyrightText: 2022 Peter Urban, Ghent University
+//
+// SPDX-License-Identifier: MPL-2.0
+
+#pragma once
+
+#include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
+#include <themachinethatgoesping/tools/helpers.hpp>
+#include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
+
+namespace themachinethatgoesping {
+namespace navigation {
+
+/**
+ * @brief A structure to store a georeferenced location (e.g. of a sensor)
+ *
+ */
+struct GeoLocation
+{
+    double latitude  = 0.0; ///< in °, positive northwards
+    double longitude = 0.0; ///< in °, positive eastwards
+    double z         = 0;   ///< in m, positive downwards
+    double yaw       = 0.0; ///< in °, 0° is north, 90° is east
+    double pitch     = 0.0; ///< in °, positive means bow up
+    double roll      = 0.0; ///< in °, positive means port up
+
+    /**
+     * @brief Construct a new Sensor Position object (all offsets set to 0)
+     *
+     */
+    GeoLocation() = default;
+
+    /**
+     * @brief Construct a new GeoLocation object
+     *
+     * @param latitude in °, positive northwards
+     * @param longitude in °, positive eastwards
+     * @param z in m, positive downwards
+     * @param yaw in °, 0° is north, 90° is east
+     * @param pitch in °, positive means bow up
+     * @param roll in °, positive means port up
+     */
+    GeoLocation(double latitude,
+                      double longitude,
+                      double z,
+                      double yaw,
+                      double pitch,
+                      double roll)
+        : latitude(latitude)
+        , longitude(longitude)
+        , z(z)
+        , yaw(yaw)
+        , pitch(pitch)
+        , roll(roll)
+    {
+    }
+
+    bool operator!=(const GeoLocation& rhs) const { return !(operator==(rhs)); }
+    bool operator==(const GeoLocation& rhs) const
+    {
+        if (tools::helpers::approx(latitude, rhs.latitude))
+            if (tools::helpers::approx(longitude, rhs.longitude))
+                if (tools::helpers::approx(z, rhs.z))
+                    if (tools::helpers::approx(yaw, rhs.yaw))
+                        if (tools::helpers::approx(pitch, rhs.pitch))
+                            if (tools::helpers::approx(roll, rhs.roll))
+                                return true;
+
+        return false;
+    }
+
+  private:
+    // serialization support using bitsery
+    friend bitsery::Access;
+    template<typename S>
+    void serialize(S& s)
+    {
+        s.value8b(latitude);
+        s.value8b(longitude);
+        s.value8b(z);
+        s.value8b(yaw);
+        s.value8b(pitch);
+        s.value8b(roll);
+    }
+
+  public:
+    tools::classhelpers::ObjectPrinter __printer__() const
+    {
+        tools::classhelpers::ObjectPrinter printer("GeoLocation");
+
+        printer.register_value("latitude", latitude, "positive northwards, °");
+        printer.register_value("longitude", longitude, "positive eastwards, °");
+        printer.register_value("z", z, "positive downwards, m");
+        printer.register_value("yaw", yaw, "90 ° at east");
+        printer.register_value("pitch", pitch, "° positve bow up");
+        printer.register_value("roll", roll, "° positive port up");
+
+        return printer;
+    }
+
+  public:
+    // -- class helper function macros --
+    // define to_binary and from_binary functions (needs the serialize function)
+    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocation)
+    // define info_string and print functions (needs the __printer__ function)
+    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
+};
+
+} // namespace naviation
+} // namespace themachinethatgoesping

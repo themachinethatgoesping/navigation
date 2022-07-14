@@ -14,10 +14,10 @@ namespace themachinethatgoesping {
 namespace navigation {
 
 /**
- * @brief A structure to set sensor or target offsets relative to the vessel coordinate system
+ * @brief A structure to store positional offsets (e.g. of a sensor) relative to the vessel coordinate system
  *
  */
-struct SensorPositionOffsets
+struct PositionalOffsets
 {
     double x     = 0.0; ///< in m, positive foorward
     double y     = 0.0; ///< in m, positive starboard
@@ -30,10 +30,10 @@ struct SensorPositionOffsets
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
      */
-    SensorPositionOffsets() = default;
+    PositionalOffsets() = default;
 
     /**
-     * @brief Construct a new SensorPositionOffsets object
+     * @brief Construct a new PositionalOffsets object
      *
      * @param x in m, positive foorward
      * @param y in m, positive starboard
@@ -42,7 +42,7 @@ struct SensorPositionOffsets
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    SensorPositionOffsets(double x, double y, double z, double yaw, double pitch, double roll)
+    PositionalOffsets(double x, double y, double z, double yaw, double pitch, double roll)
         : x(x)
         , y(y)
         , z(z)
@@ -52,8 +52,8 @@ struct SensorPositionOffsets
     {
     }
 
-    bool operator!=(const SensorPositionOffsets& rhs) const { return !(operator==(rhs)); }
-    bool operator==(const SensorPositionOffsets& rhs) const
+    bool operator!=(const PositionalOffsets& rhs) const { return !(operator==(rhs)); }
+    bool operator==(const PositionalOffsets& rhs) const
     {
         if (tools::helpers::approx(x, rhs.x))
             if (tools::helpers::approx(y, rhs.y))
@@ -83,14 +83,14 @@ struct SensorPositionOffsets
   public:
     tools::classhelpers::ObjectPrinter __printer__() const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorPositionOffsets");
+        tools::classhelpers::ObjectPrinter printer("PositionalOffsets");
 
-        printer.register_value("x", x, "m");
-        printer.register_value("y", y, "m");
-        printer.register_value("z", z, "m");
-        printer.register_value("yaw", yaw, "°");
-        printer.register_value("pitch", pitch, "°");
-        printer.register_value("roll", roll, "°");
+        printer.register_value("x", x, "positive forwards, m");
+        printer.register_value("y", y, "positive starboard, m");
+        printer.register_value("z", z, "positive downwards, m");
+        printer.register_value("yaw", yaw, "90 ° at east");
+        printer.register_value("pitch", pitch, "° positve bow up");
+        printer.register_value("roll", roll, "° positive port up");
 
         return printer;
     }
@@ -98,7 +98,7 @@ struct SensorPositionOffsets
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorPositionOffsets)
+    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(PositionalOffsets)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
