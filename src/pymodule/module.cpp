@@ -8,7 +8,8 @@
 // declare modules
 void init_c_positionaloffsets(pybind11::module& m); // c_positionaloffsets.cpp
 void init_c_geolocation(pybind11::module& m);       // c_geolocation.cpp
-void init_c_geolocationutm(pybind11::module& m);       // c_geolocationutm.cpp
+void init_c_geolocationutm(pybind11::module& m);    // c_geolocationutm.cpp
+void init_m_tools(pybind11::module& m);             // m_tools.cpp
 
 PYBIND11_MODULE(PYTHON_LIB, m)
 {
@@ -16,6 +17,7 @@ PYBIND11_MODULE(PYTHON_LIB, m)
 
     m.doc() = "Python module to store, interpolate and transform navigation data";
 
+    init_m_tools(m);
     init_c_positionaloffsets(m);
     init_c_geolocation(m);
     init_c_geolocationutm(m);

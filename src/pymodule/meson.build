@@ -10,7 +10,8 @@ sources = [
     'module.cpp',
     'c_positionaloffsets.cpp',
     'c_geolocation.cpp',
-    'c_geolocationutm.cpp'
+    'c_geolocationutm.cpp',
+    'm_tools.cpp'
 ]
 
 # define python module
