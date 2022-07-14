@@ -12,6 +12,7 @@
 
 #include <fmt/core.h>
 #include <magic_enum.hpp>
+#include <stdexcept>
 
 namespace themachinethatgoesping {
 namespace navigation {
