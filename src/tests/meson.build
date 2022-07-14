@@ -8,7 +8,8 @@ testcomponent = 'tools'
 
 sources = [
     'positionaloffsets.test.cpp',
-    'geolocation.test.cpp'
+    'geolocation.test.cpp',
+    'sensorcoordinatesystem.test.cpp'
 ]
 
 foreach source : sources

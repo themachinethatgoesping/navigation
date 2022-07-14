@@ -12,7 +12,8 @@ sources = [
 
 headers = [
   'positionaloffsets.hpp',
-  'geolocation.hpp'
+  'geolocation.hpp',
+  'sensorcoordinatesystem.hpp'
 ]
 
 # -- targets --
@@ -23,6 +24,7 @@ if build_machine.system() != 'linux'
                           boost_dep, 
                           eigen3_dep, 
                           omp_dep,
+                          geographiclib_dep,
                           tools_dep
                           ],
                         override_options: [
@@ -37,6 +39,7 @@ else
                           boost_dep, 
                           eigen3_dep, 
                           omp_dep,
+                          geographiclib_dep,
                           tools_dep
                           ],
                         override_options: [
@@ -54,6 +57,7 @@ navigation_dep = declare_dependency(
     boost_dep,
     eigen3_dep,
     omp_dep,
+    geographiclib_dep,
     tools_dep
   ],
   link_with : [navigation_lib],
