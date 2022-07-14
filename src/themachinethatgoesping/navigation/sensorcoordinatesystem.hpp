@@ -8,7 +8,6 @@
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 #include <cmath>
-#include <eigen3/Eigen/Geometry>
 #include <exception>
 #include <iostream>
 #include <math.h>
