@@ -3,9 +3,13 @@
 //
 // SPDX-License-Identifier: MIT
 
-# source: https://oss.squalllinesoftware.com/projects/disorder/files *geographiclib-2.0.meson.tar.gz
-# souce(direct link): https://oss.squalllinesoftware.com/attachments/30
-# Note: this source used: https://github.com/geographiclib/geographiclib/blob/main/include/GeographicLib/Config.h.in (in git tag v2.0)
+/**
+ * source: https://oss.squalllinesoftware.com/projects/disorder/files *geographiclib-2.0.meson.tar.gz
+ * souce(direct link): https://oss.squalllinesoftware.com/attachments/30
+ * Note: this source used: https://github.com/geographiclib/geographiclib/blob/main/include/GeographicLib/Config.h.in (in git tag v2.0)
+ *
+ */
+
 
 #define GEOGRAPHICLIB_VERSION_STRING "@PROJECT_VERSION@"
 #define GEOGRAPHICLIB_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
