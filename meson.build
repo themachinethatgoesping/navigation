@@ -26,9 +26,8 @@ else
   omp_dep = dependency('openmp')
 endif
 
-# # boost
-#boost_modules = dependency('boost', modules: ['filesystem'], static: true)
-boost_dep     = dependency('boost')
+# boost
+boost_dep = dependency('boost')
 
 # eigen 3
 eigen3_dep = dependency('eigen3', required: false)
@@ -38,12 +37,19 @@ if not eigen3_dep.found()
     eigen3_dep = eigen3_project.get_variable('eigen_dep')
 endif
 
+# geographiclib
+geographiclib_dep = dependency('geographiclib', required: false)
+
+if not geographiclib_dep.found()
+    geographiclib_dep = subproject('geographiclib').get_variable('geographiclib_dep')
+endif
+
 # themachinethatgoesping
 # tools
 tools_dep = dependency('themachinethatgoesping_tools', required: false)
 
 if not tools_dep.found()
-    tools_dep = subproject('tools', default_options: 'default_library=static').get_variable('tools_dep')
+    tools_dep = subproject('tools').get_variable('tools_dep')
 endif
 
 

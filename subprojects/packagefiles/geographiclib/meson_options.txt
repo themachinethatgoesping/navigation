@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2011-2022 Squall Line Software, LLC
+#
+# SPDX-License-Identifier: MIT
+
+# source: https://oss.squalllinesoftware.com/projects/disorder/files *geographiclib-2.0.meson.tar.gz
+# souce(direct link): https://oss.squalllinesoftware.com/attachments/30
+
+option(
+    'precision',
+    type : 'combo',
+    choices : ['float','double','extended','quadruple','variable'],
+    value : 'double',
+    description : 'Select the preferred "real" precision.',
+)
+
+option('use_boost_for_examples', type : 'boolean', value : false)
