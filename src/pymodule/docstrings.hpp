@@ -27,7 +27,9 @@ static const char *__doc_themachinethatgoesping_navigation_GeoLocation =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
 sensor))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_GeoLocation_2 = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_2 =
+R"doc(Construct an GeoLocation object from an existing GeoLocationUTM object
+(this allows for implicit conversion from GeoLocationUTM class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM = R"doc()doc";
 
@@ -38,7 +40,9 @@ utm coordinates)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_GeoLocationUTM = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_GeoLocationUTM_2 = R"doc(Convert an existing GeoLocation object to A GeoLocationUTM object)doc";
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_GeoLocationUTM_2 =
+R"doc(Construct an GeoLocationUTM object from an existing GeoLocation object
+(this allows for implicit conversion from GeoLocation class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_GeoLocationUTM_3 =
 R"doc(Construct a new GeoLocationUTM object
@@ -114,7 +118,9 @@ static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_zone =
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocation_GeoLocation = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_GeoLocation_GeoLocation_2 = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_GeoLocation_2 =
+R"doc(Construct an GeoLocation object from an existing GeoLocationUTM object
+(this allows for implicit conversion from GeoLocationUTM class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocation_GeoLocation_3 =
 R"doc(Construct a new GeoLocation object

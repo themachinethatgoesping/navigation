@@ -38,6 +38,12 @@ struct GeoLocation
      */
     GeoLocation() = default;
 
+
+    /**
+     * @brief Construct an GeoLocation object from an existing GeoLocationUTM object (this allows
+     * for implicit conversion from GeoLocationUTM class)
+     *
+     */
     GeoLocation(const GeoLocationUTM& location_utm); // defined in geolocationutm.hpp
 
     /**

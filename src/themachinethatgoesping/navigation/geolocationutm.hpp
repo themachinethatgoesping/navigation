@@ -38,7 +38,8 @@ struct GeoLocationUTM
     GeoLocationUTM() = default;
 
     /**
-     * @brief Convert an existing GeoLocation object to A GeoLocationUTM object
+     * @brief Construct an GeoLocationUTM object from an existing GeoLocation object (this allows
+     * for implicit conversion from GeoLocation class)
      *
      */
     GeoLocationUTM(const GeoLocation& location, int setzone = -1)
