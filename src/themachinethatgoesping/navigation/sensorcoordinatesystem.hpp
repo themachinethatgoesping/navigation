@@ -119,7 +119,7 @@ class SensorCoordinateSystem
      * @return return x,y coordinates in meters (x=northing,y=easting) (relative to _X,_Y from
      * position system, includtion motion and depth corrections)
      */
-    std::tuple<double, double> get_targetXY(const std::string& key, bool use_VesselXY) const
+    std::pair<double, double> get_targetXY(const std::string& key, bool use_VesselXY) const
     {
         auto map_it = _TargetOffsetIDs.find(key);
         if (map_it == _TargetOffsetIDs.end())
@@ -156,8 +156,8 @@ class SensorCoordinateSystem
             positionSystem_xyz[1] += _Y;
         }
 
-        return std::make_tuple(target_xyz[0] - positionSystem_xyz[0],
-                               target_xyz[1] - positionSystem_xyz[1]);
+        return std::make_pair(target_xyz[0] - positionSystem_xyz[0],
+                              target_xyz[1] - positionSystem_xyz[1]);
     }
 
     /**
@@ -168,8 +168,8 @@ class SensorCoordinateSystem
      * @return return distance,azimuth (0° Noth, 90° East) coordinates in meters,° (relative to the
      * position system, includtion motion and depth corrections)
      */
-    std::tuple<double, double> get_targetPosSysDistanceAndAzimuth(const std::string& key,
-                                                                  bool               radians) const
+    std::pair<double, double> get_targetPosSysDistanceAndAzimuth(const std::string& key,
+                                                                 bool               radians) const
     {
         auto xy = get_targetXY(key, false);
 
@@ -207,7 +207,7 @@ class SensorCoordinateSystem
         if (!radians)
             azimuth *= 180 / M_PI;
 
-        return std::make_tuple(distance, azimuth);
+        return std::make_pair(distance, azimuth);
     }
 
     /**
@@ -216,7 +216,7 @@ class SensorCoordinateSystem
      * @param key: Name of the target
      * @return return latitude and longitude of the target in °
      */
-    std::tuple<double, double> get_targetLatLon(const std::string& key) const
+    std::pair<double, double> get_targetLatLon(const std::string& key) const
     {
         double distance, heading;
         std::tie(distance, heading) = get_targetPosSysDistanceAndAzimuth(key, false);
@@ -225,7 +225,7 @@ class SensorCoordinateSystem
         {
             // this happens if there is no offset between the antenna and the target
             if (distance == 0)
-                return std::make_tuple(_Lat, _Lon);
+                return std::make_pair(_Lat, _Lon);
 
             // this should never happen
             else
@@ -239,7 +239,7 @@ class SensorCoordinateSystem
                                      GeographicLib::Constants::WGS84_f());
         geod.Direct(_Lat, _Lon, heading, distance, target_lat, target_lon);
 
-        return std::make_tuple(target_lat, target_lon);
+        return std::make_pair(target_lat, target_lon);
     }
 
     /**
@@ -295,13 +295,13 @@ class SensorCoordinateSystem
             yaw_offset = _MotionSensorOffsets.yaw;
 
         offset_quat = tools::rotationfunctions::quaternion_from_ypr(
-            yaw_offset, _MotionSensorOffsets.roll, _MotionSensorOffsets.pitch, true);
+            yaw_offset, _MotionSensorOffsets.pitch, _MotionSensorOffsets.roll, true);
 
         if (_use_motionSensorYaw)
         {
 
             auto sensor_quat =
-                tools::rotationfunctions::quaternion_from_ypr(_Yaw, _Roll, _Pitch, true);
+                tools::rotationfunctions::quaternion_from_ypr(_Yaw, _Pitch, _Roll, true);
             sensor_quat.normalize();
             offset_quat.normalize();
 
@@ -311,7 +311,7 @@ class SensorCoordinateSystem
         {
 
             auto sensor_quat =
-                tools::rotationfunctions::quaternion_from_ypr(0.0, _Roll, _Pitch, true);
+                tools::rotationfunctions::quaternion_from_ypr(0.0, _Pitch, _Roll, true);
             auto compass_quat =
                 tools::rotationfunctions::quaternion_from_ypr(Heading, 0.0, 0.0, true);
 
@@ -345,10 +345,7 @@ class SensorCoordinateSystem
 
         Eigen::Quaternion<double> target_quat;
         target_quat = tools::rotationfunctions::quaternion_from_ypr(
-            target_offset.yaw,
-            target_offset.roll,
-            target_offset.pitch,
-            true);
+            target_offset.yaw, target_offset.pitch, target_offset.roll, true);
 
         auto vessel_quat = get_vesselQuat();
 
@@ -360,8 +357,7 @@ class SensorCoordinateSystem
 
     std::tuple<double, double, double> get_vesselYPR(bool radians) const
     {
-        auto ypr = tools::rotationfunctions::ypr_from_quaternion(
-            get_vesselQuat(), !radians);
+        auto ypr = tools::rotationfunctions::ypr_from_quaternion(get_vesselQuat(), !radians);
 
         return std::make_tuple(ypr[0], ypr[1], ypr[2]);
     }
@@ -499,7 +495,7 @@ class SensorCoordinateSystem
         }
         else
         {
-            _TargetOffsets[map_it->second] == new_offsets;
+            _TargetOffsets[map_it->second] = new_offsets;
         }
     }
     PositionalOffsets get_targetOffsets(const std::string& key) const
