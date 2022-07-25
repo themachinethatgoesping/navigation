@@ -14,6 +14,8 @@ headers = [
   'positionaloffsets.hpp',
   'geolocation.hpp',
   'geolocationutm.hpp',
+  'geolocationlocal.hpp',
+  'sensordata.hpp',
   'sensorcoordinatesystem.hpp',
   'navtools.hpp'
 ]
