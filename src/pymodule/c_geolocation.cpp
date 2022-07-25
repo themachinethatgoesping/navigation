@@ -50,4 +50,5 @@ void init_c_geolocation(py::module& m)
         __PYCLASS_DEFAULT_PRINTING__(GeoLocation)
         // end GeoLocation
         ;
+
 }

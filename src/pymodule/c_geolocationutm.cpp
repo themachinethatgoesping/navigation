@@ -6,6 +6,7 @@
 #include "docstrings.hpp" //automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
+#include "../themachinethatgoesping/navigation/geolocationlocal.hpp"
 #include "../themachinethatgoesping/navigation/geolocationutm.hpp"
 #include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
 
@@ -24,8 +25,15 @@ void init_c_geolocationutm(py::module& m)
              DOC(themachinethatgoesping, navigation, GeoLocationUTM, GeoLocationUTM_2),
              py::arg("geolocation"),
              py::arg("setzone") = -1)
-        .def(py::init<double, double, int, bool, double, double, double, double>(),
+        .def(py::init<const GeoLocationLocal&, int, bool, double, double>(),
              DOC(themachinethatgoesping, navigation, GeoLocationUTM, GeoLocationUTM_3),
+             py::arg("geolocation_local"),
+             py::arg("zone"),
+             py::arg("northern_hemisphere"),
+             py::arg("offset_northing") = 0,
+             py::arg("offset_easting")  = 0)
+        .def(py::init<double, double, int, bool, double, double, double, double>(),
+             DOC(themachinethatgoesping, navigation, GeoLocationUTM, GeoLocationUTM_4),
              py::arg("northing")            = 0,
              py::arg("easting")             = 0,
              py::arg("zone")                = 0,
@@ -65,6 +73,6 @@ void init_c_geolocationutm(py::module& m)
         // end GeoLocationUTM
         ;
 
-    py::implicitly_convertible<GeoLocation, GeoLocationUTM>();
     py::implicitly_convertible<GeoLocationUTM, GeoLocation>();
+    py::implicitly_convertible<GeoLocation, GeoLocationUTM>(); 
 }

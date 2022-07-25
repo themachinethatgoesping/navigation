@@ -16,6 +16,9 @@
 namespace themachinethatgoesping {
 namespace navigation {
 
+// foorwad declarations for location conversions
+struct GeoLocationLocal; // defined in geolocationlocal.hpp
+
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
  * unlike the default GeoLocation structure, this object stores utm coordinates
@@ -48,10 +51,26 @@ struct GeoLocationUTM
     }
 
     /**
+     * @brief Construct an GeoLocationUTM object from an existing GeoLocationLocal object (using a
+     * known zone and hemisphere)
+     *
+     * @param location_local
+     * @param zone UTM/UPS zone number
+     * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
+     * @param offset_northing in m, is added to northing coordinate
+     * @param offset_easting in m, is added to easting coordinate
+     */
+    GeoLocationUTM(const GeoLocationLocal& location_local,
+                   int                     zone,
+                   bool                    northern_hemisphere,
+                   double                  offset_northing = 0.0,
+                   double                  offset_easting = 0.0); // defined in geolocationlocal.hpp
+
+    /**
      * @brief Construct a new GeoLocationUTM object
      *
-     * @param latitude in °, positive northwards
-     * @param longitude in °, positive eastwards
+     * @param northing in m, positive northwards
+     * @param easting in m, positive eastwards
      * @param zone UTM/UPS zone number
      * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      * @param z in m, positive downwards

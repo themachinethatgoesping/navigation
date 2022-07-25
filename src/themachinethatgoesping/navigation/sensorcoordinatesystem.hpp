@@ -17,6 +17,7 @@
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
 #include "geolocation.hpp"
+#include "geolocationutm.hpp"
 #include "positionaloffsets.hpp"
 
 namespace themachinethatgoesping {

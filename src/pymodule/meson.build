@@ -11,6 +11,7 @@ sources = [
     'c_positionaloffsets.cpp',
     'c_geolocation.cpp',
     'c_geolocationutm.cpp',
+    'c_geolocationlocal.cpp',
     'm_navtools.cpp'
 ]
 

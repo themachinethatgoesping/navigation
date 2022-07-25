@@ -31,9 +31,118 @@ static const char *__doc_themachinethatgoesping_navigation_GeoLocation_2 =
 R"doc(Construct an GeoLocation object from an existing GeoLocationUTM object
 (this allows for implicit conversion from GeoLocationUTM class))doc";
 
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal =
+R"doc(A structure to store a georeferenced location and attitude (e.g. of a
+sensor) unlike the default GeoLocation structure, this object stores
+local northing and easting coordinates. These coordintaes can be
+converted to UTM coordinates if the zone and hemisphere are known.)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_GeoLocationLocal = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_GeoLocationLocal_2 =
+R"doc(Construct an GeoLocationLocal object from an existing GeoLocation
+object (this allows for implicit conversion from GeoLocation class))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_GeoLocationLocal_3 =
+R"doc(Construct a new GeoLocationLocal object
+
+Parameter ``northing``:
+    in m, positive northwards
+
+Parameter ``easting``:
+    in m, positive eastwards
+
+Parameter ``z``:
+    in m, positive downwards
+
+Parameter ``yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``pitch``:
+    in °, positive means bow up
+
+Parameter ``roll``:
+    in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_easting = R"doc(< in m, positive eastwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_from_geolocationutm =
+R"doc(Construct convert a GeoLocationUTM Object to local (stripping zone and
+hemisphere)
+
+Parameter ``location_utm``:
+    valid GeoLocation object
+
+Parameter ``northing_offset``:
+    in m, is substracted from northing coordinate
+
+Parameter ``offset_easting``:
+    in m, is substracted fromeasting coordinate
+
+Returns:
+    GeoLocationLocal)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_northing = R"doc(< in m, positive northwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_operator_eq = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_operator_ne = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_pitch = R"doc(< in °, positive means bow up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_roll = R"doc(< in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_serialize = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_to_geolocationutm =
+R"doc(Convert a utm geolocation to a unprojected location
+
+Parameter ``location_local``:
+    $Parameter ``zone``:
+
+UTM/UPS zone number
+
+Parameter ``northern_hemisphere``:
+    if true: northern hemisphere, else: southern hemisphere
+
+Parameter ``northing_offset``:
+    in m, is added to northing coordinate
+
+Parameter ``offset_easting``:
+    in m, is added to easting coordinate
+
+Returns:
+    GeoLocationUTM)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationLocal_z = R"doc(< in m, positive downwards)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_2 =
+R"doc(Construct an GeoLocationUTM object from an existing GeoLocationLocal
+object (using a known zone and hemisphere)
+
+Parameter ``location_local``:
+    $Parameter ``zone``:
+
+UTM/UPS zone number
+
+Parameter ``northern_hemisphere``:
+    if true: northern hemisphere, else: southern hemisphere
+
+Parameter ``offset_northing``:
+    in m, is added to northing coordinate
+
+Parameter ``offset_easting``:
+    in m, is added to easting coordinate)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_3 =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
 sensor) unlike the default GeoLocation structure, this object stores
 utm coordinates)doc";
@@ -45,13 +154,31 @@ R"doc(Construct an GeoLocationUTM object from an existing GeoLocation object
 (this allows for implicit conversion from GeoLocation class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_GeoLocationUTM_3 =
+R"doc(Construct an GeoLocationUTM object from an existing GeoLocationLocal
+object (using a known zone and hemisphere)
+
+Parameter ``location_local``:
+    $Parameter ``zone``:
+
+UTM/UPS zone number
+
+Parameter ``northern_hemisphere``:
+    if true: northern hemisphere, else: southern hemisphere
+
+Parameter ``offset_northing``:
+    in m, is added to northing coordinate
+
+Parameter ``offset_easting``:
+    in m, is added to easting coordinate)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocationUTM_GeoLocationUTM_4 =
 R"doc(Construct a new GeoLocationUTM object
 
-Parameter ``latitude``:
-    in °, positive northwards
+Parameter ``northing``:
+    in m, positive northwards
 
-Parameter ``longitude``:
-    in °, positive eastwards
+Parameter ``easting``:
+    in m, positive eastwards
 
 Parameter ``zone``:
     UTM/UPS zone number
@@ -147,9 +274,23 @@ static const char *__doc_themachinethatgoesping_navigation_GeoLocation_latitude 
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocation_longitude = R"doc(< in °, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_GeoLocation_operator_eq = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_operator_eq =
+R"doc(Check if two GeoLocation objects are equal
 
-static const char *__doc_themachinethatgoesping_navigation_GeoLocation_operator_ne = R"doc()doc";
+Parameter ``rhs``:
+    $Returns:
+
+true if equal
+
+Returns:
+    false if not equal)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_GeoLocation_operator_ne =
+R"doc(Construct a new GeoLocation object from a string
+
+Parameter ``str``:
+    string containing the location in the format
+    "latitude,longitude,z,yaw,pitch,roll")doc";
 
 static const char *__doc_themachinethatgoesping_navigation_GeoLocation_pitch = R"doc(< in °, positive means bow up)doc";
 

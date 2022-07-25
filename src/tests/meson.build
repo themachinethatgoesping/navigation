@@ -10,6 +10,7 @@ sources = [
     'positionaloffsets.test.cpp',
     'geolocation.test.cpp',
     'geolocationutm.test.cpp',
+    'geolocationlocal.test.cpp',
     'sensorcoordinatesystem.test.cpp'
 ]
 
