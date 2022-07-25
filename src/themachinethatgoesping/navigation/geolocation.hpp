@@ -18,7 +18,7 @@
 namespace themachinethatgoesping {
 namespace navigation {
 
-//foorwad declarations for location conversions
+// foorwad declarations for location conversions
 struct GeoLocationUTM; // defined in geolocationutm.hpp
 
 /**
@@ -39,7 +39,6 @@ struct GeoLocation
      *
      */
     GeoLocation() = default;
-
 
     /**
      * @brief Construct an GeoLocation object from an existing GeoLocationUTM object (this allows
@@ -68,7 +67,20 @@ struct GeoLocation
     {
     }
 
+    /**
+     * @brief Construct a new GeoLocation object from a string
+     *
+     * @param str string containing the location in the format "latitude,longitude,z,yaw,pitch,roll"
+     */
     bool operator!=(const GeoLocation& rhs) const { return !(operator==(rhs)); }
+
+    /**
+     * @brief Check if two GeoLocation objects are equal
+     *
+     * @param rhs
+     * @return true if equal
+     * @return false if not equal
+     */
     bool operator==(const GeoLocation& rhs) const
     {
         if (tools::helpers::approx(latitude, rhs.latitude))
@@ -101,8 +113,14 @@ struct GeoLocation
     {
         tools::classhelpers::ObjectPrinter printer("GeoLocation");
 
-        printer.register_string("latitude", navtools::latitude_to_string(latitude,navtools::t_latlon_format::seconds,1), "ddd°mm',ss.s''N/S");
-        printer.register_string("longitude", navtools::longitude_to_string(latitude,navtools::t_latlon_format::seconds,1), "ddd°mm',ss.s''E/W");
+        printer.register_string(
+            "latitude",
+            navtools::latitude_to_string(latitude, navtools::t_latlon_format::seconds, 1),
+            "ddd°mm',ss.s''N/S");
+        printer.register_string(
+            "longitude",
+            navtools::longitude_to_string(latitude, navtools::t_latlon_format::seconds, 1),
+            "ddd°mm',ss.s''E/W");
         printer.register_value("z", z, "positive downwards, m");
         printer.register_value("yaw", yaw, "90 ° at east");
         printer.register_value("pitch", pitch, "° positve bow up");
