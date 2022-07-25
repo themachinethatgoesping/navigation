@@ -19,16 +19,16 @@ TEST_CASE("SensorData should support common functions", TESTTAG)
     // initialize location
     auto location = SensorData();
 
-    location.latitude  = 1;
-    location.longitude = 2;
-    location.z         = 3;
+    location.gps_latitude  = 1;
+    location.gps_longitude = 2;
+    location.gps_z         = 3;
 
-    location.heading = NAN;
-    location.heave = 1;
+    location.compass_heading = NAN;
+    location.heave_heave = 1;
 
-    location.yaw   = 10;
-    location.pitch = 20;
-    location.roll  = 30;
+    location.imu_yaw   = 10;
+    location.imu_pitch = 20;
+    location.imu_roll  = 30;
 
     // test copy
     REQUIRE(location == SensorData(location));
@@ -47,7 +47,7 @@ TEST_CASE("SensorData should support common functions", TESTTAG)
     location.print(std::cerr);
     REQUIRE(location.info_string().find("invalid") != std::string::npos);
 
-    location.heading = 12;
+    location.compass_heading = 12;
     location.print(std::cerr);
     REQUIRE(location.info_string().find("valid") != std::string::npos);
 }
