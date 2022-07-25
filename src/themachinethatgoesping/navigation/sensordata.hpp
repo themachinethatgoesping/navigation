@@ -22,7 +22,8 @@ namespace navigation {
 struct SensorDataUTM; // defined in sensordatautm.hpp
 
 /**
- * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
+ * @brief A structure to store a georeferenced location and attitude data from different sensors
+ * (e.g. GPS, IMU, etc.)
  *
  */
 struct SensorData
