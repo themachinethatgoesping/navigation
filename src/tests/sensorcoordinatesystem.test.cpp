@@ -7,6 +7,7 @@
 #include <filesystem>
 
 #include "../themachinethatgoesping/navigation/sensorcoordinatesystem.hpp"
+#include "../themachinethatgoesping/navigation/navdata.hpp"
 
 // using namespace testing;
 using namespace std;
@@ -74,10 +75,19 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
 
     SECTION("SENSOR_VALUES")
     {
+        navdata::SensorDataLocal sensor_data;
+        
         // scenario 1
-        scs.set_depthSensorDepth(5);
-        scs.set_compassHeading(25);
-        scs.set_motionSensorYPR(40, 20, 10, false);
+        sensor_data.gps_z = 5;
+        sensor_data.compass_heading = 25;
+        sensor_data.imu_yaw = 40;
+        sensor_data.imu_pitch = 20;
+        sensor_data.imu_roll = 10;
+        scs.set_sensor_data(sensor_data);
+        // scs.set_depthSensorDepth(5);
+        // scs.set_compassHeading(25);
+        // scs.set_motionSensorYPR(40, 20, 10, false);
+
         scs.set_positionSystemXY(10, 20);
         REQUIRE(scs.get_targetDepth("MBES") == Approx(7.7605814142));
         REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
@@ -103,9 +113,15 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(31.4141895033));
 
         // scenario 2
-        scs.set_depthSensorDepth(-5);
-        scs.set_compassHeading(-35);
-        scs.set_motionSensorYPR(40, -5, -15, false);
+        // scs.set_depthSensorDepth(-5);
+        // scs.set_compassHeading(-35);
+        // scs.set_motionSensorYPR(40, -5, -15, false);
+        sensor_data.gps_z = -5;
+        sensor_data.compass_heading = -35;
+        sensor_data.imu_yaw = 40;
+        sensor_data.imu_pitch = -5;
+        sensor_data.imu_roll = -15;
+        scs.set_sensor_data(sensor_data);
         scs.set_positionSystemXY(-23, -20);
         CHECK(scs.get_targetDepth("MBES") == Approx(-2.5417620175));
         REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
@@ -131,9 +147,15 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(-4.429576033));
 
         // scenario 3
-        scs.set_depthSensorDepth(3);
-        scs.set_compassHeading(120);
-        scs.set_motionSensorYPR(30, -5, -15, true);
+        // scs.set_depthSensorDepth(3);
+        // scs.set_compassHeading(120);
+        // scs.set_motionSensorYPR(30, -5, -15, true);
+        sensor_data.gps_z = 3;
+        sensor_data.compass_heading = NAN;
+        sensor_data.imu_yaw = 30;
+        sensor_data.imu_pitch = -5;
+        sensor_data.imu_roll = -15;
+        scs.set_sensor_data(sensor_data);
         scs.set_positionSystemXY(100, -20);
         CHECK(scs.get_targetDepth("MBES") == Approx(5.4582379825));
         REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
@@ -159,9 +181,15 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(-4.429576033));
 
         // scenario 4
-        scs.set_depthSensorDepth(-2000);
-        scs.set_compassHeading(-470);
-        scs.set_motionSensorYPR(40, -59, 1, false);
+        // scs.set_depthSensorDepth(-2000);
+        // scs.set_compassHeading(-470);
+        // scs.set_motionSensorYPR(40, -59, 1, false);
+        sensor_data.gps_z = -2000;
+        sensor_data.compass_heading = -470;
+        sensor_data.imu_yaw = 40;
+        sensor_data.imu_pitch = -59;
+        sensor_data.imu_roll = 1;
+        scs.set_sensor_data(sensor_data);
         scs.set_positionSystemXY(23, -1000);
         CHECK(scs.get_targetDepth("MBES") == Approx(-1997.5799764953));
         REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
@@ -187,9 +215,15 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(-36.6392731807));
 
         // scenario 5 (latlon)
-        scs.set_depthSensorDepth(2000);
-        scs.set_compassHeading(470);
-        scs.set_motionSensorYPR(40, -59, 1, false);
+        // scs.set_depthSensorDepth(2000);
+        // scs.set_compassHeading(470);
+        // scs.set_motionSensorYPR(40, -59, 1, false);
+        sensor_data.gps_z = 2000;
+        sensor_data.compass_heading = 470;
+        sensor_data.imu_yaw = 40;
+        sensor_data.imu_pitch = -59;
+        sensor_data.imu_roll = 1;
+        scs.set_sensor_data(sensor_data);
         scs.set_positionSystemLatLon(54.123, -10.123);
         CHECK(scs.get_targetDepth("MBES") == Approx(2002.4200235047));
         REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
@@ -211,9 +245,15 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(-36.6392731807));
 
         // scenario 6 (latlon)
-        scs.set_depthSensorDepth(1000);
-        scs.set_compassHeading(360);
-        scs.set_motionSensorYPR(40, 9, -1, false);
+        // scs.set_depthSensorDepth(1000);
+        // scs.set_compassHeading(360);
+        // scs.set_motionSensorYPR(40, 9, -1, false);
+        sensor_data.gps_z = 1000;
+        sensor_data.compass_heading = 360;
+        sensor_data.imu_yaw = 40;
+        sensor_data.imu_pitch = 9;
+        sensor_data.imu_roll = -1;
+        scs.set_sensor_data(sensor_data);
         scs.set_positionSystemLatLon(-74.123, 1.123);
         CHECK(scs.get_targetDepth("MBES") == Approx(1002.7717041909));
         REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));

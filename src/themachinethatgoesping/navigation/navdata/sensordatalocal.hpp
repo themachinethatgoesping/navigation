@@ -86,6 +86,7 @@ struct SensorDataLocal
     {
     }
 
+
     bool operator!=(const SensorDataLocal& rhs) const { return !(operator==(rhs)); }
     /**
      * @brief Check if two SensorDataLocal objects are equal

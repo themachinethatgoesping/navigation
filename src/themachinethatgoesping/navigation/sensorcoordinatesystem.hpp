@@ -17,6 +17,7 @@
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
 #include "navdata.hpp"
+#include "navdata.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -34,15 +35,17 @@ class SensorCoordinateSystem
         _TargetOffsetIDs; ///< TargetId (position in vector) for each registered key
 
     // Static Roll,Pitch,Yaw Offsets of Motionsensor Installation and Position of Motionsensor
-    navdata::PositionalOffsets _MotionSensorOffsets;
+    navdata::PositionalOffsets _motion_sensor_offsets;
     // Static Roll,Pitch,Yaw Offsets of Motionsensor Installation and Position of Motionsensor
-    navdata::PositionalOffsets _CompassOffsets;
+    navdata::PositionalOffsets _compass_offsets;
     // Static Position of Positionsystem
-    navdata::PositionalOffsets _PositionSystemOffsets;
+    navdata::PositionalOffsets _position_system_offsets;
     // Static Position of Depth Sensor
-    navdata::PositionalOffsets _DepthSensorOffsets;
+    navdata::PositionalOffsets _depth_sensor_offsets;
     // Static Position of Heave Sensor
     // Offsets _HeaveSensorOffsets;
+
+    navdata::SensorDataLocal _sensor_data; ///< Local sensor data
 
     bool   _Latlon_set = false;
     double _Lat;
@@ -50,18 +53,10 @@ class SensorCoordinateSystem
 
     double _X     = 0; // Position Y in meters
     double _Y     = 0; // Position X in meters
-    double _Z     = 0; // depth sensor depth
-    double _Heave = 0;
 
-    double _RotationPoint_X = 0;
-    double _RotationPoint_Y = 0;
-    double _RotationPoint_Z = 0;
-
-    bool   _use_motionSensorYaw = false;
-    double _Heading             = 0;
-    double _Yaw                 = 0; // Motion sensor heading
-    double _Pitch               = 0;
-    double _Roll                = 0;
+    double _rotation_point_x = 0;
+    double _rotation_point_y = 0;
+    double _rotation_point_z = 0;
 
   public:
     SensorCoordinateSystem() = default;
@@ -89,15 +84,15 @@ class SensorCoordinateSystem
         // vessel quat is negative rotation quat because rotation point is the center of the
         // rotation
         auto target_xyz_quat =
-            tools::rotationfunctions::getQuaterniondfromVector(target_offset.x - _RotationPoint_X,
-                                                               target_offset.y - _RotationPoint_Y,
-                                                               target_offset.z - _RotationPoint_Z);
+            tools::rotationfunctions::getQuaterniondfromVector(target_offset.x - _rotation_point_x,
+                                                               target_offset.y - _rotation_point_y,
+                                                               target_offset.z - _rotation_point_z);
 
         // distance between the rotation point and the depth sensor quat
         auto depthSensor_xyz_quat = tools::rotationfunctions::getQuaterniondfromVector(
-            _DepthSensorOffsets.x - _RotationPoint_X,
-            _DepthSensorOffsets.y - _RotationPoint_Y,
-            _DepthSensorOffsets.z - _RotationPoint_Z);
+            _depth_sensor_offsets.x - _rotation_point_x,
+            _depth_sensor_offsets.y - _rotation_point_y,
+            _depth_sensor_offsets.z - _rotation_point_z);
 
         auto vessel_quat = get_vesselQuat(); // current rotation of vessel
         auto target_xyz  = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
@@ -107,7 +102,7 @@ class SensorCoordinateSystem
         //_Z is depth sensor depth
         //_Heave is defined as positive up
         // difference between vessel and depth sensor z
-        return target_xyz[2] - depthSensor_xyz[2] - _Heave + _Z;
+        return target_xyz[2] - depthSensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
     }
 
     /**
@@ -134,15 +129,15 @@ class SensorCoordinateSystem
         // vessel quat is negative rotation quat because rotation point is the center of the
         // rotation
         auto target_xyz_quat =
-            tools::rotationfunctions::getQuaterniondfromVector(target_offset.x - _RotationPoint_X,
-                                                               target_offset.y - _RotationPoint_Y,
-                                                               target_offset.z - _RotationPoint_Z);
+            tools::rotationfunctions::getQuaterniondfromVector(target_offset.x - _rotation_point_x,
+                                                               target_offset.y - _rotation_point_y,
+                                                               target_offset.z - _rotation_point_z);
 
         // distance between the rotation point and the depth sensor quat
         auto positionSystem_xyz_quat = tools::rotationfunctions::getQuaterniondfromVector(
-            _PositionSystemOffsets.x - _RotationPoint_X,
-            _PositionSystemOffsets.y - _RotationPoint_Y,
-            _PositionSystemOffsets.z - _RotationPoint_Z);
+            _position_system_offsets.x - _rotation_point_x,
+            _position_system_offsets.y - _rotation_point_y,
+            _position_system_offsets.z - _rotation_point_z);
 
         auto vessel_quat = get_vesselQuat(); // current rotation of vessel
         auto target_xyz  = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
@@ -254,13 +249,13 @@ class SensorCoordinateSystem
         // vessel quat is negative rotation quat because rotation point is the center of the
         // rotation
         auto vessel_xyz_quat = tools::rotationfunctions::getQuaterniondfromVector(
-            -_RotationPoint_X, -_RotationPoint_Y, -_RotationPoint_Z);
+            -_rotation_point_x, -_rotation_point_y, -_rotation_point_z);
 
         // distance between the rotation point and the depth sensor quat
         auto depthSensor_xyz_quat = tools::rotationfunctions::getQuaterniondfromVector(
-            _DepthSensorOffsets.x - _RotationPoint_X,
-            _DepthSensorOffsets.y - _RotationPoint_Y,
-            _DepthSensorOffsets.z - _RotationPoint_Z);
+            _depth_sensor_offsets.x - _rotation_point_x,
+            _depth_sensor_offsets.y - _rotation_point_y,
+            _depth_sensor_offsets.z - _rotation_point_z);
 
         auto vessel_xyz = tools::rotationfunctions::rotateXYZ(vessel_quat, vessel_xyz_quat);
         auto depthSensor_xyz =
@@ -269,38 +264,40 @@ class SensorCoordinateSystem
         //_Z is depth sensor depth
         //_Heave is defined as positive up
         // difference between vessel and depth sensor z
-        return vessel_xyz[2] - depthSensor_xyz[2] - _Heave + _Z;
+        return vessel_xyz[2] - depthSensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
     }
 
     Eigen::Quaterniond get_vesselQuat() const
     {
         /* first do yaw rotation */
-        double Heading;
+        double heading = _sensor_data.compass_heading;
+        bool use_motionSensorYaw = false;
 
-        if (_use_motionSensorYaw)
+        if (std::isnan(heading))
         {
-            Heading = _Yaw;
+            use_motionSensorYaw = true;
+            heading = _sensor_data.imu_yaw;
         }
         else
         {
-            // For additive and intrinsic yaw pitch roll: yaw is applied first and therefore
+            // yaw is applied first and therefore
             // additive
-            Heading = _Heading - _CompassOffsets.yaw;
+            heading = heading - _compass_offsets.yaw;
         }
 
         Eigen::Quaternion<double> offset_quat;
         double                    yaw_offset = 0;
-        if (_use_motionSensorYaw)
-            yaw_offset = _MotionSensorOffsets.yaw;
+        if (use_motionSensorYaw)
+            yaw_offset = _motion_sensor_offsets.yaw;
 
         offset_quat = tools::rotationfunctions::quaternion_from_ypr(
-            yaw_offset, _MotionSensorOffsets.pitch, _MotionSensorOffsets.roll, true);
+            yaw_offset, _motion_sensor_offsets.pitch, _motion_sensor_offsets.roll, true);
 
-        if (_use_motionSensorYaw)
+        if (use_motionSensorYaw)
         {
 
             auto sensor_quat =
-                tools::rotationfunctions::quaternion_from_ypr(_Yaw, _Pitch, _Roll, true);
+                tools::rotationfunctions::quaternion_from_ypr(_sensor_data.imu_yaw, _sensor_data.imu_pitch, _sensor_data.imu_roll, true);
             sensor_quat.normalize();
             offset_quat.normalize();
 
@@ -310,9 +307,9 @@ class SensorCoordinateSystem
         {
 
             auto sensor_quat =
-                tools::rotationfunctions::quaternion_from_ypr(0.0, _Pitch, _Roll, true);
+                tools::rotationfunctions::quaternion_from_ypr(0.0, _sensor_data.imu_pitch, _sensor_data.imu_roll, true);
             auto compass_quat =
-                tools::rotationfunctions::quaternion_from_ypr(Heading, 0.0, 0.0, true);
+                tools::rotationfunctions::quaternion_from_ypr(heading, 0.0, 0.0, true);
 
             sensor_quat.normalize();
             offset_quat.normalize();
@@ -374,102 +371,32 @@ class SensorCoordinateSystem
         _X          = X;
         _Y          = Y;
     }
-    void set_motionSensorYPR(double yaw, double pitch, double roll, bool use_motionSensorYaw)
+
+    void set_sensor_data(const navdata::SensorDataLocal& sensor_data)
     {
-        _use_motionSensorYaw = use_motionSensorYaw;
-        _Yaw                 = yaw;
-        _Pitch               = pitch;
-        _Roll                = roll;
+        _sensor_data = sensor_data;
     }
-    void set_motionSensorPR(double pitch, double roll)
+
+    navdata::SensorDataLocal get_sensor_data() const
     {
-        _Yaw   = 0.0;
-        _Pitch = pitch;
-        _Roll  = roll;
-    }
-    void set_compassHeading(double heading, bool use_motionSensorYaw = false)
-    {
-        _use_motionSensorYaw = use_motionSensorYaw;
-        _Heading             = heading;
-    }
-    void set_depthSensorDepth(double depth) { _Z = depth; }
-    void set_heaveSensorHeave(double heave) { _Heave = heave; }
-    void set_vesselSensorValuesLatLon(double      lat,
-                                      double      lon,
-                                      double      depth,
-                                      double      heave,
-                                      double      heading,
-                                      double      yaw,
-                                      double      pitch,
-                                      double      roll,
-                                      int_fast8_t use_motionSensorYaw = -1)
-    {
-        _Latlon_set = true;
-        _Lat        = lat;
-        _Lon        = lon;
-        if (use_motionSensorYaw == 0)
-            _use_motionSensorYaw = false;
-        if (use_motionSensorYaw == 1)
-            _use_motionSensorYaw = true;
-        if (std::isfinite(depth))
-            _Z = depth;
-        if (std::isfinite(heave))
-            _Heave = heave;
-        if (std::isfinite(heading))
-            _Heading = heading;
-        if (std::isfinite(yaw))
-            _Yaw = yaw;
-        if (std::isfinite(pitch))
-            _Pitch = pitch;
-        if (std::isfinite(roll))
-            _Roll = roll;
-    }
-    void set_vesselSensorValuesXY(double      X,
-                                  double      Y,
-                                  double      depth,
-                                  double      heave,
-                                  double      heading,
-                                  double      yaw,
-                                  double      pitch,
-                                  double      roll,
-                                  int_fast8_t use_motionSensorYaw = -1)
-    {
-        _Latlon_set = false;
-        _X          = X;
-        _Y          = Y;
-        if (use_motionSensorYaw == 0)
-            _use_motionSensorYaw = false;
-        if (use_motionSensorYaw == 1)
-            _use_motionSensorYaw = true;
-        if (std::isfinite(depth))
-            _Z = depth;
-        if (std::isfinite(heave))
-            _Heave = heave;
-        if (std::isfinite(heading))
-            _Heading = heading;
-        if (std::isfinite(yaw))
-            _Yaw = yaw;
-        if (std::isfinite(pitch))
-            _Pitch = pitch;
-        if (std::isfinite(roll))
-            _Roll = roll;
+        return _sensor_data;
     }
 
     //------------------------------------- Rotation point offsets --------------------------------
     void set_rotationPoint(double x, double y, double z)
     {
-        _RotationPoint_X = x;
-        _RotationPoint_Y = y;
-        _RotationPoint_Z = z;
+        _rotation_point_x = x;
+        _rotation_point_y = y;
+        _rotation_point_z = z;
     }
-    void set_rotationPointZ(double z) { _RotationPoint_Z = z; }
+    void set_rotationPointZ(double z) { _rotation_point_z = z; }
     void set_vesselPointWaterlineOffset(double vesselPointHeight)
     {
-        _RotationPoint_Z = -vesselPointHeight;
+        _rotation_point_z = -vesselPointHeight;
     }
     std::tuple<double, double, double> get_rotationPoint() const
     {
-        return std::make_tuple(_RotationPoint_X, _RotationPoint_Y, _RotationPoint_Z);
+        return std::make_tuple(_rotation_point_x, _rotation_point_y, _rotation_point_z);
     }
 
     //------------------------------------- Target offsets(e.g Offsets of Multibeam)---------------
@@ -510,54 +437,49 @@ class SensorCoordinateSystem
         return _TargetOffsets[map_it->second];
     }
 
-    void set_motionSensorOffsets(double yaw, double pitch, double roll)
+    void set_motion_sensor_offsets(double yaw, double pitch, double roll)
     {
-        _MotionSensorOffsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
+        _motion_sensor_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
     }
-    void set_motionSensorOffsets(const navdata::PositionalOffsets& new_offsets)
+    void set_motion_sensor_offsets(const navdata::PositionalOffsets& new_offsets)
     {
-        _MotionSensorOffsets = new_offsets;
+        _motion_sensor_offsets = new_offsets;
     }
 
-    navdata::PositionalOffsets get_motionSensorOffsets() const { return _MotionSensorOffsets; }
+    navdata::PositionalOffsets get_motion_sensor_offsets() const { return _motion_sensor_offsets; }
 
-    void set_compassOffsets(double yaw)
+    void set_compass_offsets(double yaw)
     {
-        _CompassOffsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
+        _compass_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
         // Offsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0, Offsets::t_angleOffsetType::additive);
     }
-    void set_compassOffsets(const navdata::PositionalOffsets& new_offsets) { _CompassOffsets = new_offsets; }
-    navdata::PositionalOffsets get_compassOffsets() const { return _CompassOffsets; }
+    void set_compass_offsets(const navdata::PositionalOffsets& new_offsets) { _compass_offsets = new_offsets; }
+    navdata::PositionalOffsets get_compass_offsets() const { return _compass_offsets; }
 
-    void set_depthSensorOffsets(double x, double y, double z)
+    void set_depth_sensor_offsets(double x, double y, double z)
     {
-        _DepthSensorOffsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+        _depth_sensor_offsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
     }
-    void set_depthSensorOffsets(const navdata::PositionalOffsets& new_offsets)
+    void set_depth_sensor_offsets(const navdata::PositionalOffsets& new_offsets)
     {
-        _DepthSensorOffsets = new_offsets;
+        _depth_sensor_offsets = new_offsets;
     }
-    navdata::PositionalOffsets get_depthSensorOffsets() const { return _DepthSensorOffsets; }
+    navdata::PositionalOffsets get_depth_sensor_offsets() const { return _depth_sensor_offsets; }
 
     //    void set_heaveSensorOffsets(double x, double y, double z);
     //    void set_heaveSensorOffsets(const Offsets& new_offsets);
     //    Offsets get_heaveSensorOffsets() const;
 
-    void set_positionSystemOffsets(double x, double y, double z)
+    void set_position_system_offsets(double x, double y, double z)
     {
-        _PositionSystemOffsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+        _position_system_offsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
     }
-    void set_positionSystemOffsets(const navdata::PositionalOffsets& new_offsets)
+    void set_position_system_offsets(const navdata::PositionalOffsets& new_offsets)
     {
-        _PositionSystemOffsets = new_offsets;
+        _position_system_offsets = new_offsets;
     }
-    navdata::PositionalOffsets get_positionSystemOffsets() const { return _PositionSystemOffsets; }
+    navdata::PositionalOffsets get_position_system_offsets() const { return _position_system_offsets; }
 
-    bool get_use_motionSensorYaw() const { return _use_motionSensorYaw; }
-    void set_use_motionSensorYaw(bool use_motionSensorYaw)
-    {
-        _use_motionSensorYaw = use_motionSensorYaw;
-    }
 };
 
 } // namespace navigation
