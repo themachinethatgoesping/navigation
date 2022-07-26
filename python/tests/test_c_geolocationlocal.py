@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-import themachinethatgoesping.navigation as nav
+from themachinethatgoesping.navigation.datastructures import GeoLocationLocal, GeoLocationUTM
 
 import time
 from pytest import approx, raises
@@ -13,7 +13,7 @@ class Test_navigation_GeoLocationLocal:
     # define actual tests (must start with "test_"
     # test case 1
     def test_GeoLocationLocal_should_support_common_functions(self):
-        location = nav.GeoLocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
+        location = GeoLocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
         print(location)
 
         # print
@@ -26,17 +26,17 @@ class Test_navigation_GeoLocationLocal:
         assert location != location2
 
         # binary
-        assert location == nav.GeoLocationLocal.from_binary(location.to_binary())
+        assert location == GeoLocationLocal.from_binary(location.to_binary())
 
     def test_GeoLocationLocal_should_support_utm_conversions(self):
-        location = nav.GeoLocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
+        location = GeoLocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
         print(location)
 
         zone = 60
         northern_hemisphere = False
 
         # create a new GeoLocation object by explicit conversion
-        location_utm = nav.GeoLocationUTM(
+        location_utm = GeoLocationUTM(
             location, zone=zone, northern_hemisphere=northern_hemisphere
         )
 
@@ -47,9 +47,9 @@ class Test_navigation_GeoLocationLocal:
         with raises(TypeError):
             location_utm == location
 
-        assert nav.GeoLocationLocal.from_geolocationutm(location_utm) == location
+        assert GeoLocationLocal.from_geolocationutm(location_utm) == location
         assert location_utm == (
-            nav.GeoLocationLocal.to_geolocationutm(
+            GeoLocationLocal.to_geolocationutm(
                 location, zone=zone, northern_hemisphere=northern_hemisphere
             )
         )
@@ -57,7 +57,7 @@ class Test_navigation_GeoLocationLocal:
         # check conversion with offsets
         offset_northing = 100
         offset_easting = -100
-        location_utm2 = nav.GeoLocationUTM(
+        location_utm2 = GeoLocationUTM(
             location,
             zone=zone,
             northern_hemisphere=northern_hemisphere,
@@ -69,10 +69,10 @@ class Test_navigation_GeoLocationLocal:
         assert location_utm2.northing == approx(location_utm.northing + offset_northing)
         assert location_utm2.easting == approx(location_utm.easting + offset_easting)
 
-        location2 = nav.GeoLocationLocal.from_geolocationutm(location_utm2)
+        location2 = GeoLocationLocal.from_geolocationutm(location_utm2)
         assert location2 == location_utm2
 
-        location3 = nav.GeoLocationLocal(
+        location3 = GeoLocationLocal(
             location_utm2,
             offset_northing=offset_northing,
             offset_easting=offset_easting,

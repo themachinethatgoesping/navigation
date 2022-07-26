@@ -13,10 +13,11 @@
 #include <themachinethatgoesping/tools/helpers.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
-#include "navtools.hpp"
+#include "../navtools.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
+namespace datastructures {
 
 // foorwad declarations for location conversions
 struct SensorDataUTM; // defined in sensordatautm.hpp
@@ -48,7 +49,7 @@ struct SensorData
      * for implicit conversion from SensorDataUTM class)
      *
      */
-    // SensorData(const SensorDataUTM& location_utm); // defined in sensordatautm.hpp
+    SensorData(const SensorDataUTM& data_utm); // defined in sensordatautm.hpp
 
     /**
      * @brief Construct a new SensorData object
@@ -161,5 +162,6 @@ struct SensorData
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
 
+} // nameespace datastrcutures
 } // namespace naviation
 } // namespace themachinethatgoesping

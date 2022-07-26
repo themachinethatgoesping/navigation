@@ -5,12 +5,10 @@
 #include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
 
+#include "datastructures/module.hpp"
+
 // declare modules
-void init_c_positionaloffsets(pybind11::module& m); // c_positionaloffsets.cpp
-void init_c_geolocation(pybind11::module& m);       // c_geolocation.cpp
-void init_c_geolocationutm(pybind11::module& m);    // c_geolocationutm.cpp
-void init_c_geolocationlocal(pybind11::module& m);    // c_geolocationlocal.cpp
-void init_m_navtools(pybind11::module& m);             // m_navtools.cpp
+void init_m_navtools(pybind11::module& m);          // m_navtools.cpp
 
 PYBIND11_MODULE(PYTHON_LIB, m)
 {
@@ -19,8 +17,5 @@ PYBIND11_MODULE(PYTHON_LIB, m)
     m.doc() = "Python module to store, interpolate and transform navigation data";
 
     init_m_navtools(m);
-    init_c_positionaloffsets(m);
-    init_c_geolocation(m);
-    init_c_geolocationutm(m);
-    init_c_geolocationlocal(m);
+    init_m_datastructures(m);
 }

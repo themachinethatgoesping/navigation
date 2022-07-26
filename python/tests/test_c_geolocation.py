@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation import GeoLocation
+from themachinethatgoesping.navigation.datastructures import GeoLocation
 
 import time
 import pytest

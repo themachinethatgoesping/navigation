@@ -8,11 +8,14 @@ module_name = 'navigation'
 # -- sources
 sources = [
     'module.cpp',
-    'c_positionaloffsets.cpp',
-    'c_geolocation.cpp',
-    'c_geolocationutm.cpp',
-    'c_geolocationlocal.cpp',
-    'm_navtools.cpp'
+    'm_navtools.cpp',
+    'datastructures/c_positionaloffsets.cpp',
+    'datastructures/c_geolocation.cpp',
+    'datastructures/c_geolocationutm.cpp',
+    'datastructures/c_geolocationlocal.cpp',
+    'datastructures/c_sensordata.cpp',
+    'datastructures/c_sensordatautm.cpp',
+    'datastructures/c_sensordatalocal.cpp'
 ]
 
 # define python module

@@ -6,48 +6,49 @@
 
 #include <filesystem>
 
-#include "../themachinethatgoesping/navigation/sensordata.hpp"
+#include "../themachinethatgoesping/navigation/datastructures.hpp"
 
 // using namespace testing;
 using namespace std;
-using namespace themachinethatgoesping::navigation;
+using namespace themachinethatgoesping::navigation::datastructures;
 
-#define TESTTAG "[location]"
+#define TESTTAG "[data]"
 
 TEST_CASE("SensorData should support common functions", TESTTAG)
 {
-    // initialize location
-    auto location = SensorData();
+    // initialize data
+    auto data = SensorData();
 
-    location.gps_latitude  = 1;
-    location.gps_longitude = 2;
-    location.gps_z         = 3;
+    data.gps_latitude  = 1;
+    data.gps_longitude = 2;
+    data.gps_z         = 3;
 
-    location.compass_heading = NAN;
-    location.heave_heave = 1;
+    data.compass_heading = 10;
+    data.heave_heave = 1;
 
-    location.imu_yaw   = 10;
-    location.imu_pitch = 20;
-    location.imu_roll  = 30;
+    data.imu_yaw   = 10;
+    data.imu_pitch = 20;
+    data.imu_roll  = 30;
 
     // test copy
-    REQUIRE(location == SensorData(location));
+    REQUIRE(data == SensorData(data));
 
     // test binary
-    REQUIRE(location == SensorData(location.from_binary(location.to_binary())));
+    REQUIRE(data == SensorData(data.from_binary(data.to_binary())));
 
     // test stream
     std::stringstream buffer;
-    location.to_stream(buffer);
-    REQUIRE(location == SensorData(location.from_stream(buffer)));
+    data.to_stream(buffer);
+    REQUIRE(data == SensorData(data.from_stream(buffer)));
 
     // test print does not crash
-    REQUIRE(location.info_string().size() != 0);
+    REQUIRE(data.info_string().size() != 0);
 
-    location.print(std::cerr);
-    REQUIRE(location.info_string().find("invalid") != std::string::npos);
+    data.print(std::cerr);
+    data.compass_heading = NAN;
+    REQUIRE(data.info_string().find("invalid") != std::string::npos);
 
-    location.compass_heading = 12;
-    location.print(std::cerr);
-    REQUIRE(location.info_string().find("valid") != std::string::npos);
+    data.compass_heading = 12;
+    data.print(std::cerr);
+    REQUIRE(data.info_string().find("valid") != std::string::npos);
 }

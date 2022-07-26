@@ -12,6 +12,8 @@ sources = [
     'geolocationutm.test.cpp',
     'geolocationlocal.test.cpp',
     'sensordata.test.cpp',
+    'sensordatautm.test.cpp',
+    'sensordatalocal.test.cpp',
     'sensorcoordinatesystem.test.cpp'
 ]
 

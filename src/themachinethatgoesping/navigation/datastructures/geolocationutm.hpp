@@ -15,6 +15,7 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
+namespace datastructures {
 
 // foorwad declarations for location conversions
 struct GeoLocationLocal; // defined in geolocationlocal.hpp
@@ -205,5 +206,6 @@ inline GeoLocation::GeoLocation(const GeoLocationUTM& location_utm)
 {
 }
 
+} // namespace datastructures
 } // namespace naviation
 } // namespace themachinethatgoesping

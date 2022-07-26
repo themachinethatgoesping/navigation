@@ -13,10 +13,11 @@
 #include <themachinethatgoesping/tools/helpers.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
-#include "navtools.hpp"
+#include "../navtools.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
+namespace datastructures {
 
 // foorwad declarations for location conversions
 struct GeoLocationUTM; // defined in geolocationutm.hpp
@@ -137,5 +138,6 @@ struct GeoLocation
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
 
-} // namespace naviation
+} // namespace datastructures
+} // namespace navigation
 } // namespace themachinethatgoesping

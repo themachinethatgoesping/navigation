@@ -6,12 +6,11 @@
 
 #include <filesystem>
 
-#include "../themachinethatgoesping/navigation/geolocationlocal.hpp"
-#include "../themachinethatgoesping/navigation/geolocationutm.hpp"
+#include "../themachinethatgoesping/navigation/datastructures.hpp"
 
 // using namespace testing;
 using namespace std;
-using namespace themachinethatgoesping::navigation;
+using namespace themachinethatgoesping::navigation::datastructures;
 
 #define TESTTAG "[location]"
 

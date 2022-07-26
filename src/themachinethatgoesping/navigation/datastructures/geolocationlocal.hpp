@@ -16,6 +16,7 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
+namespace datastructures {
 
 
 /**
@@ -193,5 +194,6 @@ inline GeoLocationUTM::GeoLocationUTM(const GeoLocationLocal& location_local,
 {
 }
 
+} // namespace datastrcutures
 } // namespace naviation
 } // namespace themachinethatgoesping

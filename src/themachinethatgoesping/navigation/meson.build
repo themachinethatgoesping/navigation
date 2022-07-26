@@ -11,11 +11,13 @@ sources = [
 ]
 
 headers = [
-  'positionaloffsets.hpp',
-  'geolocation.hpp',
-  'geolocationutm.hpp',
-  'geolocationlocal.hpp',
-  'sensordata.hpp',
+  'datastructures/positionaloffsets.hpp',
+  'datastructures/geolocation.hpp',
+  'datastructures/geolocationutm.hpp',
+  'datastructures/geolocationlocal.hpp',
+  'datastructures/sensordata.hpp',
+  'datastructures/sensordatautm.hpp',
+  'datastructures/sensordatalocal.hpp',
   'sensorcoordinatesystem.hpp',
   'navtools.hpp'
 ]

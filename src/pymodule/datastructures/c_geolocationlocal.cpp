@@ -6,27 +6,27 @@
 #include "docstrings.hpp" //automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
-#include "../themachinethatgoesping/navigation/geolocationlocal.hpp"
+#include "../themachinethatgoesping/navigation/datastructures.hpp"
 #include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
-using namespace themachinethatgoesping::navigation;
+using namespace themachinethatgoesping::navigation::datastructures;
 
 void init_c_geolocationlocal(py::module& m)
 {
 
     py::class_<GeoLocationLocal>(
-        m, "GeoLocationLocal", DOC(themachinethatgoesping, navigation, GeoLocationLocal))
+        m, "GeoLocationLocal", DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal))
         .def(py::init<const GeoLocationUTM&, double, double>(),
-             DOC(themachinethatgoesping, navigation, GeoLocationLocal, GeoLocationLocal_2),
+             DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, GeoLocationLocal_2),
              py::arg("geolocationutm"),
              py::arg("offset_northing") = 0,
              py::arg("offset_easting") = 0)
         .def(py::init<double, double, double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, GeoLocationLocal, GeoLocationLocal_3),
+             DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, GeoLocationLocal_3),
              py::arg("northing") = 0,
              py::arg("easting")  = 0,
              py::arg("z")        = 0,
@@ -35,7 +35,7 @@ void init_c_geolocationlocal(py::module& m)
              py::arg("roll")     = 0)
         .def("__eq__",
              &GeoLocationLocal::operator==,
-             DOC(themachinethatgoesping, navigation, GeoLocationLocal, operator_eq),
+             DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, operator_eq),
              py::arg("rhs"))
         .def_readwrite("northing", &GeoLocationLocal::northing)
         .def_readwrite("easting", &GeoLocationLocal::easting)
@@ -46,7 +46,7 @@ void init_c_geolocationlocal(py::module& m)
         // static functions
         .def_static("to_geolocationutm",
                     &GeoLocationLocal::to_geolocationutm,
-                    DOC(themachinethatgoesping, navigation, GeoLocationLocal, to_geolocationutm),
+                    DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, to_geolocationutm),
                     py::arg("geolocation_local"),
                     py::arg("zone"),
                     py::arg("northern_hemisphere"),
@@ -54,7 +54,7 @@ void init_c_geolocationlocal(py::module& m)
                     py::arg("offset_easting")  = 0)
         .def_static("from_geolocationutm",
                     &GeoLocationLocal::from_geolocationutm,
-                    DOC(themachinethatgoesping, navigation, GeoLocationLocal, from_geolocationutm),
+                    DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, from_geolocationutm),
                     py::arg("geolocation_utm"),
                     py::arg("offset_northing") = 0,
                     py::arg("offset_easting")  = 0)
