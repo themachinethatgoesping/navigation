@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.navdata import SensorDataLatLon
+from themachinethatgoesping.navigation.navdata import SensorDataLatLon, SensorData
 
 import time
 import pytest
@@ -15,7 +15,12 @@ class Test_navigation_SensorData:
     #test case 1
     def test_SensorDataLatLon_should_support_common_functions(self):
         data = SensorDataLatLon(1,2,3,4,10,11,20,30)
+        data_base = SensorData(3,4,10,11,20,30)
         print(data)
+
+        #compare to base
+        assert data_base == SensorData(data)
+        assert data == SensorDataLatLon(data_base,1,2)
 
         #copy
         data2 = data.copy()

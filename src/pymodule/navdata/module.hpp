@@ -12,7 +12,7 @@ void init_c_geolocation(pybind11::module& m);       // c_geolocation.cpp
 void init_c_geolocationutm(pybind11::module& m);    // c_geolocationutm.cpp
 void init_c_geolocationlocal(pybind11::module& m);  // c_geolocationlocal.cpp
 void init_c_sensordata(pybind11::module& m);        // c_sensordata.cpp
-void init_c_sensordatalatlon(pybind11::module& m);        // c_sensordatalatlon.cpp
+void init_c_sensordatalatlon(pybind11::module& m);  // c_sensordatalatlon.cpp
 void init_c_sensordatautm(pybind11::module& m);     // c_sensordatautm.cpp
 void init_c_sensordatalocal(pybind11::module& m);   // c_sensordatalocal.cpp
 
@@ -37,7 +37,8 @@ void init_m_navdata(pybind11::module& m)
     pybind11::implicitly_convertible<SensorDataUTM, SensorDataLatLon>();
     pybind11::implicitly_convertible<SensorDataLatLon, SensorDataUTM>(); 
     
-    pybind11::implicitly_convertible<SensorDataUTM, SensorDataLocal>(); // this does not work anymore since SensorData is derived from SensorDataLocal
-    // pybind11::implicitly_convertible<SensorDataLocal, SensorDataUTM>();
-    // not possible because this conversion needs additional information about zone and hemisphere
+    pybind11::implicitly_convertible<SensorDataUTM,    SensorDataLocal>(); // this does not work anymore since SensorData is derived from SensorDataLocal    
+    pybind11::implicitly_convertible<SensorDataUTM,    SensorData>();   
+    pybind11::implicitly_convertible<SensorDataLatLon, SensorData>(); 
+    pybind11::implicitly_convertible<SensorDataLocal,  SensorData>(); 
 }

@@ -20,17 +20,24 @@ void init_c_sensordatautm(py::module& m)
 
     py::class_<SensorDataUTM, SensorDataLocal>(
         m, "SensorDataUTM", DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM))
-        .def(py::init<const SensorDataLatLon&, int>(),
+        .def(py::init<const SensorData&, double, double, int, bool>(),
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_2),
              py::arg("sensordatalatlon"),
-             py::arg("setgps_zone") = -1)
+             py::arg("gps_northing"),
+          py::arg("gps_easting"),
+             py::arg("gps_zone"),
+             py::arg("gps_northern_hemisphere"))
         .def(py::init<const SensorDataLocal&, int, bool>(),
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_3),
              py::arg("sensordata_local"),
              py::arg("gps_zone"),
              py::arg("gps_northern_hemisphere"))
-        .def(py::init<double, double, int, bool, double, double, double, double, double, double>(),
+        .def(py::init<const SensorDataLatLon&, int>(),
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_4),
+             py::arg("sensordatalatlon"),
+             py::arg("setgps_zone") = -1)
+        .def(py::init<double, double, int, bool, double, double, double, double, double, double>(),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_5),
              py::arg("gps_northing")            = 0,
              py::arg("gps_easting")             = 0,
              py::arg("gps_zone")                = 0,

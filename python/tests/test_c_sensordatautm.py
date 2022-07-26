@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.navdata import SensorDataLatLon, SensorDataUTM
+from themachinethatgoesping.navigation.navdata import SensorDataLatLon, SensorDataUTM, SensorData, SensorDataLocal
 
 import time
 from pytest import approx
@@ -24,7 +24,29 @@ class Test_navigation_SensorDataUTM:
             11, 
             20, 
             30)
+        data_base = SensorDataLocal(
+            5427745.995, 
+            314082.699, 
+            3, 
+            4,
+            10,
+            11, 
+            20, 
+            30)
+        data_base_base = SensorData(
+            3, 
+            4,
+            10,
+            11, 
+            20, 
+            30)
         print(data)
+
+        #compare to base
+        assert data_base == SensorDataLocal(data)
+        assert data_base_base == SensorData(data)
+        assert data == SensorDataUTM(data_base,60,False)
+        assert data == SensorDataUTM(data_base_base,5427745.995, 314082.699, 60,False)
 
         # print
         assert len(str(data)) != 0

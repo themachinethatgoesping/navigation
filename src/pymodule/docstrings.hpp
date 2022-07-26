@@ -769,13 +769,9 @@ Parameter ``data_utm``:
 
 SensorDataLatLon)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_SensorData = R"doc(Construct a new SensorData object (all offsets set to 0))doc";
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_SensorData = R"doc(Construct a new SensorData object)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_SensorData_2 =
-R"doc(Construct an SensorData object from an existing SensorDataUTM object
-(this allows for implicit conversion from SensorDataUTM class))doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_SensorData_3 =
 R"doc(Construct a new SensorData object
 
 Parameter ``gps_z``:

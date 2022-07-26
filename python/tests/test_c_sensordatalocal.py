@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.navdata import SensorDataLocal, SensorDataUTM
+from themachinethatgoesping.navigation.navdata import SensorDataLocal, SensorDataUTM, SensorData
 
 import time
 from pytest import approx, raises
@@ -14,7 +14,12 @@ class Test_navigation_SensorDataLocal:
     # test case 1
     def test_SensorDataLocal_should_support_common_functions(self):
         data = SensorDataLocal(5427745.995, 314082.699, 3, 4, 10, 11, 20, 30)
+        data_base = SensorData(3, 4, 10, 11, 20, 30)
         print(data)
+
+        #compare to base
+        assert data_base == SensorData(data)
+        assert data == SensorDataLocal(data_base,5427745.995, 314082.699)
 
         # print
         assert len(str(data)) != 0

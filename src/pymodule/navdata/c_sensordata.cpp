@@ -19,8 +19,14 @@ void init_c_sensordata(py::module& m)
 {
 
     py::class_<SensorData>(m, "SensorData", DOC(themachinethatgoesping, navigation, navdata, SensorData))
+          .def(py::init<SensorDataLatLon>(),
+               DOC(themachinethatgoesping, navigation, navdata, SensorData, SensorData))
+          .def(py::init<SensorDataLocal>(),
+               DOC(themachinethatgoesping, navigation, navdata, SensorData, SensorData))
+          .def(py::init<SensorDataUTM>(),
+               DOC(themachinethatgoesping, navigation, navdata, SensorData, SensorData))
         .def(py::init<double, double, double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, navdata, SensorData, SensorData_3),
+             DOC(themachinethatgoesping, navigation, navdata, SensorData, SensorData_2),
              py::arg("gps_z")           = 0,
              py::arg("heave_heave")     = 0,
              py::arg("compass_heading") = 0,

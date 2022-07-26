@@ -38,17 +38,10 @@ struct SensorData
     double imu_roll  = 0.0;   ///< from motion sensor, in °, positive means port up
 
     /**
-     * @brief Construct a new SensorData object (all offsets set to 0)
+     * @brief Construct a new SensorData object
      *
      */
     SensorData() = default;
-
-    /**
-     * @brief Construct an SensorData object from an existing SensorDataUTM object (this allows
-     * for implicit conversion from SensorDataUTM class)
-     *
-     */
-    SensorData(const SensorDataUTM& data_utm); // defined in sensordatautm.hpp
 
     /**
      * @brief Construct a new SensorData object
