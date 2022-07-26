@@ -8,24 +8,22 @@ import time
 import pytest
 
 
-#define class for grouping (test sections)
+# define class for grouping (test sections)
 class Test_navigation_GeoLocation:
-    #define actual tests (must start with "test_"
-    #test case 1
+    # define actual tests (must start with "test_"
+    # test case 1
     def test_GeoLocation_should_support_common_functions(self):
-        location = GeoLocation(3,10,20,30)
+        location = GeoLocation(3, 10, 20, 30)
         print(location)
 
-        #print
+        # print
         assert len(str(location)) != 0
 
-        #copy
+        # copy
         location2 = location.copy()
         assert location == location2
         location2.z = 100
         assert location != location2
 
-        #binary
+        # binary
         assert location == GeoLocation.from_binary(location.to_binary())
-
-

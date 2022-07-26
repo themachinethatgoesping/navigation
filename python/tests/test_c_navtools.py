@@ -22,7 +22,9 @@ class Test_navigation_navtools:
 
         assert navtools.longitude_to_string(123.45678, "degrees", 2) == "123.46°E"
         assert navtools.longitude_to_string(123.45678, "minutes", 2) == "123°27.41'E"
-        assert navtools.longitude_to_string(123.45678, "seconds", 2) == "123°27'24.41\"E"
+        assert (
+            navtools.longitude_to_string(123.45678, "seconds", 2) == "123°27'24.41\"E"
+        )
         assert (
             navtools.longitude_to_string(-123.45678, "seconds", 3) == "123°27'24.408\"W"
         )
