@@ -27,8 +27,8 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
 {
     // initialize offsets
     SensorCoordinateSystem            scs;
-    datastructures::PositionalOffsets targetOffsets1(1, 2, 3, 0, 0, 0);
-    datastructures::PositionalOffsets targetOffsets2(1, 2, 3, 45, 5, 10);
+    navdata::PositionalOffsets targetOffsets1(1, 2, 3, 0, 0, 0);
+    navdata::PositionalOffsets targetOffsets2(1, 2, 3, 45, 5, 10);
 
     scs.set_targetOffsets("MBES", targetOffsets1);
     scs.set_targetOffsets("SBES", targetOffsets2);

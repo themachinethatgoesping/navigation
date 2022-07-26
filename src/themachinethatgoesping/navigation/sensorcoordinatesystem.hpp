@@ -16,7 +16,7 @@
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
-#include "datastructures.hpp"
+#include "navdata.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -29,18 +29,18 @@ namespace navigation {
  */
 class SensorCoordinateSystem
 {
-    std::vector<datastructures::PositionalOffsets> _TargetOffsets; ///< Positional offsets of registered targets
+    std::vector<navdata::PositionalOffsets> _TargetOffsets; ///< Positional offsets of registered targets
     std::unordered_map<std::string, size_t>
         _TargetOffsetIDs; ///< TargetId (position in vector) for each registered key
 
     // Static Roll,Pitch,Yaw Offsets of Motionsensor Installation and Position of Motionsensor
-    datastructures::PositionalOffsets _MotionSensorOffsets;
+    navdata::PositionalOffsets _MotionSensorOffsets;
     // Static Roll,Pitch,Yaw Offsets of Motionsensor Installation and Position of Motionsensor
-    datastructures::PositionalOffsets _CompassOffsets;
+    navdata::PositionalOffsets _CompassOffsets;
     // Static Position of Positionsystem
-    datastructures::PositionalOffsets _PositionSystemOffsets;
+    navdata::PositionalOffsets _PositionSystemOffsets;
     // Static Position of Depth Sensor
-    datastructures::PositionalOffsets _DepthSensorOffsets;
+    navdata::PositionalOffsets _DepthSensorOffsets;
     // Static Position of Heave Sensor
     // Offsets _HeaveSensorOffsets;
 
@@ -481,9 +481,9 @@ class SensorCoordinateSystem
                            double             pitch,
                            double             roll)
     {
-        set_targetOffsets(key, datastructures::PositionalOffsets(x, y, z, yaw, pitch, roll));
+        set_targetOffsets(key, navdata::PositionalOffsets(x, y, z, yaw, pitch, roll));
     }
-    void set_targetOffsets(const std::string& key, const datastructures::PositionalOffsets& new_offsets)
+    void set_targetOffsets(const std::string& key, const navdata::PositionalOffsets& new_offsets)
     {
 
         auto map_it = _TargetOffsetIDs.find(key);
@@ -497,7 +497,7 @@ class SensorCoordinateSystem
             _TargetOffsets[map_it->second] = new_offsets;
         }
     }
-    datastructures::PositionalOffsets get_targetOffsets(const std::string& key) const
+    navdata::PositionalOffsets get_targetOffsets(const std::string& key) const
     {
         auto map_it = _TargetOffsetIDs.find(key);
         if (map_it == _TargetOffsetIDs.end())
@@ -512,32 +512,32 @@ class SensorCoordinateSystem
 
     void set_motionSensorOffsets(double yaw, double pitch, double roll)
     {
-        _MotionSensorOffsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
+        _MotionSensorOffsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
     }
-    void set_motionSensorOffsets(const datastructures::PositionalOffsets& new_offsets)
+    void set_motionSensorOffsets(const navdata::PositionalOffsets& new_offsets)
     {
         _MotionSensorOffsets = new_offsets;
     }
 
-    datastructures::PositionalOffsets get_motionSensorOffsets() const { return _MotionSensorOffsets; }
+    navdata::PositionalOffsets get_motionSensorOffsets() const { return _MotionSensorOffsets; }
 
     void set_compassOffsets(double yaw)
     {
-        _CompassOffsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
+        _CompassOffsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
         // Offsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0, Offsets::t_angleOffsetType::additive);
     }
-    void set_compassOffsets(const datastructures::PositionalOffsets& new_offsets) { _CompassOffsets = new_offsets; }
-    datastructures::PositionalOffsets get_compassOffsets() const { return _CompassOffsets; }
+    void set_compassOffsets(const navdata::PositionalOffsets& new_offsets) { _CompassOffsets = new_offsets; }
+    navdata::PositionalOffsets get_compassOffsets() const { return _CompassOffsets; }
 
     void set_depthSensorOffsets(double x, double y, double z)
     {
-        _DepthSensorOffsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+        _DepthSensorOffsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
     }
-    void set_depthSensorOffsets(const datastructures::PositionalOffsets& new_offsets)
+    void set_depthSensorOffsets(const navdata::PositionalOffsets& new_offsets)
     {
         _DepthSensorOffsets = new_offsets;
     }
-    datastructures::PositionalOffsets get_depthSensorOffsets() const { return _DepthSensorOffsets; }
+    navdata::PositionalOffsets get_depthSensorOffsets() const { return _DepthSensorOffsets; }
 
     //    void set_heaveSensorOffsets(double x, double y, double z);
     //    void set_heaveSensorOffsets(const Offsets& new_offsets);
@@ -545,13 +545,13 @@ class SensorCoordinateSystem
 
     void set_positionSystemOffsets(double x, double y, double z)
     {
-        _PositionSystemOffsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+        _PositionSystemOffsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
     }
-    void set_positionSystemOffsets(const datastructures::PositionalOffsets& new_offsets)
+    void set_positionSystemOffsets(const navdata::PositionalOffsets& new_offsets)
     {
         _PositionSystemOffsets = new_offsets;
     }
-    datastructures::PositionalOffsets get_positionSystemOffsets() const { return _PositionSystemOffsets; }
+    navdata::PositionalOffsets get_positionSystemOffsets() const { return _PositionSystemOffsets; }
 
     bool get_use_motionSensorYaw() const { return _use_motionSensorYaw; }
     void set_use_motionSensorYaw(bool use_motionSensorYaw)

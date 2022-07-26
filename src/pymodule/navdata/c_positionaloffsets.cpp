@@ -6,22 +6,22 @@
 #include "docstrings.hpp" //automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
-#include "../themachinethatgoesping/navigation/datastructures.hpp"
+#include "../themachinethatgoesping/navigation/navdata.hpp"
 #include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
-using namespace themachinethatgoesping::navigation::datastructures;
+using namespace themachinethatgoesping::navigation::navdata;
 
 void init_c_positionaloffsets(py::module& m)
 {
 
     py::class_<PositionalOffsets>(
-        m, "PositionalOffsets", DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets))
+        m, "PositionalOffsets", DOC(themachinethatgoesping, navigation, navdata, PositionalOffsets))
         .def(py::init<double, double, double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, PositionalOffsets_2),
+             DOC(themachinethatgoesping, navigation, navdata, PositionalOffsets, PositionalOffsets_2),
              py::arg("x")     = 0,
              py::arg("y")     = 0,
              py::arg("z")     = 0,
@@ -31,7 +31,7 @@ void init_c_positionaloffsets(py::module& m)
 
         .def("__eq__",
              &PositionalOffsets::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, operator_eq),
+             DOC(themachinethatgoesping, navigation, navdata, PositionalOffsets, operator_eq),
              py::arg("other"))
         .def_readwrite("x", &PositionalOffsets::x)
         .def_readwrite("y", &PositionalOffsets::y)

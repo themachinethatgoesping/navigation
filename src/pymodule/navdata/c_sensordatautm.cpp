@@ -6,33 +6,33 @@
 #include "docstrings.hpp" //automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
-#include "../themachinethatgoesping/navigation/datastructures.hpp"
+#include "../themachinethatgoesping/navigation/navdata.hpp"
 #include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
-using namespace themachinethatgoesping::navigation::datastructures;
+using namespace themachinethatgoesping::navigation::navdata;
 
 void init_c_sensordatautm(py::module& m)
 {
 
     py::class_<SensorDataUTM>(
-        m, "SensorDataUTM", DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM))
+        m, "SensorDataUTM", DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM))
         .def(py::init<const SensorData&, int>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_2),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_2),
              py::arg("sensordata"),
              py::arg("setgps_zone") = -1)
         .def(py::init<const SensorDataLocal&, int, bool, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_3),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_3),
              py::arg("sensordata_local"),
              py::arg("gps_zone"),
              py::arg("gps_northern_hemisphere"),
              py::arg("offset_northing") = 0,
              py::arg("offset_easting")  = 0)
         .def(py::init<double, double, int, bool, double, double, double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_4),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_4),
              py::arg("gps_northing")            = 0,
              py::arg("gps_easting")             = 0,
              py::arg("gps_zone")                = 0,
@@ -45,7 +45,7 @@ void init_c_sensordatautm(py::module& m)
              py::arg("imu_roll")                = 0)
         .def("__eq__",
              &SensorDataUTM::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, operator_eq),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, operator_eq),
              py::arg("rhs"))
         .def_readwrite("gps_northing", &SensorDataUTM::gps_northing)
         .def_readwrite("gps_easting", &SensorDataUTM::gps_easting)
@@ -60,11 +60,11 @@ void init_c_sensordatautm(py::module& m)
         // static functions
         .def_static("to_sensordata",
                     &SensorDataUTM::to_sensordata,
-                    DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, to_sensordata),
+                    DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, to_sensordata),
                     py::arg("sensordata_utm"))
         .def_static("from_sensordata",
                     &SensorDataUTM::from_sensordata,
-                    DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, from_sensordata),
+                    DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, from_sensordata),
                     py::arg("sensordata"),
                     py::arg("setgps_zone") = -1)
         // default copy functions

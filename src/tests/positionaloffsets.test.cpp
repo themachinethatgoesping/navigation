@@ -6,11 +6,11 @@
 
 #include <filesystem>
 
-#include "../themachinethatgoesping/navigation/datastructures.hpp"
+#include "../themachinethatgoesping/navigation/navdata.hpp"
 
 // using namespace testing;
 using namespace std;
-using namespace themachinethatgoesping::navigation::datastructures;
+using namespace themachinethatgoesping::navigation::navdata;
 
 #define TESTTAG "[offsets]"
 

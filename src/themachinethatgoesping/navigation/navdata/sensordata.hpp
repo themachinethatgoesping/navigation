@@ -17,7 +17,7 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
-namespace datastructures {
+namespace navdata {
 
 // foorwad declarations for location conversions
 struct SensorDataUTM; // defined in sensordatautm.hpp

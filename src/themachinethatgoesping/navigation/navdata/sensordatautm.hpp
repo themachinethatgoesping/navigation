@@ -16,7 +16,7 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
-namespace datastructures {
+namespace navdata {
 
 // foorwad declarations for location conversions
 struct SensorDataLocal; // defined in sensordatalocal.hpp
@@ -255,6 +255,6 @@ inline SensorData::SensorData(const SensorDataUTM& data_utm)
 {
 }
 
-} // namespace datastructures
+} // namespace navdata
 } // namespace naviation
 } // namespace themachinethatgoesping

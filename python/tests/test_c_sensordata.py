@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.datastructures import SensorData
+from themachinethatgoesping.navigation.navdata import SensorData
 
 import time
 import pytest

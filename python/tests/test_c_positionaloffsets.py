@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.datastructures import PositionalOffsets
+from themachinethatgoesping.navigation.navdata import PositionalOffsets
 
 import time
 import pytest

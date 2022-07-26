@@ -14,18 +14,18 @@ void init_c_sensordata(pybind11::module& m);        // c_sensordata.cpp
 void init_c_sensordatautm(pybind11::module& m);     // c_sensordatautm.cpp
 void init_c_sensordatalocal(pybind11::module& m);   // c_sensordatalocal.cpp
 
-void init_m_datastructures(pybind11::module& m)
+void init_m_navdata(pybind11::module& m)
 {
-    pybind11::module m_datastructures = m.def_submodule("datastructures");
+    pybind11::module m_navdata = m.def_submodule("navdata");
 
-    m_datastructures.doc() = "Submodule that contains datastructures that store navigation "
+    m_navdata.doc() = "Submodule that contains navdata that store navigation "
                              "data or navigation sensor input";
 
-    init_c_positionaloffsets(m_datastructures);
-    init_c_geolocation(m_datastructures);
-    init_c_geolocationutm(m_datastructures);
-    init_c_geolocationlocal(m_datastructures);
-    init_c_sensordata(m_datastructures);
-    init_c_sensordatautm(m_datastructures);
-    init_c_sensordatalocal(m_datastructures);
+    init_c_positionaloffsets(m_navdata);
+    init_c_geolocation(m_navdata);
+    init_c_geolocationutm(m_navdata);
+    init_c_geolocationlocal(m_navdata);
+    init_c_sensordata(m_navdata);
+    init_c_sensordatautm(m_navdata);
+    init_c_sensordatalocal(m_navdata);
 }

@@ -17,7 +17,7 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
-namespace datastructures {
+namespace navdata {
 
 // foorwad declarations for location conversions
 struct GeoLocationUTM; // defined in geolocationutm.hpp
@@ -138,6 +138,6 @@ struct GeoLocation
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
 
-} // namespace datastructures
+} // namespace navdata
 } // namespace navigation
 } // namespace themachinethatgoesping

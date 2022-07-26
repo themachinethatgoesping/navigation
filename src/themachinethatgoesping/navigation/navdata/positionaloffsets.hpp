@@ -12,7 +12,7 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
-namespace datastructures {
+namespace navdata {
 
 /**
  * @brief A structure to store positional offsets (e.g. of a sensor) relative to the vessel coordinate system
@@ -104,6 +104,6 @@ struct PositionalOffsets
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
 
-} // namespace datastructures
+} // namespace navdata
 } // namespace navigation
 } // namespace themachinethatgoesping

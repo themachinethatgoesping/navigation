@@ -16,7 +16,7 @@
 
 namespace themachinethatgoesping {
 namespace navigation {
-namespace datastructures {
+namespace navdata {
 
 /**
  * @brief A structure to store a georeferenced data and attitude data from different sensors
@@ -227,6 +227,6 @@ inline SensorDataUTM::SensorDataUTM(const SensorDataLocal& data_local,
 {
 }
 
-} // namespace datastructures
+} // namespace navdata
 } // namespace naviation
 } // namespace themachinethatgoesping

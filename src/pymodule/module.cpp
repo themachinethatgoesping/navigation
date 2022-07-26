@@ -5,7 +5,7 @@
 #include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
 
-#include "datastructures/module.hpp"
+#include "navdata/module.hpp"
 
 // declare modules
 void init_m_navtools(pybind11::module& m);          // m_navtools.cpp
@@ -17,5 +17,5 @@ PYBIND11_MODULE(PYTHON_LIB, m)
     m.doc() = "Python module to store, interpolate and transform navigation data";
 
     init_m_navtools(m);
-    init_m_datastructures(m);
+    init_m_navdata(m);
 }

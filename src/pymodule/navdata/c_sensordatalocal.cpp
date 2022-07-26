@@ -6,27 +6,27 @@
 #include "docstrings.hpp" //automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
-#include "../themachinethatgoesping/navigation/datastructures.hpp"
+#include "../themachinethatgoesping/navigation/navdata.hpp"
 #include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
-using namespace themachinethatgoesping::navigation::datastructures;
+using namespace themachinethatgoesping::navigation::navdata;
 
 void init_c_sensordatalocal(py::module& m)
 {
 
     py::class_<SensorDataLocal>(
-        m, "SensorDataLocal", DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal))
+        m, "SensorDataLocal", DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal))
         .def(py::init<const SensorDataUTM&, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, SensorDataLocal_2),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, SensorDataLocal_2),
              py::arg("sensordatautm"),
              py::arg("offset_northing") = 0,
              py::arg("offset_easting")  = 0)
         .def(py::init<double, double, double, double, double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, SensorDataLocal_3),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, SensorDataLocal_3),
              py::arg("gps_northing")    = 0,
              py::arg("gps_easting")     = 0,
              py::arg("gps_z")           = 0,
@@ -37,7 +37,7 @@ void init_c_sensordatalocal(py::module& m)
              py::arg("imu_roll")        = 0)
         .def("__eq__",
              &SensorDataLocal::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, operator_eq),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, operator_eq),
              py::arg("rhs"))
         .def_readwrite("gps_northing", &SensorDataLocal::gps_northing)
         .def_readwrite("gps_easting", &SensorDataLocal::gps_easting)
@@ -50,7 +50,7 @@ void init_c_sensordatalocal(py::module& m)
         // static functions
         .def_static("to_sensordatautm",
                     &SensorDataLocal::to_sensordatautm,
-                    DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, to_sensordatautm),
+                    DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, to_sensordatautm),
                     py::arg("sensordata_local"),
                     py::arg("gps_zone"),
                     py::arg("gps_northern_hemisphere"),
@@ -58,7 +58,7 @@ void init_c_sensordatalocal(py::module& m)
                     py::arg("offset_easting")  = 0)
         .def_static("from_sensordatautm",
                     &SensorDataLocal::from_sensordatautm,
-                    DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, from_sensordatautm),
+                    DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, from_sensordatautm),
                     py::arg("sensordata_utm"),
                     py::arg("offset_northing") = 0,
                     py::arg("offset_easting")  = 0)

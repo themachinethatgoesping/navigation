@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.datastructures import GeoLocationLocal, GeoLocationUTM
+from themachinethatgoesping.navigation.navdata import GeoLocationLocal, GeoLocationUTM
 
 import time
 from pytest import approx, raises
