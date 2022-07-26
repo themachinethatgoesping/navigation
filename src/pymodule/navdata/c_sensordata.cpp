@@ -15,17 +15,12 @@
 namespace py = pybind11;
 using namespace themachinethatgoesping::navigation::navdata;
 
-void init_c_sensordatalatlon(py::module& m)
+void init_c_sensordata(py::module& m)
 {
 
-    py::class_<SensorDataLatLon>(m, "SensorDataLatLon", DOC(themachinethatgoesping, navigation, navdata, SensorDataLatLon))
-        .def(py::init<const SensorDataUTM&>(),
-             DOC(themachinethatgoesping, navigation, navdata, SensorDataLatLon, SensorDataLatLon_2),
-             py::arg("sensordatalatlon_utm"))
-        .def(py::init<double, double, double, double, double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, navdata, SensorDataLatLon, SensorDataLatLon_3),
-             py::arg("gps_latitude")    = 0,
-             py::arg("gps_longitude")   = 0,
+    py::class_<SensorData>(m, "SensorData", DOC(themachinethatgoesping, navigation, navdata, SensorData))
+        .def(py::init<double, double, double, double, double, double>(),
+             DOC(themachinethatgoesping, navigation, navdata, SensorData, SensorData_3),
              py::arg("gps_z")           = 0,
              py::arg("heave_heave")     = 0,
              py::arg("compass_heading") = 0,
@@ -33,23 +28,21 @@ void init_c_sensordatalatlon(py::module& m)
              py::arg("imu_pitch")       = 0,
              py::arg("imu_roll")        = 0)
         .def("__eq__",
-             &SensorDataLatLon::operator==,
-             DOC(themachinethatgoesping, navigation, navdata, SensorDataLatLon, operator_eq),
+             &SensorData::operator==,
+             DOC(themachinethatgoesping, navigation, navdata, SensorData, operator_eq),
              py::arg("other"))
-        .def_readwrite("gps_latitude", &SensorDataLatLon::gps_latitude)
-        .def_readwrite("gps_longitude", &SensorDataLatLon::gps_longitude)
-        .def_readwrite("gps_z", &SensorDataLatLon::gps_z)
-        .def_readwrite("heave_heave", &SensorDataLatLon::heave_heave)
-        .def_readwrite("compass_heading", &SensorDataLatLon::compass_heading)
-        .def_readwrite("imu_yaw", &SensorDataLatLon::imu_yaw)
-        .def_readwrite("imu_pitch", &SensorDataLatLon::imu_pitch)
-        .def_readwrite("imu_roll", &SensorDataLatLon::imu_roll)
+        .def_readwrite("gps_z", &SensorData::gps_z)
+        .def_readwrite("heave_heave", &SensorData::heave_heave)
+        .def_readwrite("compass_heading", &SensorData::compass_heading)
+        .def_readwrite("imu_yaw", &SensorData::imu_yaw)
+        .def_readwrite("imu_pitch", &SensorData::imu_pitch)
+        .def_readwrite("imu_roll", &SensorData::imu_roll)
         // default copy functions
-        __PYCLASS_DEFAULT_COPY__(SensorDataLatLon)
+        __PYCLASS_DEFAULT_COPY__(SensorData)
         // default binary functions
-        __PYCLASS_DEFAULT_BINARY__(SensorDataLatLon)
+        __PYCLASS_DEFAULT_BINARY__(SensorData)
         // default printing functions
-        __PYCLASS_DEFAULT_PRINTING__(SensorDataLatLon)
-        // end SensorDataLatLon
+        __PYCLASS_DEFAULT_PRINTING__(SensorData)
+        // end SensorData
         ;
 }

@@ -14,6 +14,8 @@ sources = [
     'navdata/c_geolocationutm.cpp',
     'navdata/c_geolocationlocal.cpp',
     'navdata/c_sensordata.cpp',
+    'navdata/c_sensordatalocal.cpp',
+    'navdata/c_sensordatalatlon.cpp',
     'navdata/c_sensordatautm.cpp',
     'navdata/c_sensordatalocal.cpp'
 ]
