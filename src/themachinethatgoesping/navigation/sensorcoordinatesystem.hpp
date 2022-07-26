@@ -53,12 +53,22 @@ class SensorCoordinateSystem
     double _X     = 0; // Position Y in meters
     double _Y     = 0; // Position X in meters
 
-    double _rotation_point_x = 0;
-    double _rotation_point_y = 0;
-    double _rotation_point_z = 0;
-
   public:
     SensorCoordinateSystem() = default;
+
+    navdata::GeoLocation computePosition(const navdata::SensorData& sensor_data)
+    {
+        navdata::GeoLocation location;
+
+        // first get the current roation of the vessel
+         auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets); 
+
+        //
+        //location.
+        
+        return location;
+    }
+
 
     //------------------------------------- get vessel position -----------------------------------
     /**
@@ -83,15 +93,15 @@ class SensorCoordinateSystem
         // vessel quat is negative rotation quat because rotation point is the center of the
         // rotation
         auto target_xyz_quat =
-            tools::rotationfunctions::getQuaterniondfromVector(target_offset.x - _rotation_point_x,
-                                                               target_offset.y - _rotation_point_y,
-                                                               target_offset.z - _rotation_point_z);
+            tools::rotationfunctions::getQuaterniondfromVector(target_offset.x,
+                                                               target_offset.y,
+                                                               target_offset.z);
 
         // distance between the rotation point and the depth sensor quat
         auto depthSensor_xyz_quat = tools::rotationfunctions::getQuaterniondfromVector(
-            _depth_sensor_offsets.x - _rotation_point_x,
-            _depth_sensor_offsets.y - _rotation_point_y,
-            _depth_sensor_offsets.z - _rotation_point_z);
+            _depth_sensor_offsets.x,
+            _depth_sensor_offsets.y,
+            _depth_sensor_offsets.z);
 
         auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets); // current rotation of vessel
         auto target_xyz  = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
@@ -128,15 +138,15 @@ class SensorCoordinateSystem
         // vessel quat is negative rotation quat because rotation point is the center of the
         // rotation
         auto target_xyz_quat =
-            tools::rotationfunctions::getQuaterniondfromVector(target_offset.x - _rotation_point_x,
-                                                               target_offset.y - _rotation_point_y,
-                                                               target_offset.z - _rotation_point_z);
+            tools::rotationfunctions::getQuaterniondfromVector(target_offset.x,
+                                                               target_offset.y,
+                                                               target_offset.z);
 
         // distance between the rotation point and the depth sensor quat
         auto positionSystem_xyz_quat = tools::rotationfunctions::getQuaterniondfromVector(
-            _position_system_offsets.x - _rotation_point_x,
-            _position_system_offsets.y - _rotation_point_y,
-            _position_system_offsets.z - _rotation_point_z);
+            _position_system_offsets.x,
+            _position_system_offsets.y,
+            _position_system_offsets.z);
 
         auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets); // current rotation of vessel
         auto target_xyz  = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
@@ -235,36 +245,6 @@ class SensorCoordinateSystem
         return std::make_pair(target_lat, target_lon);
     }
 
-    /**
-     * @brief get_vesselDepth: Get the depth of the vessel including depth sensor values and heave
-     * including motion correction)
-     * @return depth of the vessel point
-     */
-    double get_vesselDepth() const
-    {
-        auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets); // current rotation of vessel
-
-        // vessel quat is negative rotation quat because rotation point is the center of the
-        // rotation
-        auto vessel_xyz_quat = tools::rotationfunctions::getQuaterniondfromVector(
-            -_rotation_point_x, -_rotation_point_y, -_rotation_point_z);
-
-        // distance between the rotation point and the depth sensor quat
-        auto depthSensor_xyz_quat = tools::rotationfunctions::getQuaterniondfromVector(
-            _depth_sensor_offsets.x - _rotation_point_x,
-            _depth_sensor_offsets.y - _rotation_point_y,
-            _depth_sensor_offsets.z - _rotation_point_z);
-
-        auto vessel_xyz = tools::rotationfunctions::rotateXYZ(vessel_quat, vessel_xyz_quat);
-        auto depthSensor_xyz =
-            tools::rotationfunctions::rotateXYZ(vessel_quat, depthSensor_xyz_quat);
-
-        //_Z is depth sensor depth
-        //_Heave is defined as positive up
-        // difference between vessel and depth sensor z
-        return vessel_xyz[2] - depthSensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
-    }
-
     static Eigen::Quaterniond get_vesselQuat(
         const navdata::SensorData& sensor_data, 
         const navdata::PositionalOffsets& compasss_offsets, 
@@ -313,7 +293,9 @@ class SensorCoordinateSystem
             sensor_quat.normalize();
             offset_quat.normalize();
             compass_quat.normalize();
-            return compass_quat * offset_quat.inverse() * sensor_quat;
+            auto vessel_quat = compass_quat * offset_quat.inverse() * sensor_quat;
+            vessel_quat.normalize(); 
+            return vessel_quat;
         }
     }
 
@@ -379,23 +361,6 @@ class SensorCoordinateSystem
     navdata::SensorData get_sensor_data() const
     {
         return _sensor_data;
-    }
-
-    //------------------------------------- Rotation point offsets --------------------------------
-    void set_rotationPoint(double x, double y, double z)
-    {
-        _rotation_point_x = x;
-        _rotation_point_y = y;
-        _rotation_point_z = z;
-    }
-    void set_rotationPointZ(double z) { _rotation_point_z = z; }
-    void set_vesselPointWaterlineOffset(double vesselPointHeight)
-    {
-        _rotation_point_z = -vesselPointHeight;
-    }
-    std::tuple<double, double, double> get_rotationPoint() const
-    {
-        return std::make_tuple(_rotation_point_x, _rotation_point_y, _rotation_point_z);
     }
 
     //------------------------------------- Target offsets(e.g Offsets of Multibeam)---------------
