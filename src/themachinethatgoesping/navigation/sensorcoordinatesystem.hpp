@@ -17,7 +17,6 @@
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
 #include "navdata.hpp"
-#include "navdata.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -45,7 +44,7 @@ class SensorCoordinateSystem
     // Static Position of Heave Sensor
     // Offsets _HeaveSensorOffsets;
 
-    navdata::SensorDataLocal _sensor_data; ///< Local sensor data
+    navdata::SensorData _sensor_data; ///< Local sensor data
 
     bool   _Latlon_set = false;
     double _Lat;
@@ -94,7 +93,7 @@ class SensorCoordinateSystem
             _depth_sensor_offsets.y - _rotation_point_y,
             _depth_sensor_offsets.z - _rotation_point_z);
 
-        auto vessel_quat = get_vesselQuat(); // current rotation of vessel
+        auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets); // current rotation of vessel
         auto target_xyz  = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
         auto depthSensor_xyz =
             tools::rotationfunctions::rotateXYZ(vessel_quat, depthSensor_xyz_quat);
@@ -139,7 +138,7 @@ class SensorCoordinateSystem
             _position_system_offsets.y - _rotation_point_y,
             _position_system_offsets.z - _rotation_point_z);
 
-        auto vessel_quat = get_vesselQuat(); // current rotation of vessel
+        auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets); // current rotation of vessel
         auto target_xyz  = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
         auto positionSystem_xyz =
             tools::rotationfunctions::rotateXYZ(vessel_quat, positionSystem_xyz_quat);
@@ -243,8 +242,7 @@ class SensorCoordinateSystem
      */
     double get_vesselDepth() const
     {
-
-        auto vessel_quat = get_vesselQuat(); // current rotation of vessel
+        auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets); // current rotation of vessel
 
         // vessel quat is negative rotation quat because rotation point is the center of the
         // rotation
@@ -267,37 +265,39 @@ class SensorCoordinateSystem
         return vessel_xyz[2] - depthSensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
     }
 
-    Eigen::Quaterniond get_vesselQuat() const
+    static Eigen::Quaterniond get_vesselQuat(
+        const navdata::SensorData& sensor_data, 
+        const navdata::PositionalOffsets& compasss_offsets, 
+        const navdata::PositionalOffsets& motion_sensor_offsets)
     {
         /* first do yaw rotation */
-        double heading = _sensor_data.compass_heading;
+        double heading = sensor_data.compass_heading;
         bool use_motionSensorYaw = false;
 
         if (std::isnan(heading))
         {
             use_motionSensorYaw = true;
-            heading = _sensor_data.imu_yaw;
+            heading = sensor_data.imu_yaw;
         }
         else
         {
             // yaw is applied first and therefore
             // additive
-            heading = heading - _compass_offsets.yaw;
+            heading = heading - compasss_offsets.yaw;
         }
 
         Eigen::Quaternion<double> offset_quat;
         double                    yaw_offset = 0;
         if (use_motionSensorYaw)
-            yaw_offset = _motion_sensor_offsets.yaw;
+            yaw_offset = motion_sensor_offsets.yaw;
 
         offset_quat = tools::rotationfunctions::quaternion_from_ypr(
-            yaw_offset, _motion_sensor_offsets.pitch, _motion_sensor_offsets.roll, true);
+            yaw_offset, motion_sensor_offsets.pitch, motion_sensor_offsets.roll, true);
 
         if (use_motionSensorYaw)
         {
-
             auto sensor_quat =
-                tools::rotationfunctions::quaternion_from_ypr(_sensor_data.imu_yaw, _sensor_data.imu_pitch, _sensor_data.imu_roll, true);
+                tools::rotationfunctions::quaternion_from_ypr(sensor_data.imu_yaw, sensor_data.imu_pitch, sensor_data.imu_roll, true);
             sensor_quat.normalize();
             offset_quat.normalize();
 
@@ -305,9 +305,8 @@ class SensorCoordinateSystem
         }
         else
         {
-
             auto sensor_quat =
-                tools::rotationfunctions::quaternion_from_ypr(0.0, _sensor_data.imu_pitch, _sensor_data.imu_roll, true);
+                tools::rotationfunctions::quaternion_from_ypr(0.0, sensor_data.imu_pitch, sensor_data.imu_roll, true);
             auto compass_quat =
                 tools::rotationfunctions::quaternion_from_ypr(heading, 0.0, 0.0, true);
 
@@ -343,7 +342,7 @@ class SensorCoordinateSystem
         target_quat = tools::rotationfunctions::quaternion_from_ypr(
             target_offset.yaw, target_offset.pitch, target_offset.roll, true);
 
-        auto vessel_quat = get_vesselQuat();
+        auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets);
 
         vessel_quat.normalize();
         target_quat.normalize();
@@ -353,7 +352,7 @@ class SensorCoordinateSystem
 
     std::tuple<double, double, double> get_vesselYPR(bool radians) const
     {
-        auto ypr = tools::rotationfunctions::ypr_from_quaternion(get_vesselQuat(), !radians);
+        auto ypr = tools::rotationfunctions::ypr_from_quaternion(get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets), !radians);
 
         return std::make_tuple(ypr[0], ypr[1], ypr[2]);
     }
@@ -372,12 +371,12 @@ class SensorCoordinateSystem
         _Y          = Y;
     }
 
-    void set_sensor_data(const navdata::SensorDataLocal& sensor_data)
+    void set_sensor_data(const navdata::SensorData& sensor_data)
     {
         _sensor_data = sensor_data;
     }
 
-    navdata::SensorDataLocal get_sensor_data() const
+    navdata::SensorData get_sensor_data() const
     {
         return _sensor_data;
     }

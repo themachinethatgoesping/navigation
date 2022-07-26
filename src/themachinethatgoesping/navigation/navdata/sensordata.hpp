@@ -14,13 +14,11 @@
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "../navtools.hpp"
+#include "positionaloffsets.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace navdata {
-
-// foorwad declarations for location conversions
-struct SensorDataUTM; // defined in sensordatautm.hpp
 
 /**
  * @brief A structure to store a georeferenced location and attitude data from different sensors
@@ -30,12 +28,13 @@ struct SensorDataUTM; // defined in sensordatautm.hpp
  */
 struct SensorData
 {
-    double gps_z         = 0.0; ///< in m, positive downwards
-    double heave_heave     = 0.0; ///< from heave sensor, will be added to gps_z in m, positive upwards
-    double compass_heading = NAN; ///< from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
-    double imu_yaw     = 0.0; ///< from motion sensor, in °, 0° is north, 90° is east
-    double imu_pitch = 0.0;   ///< from motion sensor, in °, positive means bow up
-    double imu_roll  = 0.0;   ///< from motion sensor, in °, positive means port up
+    double gps_z       = 0.0; ///< in m, positive downwards
+    double heave_heave = 0.0; ///< from heave sensor, will be added to gps_z in m, positive upwards
+    double compass_heading =
+        NAN; ///< from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
+    double imu_yaw   = 0.0; ///< from motion sensor, in °, 0° is north, 90° is east
+    double imu_pitch = 0.0; ///< from motion sensor, in °, positive means bow up
+    double imu_roll  = 0.0; ///< from motion sensor, in °, positive means port up
 
     /**
      * @brief Construct a new SensorData object
@@ -48,7 +47,8 @@ struct SensorData
      *
      * @param gps_z in m, positive downwards
      * @param heave_heave from heave sensor, will be added to gps_z in m, positive upwards
-     * @param compass_heading from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
+     * @param compass_heading from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
+     * east
      * @param imu_yaw in °, 0° is north, 90° is east
      * @param imu_pitch in °, positive means bow up
      * @param imu_roll in °, positive means port up
@@ -78,17 +78,16 @@ struct SensorData
      */
     bool operator==(const SensorData& rhs) const
     {
-                 if (tools::helpers::approx(gps_z, rhs.gps_z))
-                     if (tools::helpers::approx(heave_heave, rhs.heave_heave))
-                         if (tools::helpers::approx(compass_heading, rhs.compass_heading))
-                             if (tools::helpers::approx(imu_yaw, rhs.imu_yaw))
-                                 if (tools::helpers::approx(imu_pitch, rhs.imu_pitch))
-                                     if (tools::helpers::approx(imu_roll, rhs.imu_roll))
-                                        return true;
+        if (tools::helpers::approx(gps_z, rhs.gps_z))
+            if (tools::helpers::approx(heave_heave, rhs.heave_heave))
+                if (tools::helpers::approx(compass_heading, rhs.compass_heading))
+                    if (tools::helpers::approx(imu_yaw, rhs.imu_yaw))
+                        if (tools::helpers::approx(imu_pitch, rhs.imu_pitch))
+                            if (tools::helpers::approx(imu_roll, rhs.imu_roll))
+                                return true;
 
         return false;
     }
-
 
   private:
     // serialigps_zation support using bitsery
