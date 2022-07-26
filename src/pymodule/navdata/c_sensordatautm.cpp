@@ -24,7 +24,7 @@ void init_c_sensordatautm(py::module& m)
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_2),
              py::arg("sensordatalatlon"),
              py::arg("gps_northing"),
-          py::arg("gps_easting"),
+             py::arg("gps_easting"),
              py::arg("gps_zone"),
              py::arg("gps_northern_hemisphere"))
         .def(py::init<const SensorDataLocal&, int, bool>(),
@@ -52,18 +52,27 @@ void init_c_sensordatautm(py::module& m)
              &SensorDataUTM::operator==,
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, operator_eq),
              py::arg("rhs"))
-        .def_readwrite("gps_zone", &SensorDataUTM::gps_zone)
-        .def_readwrite("gps_northern_hemisphere", &SensorDataUTM::gps_northern_hemisphere)
+        .def_readwrite("gps_zone",
+                       &SensorDataUTM::gps_zone,
+                       DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, gps_zone))
+        .def_readwrite("gps_northern_hemisphere",
+                       &SensorDataUTM::gps_northern_hemisphere,
+                       DOC(themachinethatgoesping,
+                           navigation,
+                           navdata,
+                           SensorDataUTM,
+                           gps_northern_hemisphere))
         // static functions
         .def_static("to_sensordata",
                     &SensorDataUTM::to_sensordata,
                     DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, to_sensordata),
                     py::arg("sensordata_utm"))
-        .def_static("from_sensordata",
-                    &SensorDataUTM::from_sensordata,
-                    DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, from_sensordata),
-                    py::arg("sensordatalatlon"),
-                    py::arg("setgps_zone") = -1)
+        .def_static(
+            "from_sensordata",
+            &SensorDataUTM::from_sensordata,
+            DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, from_sensordata),
+            py::arg("sensordatalatlon"),
+            py::arg("setgps_zone") = -1)
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(SensorDataUTM)
         // default binary functions

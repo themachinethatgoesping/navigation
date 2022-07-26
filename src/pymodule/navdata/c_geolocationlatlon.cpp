@@ -12,7 +12,7 @@
 // -- include pybind11 headers
 #include <pybind11/stl.h>
 
-namespace py        = pybind11;
+namespace py = pybind11;
 using namespace themachinethatgoesping::navigation::navdata;
 
 void init_c_geolocationlatlon(py::module& m)
@@ -21,27 +21,45 @@ void init_c_geolocationlatlon(py::module& m)
     py::class_<GeoLocationLatLon, GeoLocation>(
         m, "GeoLocationLatLon", DOC(themachinethatgoesping, navigation, navdata, GeoLocationLatLon))
         .def(py::init<const GeoLocation&, double, double>(),
-             DOC(themachinethatgoesping, navigation, navdata, GeoLocationLatLon, GeoLocationLatLon_2),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 navdata,
+                 GeoLocationLatLon,
+                 GeoLocationLatLon_2),
              py::arg("location"),
              py::arg("latitude"),
              py::arg("longitude"))
         .def(py::init<const GeoLocationUTM&>(),
-             DOC(themachinethatgoesping, navigation, navdata, GeoLocationLatLon, GeoLocationLatLon_3),
-             py::arg("geolocationlatlon_utm")       )   
-        .def(
-            py::init<double, double, double, double, double, double>(),
-            DOC(themachinethatgoesping, navigation, navdata, GeoLocationLatLon, GeoLocationLatLon_4),
-            py::arg("latitude")     = 0,
-            py::arg("longitude")     = 0,
-            py::arg("z")     = 0,
-            py::arg("yaw")   = 0,
-            py::arg("pitch") = 0,
-            py::arg("roll")  = 0)
+             DOC(themachinethatgoesping,
+                 navigation,
+                 navdata,
+                 GeoLocationLatLon,
+                 GeoLocationLatLon_3),
+             py::arg("geolocationlatlon_utm"))
+        .def(py::init<double, double, double, double, double, double>(),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 navdata,
+                 GeoLocationLatLon,
+                 GeoLocationLatLon_4),
+             py::arg("latitude")  = 0,
+             py::arg("longitude") = 0,
+             py::arg("z")         = 0,
+             py::arg("yaw")       = 0,
+             py::arg("pitch")     = 0,
+             py::arg("roll")      = 0)
         .def("__eq__",
              &GeoLocationLatLon::operator==,
-             DOC(themachinethatgoesping, navigation, navdata, GeoLocationLatLon, operator_eq), py::arg("rhs"))
-        .def_readwrite("latitude",&GeoLocationLatLon::latitude)
-        .def_readwrite("longitude",&GeoLocationLatLon::longitude)
+             DOC(themachinethatgoesping, navigation, navdata, GeoLocationLatLon, operator_eq),
+             py::arg("rhs"))
+        .def_readwrite(
+            "latitude",
+            &GeoLocationLatLon::latitude,
+            DOC(themachinethatgoesping, navigation, navdata, GeoLocationLatLon, latitude))
+        .def_readwrite(
+            "longitude",
+            &GeoLocationLatLon::longitude,
+            DOC(themachinethatgoesping, navigation, navdata, GeoLocationLatLon, longitude))
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(GeoLocationLatLon)
         // default binary functions
@@ -50,5 +68,4 @@ void init_c_geolocationlatlon(py::module& m)
         __PYCLASS_DEFAULT_PRINTING__(GeoLocationLatLon)
         // end GeoLocationLatLon
         ;
-
 }

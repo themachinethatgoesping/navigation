@@ -20,7 +20,7 @@ void init_c_geolocationutm(py::module& m)
 
     py::class_<GeoLocationUTM, GeoLocationLocal>(
         m, "GeoLocationUTM", DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM))
-        .def(py::init<const GeoLocationLocal&, int,bool>(),
+        .def(py::init<const GeoLocationLocal&, int, bool>(),
              DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM, GeoLocationUTM_2),
              py::arg("geolocationlatlon"),
              py::arg("zone"),
@@ -43,8 +43,13 @@ void init_c_geolocationutm(py::module& m)
              &GeoLocationUTM::operator==,
              DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM, operator_eq),
              py::arg("rhs"))
-        .def_readwrite("zone", &GeoLocationUTM::zone)
-        .def_readwrite("northern_hemisphere", &GeoLocationUTM::northern_hemisphere)
+        .def_readwrite("zone",
+                       &GeoLocationUTM::zone,
+                       DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM, zone))
+        .def_readwrite(
+            "northern_hemisphere",
+            &GeoLocationUTM::northern_hemisphere,
+            DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM, northern_hemisphere))
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(GeoLocationUTM)
         // default binary functions
@@ -53,5 +58,4 @@ void init_c_geolocationutm(py::module& m)
         __PYCLASS_DEFAULT_PRINTING__(GeoLocationUTM)
         // end GeoLocationUTM
         ;
-
 }

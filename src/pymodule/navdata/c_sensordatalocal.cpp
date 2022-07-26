@@ -42,8 +42,8 @@ void init_c_sensordatalocal(py::module& m)
              &SensorDataLocal::operator==,
              DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, operator_eq),
              py::arg("rhs"))
-        .def_readwrite("gps_northing", &SensorDataLocal::gps_northing)
-        .def_readwrite("gps_easting", &SensorDataLocal::gps_easting)
+        .def_readwrite("gps_northing", &SensorDataLocal::gps_northing, DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, gps_northing))
+        .def_readwrite("gps_easting", &SensorDataLocal::gps_easting, DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, gps_easting))
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(SensorDataLocal)
         // default binary functions

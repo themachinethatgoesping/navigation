@@ -40,9 +40,13 @@ void init_c_geolocationlocal(py::module& m)
              &GeoLocationLocal::operator==,
              DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal, operator_eq),
              py::arg("rhs"))
-        .def_readwrite("northing", &GeoLocationLocal::northing)
-        .def_readwrite("easting", &GeoLocationLocal::easting)
-        
+        .def_readwrite("northing",
+                       &GeoLocationLocal::northing,
+                       DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal, northing))
+        .def_readwrite("easting",
+                       &GeoLocationLocal::easting,
+                       DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal, easting))
+
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(GeoLocationLocal)
         // default binary functions
@@ -51,5 +55,4 @@ void init_c_geolocationlocal(py::module& m)
         __PYCLASS_DEFAULT_PRINTING__(GeoLocationLocal)
         // end GeoLocationLocal
         ;
-
 }
