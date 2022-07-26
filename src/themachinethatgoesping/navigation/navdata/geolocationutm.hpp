@@ -11,7 +11,7 @@
 #include <themachinethatgoesping/tools/helpers.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
-#include "geolocation.hpp"
+#include "geolocationlatlon.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -42,12 +42,12 @@ struct GeoLocationUTM
     GeoLocationUTM() = default;
 
     /**
-     * @brief Construct an GeoLocationUTM object from an existing GeoLocation object (this allows
-     * for implicit conversion from GeoLocation class)
+     * @brief Construct an GeoLocationUTM object from an existing GeoLocationLatLon object (this allows
+     * for implicit conversion from GeoLocationLatLon class)
      *
      */
-    GeoLocationUTM(const GeoLocation& location, int setzone = -1)
-        : GeoLocationUTM(from_geolocation(location, setzone))
+    GeoLocationUTM(const GeoLocationLatLon& location, int setzone = -1)
+        : GeoLocationUTM(from_geolocation_latlon(location, setzone))
     {
     }
 
@@ -115,14 +115,14 @@ struct GeoLocationUTM
     }
 
     /**
-     * @brief Convert a utm geolocation to a unprojected location
+     * @brief Convert a utm geolocationlatlon to a unprojected location
      *
      * @param location_utm
-     * @return GeoLocation
+     * @return GeoLocationLatLon
      */
-    static GeoLocation to_geolocation(const GeoLocationUTM& location_utm)
+    static GeoLocationLatLon to_geolocation_latlon(const GeoLocationUTM& location_utm)
     {
-        GeoLocation location(
+        GeoLocationLatLon location(
             0, 0, location_utm.z, location_utm.yaw, location_utm.pitch, location_utm.roll);
 
         GeographicLib::UTMUPS::Reverse(location_utm.zone,
@@ -136,14 +136,14 @@ struct GeoLocationUTM
     }
 
     /**
-     * @brief Construct convert a GeoLocation Object to UTM
+     * @brief Construct convert a GeoLocationLatLon Object to UTM
      *
-     * @param location valid GeoLocation object
+     * @param location valid GeoLocationLatLon object
      * @param setzone set a prefered UTM zone negative means automatic, zero means UPS, positive
      * means a particular UTM zone
      * @return GeoLocationUTM
      */
-    static GeoLocationUTM from_geolocation(const GeoLocation& location, int setzone = -1)
+    static GeoLocationUTM from_geolocation_latlon(const GeoLocationLatLon& location, int setzone = -1)
     {
         GeoLocationUTM location_utm(
             0, 0, 0, 0, location.z, location.yaw, location.pitch, location.roll);
@@ -201,8 +201,8 @@ struct GeoLocationUTM
 };
 
 // backwards conversion
-inline GeoLocation::GeoLocation(const GeoLocationUTM& location_utm)
-    : GeoLocation(GeoLocationUTM::to_geolocation(location_utm))
+inline GeoLocationLatLon::GeoLocationLatLon(const GeoLocationUTM& location_utm)
+    : GeoLocationLatLon(GeoLocationUTM::to_geolocation_latlon(location_utm))
 {
 }
 

@@ -11,7 +11,6 @@
 #include <themachinethatgoesping/tools/helpers.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
-#include "geolocation.hpp"
 #include "geolocationutm.hpp"
 
 namespace themachinethatgoesping {
@@ -103,7 +102,7 @@ struct GeoLocationLocal
      * @param offset_easting in m, is added to easting coordinate
      * @return GeoLocationUTM
      */
-    static GeoLocation to_geolocationutm(const GeoLocationLocal& location_local,
+    static GeoLocationUTM to_geolocationutm(const GeoLocationLocal& location_local,
                                          int                     zone,
                                          bool                    northern_hemisphere,
                                          double                  offset_northing = 0,

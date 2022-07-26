@@ -14,10 +14,10 @@ using namespace themachinethatgoesping::navigation::navdata;
 
 #define TESTTAG "[location]"
 
-TEST_CASE("GeoLocation should support common functions", TESTTAG)
+TEST_CASE("GeoLocationLatLon should support common functions", TESTTAG)
 {
     // initialize location
-    auto location = GeoLocation();
+    auto location = GeoLocationLatLon();
 
     location.latitude  = 1;
     location.longitude = 2;
@@ -28,15 +28,15 @@ TEST_CASE("GeoLocation should support common functions", TESTTAG)
     location.roll  = 30;
 
     // test copy
-    REQUIRE(location == GeoLocation(location));
+    REQUIRE(location == GeoLocationLatLon(location));
 
     // test binary
-    REQUIRE(location == GeoLocation(location.from_binary(location.to_binary())));
+    REQUIRE(location == GeoLocationLatLon(location.from_binary(location.to_binary())));
 
     // test stream
     std::stringstream buffer;
     location.to_stream(buffer);
-    REQUIRE(location == GeoLocation(location.from_stream(buffer)));
+    REQUIRE(location == GeoLocationLatLon(location.from_stream(buffer)));
 
     // test print does not crash
     REQUIRE(location.info_string().size() != 0);

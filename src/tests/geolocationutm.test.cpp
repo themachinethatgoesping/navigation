@@ -66,35 +66,35 @@ TEST_CASE("GeoLocationUTM should support common utm/latlon conversions", TESTTAG
     location_south.northern_hemisphere = false;
 
     // test utm/lat lon conversion
-    GeoLocation    location_latlon(location);
+    GeoLocationLatLon    location_latlon(location);
     GeoLocationUTM location_utm(location_latlon);
 
     location_latlon.print(std::cerr);
     location.print(std::cerr);
     location_utm.print(std::cerr);
-    GeoLocationUTM::from_geolocation(location_latlon).print(std::cerr);
+    GeoLocationUTM::from_geolocation_latlon(location_latlon).print(std::cerr);
 
     // to_ and from_ functions should produce the same results as initialization
-    REQUIRE(location_latlon == GeoLocationUTM::to_geolocation(location));
-    REQUIRE(location_utm == GeoLocationUTM::from_geolocation(location_latlon));
+    REQUIRE(location_latlon == GeoLocationUTM::to_geolocation_latlon(location));
+    REQUIRE(location_utm == GeoLocationUTM::from_geolocation_latlon(location_latlon));
 
     // to/from conversion should reproduce the original zone
     REQUIRE(location == location_utm);
-    REQUIRE(location_latlon == GeoLocation(location_utm));
-    REQUIRE(location_south == GeoLocationUTM(GeoLocation(location_south)));
-    REQUIRE(GeoLocation(location_south) ==
-            GeoLocation(GeoLocationUTM(GeoLocation(location_south))));
+    REQUIRE(location_latlon == GeoLocationLatLon(location_utm));
+    REQUIRE(location_south == GeoLocationUTM(GeoLocationLatLon(location_south)));
+    REQUIRE(GeoLocationLatLon(location_south) ==
+            GeoLocationLatLon(GeoLocationUTM(GeoLocationLatLon(location_south))));
 
     // test the same as above but using implicit conversion
     REQUIRE(location == location_latlon);
-    REQUIRE(location_south == GeoLocation(location_south));
+    REQUIRE(location_south == GeoLocationLatLon(location_south));
 
     // test precomputed conversion (north)
     REQUIRE(location_latlon.latitude == Approx(51.024224));
     REQUIRE(location_latlon.longitude == Approx(3.710670));
 
     // test precomputed conversion (north)
-    REQUIRE(GeoLocation(location_south).latitude == Approx(-41.280330));
-    REQUIRE(GeoLocation(location_south).longitude == Approx(174.780011));
+    REQUIRE(GeoLocationLatLon(location_south).latitude == Approx(-41.280330));
+    REQUIRE(GeoLocationLatLon(location_south).longitude == Approx(174.780011));
 
 }

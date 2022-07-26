@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.navdata import GeoLocationUTM, GeoLocation
+from themachinethatgoesping.navigation.navdata import GeoLocationUTM, GeoLocationLatLon
 
 import time
 from pytest import approx
@@ -49,12 +49,12 @@ class Test_navigation_GeoLocationUTM:
             30)
         print(location)
 
-        #create a new GeoLocation object by explicit conversion
-        location_latlon = GeoLocation(location)
+        #create a new GeoLocationLatLon object by explicit conversion
+        location_latlon = GeoLocationLatLon(location)
 
-        #GeoLocationUTM is implicitly convertible and therefore also comparable to GeoLocation
+        #GeoLocationUTM is implicitly convertible and therefore also comparable to GeoLocationLatLon
         assert location == location_latlon
-        assert GeoLocationUTM.from_geolocation(location_latlon) == location_latlon
+        assert GeoLocationUTM.from_geolocation_latlon(location_latlon) == location_latlon
 
         assert location_latlon.latitude == approx(-41.280330)
         assert location_latlon.longitude == approx(174.780011)

@@ -171,13 +171,74 @@ static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSyste
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_vesselPointWaterlineOffset = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation =
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
 sensor))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_2 =
-R"doc(Construct an GeoLocation object from an existing GeoLocationUTM object
-(this allows for implicit conversion from GeoLocationUTM class))doc";
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_2 =
+R"doc(Construct an GeoLocationLatLon object from an existing GeoLocationUTM
+object (this allows for implicit conversion from GeoLocationUTM class))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_GeoLocationLatLon = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_GeoLocationLatLon_2 =
+R"doc(Construct an GeoLocationLatLon object from an existing GeoLocationUTM
+object (this allows for implicit conversion from GeoLocationUTM class))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_GeoLocationLatLon_3 =
+R"doc(Construct a new GeoLocationLatLon object
+
+Parameter ``latitude``:
+    in °, positive northwards
+
+Parameter ``longitude``:
+    in °, positive eastwards
+
+Parameter ``z``:
+    in m, positive downwards
+
+Parameter ``yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``pitch``:
+    in °, positive means bow up
+
+Parameter ``roll``:
+    in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_latitude = R"doc(< in °, positive northwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_longitude = R"doc(< in °, positive eastwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_operator_eq =
+R"doc(Check if two GeoLocationLatLon objects are equal
+
+Parameter ``rhs``:
+    $Returns:
+
+true if equal
+
+Returns:
+    false if not equal)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_operator_ne =
+R"doc(Construct a new GeoLocationLatLon object from a string
+
+Parameter ``str``:
+    string containing the location in the format
+    "latitude,longitude,z,yaw,pitch,roll")doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_pitch = R"doc(< in °, positive means bow up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_roll = R"doc(< in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_serialize = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLatLon_z = R"doc(< in m, positive downwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLocal =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
@@ -298,8 +359,9 @@ utm coordinates)doc";
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_GeoLocationUTM = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_GeoLocationUTM_2 =
-R"doc(Construct an GeoLocationUTM object from an existing GeoLocation object
-(this allows for implicit conversion from GeoLocation class))doc";
+R"doc(Construct an GeoLocationUTM object from an existing GeoLocationLatLon
+object (this allows for implicit conversion from GeoLocationLatLon
+class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_GeoLocationUTM_3 =
 R"doc(Construct an GeoLocationUTM object from an existing GeoLocationLocal
@@ -349,10 +411,10 @@ Parameter ``roll``:
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_easting = R"doc(< in m, positive eastwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_from_geolocation =
-R"doc(Construct convert a GeoLocation Object to UTM
+R"doc(Construct convert a GeoLocationLatLon Object to UTM
 
 Parameter ``location``:
-    valid GeoLocation object
+    valid GeoLocationLatLon object
 
 Parameter ``setzone``:
     set a prefered UTM zone negative means automatic, zero means UPS,
@@ -378,79 +440,18 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUT
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_to_geolocation =
-R"doc(Convert a utm geolocation to a unprojected location
+R"doc(Convert a utm geolocationlatlon to a unprojected location
 
 Parameter ``location_utm``:
     $Returns:
 
-GeoLocation)doc";
+GeoLocationLatLon)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_z = R"doc(< in m, positive downwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_zone = R"doc(< UTM/UPS zone number)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_GeoLocation = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_GeoLocation_2 =
-R"doc(Construct an GeoLocation object from an existing GeoLocationUTM object
-(this allows for implicit conversion from GeoLocationUTM class))doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_GeoLocation_3 =
-R"doc(Construct a new GeoLocation object
-
-Parameter ``latitude``:
-    in °, positive northwards
-
-Parameter ``longitude``:
-    in °, positive eastwards
-
-Parameter ``z``:
-    in m, positive downwards
-
-Parameter ``yaw``:
-    in °, 0° is north, 90° is east
-
-Parameter ``pitch``:
-    in °, positive means bow up
-
-Parameter ``roll``:
-    in °, positive means port up)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_latitude = R"doc(< in °, positive northwards)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_longitude = R"doc(< in °, positive eastwards)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_operator_eq =
-R"doc(Check if two GeoLocation objects are equal
-
-Parameter ``rhs``:
-    $Returns:
-
-true if equal
-
-Returns:
-    false if not equal)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_operator_ne =
-R"doc(Construct a new GeoLocation object from a string
-
-Parameter ``str``:
-    string containing the location in the format
-    "latitude,longitude,z,yaw,pitch,roll")doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_pitch = R"doc(< in °, positive means bow up)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_roll = R"doc(< in °, positive means port up)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_serialize = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation_z = R"doc(< in m, positive downwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_PositionalOffsets =
 R"doc(A structure to store positional offsets (e.g. of a sensor) relative to

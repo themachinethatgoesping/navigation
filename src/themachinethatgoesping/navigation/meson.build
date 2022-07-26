@@ -12,7 +12,7 @@ sources = [
 
 headers = [
   'navdata/positionaloffsets.hpp',
-  'navdata/geolocation.hpp',
+  'navdata/geolocationlatlon.hpp',
   'navdata/geolocationutm.hpp',
   'navdata/geolocationlocal.hpp',
   'navdata/sensordata.hpp',

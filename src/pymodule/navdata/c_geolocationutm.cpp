@@ -20,9 +20,9 @@ void init_c_geolocationutm(py::module& m)
 
     py::class_<GeoLocationUTM>(
         m, "GeoLocationUTM", DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM))
-        .def(py::init<const GeoLocation&, int>(),
+        .def(py::init<const GeoLocationLatLon&, int>(),
              DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM, GeoLocationUTM_2),
-             py::arg("geolocation"),
+             py::arg("geolocationlatlon"),
              py::arg("setzone") = -1)
         .def(py::init<const GeoLocationLocal&, int, bool, double, double>(),
              DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM, GeoLocationUTM_3),
@@ -54,14 +54,14 @@ void init_c_geolocationutm(py::module& m)
         .def_readwrite("pitch", &GeoLocationUTM::pitch)
         .def_readwrite("roll", &GeoLocationUTM::roll)
         // static functions
-        .def_static("to_geolocation",
-                    &GeoLocationUTM::to_geolocation,
+        .def_static("to_geolocation_latlon",
+                    &GeoLocationUTM::to_geolocation_latlon,
                     DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM, to_geolocation),
                     py::arg("geolocation_utm"))
-        .def_static("from_geolocation",
-                    &GeoLocationUTM::from_geolocation,
+        .def_static("from_geolocation_latlon",
+                    &GeoLocationUTM::from_geolocation_latlon,
                     DOC(themachinethatgoesping, navigation, navdata, GeoLocationUTM, from_geolocation),
-                    py::arg("geolocation"),
+                    py::arg("geolocationlatlon"),
                     py::arg("setzone") = -1)
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(GeoLocationUTM)
@@ -72,6 +72,6 @@ void init_c_geolocationutm(py::module& m)
         // end GeoLocationUTM
         ;
 
-    py::implicitly_convertible<GeoLocationUTM, GeoLocation>();
-    py::implicitly_convertible<GeoLocation, GeoLocationUTM>(); 
+    py::implicitly_convertible<GeoLocationUTM, GeoLocationLatLon>();
+    py::implicitly_convertible<GeoLocationLatLon, GeoLocationUTM>(); 
 }
