@@ -12,44 +12,26 @@
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "geolocationlatlon.hpp"
+#include "geolocationlocal.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace navdata {
 
-// foorwad declarations for location conversions
-struct GeoLocationLocal; // defined in geolocationlocal.hpp
-
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
  * unlike the default GeoLocation structure, this object stores utm coordinates
  */
-struct GeoLocationUTM
+struct GeoLocationUTM :public GeoLocationLocal
 {
-    double northing            = 0.0;  ///< in m, positive northwards
-    double easting             = 0.0;  ///< in m, positive eastwards
-    int    zone                = 0;    ///< UTM/UPS zone number
-    bool   northern_hemisphere = true; ///< if true: northern hemisphere, else: southern hemisphere
-    double z                   = 0;    ///< in m, positive downwards
-    double yaw                 = 0.0;  ///< in °, 0° is north, 90° is east
-    double pitch               = 0.0;  ///< in °, positive means bow up
-    double roll                = 0.0;  ///< in °, positive means port up
+    int  zone                = 0;    ///< UTM/UPS zone number
+    bool northern_hemisphere = true; ///< if true: northern hemisphere, else: southern hemisphere
 
     /**
-     * @brief Construct a new Sensor Position object (all offsets set to 0)
+     * @brief Construct a new Sensor Position object
      *
      */
     GeoLocationUTM() = default;
-
-    /**
-     * @brief Construct an GeoLocationUTM object from an existing GeoLocationLatLon object (this allows
-     * for implicit conversion from GeoLocationLatLon class)
-     *
-     */
-    GeoLocationUTM(const GeoLocationLatLon& location, int setzone = -1)
-        : GeoLocationUTM(from_geolocation_latlon(location, setzone))
-    {
-    }
 
     /**
      * @brief Construct an GeoLocationUTM object from an existing GeoLocationLocal object (using a
@@ -58,14 +40,23 @@ struct GeoLocationUTM
      * @param location_local
      * @param zone UTM/UPS zone number
      * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
-     * @param offset_northing in m, is added to northing coordinate
-     * @param offset_easting in m, is added to easting coordinate
      */
-    GeoLocationUTM(const GeoLocationLocal& location_local,
-                   int                     zone,
-                   bool                    northern_hemisphere,
-                   double                  offset_northing = 0.0,
-                   double                  offset_easting = 0.0); // defined in geolocationlocal.hpp
+    GeoLocationUTM(const GeoLocationLocal& location_local, int zone, bool northern_hemisphere)
+        : GeoLocationLocal(location_local)
+        , zone(zone)
+        , northern_hemisphere(northern_hemisphere)
+    {
+    }
+
+    /**
+     * @brief Construct an GeoLocationUTM object from an existing GeoLocationLatLon object (this
+     * allows for implicit conversion from GeoLocationLatLon class)
+     *
+     */
+    GeoLocationUTM(const GeoLocationLatLon& location, int setzone = -1)
+        : GeoLocationUTM(from_geolocation_latlon(location, setzone))
+    {
+    }
 
     /**
      * @brief Construct a new GeoLocationUTM object
@@ -87,29 +78,19 @@ struct GeoLocationUTM
                    double yaw,
                    double pitch,
                    double roll)
-        : northing(northing)
-        , easting(easting)
+        : GeoLocationLocal(northing, easting, z, yaw, pitch, roll)
         , zone(zone)
         , northern_hemisphere(northern_hemisphere)
-        , z(z)
-        , yaw(yaw)
-        , pitch(pitch)
-        , roll(roll)
     {
     }
 
     bool operator!=(const GeoLocationUTM& rhs) const { return !(operator==(rhs)); }
     bool operator==(const GeoLocationUTM& rhs) const
     {
-        if (tools::helpers::approx(northing, rhs.northing))
-            if (tools::helpers::approx(easting, rhs.easting))
-                if (zone == rhs.zone)
-                    if (northern_hemisphere == rhs.northern_hemisphere)
-                        if (tools::helpers::approx(z, rhs.z))
-                            if (tools::helpers::approx(yaw, rhs.yaw))
-                                if (tools::helpers::approx(pitch, rhs.pitch))
-                                    if (tools::helpers::approx(roll, rhs.roll))
-                                        return true;
+        if (GeoLocationLocal::operator==(rhs))
+            if (zone == rhs.zone)
+                if (northern_hemisphere == rhs.northern_hemisphere)
+                    return true;
 
         return false;
     }
@@ -143,7 +124,8 @@ struct GeoLocationUTM
      * means a particular UTM zone
      * @return GeoLocationUTM
      */
-    static GeoLocationUTM from_geolocation_latlon(const GeoLocationLatLon& location, int setzone = -1)
+    static GeoLocationUTM from_geolocation_latlon(const GeoLocationLatLon& location,
+                                                  int                      setzone = -1)
     {
         GeoLocationUTM location_utm(
             0, 0, 0, 0, location.z, location.yaw, location.pitch, location.roll);

@@ -54,7 +54,7 @@ class Test_navigation_GeoLocationUTM:
 
         #GeoLocationUTM is implicitly convertible and therefore also comparable to GeoLocationLatLon
         assert location == location_latlon
-        assert GeoLocationUTM.from_geolocation_latlon(location_latlon) == location_latlon
+        assert GeoLocationUTM(location_latlon) == location_latlon
 
         assert location_latlon.latitude == approx(-41.280330)
         assert location_latlon.longitude == approx(174.780011)

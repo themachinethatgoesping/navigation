@@ -10,6 +10,7 @@ sources = [
     'module.cpp',
     'm_navtools.cpp',
     'navdata/c_positionaloffsets.cpp',
+    'navdata/c_geolocation.cpp',
     'navdata/c_geolocationlatlon.cpp',
     'navdata/c_geolocationlocal.cpp',
     'navdata/c_geolocationutm.cpp',

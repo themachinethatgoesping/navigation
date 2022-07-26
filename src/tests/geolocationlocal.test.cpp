@@ -62,10 +62,9 @@ TEST_CASE("GeoLocationLocal should support common utm/local conversions", TESTTA
 
     location.print(std::cerr);
     location_utm.print(std::cerr);
-    GeoLocationLocal::from_geolocationutm(location_utm).print(std::cerr);
+    GeoLocationLocal(location_utm).print(std::cerr);
 
     // to_ and from_ functions should produce the same results as initialization
-    REQUIRE(location_utm == GeoLocationLocal::to_geolocationutm(location, zone, northern_hemisphere));
-    REQUIRE(location == GeoLocationLocal::from_geolocationutm(location_utm));
-
+    REQUIRE(location_utm == GeoLocationUTM(location, zone, northern_hemisphere));
+    REQUIRE(location == GeoLocationLocal(location_utm));
 }

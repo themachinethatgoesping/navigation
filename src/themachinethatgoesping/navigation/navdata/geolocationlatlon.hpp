@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <bitsery/ext/inheritance.h>
+
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
@@ -14,6 +16,7 @@
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "../navtools.hpp"
+#include "geolocation.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -24,22 +27,31 @@ struct GeoLocationUTM; // defined in geolocationutm.hpp
 
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
+ * Unlike the base GeoLocation object, this also stores latitude and longitude coordinates
  *
  */
-struct GeoLocationLatLon
+struct GeoLocationLatLon : public GeoLocation
 {
     double latitude  = 0.0; ///< in °, positive northwards
     double longitude = 0.0; ///< in °, positive eastwards
-    double z         = 0;   ///< in m, positive downwards
-    double yaw       = 0.0; ///< in °, 0° is north, 90° is east
-    double pitch     = 0.0; ///< in °, positive means bow up
-    double roll      = 0.0; ///< in °, positive means port up
-
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
      */
     GeoLocationLatLon() = default;
+
+    /**
+     * @brief Construct a new Sensor Data Lat Lon object using a base sensor data object
+     * 
+     * @param location 
+     * @param latitude in °, positive northwards
+     * @param longitude in °, positive eastwards
+     */
+    GeoLocationLatLon(const GeoLocation& location, double latitude, double longitude)
+        : GeoLocation(location),
+            latitude(latitude),
+            longitude(longitude)
+    {}
 
     /**
      * @brief Construct an GeoLocationLatLon object from an existing GeoLocationUTM object (this allows
@@ -59,12 +71,9 @@ struct GeoLocationLatLon
      * @param roll in °, positive means port up
      */
     GeoLocationLatLon(double latitude, double longitude, double z, double yaw, double pitch, double roll)
-        : latitude(latitude)
+        : GeoLocation(z, yaw, pitch, roll)
+        , latitude(latitude)
         , longitude(longitude)
-        , z(z)
-        , yaw(yaw)
-        , pitch(pitch)
-        , roll(roll)
     {
     }
 
@@ -82,15 +91,12 @@ struct GeoLocationLatLon
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const GeoLocationLatLon& rhs) const
+    bool operator==(const GeoLocationLatLon& other) const
     {
-        if (tools::helpers::approx(latitude, rhs.latitude))
-            if (tools::helpers::approx(longitude, rhs.longitude))
-                if (tools::helpers::approx(z, rhs.z))
-                    if (tools::helpers::approx(yaw, rhs.yaw))
-                        if (tools::helpers::approx(pitch, rhs.pitch))
-                            if (tools::helpers::approx(roll, rhs.roll))
-                                return true;
+        if (GeoLocation::operator==(other))
+            if (tools::helpers::approx(latitude, other.latitude))
+                if (tools::helpers::approx(longitude, other.longitude))
+                    return true;
 
         return false;
     }
@@ -101,12 +107,9 @@ struct GeoLocationLatLon
     template<typename S>
     void serialize(S& s)
     {
+        s.ext(*this, bitsery::ext::BaseClass<GeoLocation>{});
         s.value8b(latitude);
         s.value8b(longitude);
-        s.value8b(z);
-        s.value8b(yaw);
-        s.value8b(pitch);
-        s.value8b(roll);
     }
 
   public:
@@ -114,6 +117,7 @@ struct GeoLocationLatLon
     {
         tools::classhelpers::ObjectPrinter printer("GeoLocationLatLon");
 
+        printer.register_section("coordinates");
         printer.register_string(
             "latitude",
             navtools::latitude_to_string(latitude, navtools::t_latlon_format::seconds, 1),
@@ -122,10 +126,9 @@ struct GeoLocationLatLon
             "longitude",
             navtools::longitude_to_string(latitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
-        printer.register_value("z", z, "positive downwards, m");
-        printer.register_value("yaw", yaw, "90 ° at east");
-        printer.register_value("pitch", pitch, "° positve bow up");
-        printer.register_value("roll", roll, "° positive port up");
+
+        printer.register_section("attitude");
+        printer.append(GeoLocation::__printer__());
 
         return printer;
     }

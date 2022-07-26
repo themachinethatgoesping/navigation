@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.navdata import GeoLocationLocal, GeoLocationUTM
+from themachinethatgoesping.navigation.navdata import GeoLocationLocal, GeoLocationUTM, GeoLocationLatLon
 
 import time
 from pytest import approx, raises
@@ -40,42 +40,17 @@ class Test_navigation_GeoLocationLocal:
             location, zone=zone, northern_hemisphere=northern_hemisphere
         )
 
-        # GeoLocationLocal is implicitly convertible and therefore also comparable to GeoLocation
-        assert location == location_utm
+        # GeoLocationLocal is implicitly convertible and therefore also comparable to GeoLocation UTM
+        assert location == GeoLocationLocal(location_utm)
 
         # this does not work because local coordinates are not comparable to utm coordinates unless the zone and hemisphere are known
         with raises(TypeError):
             location_utm == location
 
-        assert GeoLocationLocal.from_geolocationutm(location_utm) == location
+        assert GeoLocationLocal(location_utm) == location
         assert location_utm == (
-            GeoLocationLocal.to_geolocationutm(
+            GeoLocationUTM(
                 location, zone=zone, northern_hemisphere=northern_hemisphere
             )
         )
 
-        # check conversion with offsets
-        offset_northing = 100
-        offset_easting = -100
-        location_utm2 = GeoLocationUTM(
-            location,
-            zone=zone,
-            northern_hemisphere=northern_hemisphere,
-            offset_northing=offset_northing,
-            offset_easting=offset_easting,
-        )
-
-        assert location_utm2 != location_utm
-        assert location_utm2.northing == approx(location_utm.northing + offset_northing)
-        assert location_utm2.easting == approx(location_utm.easting + offset_easting)
-
-        location2 = GeoLocationLocal.from_geolocationutm(location_utm2)
-        assert location2 == location_utm2
-
-        location3 = GeoLocationLocal(
-            location_utm2,
-            offset_northing=offset_northing,
-            offset_easting=offset_easting,
-        )
-
-        assert location3 == location

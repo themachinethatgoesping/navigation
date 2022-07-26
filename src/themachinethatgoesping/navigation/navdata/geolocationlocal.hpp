@@ -11,12 +11,11 @@
 #include <themachinethatgoesping/tools/helpers.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
-#include "geolocationutm.hpp"
+//#include "geolocationutm.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace navdata {
-
 
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
@@ -24,14 +23,10 @@ namespace navdata {
  * coordinates. These coordintaes can be converted to UTM coordinates if the zone and hemisphere are
  * known.
  */
-struct GeoLocationLocal
+struct GeoLocationLocal : public GeoLocation
 {
     double northing = 0.0; ///< in m, positive northwards
     double easting  = 0.0; ///< in m, positive eastwards
-    double z        = 0;   ///< in m, positive downwards
-    double yaw      = 0.0; ///< in °, 0° is north, 90° is east
-    double pitch    = 0.0; ///< in °, positive means bow up
-    double roll     = 0.0; ///< in °, positive means port up
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
@@ -40,16 +35,16 @@ struct GeoLocationLocal
     GeoLocationLocal() = default;
 
     /**
-     * @brief Construct an GeoLocationLocal object from an existing GeoLocation object (this allows
-     * for implicit conversion from GeoLocation class)
-     *
+     * @brief Construct a new GeoLocationLocal object
+     * 
+     * @param location 
+     * @param northing in m, positive northwards
+     * @param easting in m, positive eastwards
      */
-    GeoLocationLocal(const GeoLocationUTM& location_utm,
-                     double                offset_northing = 0,
-                     double                offset_easting  = 0)
-        : GeoLocationLocal(from_geolocationutm(location_utm,
-                                               offset_northing,
-                                               offset_easting))
+    GeoLocationLocal(const GeoLocation& location, double northing, double easting)
+    : GeoLocation(location),
+      northing(northing),
+      easting(easting)
     {
     }
 
@@ -69,77 +64,21 @@ struct GeoLocationLocal
                      double yaw,
                      double pitch,
                      double roll)
-        : northing(northing)
+        : GeoLocation(z,yaw, pitch, roll)
+        , northing(northing)
         , easting(easting)
-        , z(z)
-        , yaw(yaw)
-        , pitch(pitch)
-        , roll(roll)
     {
     }
 
     bool operator!=(const GeoLocationLocal& rhs) const { return !(operator==(rhs)); }
     bool operator==(const GeoLocationLocal& rhs) const
     {
-        if (tools::helpers::approx(northing, rhs.northing))
-            if (tools::helpers::approx(easting, rhs.easting))
-                if (tools::helpers::approx(z, rhs.z))
-                    if (tools::helpers::approx(yaw, rhs.yaw))
-                        if (tools::helpers::approx(pitch, rhs.pitch))
-                            if (tools::helpers::approx(roll, rhs.roll))
-                                return true;
+        if (GeoLocation::operator==(rhs))
+            if (tools::helpers::approx(northing, rhs.northing))
+                if (tools::helpers::approx(easting, rhs.easting))
+                    return true;
 
         return false;
-    }
-
-    /**
-     * @brief Convert a utm geolocation to a unprojected location
-     *
-     * @param location_local
-     * @param zone UTM/UPS zone number
-     * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
-     * @param offset_northing in m, is added to northing coordinate
-     * @param offset_easting in m, is added to easting coordinate
-     * @return GeoLocationUTM
-     */
-    static GeoLocationUTM to_geolocationutm(const GeoLocationLocal& location_local,
-                                         int                     zone,
-                                         bool                    northern_hemisphere,
-                                         double                  offset_northing = 0,
-                                         double                  offset_easting  = 0)
-    {
-        GeoLocationUTM location_utm(location_local.northing + offset_northing,
-                                    location_local.easting + offset_easting,
-                                    zone,
-                                    northern_hemisphere,
-                                    location_local.z,
-                                    location_local.yaw,
-                                    location_local.pitch,
-                                    location_local.roll);
-
-        return location_utm;
-    }
-
-    /**
-     * @brief Construct convert a GeoLocationUTM Object to local (stripping zone and hemisphere)
-     *
-     * @param location_utm valid GeoLocation object
-     * @param offset_northing in m, is substracted from northing coordinate
-     * @param offset_easting in m, is substracted fromeasting coordinate
-     * @return GeoLocationLocal
-     */
-    static GeoLocationLocal from_geolocationutm(const GeoLocationUTM& location_utm,
-                                                double                offset_northing = 0,
-                                                double                offset_easting  = 0)
-    {
-        GeoLocationLocal location_local(location_utm.northing - offset_northing,
-                                      location_utm.easting - offset_easting,
-                                      location_utm.z,
-                                      location_utm.yaw,
-                                      location_utm.pitch,
-                                      location_utm.roll);
-
-        return location_local;
     }
 
   private:
@@ -148,12 +87,9 @@ struct GeoLocationLocal
     template<typename S>
     void serialize(S& s)
     {
+        s.ext(*this,bitsery::ext::BaseClass<GeoLocation>{});
         s.value8b(northing);
         s.value8b(easting);
-        s.value8b(z);
-        s.value8b(yaw);
-        s.value8b(pitch);
-        s.value8b(roll);
     }
 
   public:
@@ -161,12 +97,12 @@ struct GeoLocationLocal
     {
         tools::classhelpers::ObjectPrinter printer("GeoLocationLocal");
 
+        printer.register_section("coordinates");
         printer.register_value("northing", northing, "positive northwards, m");
         printer.register_value("easting", easting, "positive eastwards, m");
-        printer.register_value("z", z, "positive downwards, m");
-        printer.register_value("yaw", yaw, "90 ° at east");
-        printer.register_value("pitch", pitch, "° positve bow up");
-        printer.register_value("roll", roll, "° positive port up");
+
+        printer.register_section("attitude");
+        printer.append(GeoLocation::__printer__());
 
         return printer;
     }
@@ -178,20 +114,6 @@ struct GeoLocationLocal
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
-
-// backwards conversion
-inline GeoLocationUTM::GeoLocationUTM(const GeoLocationLocal& location_local,
-                                      int                     zone,
-                                      bool                    northern_hemisphere,
-                                      double                  offset_northing,
-                                      double                  offset_easting)
-    : GeoLocationUTM(GeoLocationLocal::to_geolocationutm(location_local,
-                                                      zone,
-                                                      northern_hemisphere,
-                                                      offset_northing,
-                                                      offset_easting))
-{
-}
 
 } // namespace datastrcutures
 } // namespace naviation

@@ -18,13 +18,16 @@ using namespace themachinethatgoesping::navigation::navdata;
 void init_c_geolocationlocal(py::module& m)
 {
 
-    py::class_<GeoLocationLocal>(
+    py::class_<GeoLocationLocal, GeoLocation>(
         m, "GeoLocationLocal", DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal))
-        .def(py::init<const GeoLocationUTM&, double, double>(),
+        .def(py::init<const GeoLocationUTM&>(),
+             DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal, GeoLocationLocal),
+             py::arg("geolocationutm"))
+        .def(py::init<const GeoLocation&, double, double>(),
              DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal, GeoLocationLocal_2),
-             py::arg("geolocationutm"),
-             py::arg("offset_northing") = 0,
-             py::arg("offset_easting") = 0)
+             py::arg("geolocation"),
+             py::arg("northing"),
+             py::arg("easting"))
         .def(py::init<double, double, double, double, double, double>(),
              DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal, GeoLocationLocal_3),
              py::arg("northing") = 0,
@@ -39,25 +42,7 @@ void init_c_geolocationlocal(py::module& m)
              py::arg("rhs"))
         .def_readwrite("northing", &GeoLocationLocal::northing)
         .def_readwrite("easting", &GeoLocationLocal::easting)
-        .def_readwrite("z", &GeoLocationLocal::z)
-        .def_readwrite("yaw", &GeoLocationLocal::yaw)
-        .def_readwrite("pitch", &GeoLocationLocal::pitch)
-        .def_readwrite("roll", &GeoLocationLocal::roll)
-        // static functions
-        .def_static("to_geolocationutm",
-                    &GeoLocationLocal::to_geolocationutm,
-                    DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal, to_geolocationutm),
-                    py::arg("geolocation_local"),
-                    py::arg("zone"),
-                    py::arg("northern_hemisphere"),
-                    py::arg("offset_northing") = 0,
-                    py::arg("offset_easting")  = 0)
-        .def_static("from_geolocationutm",
-                    &GeoLocationLocal::from_geolocationutm,
-                    DOC(themachinethatgoesping, navigation, navdata, GeoLocationLocal, from_geolocationutm),
-                    py::arg("geolocation_utm"),
-                    py::arg("offset_northing") = 0,
-                    py::arg("offset_easting")  = 0)
+        
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(GeoLocationLocal)
         // default binary functions
@@ -67,7 +52,4 @@ void init_c_geolocationlocal(py::module& m)
         // end GeoLocationLocal
         ;
 
-    py::implicitly_convertible<GeoLocationUTM, GeoLocationLocal>();
-    // py::implicitly_convertible<GeoLocationLocal, GeoLocationUTM>();
-    // not possible because this conversion needs additional information about zone and hemisphere
 }
