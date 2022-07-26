@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.navdata import SensorData, SensorDataUTM
+from themachinethatgoesping.navigation.navdata import SensorDataLatLon, SensorDataUTM
 
 import time
 from pytest import approx
@@ -53,12 +53,14 @@ class Test_navigation_SensorDataUTM:
             30)
         print(data)
 
-        #create a new SensorData object by explicit conversion
-        data_latlon = SensorData(data)
+        #create a new SensorDataLatLon object by explicit conversion
+        data_latlon = SensorDataLatLon(data)
 
-        #SensorDataUTM is implicitly convertible and therefore also comparable to SensorData
+        #SensorDataUTM is implicitly convertible and therefore also comparable to SensorDataLatLon
+        assert data == data
         assert data == data_latlon
         assert SensorDataUTM.from_sensordata(data_latlon) == data_latlon
 
         assert data_latlon.gps_latitude == approx(-41.280330)
         assert data_latlon.gps_longitude == approx(174.780011)
+

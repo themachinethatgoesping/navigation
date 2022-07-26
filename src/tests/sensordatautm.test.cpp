@@ -72,7 +72,7 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     data_south.gps_northern_hemisphere = false;
 
     // test utm/lat lon conversion
-    SensorData    data_latlon(data);
+    SensorDataLatLon    data_latlon(data);
     SensorDataUTM data_utm(data_latlon);
 
     data_latlon.print(std::cerr);
@@ -86,22 +86,22 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
 
     // to/from conversion should reproduce the original zone
     REQUIRE(data == data_utm);
-    REQUIRE(data_latlon == SensorData(data_utm));
-    REQUIRE(data_south == SensorDataUTM(SensorData(data_south)));
-    REQUIRE(SensorData(data_south) ==
-            SensorData(SensorDataUTM(SensorData(data_south))));
+    REQUIRE(data_latlon == SensorDataLatLon(data_utm));
+    REQUIRE(data_south == SensorDataUTM(SensorDataLatLon(data_south)));
+    REQUIRE(SensorDataLatLon(data_south) ==
+            SensorDataLatLon(SensorDataUTM(SensorDataLatLon(data_south))));
 
     // test the same as above but using implicit conversion
     REQUIRE(data == data_latlon);
-    REQUIRE(data_south == SensorData(data_south));
+    REQUIRE(data_south == SensorDataLatLon(data_south));
 
     // test precomputed conversion (north)
     REQUIRE(data_latlon.gps_latitude == Approx(51.024224));
     REQUIRE(data_latlon.gps_longitude == Approx(3.710670));
 
     // test precomputed conversion (north)
-    REQUIRE(SensorData(data_south).gps_latitude == Approx(-41.280330));
-    REQUIRE(SensorData(data_south).gps_longitude == Approx(174.780011));
+    REQUIRE(SensorDataLatLon(data_south).gps_latitude == Approx(-41.280330));
+    REQUIRE(SensorDataLatLon(data_south).gps_longitude == Approx(174.780011));
 
     // test info strings
     data_utm.compass_heading = NAN;

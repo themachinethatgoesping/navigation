@@ -20,11 +20,9 @@ void init_c_sensordatalocal(py::module& m)
 
     py::class_<SensorDataLocal>(
         m, "SensorDataLocal", DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal))
-        .def(py::init<const SensorDataUTM&, double, double>(),
-             DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, SensorDataLocal_2),
-             py::arg("sensordatautm"),
-             py::arg("offset_northing") = 0,
-             py::arg("offset_easting")  = 0)
+        .def(py::init<const SensorDataUTM&>(),
+             DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, SensorDataLocal),
+             py::arg("sensordatautm"))
         .def(py::init<double, double, double, double, double, double, double, double>(),
              DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, SensorDataLocal_3),
              py::arg("gps_northing")    = 0,
@@ -47,21 +45,6 @@ void init_c_sensordatalocal(py::module& m)
         .def_readwrite("imu_yaw", &SensorDataLocal::imu_yaw)
         .def_readwrite("imu_pitch", &SensorDataLocal::imu_pitch)
         .def_readwrite("imu_roll", &SensorDataLocal::imu_roll)
-        // static functions
-        .def_static("to_sensordatautm",
-                    &SensorDataLocal::to_sensordatautm,
-                    DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, to_sensordatautm),
-                    py::arg("sensordata_local"),
-                    py::arg("gps_zone"),
-                    py::arg("gps_northern_hemisphere"),
-                    py::arg("offset_northing") = 0,
-                    py::arg("offset_easting")  = 0)
-        .def_static("from_sensordatautm",
-                    &SensorDataLocal::from_sensordatautm,
-                    DOC(themachinethatgoesping, navigation, navdata, SensorDataLocal, from_sensordatautm),
-                    py::arg("sensordata_utm"),
-                    py::arg("offset_northing") = 0,
-                    py::arg("offset_easting")  = 0)
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(SensorDataLocal)
         // default binary functions
@@ -71,7 +54,4 @@ void init_c_sensordatalocal(py::module& m)
         // end SensorDataLocal
         ;
 
-    py::implicitly_convertible<SensorDataUTM, SensorDataLocal>();
-    // py::implicitly_convertible<SensorDataLocal, SensorDataUTM>();
-    // not possible because this conversion needs additional information about zone and hemisphere
 }

@@ -68,10 +68,7 @@ TEST_CASE("SensorDataLocal should support common utm/local conversions", TESTTAG
 
     data.print(std::cerr);
     data_utm.print(std::cerr);
-    SensorDataLocal::from_sensordatautm(data_utm).print(std::cerr);
 
-    // to_ and from_ functions should produce the same results as initialization
-    REQUIRE(data_utm == SensorDataLocal::to_sensordatautm(data, zone, northern_hemisphere));
-    REQUIRE(data == SensorDataLocal::from_sensordatautm(data_utm));
-
+    // test implicit conversion
+    REQUIRE(data == data_utm); // note this only works in one direction!
 }

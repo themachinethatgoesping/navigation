@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <bitsery/ext/inheritance.h>
+
 #include <GeographicLib/UTMUPS.hpp>
 
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
@@ -12,35 +14,27 @@
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "../navtools.hpp"
-#include "sensordata.hpp"
+#include "sensordatalocal.hpp"
+#include "sensordatalatlon.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace navdata {
 
 // foorwad declarations for location conversions
-struct SensorDataLocal; // defined in sensordatalocal.hpp
+//struct SensorDataLocal; // defined in sensordatalocal.hpp
 
 /**
  * @brief A structure to store a georeferenced data and attitude data from different sensors
  * (e.g. GPS, IMU, etc.)
- * Unlike SensorData, this structure stores UTM coordinates.
+ * Unlike SensorDataLatLon, this structure stores UTM coordinates.
  *
  */
-struct SensorDataUTM
+struct SensorDataUTM : public SensorDataLocal
 {
-    double gps_northing = 0.0; ///< in m, positive northwards
-    double gps_easting  = 0.0; ///< in m, positive eastwards
     int    gps_zone     = 0;   ///< UTM/UPS zone number
     bool   gps_northern_hemisphere =
         true;                 ///< if true: northern hemisphere, else: southern hemisphere
-    double gps_z       = 0.0; ///< in m, positive downwards
-    double heave_heave = 0.0; ///< from heave sensor, will be added to gps_z in m, positive upwards
-    double compass_heading =
-        NAN; ///< from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
-    double imu_yaw   = 0.0; ///< from motion sensor, in °, 0° is north, 90° is east
-    double imu_pitch = 0.0; ///< from motion sensor, in °, positive means bow up
-    double imu_roll  = 0.0; ///< from motion sensor, in °, positive means port up
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
@@ -49,14 +43,21 @@ struct SensorDataUTM
     SensorDataUTM() = default;
 
     /**
-     * @brief Construct an SensorDataUTM object from an existing SensorData object (this allows
-     * for implicit conversion from SensorData class)
-     *
+     * @brief Construct a new Sensor Data Local object using a base sensor data object
+     * 
+     * @param data 
+     * @param gps_northing in m, positive northwards
+     * @param gps_easting in m, positive eastwards
+     * @param gps_zone UTM/UPS zone number
+     * @param gps_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    SensorDataUTM(const SensorData& data, int setzone = -1)
-        : SensorDataUTM(from_sensordata(data, setzone))
-    {
-    }
+    SensorDataUTM(const SensorData& data, double gps_northing, double gps_easting,
+                  int                    gps_zone,
+                  bool                   gps_northern_hemisphere)
+        : SensorDataLocal(data, gps_northing, gps_easting),
+            gps_zone(gps_zone),
+            gps_northern_hemisphere(gps_northern_hemisphere)
+    {}
 
     /**
      * @brief Construct an SensorDataUTM object from an existing SensorDataLocal object (using a
@@ -65,14 +66,24 @@ struct SensorDataUTM
      * @param data_local
      * @param gps_zone UTM/UPS zone number
      * @param gps_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
-     * @param offset_northing in m, is added to northing coordinate
-     * @param offset_easting in m, is added to easting coordinate
      */
     SensorDataUTM(const SensorDataLocal& data_local,
                   int                    gps_zone,
-                  bool                   gps_northern_hemisphere,
-                  double                 offset_northing = 0.0,
-                  double                 offset_easting  = 0.0); // defined in sensordatalocal.hpp
+                  bool                   gps_northern_hemisphere) 
+                  : SensorDataLocal(data_local),
+                      gps_zone(gps_zone),
+                      gps_northern_hemisphere(gps_northern_hemisphere)
+                  {}
+
+    /**
+     * @brief Construct an SensorDataUTM object from an existing SensorDataLatLon object (this allows
+     * for implicit conversion from SensorDataLatLon class)
+     *
+     */
+    SensorDataUTM(const SensorDataLatLon& data, int setzone = -1)
+        : SensorDataUTM(from_sensordata(data, setzone))
+    {
+    }
 
     /**
      * @brief Construct a new SensorDataUTM object
@@ -99,16 +110,16 @@ struct SensorDataUTM
                   double imu_yaw,
                   double imu_pitch,
                   double imu_roll)
-        : gps_northing(gps_northing)
-        , gps_easting(gps_easting)
-        , gps_zone(gps_zone)
-        , gps_northern_hemisphere(gps_northern_hemisphere)
-        , gps_z(gps_z)
-        , heave_heave(heave_heave)
-        , compass_heading(compass_heading)
-        , imu_yaw(imu_yaw)
-        , imu_pitch(imu_pitch)
-        , imu_roll(imu_roll)
+        : SensorDataLocal(gps_northing,
+                          gps_easting,
+                          gps_z,
+                          heave_heave,
+                          compass_heading,
+                          imu_yaw,
+                          imu_pitch,
+                          imu_roll),
+            gps_zone(gps_zone),
+            gps_northern_hemisphere(gps_northern_hemisphere)
     {
     }
 
@@ -122,29 +133,22 @@ struct SensorDataUTM
      */
     bool operator==(const SensorDataUTM& rhs) const
     {
-        if (tools::helpers::approx(gps_northing, rhs.gps_northing))
-            if (tools::helpers::approx(gps_easting, rhs.gps_easting))
+        if (SensorDataLocal::operator==(rhs))
                 if (gps_zone == rhs.gps_zone)
                     if (gps_northern_hemisphere == rhs.gps_northern_hemisphere)
-                        if (tools::helpers::approx(gps_z, rhs.gps_z))
-                            if (tools::helpers::approx(heave_heave, rhs.heave_heave))
-                                if (tools::helpers::approx(compass_heading, rhs.compass_heading))
-                                    if (tools::helpers::approx(imu_yaw, rhs.imu_yaw))
-                                        if (tools::helpers::approx(imu_pitch, rhs.imu_pitch))
-                                            if (tools::helpers::approx(imu_roll, rhs.imu_roll))
                                                 return true;
 
         return false;
     }
     /**
-     * @brief Convert a utm sensordata to a unprojected data
+     * @brief Convert a utm sensordatalatlon to a unprojected data
      *
      * @param data_utm
-     * @return SensorData
+     * @return SensorDataLatLon
      */
-    static SensorData to_sensordata(const SensorDataUTM& data_utm)
+    static SensorDataLatLon to_sensordata(const SensorDataUTM& data_utm)
     {
-        SensorData data(0,
+        SensorDataLatLon data(0,
                         0,
                         data_utm.gps_z,
                         data_utm.heave_heave,
@@ -164,14 +168,14 @@ struct SensorDataUTM
     }
 
     /**
-     * @brief Construct convert a SensorData Object to UTM
+     * @brief Construct convert a SensorDataLatLon Object to UTM
      *
-     * @param data valid SensorData object
+     * @param data valid SensorDataLatLon object
      * @param setzone set a prefered UTM zone negative means automatic, zero means UPS, positive
      * means a particular UTM zone
      * @return SensorDataUTM
      */
-    static SensorDataUTM from_sensordata(const SensorData& data, int setzone = -1)
+    static SensorDataUTM from_sensordata(const SensorDataLatLon& data, int setzone = -1)
     {
         SensorDataUTM data_utm(0,
                                0,
@@ -201,16 +205,9 @@ struct SensorDataUTM
     template<typename S>
     void serialize(S& s)
     {
-        s.value8b(gps_northing);
-        s.value8b(gps_easting);
+        s.ext(*this,bitsery::ext::BaseClass<SensorDataLocal>{});
         s.value4b(gps_zone);
         s.value1b(gps_northern_hemisphere);
-        s.value8b(gps_z);
-        s.value8b(heave_heave);
-        s.value8b(compass_heading);
-        s.value8b(imu_yaw);
-        s.value8b(imu_pitch);
-        s.value8b(imu_roll);
     }
 
   public:
@@ -218,25 +215,13 @@ struct SensorDataUTM
     {
         tools::classhelpers::ObjectPrinter printer("SensorDataUTM");
 
-        printer.register_value("gps_northing", gps_northing, "positive northwards, m");
-        printer.register_value("gps_easting", gps_easting, "positive eastwards, m");
-        printer.register_value("gps_zone", gps_zone);
-        printer.register_value("gps_northern_hemisphere", gps_northern_hemisphere);
-        printer.register_value("gps_z", gps_z, "positive downwards, m");
-        printer.register_value("heave_heave", heave_heave, "positive upwards, m");
-
-        if (std::isnan(compass_heading))
-        {
-            printer.register_value("compass_heading", compass_heading, "90 ° at east (invalid)");
-            printer.register_value("imu_yaw", imu_yaw, "90 ° at east (used");
-        }
-        else
-        {
-            printer.register_value("compass_heading", compass_heading, "90 ° at east (valid)");
-            printer.register_value("imu_yaw", imu_yaw, "90 ° at east (unused");
-        }
-        printer.register_value("imu_pitch", imu_pitch, "° positve bow up");
-        printer.register_value("imu_roll", imu_roll, "° positive port up");
+        auto base_printer = SensorDataLocal::__printer__();
+        base_printer.remove_sections();
+        printer.append(base_printer);
+        printer.register_value("gps_zone", gps_zone, "", 2);
+        printer.register_value("gps_northern_hemisphere", gps_northern_hemisphere, "", 3);
+        printer.register_section("coordinates", 0);
+        printer.register_section("attitude", 5);
 
         return printer;
     }
@@ -250,8 +235,8 @@ struct SensorDataUTM
 };
 
 // backwards conversion
-inline SensorData::SensorData(const SensorDataUTM& data_utm)
-    : SensorData(SensorDataUTM::to_sensordata(data_utm))
+inline SensorDataLatLon::SensorDataLatLon(const SensorDataUTM& data_utm)
+    : SensorDataLatLon(SensorDataUTM::to_sensordata(data_utm))
 {
 }
 

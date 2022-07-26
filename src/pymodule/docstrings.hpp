@@ -28,33 +28,11 @@ R"doc(A coordinate system that allows for specifying sensor offsets (e.g.
 gps antenna and motion sensor) and target offsets (e.g. MBES) to
 derive the geolocation and attitude of the specified targets)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_CompassOffsets = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_DepthSensorOffsets = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Heading = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Heave = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Lat = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Latlon_set = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Lon = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_MotionSensorOffsets = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Pitch = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_PositionSystemOffsets = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Roll = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_RotationPoint_X = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_RotationPoint_Y = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_RotationPoint_Z = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_SensorCoordinateSystem = R"doc()doc";
 
@@ -66,19 +44,21 @@ static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSyste
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Y = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Yaw = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compass_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_Z = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_depth_sensor_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_compassOffsets = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_compass_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_depthSensorOffsets = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_depth_sensor_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_motionSensorOffsets = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_motion_sensor_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_positionSystemOffsets = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_position_system_offsets = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_rotationPoint = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_sensor_data = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_targetDepth =
 R"doc(get_targetDepth: Get the depth of the target including depth sensor
@@ -136,8 +116,6 @@ static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSyste
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_targetYPR_as_Quat = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_use_motionSensorYaw = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_vesselDepth =
 R"doc(get_vesselDepth: Get the depth of the vessel including depth sensor
 values and heave including motion correction)
@@ -149,53 +127,49 @@ static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSyste
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_vesselYPR = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_compassHeading = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_motion_sensor_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_compassOffsets = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_position_system_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_compassOffsets_2 = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_rotation_point_x = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_depthSensorDepth = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_rotation_point_y = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_depthSensorOffsets = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_rotation_point_z = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_depthSensorOffsets_2 = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_sensor_data = R"doc(< Local sensor data)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_heaveSensorHeave = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_compass_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_motionSensorOffsets = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_compass_offsets_2 = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_motionSensorOffsets_2 = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_depth_sensor_offsets = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_motionSensorPR = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_depth_sensor_offsets_2 = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_motionSensorYPR = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_motion_sensor_offsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_motion_sensor_offsets_2 = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_positionSystemLatLon = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_positionSystemOffsets = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_positionSystemOffsets_2 = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_positionSystemXY = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_position_system_offsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_position_system_offsets_2 = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_rotationPoint = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_rotationPointZ = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_sensor_data = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_targetOffsets = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_targetOffsets_2 = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_use_motionSensorYaw = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_vesselPointWaterlineOffset = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_vesselSensorValuesLatLon = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_vesselSensorValuesXY = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_use_motionSensorYaw = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
@@ -527,11 +501,85 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_PositionalOff
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData =
 R"doc(A structure to store a georeferenced location and attitude data from
+different sensors (e.g. IMU, etc.) No gps coordinates are stored in
+this structure (only depth).)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon =
+R"doc(A structure to store a georeferenced location and attitude data from
 different sensors (e.g. GPS, IMU, etc.))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_2 =
-R"doc(Construct an SensorData object from an existing SensorDataUTM object
-(this allows for implicit conversion from SensorDataUTM class))doc";
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_2 =
+R"doc(Construct an SensorDataLatLon object from an existing SensorDataUTM
+object (this allows for implicit conversion from SensorDataUTM class))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_SensorDataLatLon = R"doc(Construct a new SensorDataLatLon object (all offsets set to 0))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_SensorDataLatLon_2 =
+R"doc(Construct an SensorDataLatLon object from an existing SensorDataUTM
+object (this allows for implicit conversion from SensorDataUTM class))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_SensorDataLatLon_3 =
+R"doc(Construct a new SensorDataLatLon object
+
+Parameter ``gps_latitude``:
+    in °, positive northwards
+
+Parameter ``gps_longitude``:
+    in °, positive eastwards
+
+Parameter ``gps_z``:
+    in m, positive downwards
+
+Parameter ``heave_heave``:
+    from heave sensor, will be added to gps_z in m, positive upwards
+
+Parameter ``compass_heading``:
+    from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
+    is east
+
+Parameter ``imu_yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``imu_pitch``:
+    in °, positive means bow up
+
+Parameter ``imu_roll``:
+    in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_compass_heading =
+R"doc(< from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
+east)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_gps_latitude = R"doc(< in °, positive northwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_gps_longitude = R"doc(< in °, positive eastwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_gps_z = R"doc(< in m, positive downwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_heave_heave = R"doc(< from heave sensor, will be added to gps_z in m, positive upwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_imu_pitch = R"doc(< from motion sensor, in °, positive means bow up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_imu_roll = R"doc(< from motion sensor, in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_imu_yaw = R"doc(< from motion sensor, in °, 0° is north, 90° is east)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_operator_eq =
+R"doc(Check if two SensorDataLatLon objects are equal
+
+Parameter ``rhs``:
+    $Returns:
+
+true if equal
+
+Returns:
+    false if not equal)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_operator_ne = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLatLon_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataLocal =
 R"doc(A structure to store a georeferenced data and attitude data from
@@ -645,7 +693,9 @@ Returns:
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_2 =
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_3 =
 R"doc(Construct an SensorDataUTM object from an existing SensorDataLocal
 object (using a known zone and hemisphere)
 
@@ -663,16 +713,17 @@ Parameter ``offset_northing``:
 Parameter ``offset_easting``:
     in m, is added to easting coordinate)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_3 =
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_4 =
 R"doc(A structure to store a georeferenced data and attitude data from
-different sensors (e.g. GPS, IMU, etc.) Unlike SensorData, this
+different sensors (e.g. GPS, IMU, etc.) Unlike SensorDataLatLon, this
 structure stores UTM coordinates.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_SensorDataUTM = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_SensorDataUTM_2 =
-R"doc(Construct an SensorDataUTM object from an existing SensorData object
-(this allows for implicit conversion from SensorData class))doc";
+R"doc(Construct an SensorDataUTM object from an existing SensorDataLatLon
+object (this allows for implicit conversion from SensorDataLatLon
+class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_SensorDataUTM_3 =
 R"doc(Construct an SensorDataUTM object from an existing SensorDataLocal
@@ -729,10 +780,10 @@ Parameter ``imu_roll``:
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_compass_heading = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_from_sensordata =
-R"doc(Construct convert a SensorData Object to UTM
+R"doc(Construct convert a SensorDataLatLon Object to UTM
 
 Parameter ``data``:
-    valid SensorData object
+    valid SensorDataLatLon object
 
 Parameter ``setzone``:
     set a prefered UTM zone negative means automatic, zero means UPS,
@@ -777,14 +828,14 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_to_sensordata =
-R"doc(Convert a utm sensordata to a unprojected data
+R"doc(Convert a utm sensordatalatlon to a unprojected data
 
 Parameter ``data_utm``:
     $Returns:
 
-SensorData)doc";
+SensorDataLatLon)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_SensorData = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_SensorData = R"doc(Construct a new SensorData object (all offsets set to 0))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_SensorData_2 =
 R"doc(Construct an SensorData object from an existing SensorDataUTM object
@@ -792,12 +843,6 @@ R"doc(Construct an SensorData object from an existing SensorDataUTM object
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_SensorData_3 =
 R"doc(Construct a new SensorData object
-
-Parameter ``gps_latitude``:
-    in °, positive northwards
-
-Parameter ``gps_longitude``:
-    in °, positive eastwards
 
 Parameter ``gps_z``:
     in m, positive downwards
@@ -822,32 +867,147 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_co
 R"doc(< from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
 east)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_gps_latitude = R"doc(< in °, positive northwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_compass_heading_2 =
+R"doc(Construct a new SensorData object
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_gps_longitude = R"doc(< in °, positive eastwards)doc";
+Parameter ``gps_z``:
+    in m, positive downwards
+
+Parameter ``heave_heave``:
+    from heave sensor, will be added to gps_z in m, positive upwards
+
+Parameter ``compass_heading``:
+    from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
+    is east
+
+Parameter ``imu_yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``imu_pitch``:
+    in °, positive means bow up
+
+Parameter ``imu_roll``:
+    in °, positive means port up)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_gps_z = R"doc(< in m, positive downwards)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_gps_z_2 =
+R"doc(Construct a new SensorData object
+
+Parameter ``gps_z``:
+    in m, positive downwards
+
+Parameter ``heave_heave``:
+    from heave sensor, will be added to gps_z in m, positive upwards
+
+Parameter ``compass_heading``:
+    from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
+    is east
+
+Parameter ``imu_yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``imu_pitch``:
+    in °, positive means bow up
+
+Parameter ``imu_roll``:
+    in °, positive means port up)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_heave_heave = R"doc(< from heave sensor, will be added to gps_z in m, positive upwards)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_heave_heave_2 =
+R"doc(Construct a new SensorData object
+
+Parameter ``gps_z``:
+    in m, positive downwards
+
+Parameter ``heave_heave``:
+    from heave sensor, will be added to gps_z in m, positive upwards
+
+Parameter ``compass_heading``:
+    from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
+    is east
+
+Parameter ``imu_yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``imu_pitch``:
+    in °, positive means bow up
+
+Parameter ``imu_roll``:
+    in °, positive means port up)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_imu_pitch = R"doc(< from motion sensor, in °, positive means bow up)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_imu_pitch_2 =
+R"doc(Construct a new SensorData object
+
+Parameter ``gps_z``:
+    in m, positive downwards
+
+Parameter ``heave_heave``:
+    from heave sensor, will be added to gps_z in m, positive upwards
+
+Parameter ``compass_heading``:
+    from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
+    is east
+
+Parameter ``imu_yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``imu_pitch``:
+    in °, positive means bow up
+
+Parameter ``imu_roll``:
+    in °, positive means port up)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_imu_roll = R"doc(< from motion sensor, in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_imu_roll_2 =
+R"doc(Construct a new SensorData object
+
+Parameter ``gps_z``:
+    in m, positive downwards
+
+Parameter ``heave_heave``:
+    from heave sensor, will be added to gps_z in m, positive upwards
+
+Parameter ``compass_heading``:
+    from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
+    is east
+
+Parameter ``imu_yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``imu_pitch``:
+    in °, positive means bow up
+
+Parameter ``imu_roll``:
+    in °, positive means port up)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_imu_yaw = R"doc(< from motion sensor, in °, 0° is north, 90° is east)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_operator_eq =
-R"doc(Check if two SensorData objects are equal
+static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_imu_yaw_2 =
+R"doc(Construct a new SensorData object
 
-Parameter ``rhs``:
-    $Returns:
+Parameter ``gps_z``:
+    in m, positive downwards
 
-true if equal
+Parameter ``heave_heave``:
+    from heave sensor, will be added to gps_z in m, positive upwards
 
-Returns:
-    false if not equal)doc";
+Parameter ``compass_heading``:
+    from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
+    is east
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_operator_ne = R"doc()doc";
+Parameter ``imu_yaw``:
+    in °, 0° is north, 90° is east
+
+Parameter ``imu_pitch``:
+    in °, positive means bow up
+
+Parameter ``imu_roll``:
+    in °, positive means port up)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorData_printer = R"doc()doc";
 

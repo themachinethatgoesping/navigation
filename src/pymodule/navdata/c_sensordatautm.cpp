@@ -18,19 +18,17 @@ using namespace themachinethatgoesping::navigation::navdata;
 void init_c_sensordatautm(py::module& m)
 {
 
-    py::class_<SensorDataUTM>(
+    py::class_<SensorDataUTM, SensorDataLocal>(
         m, "SensorDataUTM", DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM))
-        .def(py::init<const SensorData&, int>(),
+        .def(py::init<const SensorDataLatLon&, int>(),
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_2),
-             py::arg("sensordata"),
+             py::arg("sensordatalatlon"),
              py::arg("setgps_zone") = -1)
-        .def(py::init<const SensorDataLocal&, int, bool, double, double>(),
+        .def(py::init<const SensorDataLocal&, int, bool>(),
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_3),
              py::arg("sensordata_local"),
              py::arg("gps_zone"),
-             py::arg("gps_northern_hemisphere"),
-             py::arg("offset_northing") = 0,
-             py::arg("offset_easting")  = 0)
+             py::arg("gps_northern_hemisphere"))
         .def(py::init<double, double, int, bool, double, double, double, double, double, double>(),
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, SensorDataUTM_4),
              py::arg("gps_northing")            = 0,
@@ -47,16 +45,8 @@ void init_c_sensordatautm(py::module& m)
              &SensorDataUTM::operator==,
              DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, operator_eq),
              py::arg("rhs"))
-        .def_readwrite("gps_northing", &SensorDataUTM::gps_northing)
-        .def_readwrite("gps_easting", &SensorDataUTM::gps_easting)
         .def_readwrite("gps_zone", &SensorDataUTM::gps_zone)
         .def_readwrite("gps_northern_hemisphere", &SensorDataUTM::gps_northern_hemisphere)
-        .def_readwrite("gps_z", &SensorDataUTM::gps_z)
-        .def_readwrite("heave_heave", &SensorDataUTM::heave_heave)
-        .def_readwrite("compass_heading", &SensorDataUTM::compass_heading)
-        .def_readwrite("imu_yaw", &SensorDataUTM::imu_yaw)
-        .def_readwrite("imu_pitch", &SensorDataUTM::imu_pitch)
-        .def_readwrite("imu_roll", &SensorDataUTM::imu_roll)
         // static functions
         .def_static("to_sensordata",
                     &SensorDataUTM::to_sensordata,
@@ -65,7 +55,7 @@ void init_c_sensordatautm(py::module& m)
         .def_static("from_sensordata",
                     &SensorDataUTM::from_sensordata,
                     DOC(themachinethatgoesping, navigation, navdata, SensorDataUTM, from_sensordata),
-                    py::arg("sensordata"),
+                    py::arg("sensordatalatlon"),
                     py::arg("setgps_zone") = -1)
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(SensorDataUTM)
@@ -75,7 +65,4 @@ void init_c_sensordatautm(py::module& m)
         __PYCLASS_DEFAULT_PRINTING__(SensorDataUTM)
         // end SensorDataUTM
         ;
-
-    py::implicitly_convertible<SensorDataUTM, SensorData>();
-    py::implicitly_convertible<SensorData, SensorDataUTM>(); 
 }

@@ -16,6 +16,7 @@ headers = [
   'navdata/geolocationutm.hpp',
   'navdata/geolocationlocal.hpp',
   'navdata/sensordata.hpp',
+  'navdata/sensordatalatlon.hpp',
   'navdata/sensordatautm.hpp',
   'navdata/sensordatalocal.hpp',
   'sensorcoordinatesystem.hpp',

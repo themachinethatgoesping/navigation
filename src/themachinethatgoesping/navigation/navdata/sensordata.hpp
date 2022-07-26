@@ -24,13 +24,12 @@ struct SensorDataUTM; // defined in sensordatautm.hpp
 
 /**
  * @brief A structure to store a georeferenced location and attitude data from different sensors
- * (e.g. GPS, IMU, etc.)
+ * (e.g. IMU, etc.)
+ * No gps coordinates are stored in this structure (only depth).
  *
  */
 struct SensorData
 {
-    double gps_latitude  = 0.0; ///< in °, positive northwards
-    double gps_longitude = 0.0; ///< in °, positive eastwards
     double gps_z         = 0.0; ///< in m, positive downwards
     double heave_heave     = 0.0; ///< from heave sensor, will be added to gps_z in m, positive upwards
     double compass_heading = NAN; ///< from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
@@ -39,7 +38,7 @@ struct SensorData
     double imu_roll  = 0.0;   ///< from motion sensor, in °, positive means port up
 
     /**
-     * @brief Construct a new Sensor Position object (all offsets set to 0)
+     * @brief Construct a new SensorData object (all offsets set to 0)
      *
      */
     SensorData() = default;
@@ -54,8 +53,6 @@ struct SensorData
     /**
      * @brief Construct a new SensorData object
      *
-     * @param gps_latitude in °, positive northwards
-     * @param gps_longitude in °, positive eastwards
      * @param gps_z in m, positive downwards
      * @param heave_heave from heave sensor, will be added to gps_z in m, positive upwards
      * @param compass_heading from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
@@ -63,17 +60,13 @@ struct SensorData
      * @param imu_pitch in °, positive means bow up
      * @param imu_roll in °, positive means port up
      */
-    SensorData(double gps_latitude,
-               double gps_longitude,
-               double gps_z,
+    SensorData(double gps_z,
                double heave_heave,
                double compass_heading,
                double imu_yaw,
                double imu_pitch,
                double imu_roll)
-        : gps_latitude(gps_latitude)
-        , gps_longitude(gps_longitude)
-        , gps_z(gps_z)
+        : gps_z(gps_z)
         , heave_heave(heave_heave)
         , compass_heading(compass_heading)
         , imu_yaw(imu_yaw)
@@ -92,8 +85,6 @@ struct SensorData
      */
     bool operator==(const SensorData& rhs) const
     {
-        if (tools::helpers::approx(gps_latitude, rhs.gps_latitude))
-             if (tools::helpers::approx(gps_longitude, rhs.gps_longitude))
                  if (tools::helpers::approx(gps_z, rhs.gps_z))
                      if (tools::helpers::approx(heave_heave, rhs.heave_heave))
                          if (tools::helpers::approx(compass_heading, rhs.compass_heading))
@@ -112,8 +103,6 @@ struct SensorData
     template<typename S>
     void serialize(S& s)
     {
-        s.value8b(gps_latitude);
-        s.value8b(gps_longitude);
         s.value8b(gps_z);
         s.value8b(heave_heave);
         s.value8b(compass_heading);
@@ -127,14 +116,6 @@ struct SensorData
     {
         tools::classhelpers::ObjectPrinter printer("SensorData");
 
-        printer.register_string(
-            "gps_latitude",
-            navtools::latitude_to_string(gps_latitude, navtools::t_latlon_format::seconds, 1),
-            "ddd°mm',ss.s''N/S");
-        printer.register_string(
-            "gps_longitude",
-            navtools::longitude_to_string(gps_latitude, navtools::t_latlon_format::seconds, 1),
-            "ddd°mm',ss.s''E/W");
         printer.register_value("gps_z", gps_z, "positive downwards, m");
         printer.register_value("heave_heave", heave_heave, "positive upwards, m");
 

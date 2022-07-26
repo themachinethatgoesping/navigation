@@ -8,6 +8,7 @@
 #include "navdata/geolocation.hpp"
 #include "navdata/geolocationutm.hpp"
 #include "navdata/geolocationlocal.hpp"
-#include "navdata/sensordata.hpp"
+//#include "navdata/sensordata.hpp"
+#include "navdata/sensordatalatlon.hpp"
 #include "navdata/sensordatautm.hpp"
 #include "navdata/sensordatalocal.hpp"
