@@ -54,9 +54,9 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
                 Approx(2.2360679775));
         REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("MBES", false).second ==
                 Approx(63.4349488229));
-        REQUIRE(std::get<0>(scs.get_targetYPR("MBES")) == Approx(0));
-        REQUIRE(std::get<1>(scs.get_targetYPR("MBES")) == Approx(0));
-        REQUIRE(std::get<2>(scs.get_targetYPR("MBES")) == Approx(0));
+        REQUIRE(std::get<0>(scs.get_targetYPR("MBES", false)) == Approx(0));
+        REQUIRE(std::get<1>(scs.get_targetYPR("MBES", false)) == Approx(0));
+        REQUIRE(std::get<2>(scs.get_targetYPR("MBES", false)) == Approx(0));
 
         REQUIRE(scs.get_targetDepth("SBES") == 3);
         REQUIRE(scs.get_targetXY("SBES", false).first == 1);
@@ -68,9 +68,9 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
                 Approx(2.2360679775));
         REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES", false).second ==
                 Approx(63.4349488229));
-        REQUIRE(std::get<0>(scs.get_targetYPR("SBES")) == Approx(45));
-        REQUIRE(std::get<1>(scs.get_targetYPR("SBES")) == Approx(5));
-        REQUIRE(std::get<2>(scs.get_targetYPR("SBES")) == Approx(10));
+        REQUIRE(std::get<0>(scs.get_targetYPR("SBES", false)) == Approx(45));
+        REQUIRE(std::get<1>(scs.get_targetYPR("SBES", false)) == Approx(5));
+        REQUIRE(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(10));
     }
 
     SECTION("SENSOR_VALUES")
@@ -105,12 +105,12 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("MBES", false) ==
                 scs.get_targetPosSysDistanceAndAzimuth("SBES", false));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(25.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(20.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(10.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(71.4260001287));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(11.9252923155));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(31.4141895033));
+        CHECK(std::get<0>(scs.get_targetYPR("MBES", false)) == Approx(25.0));
+        CHECK(std::get<1>(scs.get_targetYPR("MBES", false)) == Approx(20.0));
+        CHECK(std::get<2>(scs.get_targetYPR("MBES", false)) == Approx(10.0));
+        CHECK(std::get<0>(scs.get_targetYPR("SBES", false)) == Approx(71.4260001287));
+        CHECK(std::get<1>(scs.get_targetYPR("SBES", false)) == Approx(11.9252923155));
+        CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(31.4141895033));
 
         // scenario 2
         // scs.set_depthSensorDepth(-5);
@@ -139,12 +139,12 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES", false) ==
                 scs.get_targetPosSysDistanceAndAzimuth("MBES", false));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(325.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(-5.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(-15.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(7.2216796191));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(11.7764820146));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(-4.429576033));
+        CHECK(std::get<0>(scs.get_targetYPR("MBES", false)) == Approx(325.0));
+        CHECK(std::get<1>(scs.get_targetYPR("MBES", false)) == Approx(-5.0));
+        CHECK(std::get<2>(scs.get_targetYPR("MBES", false)) == Approx(-15.0));
+        CHECK(std::get<0>(scs.get_targetYPR("SBES", false)) == Approx(7.2216796191));
+        CHECK(std::get<1>(scs.get_targetYPR("SBES", false)) == Approx(11.7764820146));
+        CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(-4.429576033));
 
         // scenario 3
         // scs.set_depthSensorDepth(3);
@@ -173,12 +173,12 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES", false) ==
                 scs.get_targetPosSysDistanceAndAzimuth("MBES", false));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(30.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(-5.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(-15.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(72.2216796191));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(11.7764820146));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(-4.429576033));
+        CHECK(std::get<0>(scs.get_targetYPR("MBES", false)) == Approx(30.0));
+        CHECK(std::get<1>(scs.get_targetYPR("MBES", false)) == Approx(-5.0));
+        CHECK(std::get<2>(scs.get_targetYPR("MBES", false)) == Approx(-15.0));
+        CHECK(std::get<0>(scs.get_targetYPR("SBES", false)) == Approx(72.2216796191));
+        CHECK(std::get<1>(scs.get_targetYPR("SBES", false)) == Approx(11.7764820146));
+        CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(-4.429576033));
 
         // scenario 4
         // scs.set_depthSensorDepth(-2000);
@@ -207,12 +207,12 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES", false) ==
                 scs.get_targetPosSysDistanceAndAzimuth("MBES", false));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(250.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(-59.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(1.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(308.8301085148));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(-34.4198234806));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(-36.6392731807));
+        CHECK(std::get<0>(scs.get_targetYPR("MBES", false)) == Approx(250.0));
+        CHECK(std::get<1>(scs.get_targetYPR("MBES", false)) == Approx(-59.0));
+        CHECK(std::get<2>(scs.get_targetYPR("MBES", false)) == Approx(1.0));
+        CHECK(std::get<0>(scs.get_targetYPR("SBES", false)) == Approx(308.8301085148));
+        CHECK(std::get<1>(scs.get_targetYPR("SBES", false)) == Approx(-34.4198234806));
+        CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(-36.6392731807));
 
         // scenario 5 (latlon)
         // scs.set_depthSensorDepth(2000);
@@ -237,12 +237,12 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES", false) ==
                 scs.get_targetPosSysDistanceAndAzimuth("MBES", false));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(110.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(-59.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(1.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(168.8301085148));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(-34.4198234806));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(-36.6392731807));
+        CHECK(std::get<0>(scs.get_targetYPR("MBES", false)) == Approx(110.0));
+        CHECK(std::get<1>(scs.get_targetYPR("MBES", false)) == Approx(-59.0));
+        CHECK(std::get<2>(scs.get_targetYPR("MBES", false)) == Approx(1.0));
+        CHECK(std::get<0>(scs.get_targetYPR("SBES", false)) == Approx(168.8301085148));
+        CHECK(std::get<1>(scs.get_targetYPR("SBES", false)) == Approx(-34.4198234806));
+        CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(-36.6392731807));
 
         // scenario 6 (latlon)
         // scs.set_depthSensorDepth(1000);
@@ -267,11 +267,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES", false) ==
                 scs.get_targetPosSysDistanceAndAzimuth("MBES", false));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(9.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(-1.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(45.9361957025));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(12.0290113349));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(15.7758445678));
+        CHECK(std::get<0>(scs.get_targetYPR("MBES", false)) == Approx(0.0));
+        CHECK(std::get<1>(scs.get_targetYPR("MBES", false)) == Approx(9.0));
+        CHECK(std::get<2>(scs.get_targetYPR("MBES", false)) == Approx(-1.0));
+        CHECK(std::get<0>(scs.get_targetYPR("SBES", false)) == Approx(45.9361957025));
+        CHECK(std::get<1>(scs.get_targetYPR("SBES", false)) == Approx(12.0290113349));
+        CHECK(std::get<2>(scs.get_targetYPR("SBES", false)) == Approx(15.7758445678));
     }
 }
