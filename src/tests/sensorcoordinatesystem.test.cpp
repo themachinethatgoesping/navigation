@@ -17,11 +17,27 @@ using namespace themachinethatgoesping::navigation;
 
 TEST_CASE("sensorcoordinatesystem should support common functions", TESTTAG)
 {
-    // initialize offsets
+    // initialize coordinate system with one target
     SensorCoordinateSystem scs;
+    navdata::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
+    scs.register_target("mbes", targetOffsets);
+    scs.set_position_system_offsets(10,20,30);
 
     // copy constructor
     SensorCoordinateSystem scs2(scs);
+
+    // eq operator
+    REQUIRE(scs == scs2);
+    scs.register_target("sbes", targetOffsets);
+    REQUIRE(scs != scs2);
+    scs2.register_target("sbes", targetOffsets);
+    REQUIRE(scs == scs2);
+    scs.set_position_system_offsets(11,20,30);
+    REQUIRE(scs != scs2);
+
+    // string conversion
+    scs.print(std::cerr);
+    REQUIRE(scs.info_string().size() > 0);
 }
 
 TEST_CASE(
