@@ -102,6 +102,7 @@ class SensorCoordinateSystem
                 sensor_data.imu_yaw, sensor_data.imu_pitch, sensor_data.imu_roll, true);
 
             // return sensor yaw, pitch, roll corrected for (rotated by) the sensor offsets
+            // TODO: check if the order is correct
             auto vessel_quat = imu_sensor_quat * imu_offset_quat.inverse();
             vessel_quat.normalize();
             return vessel_quat;
@@ -122,6 +123,7 @@ class SensorCoordinateSystem
                 0.0, sensor_data.imu_pitch, sensor_data.imu_roll, true);
 
             // compute roll and pitch using the imu_offsets (including yaw offset)
+            // TODO: check if the order is correct
             auto pr_quat = imu_sensor_quat * imu_offset_quat.inverse() ;
             pr_quat.normalize();
 

@@ -39,6 +39,7 @@ navdata::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
     location.z = target_xyz[2] - depth_sensor_xyz[2] + sensor_data.gps_z - sensor_data.heave_heave;
 
     // compute target ypr
+    // TODO: check if the order is correct
     auto target_quat = vessel_quat * target_ypr_quat;
     auto ypr         = tools::rotationfunctions::ypr_from_quaternion(target_quat);
     location.yaw     = ypr[0];

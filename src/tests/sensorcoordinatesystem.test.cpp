@@ -40,7 +40,7 @@ TEST_CASE(
         REQUIRE(scs.compute_target_position("mbes",navdata::SensorDataLocal()).z == -7);
     }
 
-    SECTION("test depth sensor offsets")
+    SECTION("test imu sensor offsets")
     {
         SensorCoordinateSystem scs;
         scs.set_target_offsets("mbes", targetOffsets);
@@ -56,9 +56,24 @@ TEST_CASE(
         scs.set_motion_sensor_offsets(90,0,0);
         auto position = scs.compute_target_position("mbes",sensor_data);
 
-        // REQUIRE(position.yaw == Approx(90));
-        // CHECK(position.pitch == Approx(20));
-        // REQUIRE(position.roll == Approx(10));
+        REQUIRE(position.yaw == Approx(90));
+        CHECK(position.pitch == Approx(0.0).scale(1.0));
+        REQUIRE(position.roll == Approx(-20));
+
+        sensor_data.imu_roll = 10;
+        sensor_data.imu_pitch = 0;
+
+        position = scs.compute_target_position("mbes",sensor_data);
+        REQUIRE(position.yaw == Approx(90));
+        CHECK(position.pitch == Approx(10.0));
+        REQUIRE(position.roll == Approx(0).scale(1.0));
+
+
+        scs.set_motion_sensor_offsets(0,1,2);
+        position = scs.compute_target_position("mbes",sensor_data);
+        REQUIRE(position.yaw == Approx(90));
+        CHECK(position.pitch == Approx(-0.9902670948));
+        REQUIRE(position.roll == Approx(8.001202844));
     }
 }
 
