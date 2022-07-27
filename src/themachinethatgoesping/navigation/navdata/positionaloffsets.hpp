@@ -67,6 +67,31 @@ struct PositionalOffsets
         return false;
     }
 
+    /**
+     * @brief convert yaw pitch roll to quaternion
+     * 
+     * @return quaternion_t quaternion
+     */
+    Eigen::Quaterniond ypr_as_quaternion() const
+    {
+        Eigen::Quaterniond ypr_quat =  Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()) * Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY()) * Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX());
+        ypr_quat.normalize();
+        return ypr_quat;
+    }
+    
+    /**
+     * @brief return x,y,z as quaternion
+     * 
+     * @return Eigen::Quaterniond 
+     */
+    Eigen::Quaterniond xyz_as_quaternion() const 
+    { 
+        return tools::rotationfunctions::getQuaterniondfromVector(
+            x,
+            y,
+            z);
+    }
+
   private:
     // serialization support using bitsery
     friend bitsery::Access;
