@@ -125,11 +125,15 @@ class SensorCoordinateSystem
     navdata::GeoLocationLatLon compute_position(const navdata::SensorDataLatLon& sensor_data,
                                                 const std::string&               target_id) const
     {
+        // compute position from SensorData (no x,y or lat,lon coordinates)
+        // this posion is thus referenced to the gps antenna (0,0), which allows to compute
+        // distance and azimuth if target towards the gps antenna
         auto position = compute_position(navdata::SensorData(sensor_data), target_id);
 
-        double distance, heading;
-        std::tie(distance, heading) =
-            compute_targetPosSysDistanceAndAzimuth(position.northing, position.easting);
+        double distance =
+            std::sqrt(position.northing * position.northing + position.easting * position.easting);
+        double heading =
+            tools::rotationfunctions::compute_heading(position.northing, position.easting);
 
         double target_lat, target_lon;
         if (std::isnan(heading))
@@ -143,9 +147,8 @@ class SensorCoordinateSystem
 
             // this should never happen
             else
-                throw(std::runtime_error(
-                    "vessel::get_targetLatLon[Fatal Error]: [get_targetPosSysDistanceAndAzimuth] "
-                    "heading is nan but distance is not 0! (this should not happen)"));
+                throw(std::runtime_error("compute_position[ERROR]: heading is nan but distance is "
+                                         "not 0! (this should never happen)"));
         }
         else
         {
@@ -164,17 +167,6 @@ class SensorCoordinateSystem
     }
 
     //------------------------------------- get vessel position -----------------------------------
-
-    std::pair<double, double> compute_targetPosSysDistanceAndAzimuth(double northing,
-                                                                     double easting,
-                                                                     bool   radians = false) const
-    {
-        double distance = std::sqrt(northing * northing + easting * easting);
-        double azimuth = tools::rotationfunctions::compute_heading(northing, easting, radians);
-
-        return std::make_pair(distance, azimuth);
-    }
-
     static Eigen::Quaterniond get_vesselQuat(
         const navdata::SensorData&        sensor_data,
         const navdata::PositionalOffsets& compasss_offsets,

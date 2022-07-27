@@ -55,20 +55,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
 
         REQUIRE(scs.get_targetOffsets("MBES") == targetOffsets1);
         REQUIRE(scs.get_targetOffsets("SBES") == targetOffsets2);
-
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(position_mbes.northing,
-                                                           position_mbes.easting)
-                    .first == Approx(2.2360679775));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(position_mbes.northing,
-                                                           position_mbes.easting)
-                    .second == Approx(63.4349488229));
-
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(position_sbes.northing,
-                                                           position_sbes.easting)
-                    .first == Approx(2.2360679775));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(position_sbes.northing,
-                                                           position_sbes.easting)
-                    .second == Approx(63.4349488229));
     }
 
     SECTION("SENSOR_VALUES no roll/pitch")
@@ -105,17 +91,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
-
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.2360679775));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(63.4349488229));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
 
         CHECK(position_mbes.yaw == Approx(0.0));
         CHECK(position_mbes.pitch == Approx(0.0));
@@ -156,17 +131,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.2360679775));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(63.4349488229 + 180));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
-
         CHECK(position_mbes.yaw == Approx(180.0));
         CHECK(position_mbes.pitch == Approx(0.0));
         CHECK(position_mbes.roll == Approx(0.0));
@@ -205,17 +169,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
-
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.2360679775));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(63.4349488229 + 90));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
 
         CHECK(position_mbes.yaw == Approx(90.0));
         CHECK(position_mbes.pitch == Approx(0.0));
@@ -260,17 +213,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.5257058925));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(59.9996008822));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
-
         CHECK(position_mbes.yaw == Approx(25.0));
         CHECK(position_mbes.pitch == Approx(20.0));
         CHECK(position_mbes.roll == Approx(10.0));
@@ -307,17 +249,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
-
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.8208271875));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(38.7626389216));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
 
         CHECK(position_mbes.yaw == Approx(325.0));
         CHECK(position_mbes.pitch == Approx(-5.0));
@@ -356,17 +287,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.8208271875));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(103.7626389216));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
-
         CHECK(position_mbes.yaw == Approx(30.0));
         CHECK(position_mbes.pitch == Approx(-5.0));
         CHECK(position_mbes.roll == Approx(-15.0));
@@ -404,17 +324,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.8536794208));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(26.9688745148));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
-
         CHECK(position_mbes.yaw == Approx(250.0));
         CHECK(position_mbes.pitch == Approx(-59.0));
         CHECK(position_mbes.roll == Approx(1.0));
@@ -449,17 +358,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
 
         CHECK(position_mbes.latitude == Approx(54.1229869952));
         CHECK(position_mbes.longitude == Approx(-10.123067173));
-
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.8536794208));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(246.9688745148));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
 
         CHECK(position_mbes.yaw == Approx(110.0));
         CHECK(position_mbes.pitch == Approx(-59.0));
@@ -498,17 +396,6 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
 
         CHECK(position_mbes.latitude == Approx(-74.1229869952));
         CHECK(position_mbes.longitude == Approx(1.123067173));
-
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .first == Approx(2.513494754));
-        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                         relative_position_mbes.easting)
-                  .second == Approx(54.7274278634));
-        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
-                                                           relative_position_mbes.easting) ==
-                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
-                                                           relative_position_sbes.easting));
 
         CHECK(position_mbes.yaw == Approx(0.0));
         CHECK(position_mbes.pitch == Approx(9.0));
