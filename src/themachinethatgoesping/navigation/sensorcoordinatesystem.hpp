@@ -29,7 +29,8 @@ namespace navigation {
  */
 class SensorCoordinateSystem
 {
-    std::vector<navdata::PositionalOffsets> _TargetOffsets; ///< Positional offsets of registered targets
+    std::vector<navdata::PositionalOffsets>
+        _TargetOffsets; ///< Positional offsets of registered targets
     std::unordered_map<std::string, size_t>
         _TargetOffsetIDs; ///< TargetId (position in vector) for each registered target_id
 
@@ -50,101 +51,109 @@ class SensorCoordinateSystem
     double _Lat;
     double _Lon;
 
-    double _X     = 0; // Position Y in meters
-    double _Y     = 0; // Position X in meters
+    double _X = 0; // Position Y in meters
+    double _Y = 0; // Position X in meters
 
   public:
-  /**
-   * @brief Construct a new Sensor Coordinate System object
-   * 
-   */
+    /**
+     * @brief Construct a new Sensor Coordinate System object
+     *
+     */
     SensorCoordinateSystem() = default;
 
     const navdata::PositionalOffsets& get_targe_offsets(const std::string& target_id) const
     {
-        return _TargetOffsets.at(_TargetOffsetIDs.at(target_id));   // throws std::out_of_range if not found
+        return _TargetOffsets.at(
+            _TargetOffsetIDs.at(target_id)); // throws std::out_of_range if not found
     }
 
-    navdata::GeoLocation compute_position(const navdata::SensorData& sensor_data,const std::string& target_id) const
-    {
-        navdata::GeoLocation location;
-
-        // first get the current roation of the vessel
-         auto vessel_quat = get_vesselQuat(sensor_data, _compass_offsets,_motion_sensor_offsets); 
-
-        // convert x,y,z offsets to quaternions
-        auto depth_sensor_xyz_quat = _depth_sensor_offsets.xyz_as_quaternion();
-
-        // convert target to quaternion        
-        auto target_offsets = get_targe_offsets(target_id);
-        auto target_xyz_quat = target_offsets.xyz_as_quaternion();
-        auto target_ypr_quat = target_offsets.ypr_as_quaternion();
-
-        // get rotated positions
-        auto target_xyz  = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
-        auto depth_sensor_xyz =
-            tools::rotationfunctions::rotateXYZ(vessel_quat, depth_sensor_xyz_quat);
- 
-        // compute target depth
-        location.z = target_xyz[2] - depth_sensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
-
-        // compute target ypr
-        auto target_quat = vessel_quat * target_ypr_quat;
-        auto ypr =
-            tools::rotationfunctions::ypr_from_quaternion(target_quat);
-        location.yaw = ypr[0];
-        location.pitch = ypr[1];
-        location.roll = ypr[2];
-
-        
-        return location;
-    }
-
-    navdata::GeoLocationLocal compute_position(const navdata::SensorDataLocal& sensor_data,const std::string& target_id) const
+    navdata::GeoLocationLocal compute_position(const navdata::SensorData& sensor_data,
+                                               const std::string&         target_id) const
     {
         navdata::GeoLocationLocal location;
 
         // first get the current roation of the vessel
-         auto vessel_quat = get_vesselQuat(sensor_data, _compass_offsets,_motion_sensor_offsets); 
+        auto vessel_quat = get_vesselQuat(sensor_data, _compass_offsets, _motion_sensor_offsets);
 
         // convert x,y,z offsets to quaternions
-        auto depth_sensor_xyz_quat = _depth_sensor_offsets.xyz_as_quaternion();
+        auto depth_sensor_xyz_quat   = _depth_sensor_offsets.xyz_as_quaternion();
         auto positionSystem_xyz_quat = _position_system_offsets.xyz_as_quaternion();
 
         // convert target to quaternion
-        
-        auto target_offsets = get_targe_offsets(target_id);
+
+        auto target_offsets  = get_targe_offsets(target_id);
         auto target_xyz_quat = target_offsets.xyz_as_quaternion();
         auto target_ypr_quat = target_offsets.ypr_as_quaternion();
 
         // get rotated positions
-        auto target_xyz  = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
+        auto target_xyz = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
         auto depth_sensor_xyz =
             tools::rotationfunctions::rotateXYZ(vessel_quat, depth_sensor_xyz_quat);
         auto positionSystem_xyz =
             tools::rotationfunctions::rotateXYZ(vessel_quat, positionSystem_xyz_quat);
- 
+
         // compute target depth
-        location.z = target_xyz[2] - depth_sensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
+        location.z =
+            target_xyz[2] - depth_sensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
 
         // compute target ypr
         auto target_quat = vessel_quat * target_ypr_quat;
-        auto ypr =
-            tools::rotationfunctions::ypr_from_quaternion(target_quat);
-        location.yaw = ypr[0];
-        location.pitch = ypr[1];
-        location.roll = ypr[2];
+        auto ypr         = tools::rotationfunctions::ypr_from_quaternion(target_quat);
+        location.yaw     = ypr[0];
+        location.pitch   = ypr[1];
+        location.roll    = ypr[2];
 
         // coompute target xy
-        location.northing =target_xyz[0] - positionSystem_xyz[0];
-        location.easting =target_xyz[1] - positionSystem_xyz[1];
-        
-        return location;
+        location.northing = target_xyz[0] - positionSystem_xyz[0];
+        location.easting  = target_xyz[1] - positionSystem_xyz[1];
 
+        return location;
+    }
+
+    navdata::GeoLocationLocal compute_position(const navdata::SensorDataLocal& sensor_data,
+                                               const std::string&              target_id) const
+    {
+        navdata::GeoLocationLocal location;
+
+        // first get the current roation of the vessel
+        auto vessel_quat = get_vesselQuat(sensor_data, _compass_offsets, _motion_sensor_offsets);
+
+        // convert x,y,z offsets to quaternions
+        auto depth_sensor_xyz_quat   = _depth_sensor_offsets.xyz_as_quaternion();
+        auto positionSystem_xyz_quat = _position_system_offsets.xyz_as_quaternion();
+
+        // convert target to quaternion
+
+        auto target_offsets  = get_targe_offsets(target_id);
+        auto target_xyz_quat = target_offsets.xyz_as_quaternion();
+        auto target_ypr_quat = target_offsets.ypr_as_quaternion();
+
+        // get rotated positions
+        auto target_xyz = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
+        auto depth_sensor_xyz =
+            tools::rotationfunctions::rotateXYZ(vessel_quat, depth_sensor_xyz_quat);
+        auto positionSystem_xyz =
+            tools::rotationfunctions::rotateXYZ(vessel_quat, positionSystem_xyz_quat);
+
+        // compute target depth
+        location.z =
+            target_xyz[2] - depth_sensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
+
+        // compute target ypr
+        auto target_quat = vessel_quat * target_ypr_quat;
+        auto ypr         = tools::rotationfunctions::ypr_from_quaternion(target_quat);
+        location.yaw     = ypr[0];
+        location.pitch   = ypr[1];
+        location.roll    = ypr[2];
+
+        // coompute target xy
+        location.northing = target_xyz[0] - positionSystem_xyz[0] + _X;
+        location.easting  = target_xyz[1] - positionSystem_xyz[1] + _Y;
+
+        return location;
     }
 
     //------------------------------------- get vessel position -----------------------------------
-
 
     /**
      * @brief get_targetXY: Get the depth of the target including depth sensor values and heave
@@ -156,25 +165,24 @@ class SensorCoordinateSystem
      */
     std::pair<double, double> get_targetXY(const std::string& target_id, bool use_VesselXY) const
     {
-        auto sensor_data = navdata::SensorDataLocal(_sensor_data, _X, _Y);
-        auto position = compute_position(sensor_data, target_id);
-        
+        navdata::GeoLocationLocal position;
+
         if (use_VesselXY)
         {
-            position.northing += _X;
-            position.easting += _Y;
+            position = compute_position(navdata::SensorDataLocal(_sensor_data, _X, _Y), target_id);
         }
-
+        else
+        {
+            position = compute_position(navdata::SensorData(_sensor_data), target_id);
+        }
         return std::make_pair(position.northing, position.easting);
     }
-
 
     std::tuple<double, double, double> get_targetYPR(const std::string& target_id) const
     {
         auto position = compute_position(_sensor_data, target_id);
         return std::make_tuple(position.yaw, position.pitch, position.roll);
     }
-
 
     /**
      * @brief get_targetDepth: Get the depth of the target including depth sensor values and heave
@@ -198,32 +206,34 @@ class SensorCoordinateSystem
     std::pair<double, double> get_targetPosSysDistanceAndAzimuth(const std::string& target_id,
                                                                  bool               radians) const
     {
-        auto xy = get_targetXY(target_id, false);
+        //auto xy = get_targetXY(target_id, false);
+        
+        auto position = compute_position(navdata::SensorData(_sensor_data), target_id);
 
         double distance =
-            std::sqrt(std::get<0>(xy) * std::get<0>(xy) + std::get<1>(xy) * std::get<1>(xy));
+            std::sqrt(position.northing * position.northing + position.easting * position.easting);
 
         // north 0°/360°, east 90°, south 180°, west 270°
         double azimuth = NAN; // only when x and y are 0
 
-        if (std::get<0>(xy) == 0)
+        if (position.northing == 0)
         {
-            if (std::get<1>(xy) < 0)
+            if (position.easting < 0)
                 azimuth = 1.5 * M_PI; // 270°
-            else if (std::get<1>(xy) > 0)
+            else if (position.easting > 0)
                 azimuth = 0.5 * M_PI; // 90°
             // else azimuth = NAN;
         }
-        else if (std::get<1>(xy) == 0)
+        else if (position.easting == 0)
         {
-            if (std::get<0>(xy) < 0)
+            if (position.northing < 0)
                 azimuth = M_PI; // 180°
-            else if (std::get<0>(xy) > 0)
+            else if (position.northing > 0)
                 azimuth = 0;
         }
         else
         {
-            azimuth = std::atan2(std::get<1>(xy), std::get<0>(xy));
+            azimuth = std::atan2(position.easting, position.northing);
         }
 
         while (azimuth < 0)
@@ -270,18 +280,18 @@ class SensorCoordinateSystem
     }
 
     static Eigen::Quaterniond get_vesselQuat(
-        const navdata::SensorData& sensor_data, 
-        const navdata::PositionalOffsets& compasss_offsets, 
+        const navdata::SensorData&        sensor_data,
+        const navdata::PositionalOffsets& compasss_offsets,
         const navdata::PositionalOffsets& motion_sensor_offsets)
     {
         /* first do yaw rotation */
-        double heading = sensor_data.compass_heading;
-        bool use_motionSensorYaw = false;
+        double heading             = sensor_data.compass_heading;
+        bool   use_motionSensorYaw = false;
 
         if (std::isnan(heading))
         {
             use_motionSensorYaw = true;
-            heading = sensor_data.imu_yaw;
+            heading             = sensor_data.imu_yaw;
         }
         else
         {
@@ -300,8 +310,8 @@ class SensorCoordinateSystem
 
         if (use_motionSensorYaw)
         {
-            auto sensor_quat =
-                tools::rotationfunctions::quaternion_from_ypr(sensor_data.imu_yaw, sensor_data.imu_pitch, sensor_data.imu_roll, true);
+            auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
+                sensor_data.imu_yaw, sensor_data.imu_pitch, sensor_data.imu_roll, true);
             sensor_quat.normalize();
             offset_quat.normalize();
 
@@ -309,8 +319,8 @@ class SensorCoordinateSystem
         }
         else
         {
-            auto sensor_quat =
-                tools::rotationfunctions::quaternion_from_ypr(0.0, sensor_data.imu_pitch, sensor_data.imu_roll, true);
+            auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
+                0.0, sensor_data.imu_pitch, sensor_data.imu_roll, true);
             auto compass_quat =
                 tools::rotationfunctions::quaternion_from_ypr(heading, 0.0, 0.0, true);
 
@@ -318,14 +328,15 @@ class SensorCoordinateSystem
             offset_quat.normalize();
             compass_quat.normalize();
             auto vessel_quat = compass_quat * offset_quat.inverse() * sensor_quat;
-            vessel_quat.normalize(); 
+            vessel_quat.normalize();
             return vessel_quat;
         }
     }
 
     std::tuple<double, double, double> get_vesselYPR(bool radians) const
     {
-        auto ypr = tools::rotationfunctions::ypr_from_quaternion(get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets), !radians);
+        auto ypr = tools::rotationfunctions::ypr_from_quaternion(
+            get_vesselQuat(_sensor_data, _compass_offsets, _motion_sensor_offsets), !radians);
 
         return std::make_tuple(ypr[0], ypr[1], ypr[2]);
     }
@@ -344,15 +355,9 @@ class SensorCoordinateSystem
         _Y          = Y;
     }
 
-    void set_sensor_data(const navdata::SensorData& sensor_data)
-    {
-        _sensor_data = sensor_data;
-    }
+    void set_sensor_data(const navdata::SensorData& sensor_data) { _sensor_data = sensor_data; }
 
-    navdata::SensorData get_sensor_data() const
-    {
-        return _sensor_data;
-    }
+    navdata::SensorData get_sensor_data() const { return _sensor_data; }
 
     //------------------------------------- Target offsets(e.g Offsets of Multibeam)---------------
     void set_targetOffsets(const std::string& target_id,
@@ -365,7 +370,8 @@ class SensorCoordinateSystem
     {
         set_targetOffsets(target_id, navdata::PositionalOffsets(x, y, z, yaw, pitch, roll));
     }
-    void set_targetOffsets(const std::string& target_id, const navdata::PositionalOffsets& new_offsets)
+    void set_targetOffsets(const std::string&                target_id,
+                           const navdata::PositionalOffsets& new_offsets)
     {
 
         auto map_it = _TargetOffsetIDs.find(target_id);
@@ -385,7 +391,8 @@ class SensorCoordinateSystem
         if (map_it == _TargetOffsetIDs.end())
         {
             std::stringstream s;
-            s << "ERROR[SensorCoordinateSystem::get_target_offsets]: Could not find target target_id: "
+            s << "ERROR[SensorCoordinateSystem::get_target_offsets]: Could not find target "
+                 "target_id: "
               << target_id << "!";
             throw std::out_of_range(s.str());
         }
@@ -408,7 +415,10 @@ class SensorCoordinateSystem
         _compass_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
         // Offsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0, Offsets::t_angleOffsetType::additive);
     }
-    void set_compass_offsets(const navdata::PositionalOffsets& new_offsets) { _compass_offsets = new_offsets; }
+    void set_compass_offsets(const navdata::PositionalOffsets& new_offsets)
+    {
+        _compass_offsets = new_offsets;
+    }
     navdata::PositionalOffsets get_compass_offsets() const { return _compass_offsets; }
 
     void set_depth_sensor_offsets(double x, double y, double z)
@@ -433,8 +443,10 @@ class SensorCoordinateSystem
     {
         _position_system_offsets = new_offsets;
     }
-    navdata::PositionalOffsets get_position_system_offsets() const { return _position_system_offsets; }
-
+    navdata::PositionalOffsets get_position_system_offsets() const
+    {
+        return _position_system_offsets;
+    }
 };
 
 } // namespace navigation
