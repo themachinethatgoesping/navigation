@@ -112,28 +112,31 @@ class SensorCoordinateSystem
 
         return position;
     }
-    
+
     navdata::GeoLocationUTM compute_position(const navdata::SensorDataUTM& sensor_data,
-                                               const std::string&              target_id) const
+                                             const std::string&            target_id) const
     {
         auto position = compute_position(navdata::SensorDataLocal(sensor_data), target_id);
 
-        return navdata::GeoLocationUTM(position,sensor_data.gps_zone,sensor_data.gps_northern_hemisphere);
+        return navdata::GeoLocationUTM(
+            position, sensor_data.gps_zone, sensor_data.gps_northern_hemisphere);
     }
 
     navdata::GeoLocationLatLon compute_position(const navdata::SensorDataLatLon& sensor_data,
-                                               const std::string&              target_id) const
-    {        
-        auto position = compute_position(navdata::SensorData(sensor_data), target_id);                        
+                                                const std::string&               target_id) const
+    {
+        auto position = compute_position(navdata::SensorData(sensor_data), target_id);
 
         double distance, heading;
-        std::tie(distance, heading) = compute_targetPosSysDistanceAndAzimuth(position.northing, position.easting);
+        std::tie(distance, heading) =
+            compute_targetPosSysDistanceAndAzimuth(position.northing, position.easting);
 
-        double                  target_lat, target_lon;
+        double target_lat, target_lon;
         if (std::isnan(heading))
         {
             // this happens if there is no offset between the antenna and the target
-            if (distance == 0){
+            if (distance == 0)
+            {
                 target_lat = sensor_data.gps_latitude;
                 target_lon = sensor_data.gps_longitude;
             }
@@ -146,23 +149,27 @@ class SensorCoordinateSystem
         }
         else
         {
-        GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
-                                     GeographicLib::Constants::WGS84_f());
-        geod.Direct(sensor_data.gps_latitude, sensor_data.gps_longitude, heading, distance, target_lat, target_lon);
-
+            GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
+                                         GeographicLib::Constants::WGS84_f());
+            geod.Direct(sensor_data.gps_latitude,
+                        sensor_data.gps_longitude,
+                        heading,
+                        distance,
+                        target_lat,
+                        target_lon);
         }
 
         // GeoPositionLocal is implicitly converted to GeoPosition when calling this function
-        return navdata::GeoLocationLatLon(position,target_lat,target_lon);
+        return navdata::GeoLocationLatLon(position, target_lat, target_lon);
     }
 
     //------------------------------------- get vessel position -----------------------------------
 
-    std::pair<double, double> compute_targetPosSysDistanceAndAzimuth(double northing, double easting,
-                                                                 bool radians = false) const
-                                                                 {
-                                                                    double distance =
-            std::sqrt(northing * northing + easting * easting);
+    std::pair<double, double> compute_targetPosSysDistanceAndAzimuth(double northing,
+                                                                     double easting,
+                                                                     bool   radians = false) const
+    {
+        double distance = std::sqrt(northing * northing + easting * easting);
 
         // north 0°/360°, east 90°, south 180°, west 270°
         double azimuth = NAN; // only when x and y are 0
@@ -198,8 +205,7 @@ class SensorCoordinateSystem
             azimuth *= 180 / M_PI;
 
         return std::make_pair(distance, azimuth);
-                                                                 }
-
+    }
 
     static Eigen::Quaterniond get_vesselQuat(
         const navdata::SensorData&        sensor_data,
@@ -254,7 +260,7 @@ class SensorCoordinateSystem
             return vessel_quat;
         }
     }
-    
+
     //------------------------------------- Target offsets(e.g Offsets of Multibeam)---------------
     void set_targetOffsets(const std::string& target_id,
                            double             x,
