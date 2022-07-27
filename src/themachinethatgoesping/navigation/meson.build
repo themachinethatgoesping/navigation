@@ -8,6 +8,7 @@ headerdir = projectnamespace + '/navigation'
 
 # -- source files --
 sources = [
+  'sensorcoordinatesystem.cpp'
 ]
 
 headers = [
