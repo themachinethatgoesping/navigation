@@ -18,7 +18,7 @@ navdata::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
 
     // first get the current roation of the vessel
     auto vessel_quat =
-        get_vessel_ypr_as_quat(sensor_data, _compass_offsets, _motion_sensor_offsets);
+        get_system_rotation_as_quat(sensor_data, _compass_offsets, _motion_sensor_offsets);
 
     // convert target to quaternion
     auto target_offsets  = get_target_offsets(target_id);
@@ -125,40 +125,140 @@ navdata::GeoLocationLatLon SensorCoordinateSystem::compute_target_position(
 const navdata::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(
     const std::string& target_id) const
 {
-    return _TargetOffsets.at(
-        _TargetOffsetIDs.at(target_id)); // throws std::out_of_range if not found
-}
-
-const navdata::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(size_t target_id) const
-{
     return _TargetOffsets.at(target_id); // throws std::out_of_range if not found
 }
 
-void SensorCoordinateSystem::set_target_offsets(const std::string&                target_id,
-                                                const navdata::PositionalOffsets& new_offsets)
+void SensorCoordinateSystem::register_target(const std::string&                target_id,
+                                        const navdata::PositionalOffsets& new_offsets)
 {
-    auto map_it = _TargetOffsetIDs.find(target_id);
-    if (map_it == _TargetOffsetIDs.end())
+    _TargetOffsets[target_id] = new_offsets;
+}
+
+void SensorCoordinateSystem::register_target(const std::string& target_id,
+                                        double             x,
+                                        double             y,
+                                        double             z,
+                                        double             yaw,
+                                        double             pitch,
+                                        double             roll)
+{
+    register_target(target_id, navdata::PositionalOffsets(x, y, z, yaw, pitch, roll));
+}
+
+// ----- get/set sensor offsets -----
+void SensorCoordinateSystem::set_motion_sensor_offsets(double yaw, double pitch, double roll)
+{
+    _motion_sensor_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
+}
+void SensorCoordinateSystem::set_motion_sensor_offsets(
+    const navdata::PositionalOffsets& new_offsets)
+{
+    _motion_sensor_offsets = new_offsets;
+}
+
+navdata::PositionalOffsets SensorCoordinateSystem::get_motion_sensor_offsets() const
+{
+    return _motion_sensor_offsets;
+}
+
+void SensorCoordinateSystem::set_compass_offsets(double yaw)
+{
+    _compass_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
+}
+void SensorCoordinateSystem::set_compass_offsets(const navdata::PositionalOffsets& new_offsets)
+{
+    _compass_offsets = new_offsets;
+}
+navdata::PositionalOffsets SensorCoordinateSystem::get_compass_offsets() const
+{
+    return _compass_offsets;
+}
+
+void SensorCoordinateSystem::set_depth_sensor_offsets(double x, double y, double z)
+{
+    _depth_sensor_offsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+}
+void SensorCoordinateSystem::set_depth_sensor_offsets(const navdata::PositionalOffsets& new_offsets)
+{
+    _depth_sensor_offsets = new_offsets;
+}
+navdata::PositionalOffsets SensorCoordinateSystem::get_depth_sensor_offsets() const
+{
+    return _depth_sensor_offsets;
+}
+
+void SensorCoordinateSystem::set_position_system_offsets(double x, double y, double z)
+{
+    _position_system_offsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+}
+void SensorCoordinateSystem::set_position_system_offsets(
+    const navdata::PositionalOffsets& new_offsets)
+{
+    _position_system_offsets = new_offsets;
+}
+navdata::PositionalOffsets SensorCoordinateSystem::get_position_system_offsets() const
+{
+    return _position_system_offsets;
+}
+
+// ----- helper functions -----
+Eigen::Quaterniond SensorCoordinateSystem::get_system_rotation_as_quat(
+    const navdata::SensorData&        sensor_data,
+    const navdata::PositionalOffsets& compasss_offsets,
+    const navdata::PositionalOffsets& motion_sensor_offsets)
+{
+
+    if (std::isnan(sensor_data.compass_heading))
     {
-        _TargetOffsets.push_back(new_offsets);
-        _TargetOffsetIDs[target_id] = _TargetOffsets.size() - 1;
+        // if compass_heading is nan, the imu_yaw will be used as heading
+        // convert offset to quaternion
+        Eigen::Quaternion<double> imu_offset_quat =
+            tools::rotationfunctions::quaternion_from_ypr(motion_sensor_offsets.yaw,
+                                                          motion_sensor_offsets.pitch,
+                                                          motion_sensor_offsets.roll,
+                                                          true);
+
+        // convert sensor yaw,pitch,roll to quaternion
+        auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
+            sensor_data.imu_yaw, sensor_data.imu_pitch, sensor_data.imu_roll, true);
+
+        // return sensor yaw, pitch, roll corrected for (rotated by) the sensor offsets
+        // TODO: check if the order is correct
+        auto vessel_quat = imu_sensor_quat * imu_offset_quat.inverse();
+        vessel_quat.normalize();
+        return vessel_quat;
     }
     else
     {
-        _TargetOffsets[map_it->second] = new_offsets;
+        // if compass_heading is nan, the imu_yaw will be used as heading
+        // convert offset to quaternion
+        Eigen::Quaternion<double> imu_offset_quat =
+            tools::rotationfunctions::quaternion_from_ypr(motion_sensor_offsets.yaw,
+                                                          motion_sensor_offsets.pitch,
+                                                          motion_sensor_offsets.roll,
+                                                          true);
+
+        // convert sensor pitch,roll to quaternion (ignore reported yaw)
+        auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
+            0.0, sensor_data.imu_pitch, sensor_data.imu_roll, true);
+
+        // compute roll and pitch using the imu_offsets (including yaw offset)
+        // TODO: check if the order is correct
+        auto pr_quat = imu_sensor_quat * imu_offset_quat.inverse();
+        pr_quat.normalize();
+
+        // compute sensor quat using the correct pitch and roll (ignore yaw)
+        auto ypr         = tools::rotationfunctions::ypr_from_quaternion(pr_quat, false);
+        auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(0., ypr[1], ypr[2], false);
+
+        // rotate sensor quat using compass_heading
+        double heading    = sensor_data.compass_heading - compasss_offsets.yaw;
+        auto compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0, 0.0, true);
+
+        auto vessel_quat = compass_quat * sensor_quat;
+        vessel_quat.normalize();
+        return vessel_quat;
     }
 }
-
-void SensorCoordinateSystem::set_target_offsets(const std::string& target_id,
-                                                double             x,
-                                                double             y,
-                                                double             z,
-                                                double             yaw,
-                                                double             pitch,
-                                                double             roll)
-{
-    set_target_offsets(target_id, navdata::PositionalOffsets(x, y, z, yaw, pitch, roll));
-}
-
 } // namespace navigation
 } // namespace themachinethatgoesping

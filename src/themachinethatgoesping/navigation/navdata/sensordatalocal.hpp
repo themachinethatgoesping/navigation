@@ -15,7 +15,6 @@
 
 #include "../navtools.hpp"
 #include "sensordata.hpp"
-//#include "sensordatautm.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -31,7 +30,7 @@ struct SensorDataLocal : public SensorData
 {
     double gps_northing = 0.0; ///< in m, positive northwards
     double gps_easting  = 0.0; ///< in m, positive eastwards
- 
+
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
@@ -40,16 +39,17 @@ struct SensorDataLocal : public SensorData
 
     /**
      * @brief Construct a new Sensor Data Local object using a base sensor data object
-     * 
-     * @param data 
+     *
+     * @param data
      * @param gps_northing in m, positive northwards
      * @param gps_easting in m, positive eastwards
      */
     SensorDataLocal(const SensorData& data, double gps_northing, double gps_easting)
-        : SensorData(data),
-            gps_northing(gps_northing),
-            gps_easting(gps_easting)
-    {}
+        : SensorData(data)
+        , gps_northing(gps_northing)
+        , gps_easting(gps_easting)
+    {
+    }
 
     /**
      * @brief Construct a new SensorDataLocal object
@@ -78,7 +78,6 @@ struct SensorDataLocal : public SensorData
     {
     }
 
-
     bool operator!=(const SensorDataLocal& rhs) const { return !(operator==(rhs)); }
     /**
      * @brief Check if two SensorDataLocal objects are equal
@@ -90,9 +89,9 @@ struct SensorDataLocal : public SensorData
     bool operator==(const SensorDataLocal& rhs) const
     {
         if (SensorData::operator==(rhs))
-        if (tools::helper::approx(gps_northing, rhs.gps_northing))
-            if (tools::helper::approx(gps_easting, rhs.gps_easting))
-                                        return true;
+            if (tools::helper::approx(gps_northing, rhs.gps_northing))
+                if (tools::helper::approx(gps_easting, rhs.gps_easting))
+                    return true;
 
         return false;
     }
@@ -115,7 +114,7 @@ struct SensorDataLocal : public SensorData
 
         printer.register_value("gps_northing", gps_northing, "positive northwards, m");
         printer.register_value("gps_easting", gps_easting, "positive eastwards, m");
-        
+
         printer.append(SensorData::__printer__());
 
         return printer;
@@ -128,7 +127,6 @@ struct SensorDataLocal : public SensorData
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
-
 
 } // namespace navdata
 } // namespace naviation

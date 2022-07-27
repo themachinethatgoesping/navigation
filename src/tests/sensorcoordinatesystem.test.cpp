@@ -34,43 +34,42 @@ TEST_CASE(
     SECTION("test depth sensor offsets")
     {
         SensorCoordinateSystem scs;
-        scs.set_target_offsets("mbes", targetOffsets);
-        scs.set_depth_sensor_offsets(0,0,10);
+        scs.register_target("mbes", targetOffsets);
+        scs.set_depth_sensor_offsets(0, 0, 10);
 
-        REQUIRE(scs.compute_target_position("mbes",navdata::SensorDataLocal()).z == -7);
+        REQUIRE(scs.compute_target_position("mbes", navdata::SensorDataLocal()).z == -7);
     }
 
     SECTION("test imu sensor offsets")
     {
         SensorCoordinateSystem scs;
-        scs.set_target_offsets("mbes", targetOffsets);
+        scs.register_target("mbes", targetOffsets);
 
         navdata::SensorDataLocal sensor_data;
         sensor_data.compass_heading = 90;
-        sensor_data.imu_roll = 0;
-        sensor_data.imu_pitch = 20;
-        sensor_data.imu_yaw = 130; // should not influence the results
+        sensor_data.imu_roll        = 0;
+        sensor_data.imu_pitch       = 20;
+        sensor_data.imu_yaw         = 130; // should not influence the results
 
-        // imu yaw offset should not influence the resulting yaw because that is influenced only by the compass_heading
-        // but imu yaw offset of 90° should swap pitch and roll
-        scs.set_motion_sensor_offsets(90,0,0);
-        auto position = scs.compute_target_position("mbes",sensor_data);
+        // imu yaw offset should not influence the resulting yaw because that is influenced only by
+        // the compass_heading but imu yaw offset of 90° should swap pitch and roll
+        scs.set_motion_sensor_offsets(90, 0, 0);
+        auto position = scs.compute_target_position("mbes", sensor_data);
 
         REQUIRE(position.yaw == Approx(90));
         CHECK(position.pitch == Approx(0.0).scale(1.0));
         REQUIRE(position.roll == Approx(-20));
 
-        sensor_data.imu_roll = 10;
+        sensor_data.imu_roll  = 10;
         sensor_data.imu_pitch = 0;
 
-        position = scs.compute_target_position("mbes",sensor_data);
+        position = scs.compute_target_position("mbes", sensor_data);
         REQUIRE(position.yaw == Approx(90));
         CHECK(position.pitch == Approx(10.0));
         REQUIRE(position.roll == Approx(0).scale(1.0));
 
-
-        scs.set_motion_sensor_offsets(0,1,2);
-        position = scs.compute_target_position("mbes",sensor_data);
+        scs.set_motion_sensor_offsets(0, 1, 2);
+        position = scs.compute_target_position("mbes", sensor_data);
         REQUIRE(position.yaw == Approx(90));
         CHECK(position.pitch == Approx(-0.9902670948));
         REQUIRE(position.roll == Approx(8.001202844));
@@ -84,8 +83,8 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
     navdata::PositionalOffsets targetOffsets1(1, 2, 3, 0, 0, 0);
     navdata::PositionalOffsets targetOffsets2(1, 2, 3, 45, 5, 10);
 
-    scs.set_target_offsets("mbes", targetOffsets1);
-    scs.set_target_offsets("sbes", targetOffsets2);
+    scs.register_target("mbes", targetOffsets1);
+    scs.register_target("sbes", targetOffsets2);
 
     SECTION("NO_SENSOR_VALUES")
     {
@@ -155,11 +154,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_easting     = 20;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes", navdata::SensorData(sensor_data)
-                                        ); // convert to SensorData (without xy coordinates)
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
         relative_position_sbes =
             scs.compute_target_position("sbes", navdata::SensorData(sensor_data));
 
@@ -195,11 +194,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_easting     = 20;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes", navdata::SensorData(sensor_data)
-                                        ); // convert to SensorData (without xy coordinates)
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
         relative_position_sbes =
             scs.compute_target_position("sbes", navdata::SensorData(sensor_data));
 
@@ -238,10 +237,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_easting     = 20;
 
         // compute sensor positions
-        auto position_mbes = scs.compute_target_position("mbes", sensor_data);
-        auto position_sbes = scs.compute_target_position("sbes", sensor_data);
-        auto relative_position_mbes =
-            scs.compute_target_position("mbes", navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
+        auto position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        auto relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
         auto relative_position_sbes =
             scs.compute_target_position("sbes", navdata::SensorData(sensor_data));
 
@@ -276,10 +276,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_easting     = -20;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes", navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
         relative_position_sbes =
             scs.compute_target_position("sbes", navdata::SensorData(sensor_data));
 
@@ -313,10 +314,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_easting     = -20;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes", navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
         relative_position_sbes =
             scs.compute_target_position("sbes", navdata::SensorData(sensor_data));
 
@@ -350,10 +352,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_easting     = -1000;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes", navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
         relative_position_sbes =
             scs.compute_target_position("sbes", navdata::SensorData(sensor_data));
 
@@ -391,10 +394,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_latitude    = 54.123;
         sensor_data.gps_longitude   = -10.123;
 
-        auto position_mbes = scs.compute_target_position("mbes", sensor_data);
-        auto position_sbes = scs.compute_target_position("sbes", sensor_data);
-        auto relative_position_mbes =
-            scs.compute_target_position("mbes", navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
+        auto position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        auto relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
         auto relative_position_sbes =
             scs.compute_target_position("sbes", navdata::SensorData(sensor_data));
 
@@ -429,10 +433,11 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_longitude   = 1.123;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes", navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            navdata::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
         relative_position_sbes =
             scs.compute_target_position("sbes", navdata::SensorData(sensor_data));
 

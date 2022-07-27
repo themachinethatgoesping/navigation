@@ -14,15 +14,12 @@
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "../navtools.hpp"
-#include "sensordatalocal.hpp"
 #include "sensordatalatlon.hpp"
+#include "sensordatalocal.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace navdata {
-
-// foorwad declarations for location conversions
-//struct SensorDataLocal; // defined in sensordatalocal.hpp
 
 /**
  * @brief A structure to store a georeferenced data and attitude data from different sensors
@@ -32,9 +29,9 @@ namespace navdata {
  */
 struct SensorDataUTM : public SensorDataLocal
 {
-    int    gps_zone     = 0;   ///< UTM/UPS zone number
-    bool   gps_northern_hemisphere =
-        true;                 ///< if true: northern hemisphere, else: southern hemisphere
+    int  gps_zone = 0; ///< UTM/UPS zone number
+    bool gps_northern_hemisphere =
+        true; ///< if true: northern hemisphere, else: southern hemisphere
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
@@ -44,20 +41,23 @@ struct SensorDataUTM : public SensorDataLocal
 
     /**
      * @brief Construct a new Sensor Data Local object using a base sensor data object
-     * 
-     * @param data 
+     *
+     * @param data
      * @param gps_northing in m, positive northwards
      * @param gps_easting in m, positive eastwards
      * @param gps_zone UTM/UPS zone number
      * @param gps_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    SensorDataUTM(const SensorData& data, double gps_northing, double gps_easting,
-                  int                    gps_zone,
-                  bool                   gps_northern_hemisphere)
-        : SensorDataLocal(data, gps_northing, gps_easting),
-            gps_zone(gps_zone),
-            gps_northern_hemisphere(gps_northern_hemisphere)
-    {}
+    SensorDataUTM(const SensorData& data,
+                  double            gps_northing,
+                  double            gps_easting,
+                  int               gps_zone,
+                  bool              gps_northern_hemisphere)
+        : SensorDataLocal(data, gps_northing, gps_easting)
+        , gps_zone(gps_zone)
+        , gps_northern_hemisphere(gps_northern_hemisphere)
+    {
+    }
 
     /**
      * @brief Construct an SensorDataUTM object from an existing SensorDataLocal object (using a
@@ -67,17 +67,16 @@ struct SensorDataUTM : public SensorDataLocal
      * @param gps_zone UTM/UPS zone number
      * @param gps_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    SensorDataUTM(const SensorDataLocal& data_local,
-                  int                    gps_zone,
-                  bool                   gps_northern_hemisphere) 
-                  : SensorDataLocal(data_local),
-                      gps_zone(gps_zone),
-                      gps_northern_hemisphere(gps_northern_hemisphere)
-                  {}
+    SensorDataUTM(const SensorDataLocal& data_local, int gps_zone, bool gps_northern_hemisphere)
+        : SensorDataLocal(data_local)
+        , gps_zone(gps_zone)
+        , gps_northern_hemisphere(gps_northern_hemisphere)
+    {
+    }
 
     /**
-     * @brief Construct an SensorDataUTM object from an existing SensorDataLatLon object (this allows
-     * for implicit conversion from SensorDataLatLon class)
+     * @brief Construct an SensorDataUTM object from an existing SensorDataLatLon object (this
+     * allows for implicit conversion from SensorDataLatLon class)
      *
      */
     SensorDataUTM(const SensorDataLatLon& data, int setzone = -1)
@@ -117,9 +116,9 @@ struct SensorDataUTM : public SensorDataLocal
                           compass_heading,
                           imu_yaw,
                           imu_pitch,
-                          imu_roll),
-            gps_zone(gps_zone),
-            gps_northern_hemisphere(gps_northern_hemisphere)
+                          imu_roll)
+        , gps_zone(gps_zone)
+        , gps_northern_hemisphere(gps_northern_hemisphere)
     {
     }
 
@@ -134,9 +133,9 @@ struct SensorDataUTM : public SensorDataLocal
     bool operator==(const SensorDataUTM& rhs) const
     {
         if (SensorDataLocal::operator==(rhs))
-                if (gps_zone == rhs.gps_zone)
-                    if (gps_northern_hemisphere == rhs.gps_northern_hemisphere)
-                                                return true;
+            if (gps_zone == rhs.gps_zone)
+                if (gps_northern_hemisphere == rhs.gps_northern_hemisphere)
+                    return true;
 
         return false;
     }
@@ -149,13 +148,13 @@ struct SensorDataUTM : public SensorDataLocal
     static SensorDataLatLon to_sensordata(const SensorDataUTM& data_utm)
     {
         SensorDataLatLon data(0,
-                        0,
-                        data_utm.gps_z,
-                        data_utm.heave_heave,
-                        data_utm.compass_heading,
-                        data_utm.imu_yaw,
-                        data_utm.imu_pitch,
-                        data_utm.imu_roll);
+                              0,
+                              data_utm.gps_z,
+                              data_utm.heave_heave,
+                              data_utm.compass_heading,
+                              data_utm.imu_yaw,
+                              data_utm.imu_pitch,
+                              data_utm.imu_roll);
 
         GeographicLib::UTMUPS::Reverse(data_utm.gps_zone,
                                        data_utm.gps_northern_hemisphere,
@@ -205,7 +204,7 @@ struct SensorDataUTM : public SensorDataLocal
     template<typename S>
     void serialize(S& s)
     {
-        s.ext(*this,bitsery::ext::BaseClass<SensorDataLocal>{});
+        s.ext(*this, bitsery::ext::BaseClass<SensorDataLocal>{});
         s.value4b(gps_zone);
         s.value1b(gps_northern_hemisphere);
     }
