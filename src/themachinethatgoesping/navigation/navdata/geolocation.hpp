@@ -19,7 +19,6 @@ namespace themachinethatgoesping {
 namespace navigation {
 namespace navdata {
 
-
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
  * This structure does not store any coordinates except the depth (z)
@@ -27,17 +26,16 @@ namespace navdata {
  */
 struct GeoLocation
 {
-    double z         = 0;   ///< in m, positive downwards
-    double yaw       = 0.0; ///< in °, 0° is north, 90° is east
-    double pitch     = 0.0; ///< in °, positive means bow up
-    double roll      = 0.0; ///< in °, positive means port up
+    double z     = 0;   ///< in m, positive downwards
+    double yaw   = 0.0; ///< in °, 0° is north, 90° is east
+    double pitch = 0.0; ///< in °, positive means bow up
+    double roll  = 0.0; ///< in °, positive means port up
 
     /**
      * @brief Construct a new Position object
      *
      */
     GeoLocation() = default;
-
 
     /**
      * @brief Construct a new GeoLocation object
@@ -71,11 +69,11 @@ struct GeoLocation
      */
     bool operator==(const GeoLocation& rhs) const
     {
-                if (tools::helper::approx(z, rhs.z))
-                    if (tools::helper::approx(yaw, rhs.yaw))
-                        if (tools::helper::approx(pitch, rhs.pitch))
-                            if (tools::helper::approx(roll, rhs.roll))
-                                return true;
+        if (tools::helper::approx(z, rhs.z))
+            if (tools::helper::approx(yaw, rhs.yaw))
+                if (tools::helper::approx(pitch, rhs.pitch))
+                    if (tools::helper::approx(roll, rhs.roll))
+                        return true;
 
         return false;
     }

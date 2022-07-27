@@ -42,20 +42,21 @@ struct GeoLocationLatLon : public GeoLocation
 
     /**
      * @brief Construct a new Sensor Data Lat Lon object using a base sensor data object
-     * 
-     * @param location 
+     *
+     * @param location
      * @param latitude in °, positive northwards
      * @param longitude in °, positive eastwards
      */
     GeoLocationLatLon(const GeoLocation& location, double latitude, double longitude)
-        : GeoLocation(location),
-            latitude(latitude),
-            longitude(longitude)
-    {}
+        : GeoLocation(location)
+        , latitude(latitude)
+        , longitude(longitude)
+    {
+    }
 
     /**
-     * @brief Construct an GeoLocationLatLon object from an existing GeoLocationUTM object (this allows
-     * for implicit conversion from GeoLocationUTM class)
+     * @brief Construct an GeoLocationLatLon object from an existing GeoLocationUTM object (this
+     * allows for implicit conversion from GeoLocationUTM class)
      *
      */
     GeoLocationLatLon(const GeoLocationUTM& location_utm); // defined in geolocationutm.hpp
@@ -70,7 +71,12 @@ struct GeoLocationLatLon : public GeoLocation
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    GeoLocationLatLon(double latitude, double longitude, double z, double yaw, double pitch, double roll)
+    GeoLocationLatLon(double latitude,
+                      double longitude,
+                      double z,
+                      double yaw,
+                      double pitch,
+                      double roll)
         : GeoLocation(z, yaw, pitch, roll)
         , latitude(latitude)
         , longitude(longitude)

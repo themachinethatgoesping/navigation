@@ -36,15 +36,15 @@ struct GeoLocationLocal : public GeoLocation
 
     /**
      * @brief Construct a new GeoLocationLocal object
-     * 
-     * @param location 
+     *
+     * @param location
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
      */
     GeoLocationLocal(const GeoLocation& location, double northing, double easting)
-    : GeoLocation(location),
-      northing(northing),
-      easting(easting)
+        : GeoLocation(location)
+        , northing(northing)
+        , easting(easting)
     {
     }
 
@@ -64,7 +64,7 @@ struct GeoLocationLocal : public GeoLocation
                      double yaw,
                      double pitch,
                      double roll)
-        : GeoLocation(z,yaw, pitch, roll)
+        : GeoLocation(z, yaw, pitch, roll)
         , northing(northing)
         , easting(easting)
     {
@@ -87,7 +87,7 @@ struct GeoLocationLocal : public GeoLocation
     template<typename S>
     void serialize(S& s)
     {
-        s.ext(*this,bitsery::ext::BaseClass<GeoLocation>{});
+        s.ext(*this, bitsery::ext::BaseClass<GeoLocation>{});
         s.value8b(northing);
         s.value8b(easting);
     }

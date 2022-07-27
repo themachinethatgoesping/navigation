@@ -22,7 +22,7 @@ namespace navdata {
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
  * unlike the default GeoLocation structure, this object stores utm coordinates
  */
-struct GeoLocationUTM :public GeoLocationLocal
+struct GeoLocationUTM : public GeoLocationLocal
 {
     int  zone                = 0;    ///< UTM/UPS zone number
     bool northern_hemisphere = true; ///< if true: northern hemisphere, else: southern hemisphere

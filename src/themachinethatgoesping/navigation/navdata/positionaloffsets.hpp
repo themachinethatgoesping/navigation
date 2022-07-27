@@ -15,7 +15,8 @@ namespace navigation {
 namespace navdata {
 
 /**
- * @brief A structure to store positional offsets (e.g. of a sensor) relative to the vessel coordinate system
+ * @brief A structure to store positional offsets (e.g. of a sensor) relative to the vessel
+ * coordinate system
  *
  */
 struct PositionalOffsets
@@ -66,7 +67,7 @@ struct PositionalOffsets
 
         return false;
     }
-    
+
   private:
     // serialization support using bitsery
     friend bitsery::Access;
