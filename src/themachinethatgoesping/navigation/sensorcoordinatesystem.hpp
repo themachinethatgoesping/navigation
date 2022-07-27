@@ -170,39 +170,7 @@ class SensorCoordinateSystem
                                                                      bool   radians = false) const
     {
         double distance = std::sqrt(northing * northing + easting * easting);
-
-        // north 0°/360°, east 90°, south 180°, west 270°
-        double azimuth = NAN; // only when x and y are 0
-
-        if (northing == 0)
-        {
-            if (easting < 0)
-                azimuth = 1.5 * M_PI; // 270°
-            else if (easting > 0)
-                azimuth = 0.5 * M_PI; // 90°
-            // else azimuth = NAN;
-        }
-        else if (easting == 0)
-        {
-            if (northing < 0)
-                azimuth = M_PI; // 180°
-            else if (northing > 0)
-                azimuth = 0;
-        }
-        else
-        {
-            azimuth = std::atan2(easting, northing);
-        }
-
-        // move azimuth into 0-2pi range
-        static const double M_2PI = 2. * M_PI;
-        while (azimuth < 0)
-            azimuth += M_2PI;
-        while (azimuth > M_2PI)
-            azimuth -= M_2PI;
-
-        if (!radians)
-            azimuth *= 180 / M_PI;
+        double azimuth = tools::rotationfunctions::compute_heading(northing, easting, radians);
 
         return std::make_pair(distance, azimuth);
     }
