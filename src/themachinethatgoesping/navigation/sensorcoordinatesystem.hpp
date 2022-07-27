@@ -34,12 +34,16 @@ class SensorCoordinateSystem
     std::unordered_map<std::string, navdata::PositionalOffsets>
         _target_offsets; /// TargetId (position in vector) for each registered target_id
 
-    navdata::PositionalOffsets _motion_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) Offsets of Motionsensor 
-    navdata::PositionalOffsets _compass_offsets; /// Static Yaw (installation) Offsets of CompassOffsets 
-    navdata::PositionalOffsets _position_system_offsets; /// Static x,y,z (installation) Offsets of the PositionSystem 
-    navdata::PositionalOffsets _depth_sensor_offsets;   /// Static xy,z (installation) Offsets of the depth sensor 
-    // Static Position of Heave Sensor
-    // Offsets _HeaveSensorOffsets;
+    navdata::PositionalOffsets
+        _motion_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) Offsets of Motionsensor
+    navdata::PositionalOffsets
+        _compass_offsets; /// Static Yaw (installation) Offsets of CompassOffsets
+    navdata::PositionalOffsets
+        _position_system_offsets; /// Static x,y,z (installation) Offsets of the PositionSystem
+    navdata::PositionalOffsets
+        _depth_sensor_offsets; /// Static xy,z (installation) Offsets of the depth sensor
+                               // Static Position of Heave Sensor
+                               // Offsets _HeaveSensorOffsets;
 
   public:
     /**
@@ -104,33 +108,35 @@ class SensorCoordinateSystem
     // ----- get/set target offsets -----
     /**
      * @brief register a target (e.g. MBES) with offsets to the sensor position system
-     * 
+     *
      * @param target_id name of the target for reference
      * @param offsets mounting offsets of the target
      */
     void register_target(const std::string& target_id, const navdata::PositionalOffsets& offsets);
     /**
      * @brief register a target (e.g. MBES) with offsets to the sensor position system
-     * 
+     *
      * @param target_id name of the target for reference
      * @param x x-offset of the target (in meters, positive foorward)
      * @param y y-offset of the target (in meters, positive starboard)
      * @param z z-offset of the target (in meters, positive down)
      * @param yaw yaw offset of the target (righthanded around the z-axis) (in degrees, 90° = east)
-     * @param pitch pitch offset of the target (righthanded around the y-axis) (in degrees, positive = bow up)
-     * @param roll roll offset of the target (righthanded around the x-axis) (in degrees, positive = port up)
+     * @param pitch pitch offset of the target (righthanded around the y-axis) (in degrees, positive
+     * = bow up)
+     * @param roll roll offset of the target (righthanded around the x-axis) (in degrees, positive =
+     * port up)
      */
     void register_target(const std::string& target_id,
-                    double             x,
-                    double             y,
-                    double             z,
-                    double             yaw,
-                    double             pitch,
-                    double             roll);
+                         double             x,
+                         double             y,
+                         double             z,
+                         double             yaw,
+                         double             pitch,
+                         double             roll);
 
     /**
      * @brief Get stored target offsets of a specified target
-     * 
+     *
      * @param target_id name of the registered target
      * @return const navdata::PositionalOffsets& offsets of the target
      */
@@ -139,49 +145,52 @@ class SensorCoordinateSystem
     // ----- get/set sensor offsets -----
     /**
      * @brief Set the motion sensor offsets
-     * 
-     * @param yaw yaw offset of the motion sensor (righthanded around the z-axis) (in degrees, 90° = east)
-     * @param pitch pitch offset of the motion sensor (righthanded around the y-axis) (in degrees, positive = bow up)
-     * @param roll roll offset of the motion sensor (righthanded around the x-axis) (in degrees, positive = port up)
+     *
+     * @param yaw yaw offset of the motion sensor (righthanded around the z-axis) (in degrees, 90° =
+     * east)
+     * @param pitch pitch offset of the motion sensor (righthanded around the y-axis) (in degrees,
+     * positive = bow up)
+     * @param roll roll offset of the motion sensor (righthanded around the x-axis) (in degrees,
+     * positive = port up)
      */
     void set_motion_sensor_offsets(double yaw, double pitch, double roll);
     /**
      * @brief Set the motion sensor offsets
-     * 
+     *
      * @param new_offsets offsets structure (only yaw, pitch and roll are used)
      */
     void set_motion_sensor_offsets(const navdata::PositionalOffsets& new_offsets);
     /**
      * @brief Get the motion sensor offsets
-     * 
+     *
      * @return const navdata::PositionalOffsets& offsets of the motion sensor
      */
     navdata::PositionalOffsets get_motion_sensor_offsets() const;
 
     /**
      * @brief Set the compass offsets
-     * 
+     *
      * @param yaw yaw offset of the compass (righthanded around the z-axis) (in degrees, 90° = east)
      */
-    void                       set_compass_offsets(double yaw);
+    void set_compass_offsets(double yaw);
 
     /**
      * @brief Set the compass offsets
-     * 
+     *
      * @param new_offsets offsets structure (only yaw is used)
      */
-    void                       set_compass_offsets(const navdata::PositionalOffsets& new_offsets);
+    void set_compass_offsets(const navdata::PositionalOffsets& new_offsets);
 
     /**
      * @brief Get the registered compass offsets
-     * 
+     *
      * @return const navdata::PositionalOffsets& offsets of the compass
      */
     navdata::PositionalOffsets get_compass_offsets() const;
 
     /**
-     * @brief Set the depth sensor offsets 
-     * 
+     * @brief Set the depth sensor offsets
+     *
      * @param x x-offset of the depth sensor (in meters, positive foorward)
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
@@ -189,22 +198,22 @@ class SensorCoordinateSystem
     void set_depth_sensor_offsets(double x, double y, double z);
 
     /**
-     * @brief Set the depth sensor offsets 
-     * 
+     * @brief Set the depth sensor offsets
+     *
      * @param new_offsets offsets structure (only x, y and z are used)
      */
     void set_depth_sensor_offsets(const navdata::PositionalOffsets& new_offsets);
 
     /**
-     * @brief Get the registered depth sensor offsets 
-     * 
+     * @brief Get the registered depth sensor offsets
+     *
      * @return const navdata::PositionalOffsets& offsets of the depth sensor
      */
     navdata::PositionalOffsets get_depth_sensor_offsets() const;
 
     /**
      * @brief Set the position system offsets
-     * 
+     *
      * @param x x-offset of the depth sensor (in meters, positive foorward)
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
@@ -213,14 +222,14 @@ class SensorCoordinateSystem
 
     /**
      * @brief Set the position system offsets
-     * 
+     *
      * @param new_offsets offsets structure (only x, y and z are used)
      */
     void set_position_system_offsets(const navdata::PositionalOffsets& new_offsets);
 
     /**
      * @brief Get the registered position system offsets
-     * 
+     *
      * @return const navdata::PositionalOffsets& offsets of the position system
      */
     navdata::PositionalOffsets get_position_system_offsets() const;
@@ -228,14 +237,19 @@ class SensorCoordinateSystem
   private:
     // ----- helper functinos -----
     /**
-     * @brief Compute the rotation of the sensor coordinate system (relative to the world reference coordinate system) using the sensor data and (rotation) offsets.
-     * Note1: If compass_heading in SensorData is NAN, the imu_yaw is used (and compass_offsets are ignored)
-     * Note2: if compass_heading is used the motion_sensor_offset yaw will be used to correct the motion_sensor_offset roll and pitch but will not be added to the heading 
-     * 
-     * @param sensor_data Sensor data object (used are: compass_heading, imu_yaw, imu_pitch, imu_roll)
+     * @brief Compute the rotation of the sensor coordinate system (relative to the world reference
+     * coordinate system) using the sensor data and (rotation) offsets. Note1: If compass_heading in
+     * SensorData is NAN, the imu_yaw is used (and compass_offsets are ignored) Note2: if
+     * compass_heading is used the motion_sensor_offset yaw will be used to correct the
+     * motion_sensor_offset roll and pitch but will not be added to the heading
+     *
+     * @param sensor_data Sensor data object (used are: compass_heading, imu_yaw, imu_pitch,
+     * imu_roll)
      * @param compasss_offsets Offsets of the compass (used is only yaw offset)
-     * @param motion_sensor_offsets Offsets of the IMU (used are yaw, pitch and roll), if compass_heading is used, yaw is used to correct pitch, and roll but not added to the heading
-     * @return Eigen::Quaterniond Rotation of the sensor system compared to the world reference system
+     * @param motion_sensor_offsets Offsets of the IMU (used are yaw, pitch and roll), if
+     * compass_heading is used, yaw is used to correct pitch, and roll but not added to the heading
+     * @return Eigen::Quaterniond Rotation of the sensor system compared to the world reference
+     * system
      */
     static Eigen::Quaterniond get_system_rotation_as_quat(
         const navdata::SensorData&        sensor_data,
@@ -257,7 +271,7 @@ class SensorCoordinateSystem
   public:
     bool operator==(const SensorCoordinateSystem& other) const
     {
-        
+
         for (const auto& [target_id, target_offsets] : _target_offsets)
         {
             if (other._target_offsets.find(target_id) == other._target_offsets.end())
@@ -275,10 +289,7 @@ class SensorCoordinateSystem
                _position_system_offsets == other._position_system_offsets &&
                _depth_sensor_offsets == other._depth_sensor_offsets;
     }
-    bool operator!=(const SensorCoordinateSystem& other) const
-    {
-        return !(*this == other);
-    }
+    bool operator!=(const SensorCoordinateSystem& other) const { return !(*this == other); }
 
     tools::classhelpers::ObjectPrinter __printer__() const
     {
@@ -289,18 +300,18 @@ class SensorCoordinateSystem
             printer.register_section("Target offsets \"" + target_id + "\"");
             printer.append(target_offsets.__printer__());
         }
-        
-            printer.register_section("Motion sensor offsets");
-            printer.append(_motion_sensor_offsets.__printer__());
 
-            printer.register_section("Compass offsets");
-            printer.append(_compass_offsets.__printer__());
+        printer.register_section("Motion sensor offsets");
+        printer.append(_motion_sensor_offsets.__printer__());
 
-            printer.register_section("Position system offsets");
-            printer.append(_position_system_offsets.__printer__());
+        printer.register_section("Compass offsets");
+        printer.append(_compass_offsets.__printer__());
 
-            printer.register_section("Depth sensor offsets");
-            printer.append(_depth_sensor_offsets.__printer__());
+        printer.register_section("Position system offsets");
+        printer.append(_position_system_offsets.__printer__());
+
+        printer.register_section("Depth sensor offsets");
+        printer.append(_depth_sensor_offsets.__printer__());
 
         return printer;
     }

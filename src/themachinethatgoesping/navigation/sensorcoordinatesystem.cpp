@@ -129,18 +129,18 @@ const navdata::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(
 }
 
 void SensorCoordinateSystem::register_target(const std::string&                target_id,
-                                        const navdata::PositionalOffsets& new_offsets)
+                                             const navdata::PositionalOffsets& new_offsets)
 {
     _target_offsets[target_id] = new_offsets;
 }
 
 void SensorCoordinateSystem::register_target(const std::string& target_id,
-                                        double             x,
-                                        double             y,
-                                        double             z,
-                                        double             yaw,
-                                        double             pitch,
-                                        double             roll)
+                                             double             x,
+                                             double             y,
+                                             double             z,
+                                             double             yaw,
+                                             double             pitch,
+                                             double             roll)
 {
     register_target(target_id, navdata::PositionalOffsets(x, y, z, yaw, pitch, roll));
 }
