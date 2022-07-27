@@ -44,131 +44,185 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
 
     SECTION("NO_SENSOR_VALUES")
     {
-        REQUIRE(scs.get_targetDepth("MBES") == 3);
-        REQUIRE(scs.get_targetXY("MBES", false).first == 1);
-        REQUIRE(scs.get_targetXY("MBES", false).second == 2);
-        REQUIRE(scs.get_targetXY("MBES", true).first == 1);
-        REQUIRE(scs.get_targetXY("MBES", true).second == 2);
-        REQUIRE(scs.get_targetOffsets("MBES") == targetOffsets1);
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.2360679775));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(63.4349488229));
-        REQUIRE(std::get<0>(scs.get_targetYPR("MBES")) == Approx(0));
-        REQUIRE(std::get<1>(scs.get_targetYPR("MBES")) == Approx(0));
-        REQUIRE(std::get<2>(scs.get_targetYPR("MBES")) == Approx(0));
+        auto position_mbes = scs.compute_position(navdata::SensorDataLocal(), "MBES");
+        auto position_sbes = scs.compute_position(navdata::SensorDataLocal(), "SBES");
 
-        REQUIRE(scs.get_targetDepth("SBES") == 3);
-        REQUIRE(scs.get_targetXY("SBES", false).first == 1);
-        REQUIRE(scs.get_targetXY("SBES", false).second == 2);
-        REQUIRE(scs.get_targetXY("SBES", true).first == 1);
-        REQUIRE(scs.get_targetXY("SBES", true).second == 2);
+        navdata::GeoLocationLocal expected_result_mbes(1, 2, 3, 0, 0, 0);
+        navdata::GeoLocationLocal expected_result_sbes(1, 2, 3, 45, 5, 10);
+
+        REQUIRE(position_mbes == expected_result_mbes);
+        REQUIRE(position_sbes == expected_result_sbes);
+
+        REQUIRE(scs.get_targetOffsets("MBES") == targetOffsets1);
         REQUIRE(scs.get_targetOffsets("SBES") == targetOffsets2);
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES").first == Approx(2.2360679775));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES").second == Approx(63.4349488229));
-        REQUIRE(std::get<0>(scs.get_targetYPR("SBES")) == Approx(45));
-        REQUIRE(std::get<1>(scs.get_targetYPR("SBES")) == Approx(5));
-        REQUIRE(std::get<2>(scs.get_targetYPR("SBES")) == Approx(10));
+
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(position_mbes.northing,
+                                                           position_mbes.easting)
+                    .first == Approx(2.2360679775));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(position_mbes.northing,
+                                                           position_mbes.easting)
+                    .second == Approx(63.4349488229));
+
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(position_sbes.northing,
+                                                           position_sbes.easting)
+                    .first == Approx(2.2360679775));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(position_sbes.northing,
+                                                           position_sbes.easting)
+                    .second == Approx(63.4349488229));
     }
 
     SECTION("SENSOR_VALUES no roll/pitch")
     {
-        navdata::SensorData sensor_data;
+        // initialize sensor data
+        navdata::SensorDataLocal sensor_data;
         sensor_data.gps_z           = 5;
         sensor_data.compass_heading = 0;
         sensor_data.imu_yaw         = 40; // ignored because compass_heading is valid
         sensor_data.imu_pitch       = 0;
         sensor_data.imu_roll        = 0;
-        scs.set_sensor_data(sensor_data);
-        scs.set_positionSystemXY(10, 20);
+        sensor_data.gps_northing    = 10;
+        sensor_data.gps_easting     = 20;
 
-        REQUIRE(scs.get_targetDepth("MBES") == Approx(8.0));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        // compute sensor positions
+        auto position_mbes = scs.compute_position(sensor_data, "MBES");
+        auto position_sbes = scs.compute_position(sensor_data, "SBES");
+        auto relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        auto relative_position_sbes =
+            scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        CHECK(scs.get_targetXY("MBES", false).first == Approx(1.0));
-        REQUIRE(scs.get_targetXY("MBES", false).second == Approx(2.0));
-        REQUIRE(scs.get_targetXY("MBES", false) == scs.get_targetXY("SBES", false));
-        // CHECK(scs.get_targetXY("MBES", true).first == Approx(-9));
-        // CHECK(scs.get_targetXY("MBES", true).second == Approx(-18));
-        CHECK(scs.get_targetXY("MBES", true).first == Approx(11));
-        REQUIRE(scs.get_targetXY("MBES", true).second == Approx(22));
-        REQUIRE(scs.get_targetXY("MBES", true) == scs.get_targetXY("SBES", true));
+        // check results
+        REQUIRE(position_mbes.z == Approx(8.0));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.2360679775));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(63.4349488229));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("MBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("SBES"));
+        CHECK(relative_position_mbes.northing == Approx(1.0));
+        CHECK(relative_position_mbes.easting == Approx(2.0));
+        CHECK(position_mbes.northing == Approx(11));
+        REQUIRE(position_mbes.easting == Approx(22));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(45));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(5));
-        REQUIRE(std::get<2>(scs.get_targetYPR("SBES")) == Approx(10));
+        REQUIRE(relative_position_mbes.northing == relative_position_sbes.northing);
+        REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
+        REQUIRE(position_mbes.northing == position_sbes.northing);
+        REQUIRE(position_mbes.easting == position_sbes.easting);
+
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.2360679775));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(63.4349488229));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
+
+        CHECK(position_mbes.yaw == Approx(0.0));
+        CHECK(position_mbes.pitch == Approx(0.0));
+        CHECK(position_mbes.roll == Approx(0.0));
+        CHECK(position_sbes.yaw == Approx(45));
+        CHECK(position_sbes.pitch == Approx(5));
+        REQUIRE(position_sbes.roll == Approx(10));
 
         // scenario 0.2
+        // initialize sensor data
         sensor_data.gps_z           = 5;
         sensor_data.compass_heading = 180;
         sensor_data.imu_yaw         = 40; // ignored because compass_heading is valid
         sensor_data.imu_pitch       = 0;
         sensor_data.imu_roll        = 0;
-        scs.set_sensor_data(sensor_data);
-        scs.set_positionSystemXY(10, 20);
+        sensor_data.gps_northing    = 10;
+        sensor_data.gps_easting     = 20;
 
-        REQUIRE(scs.get_targetDepth("MBES") == Approx(8.0));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        // compute sensor positions
+        position_mbes = scs.compute_position(sensor_data, "MBES");
+        position_sbes = scs.compute_position(sensor_data, "SBES");
+        relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        relative_position_sbes = scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        CHECK(scs.get_targetXY("MBES", false).first == Approx(-1.0));
-        REQUIRE(scs.get_targetXY("MBES", false).second == Approx(-2.0));
-        REQUIRE(scs.get_targetXY("MBES", false) == scs.get_targetXY("SBES", false));
-        // CHECK(scs.get_targetXY("MBES", true).first == Approx(-9));
-        // CHECK(scs.get_targetXY("MBES", true).second == Approx(-18));
-        CHECK(scs.get_targetXY("MBES", true).first == Approx(9));
-        REQUIRE(scs.get_targetXY("MBES", true).second == Approx(18));
-        REQUIRE(scs.get_targetXY("MBES", true) == scs.get_targetXY("SBES", true));
+        // check results
+        REQUIRE(position_mbes.z == Approx(8.0));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.2360679775));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(63.4349488229 + 180));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("MBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("SBES"));
+        CHECK(relative_position_mbes.northing == Approx(-1.0));
+        REQUIRE(relative_position_mbes.easting == Approx(-2.0));
+        CHECK(position_mbes.northing == Approx(9));
+        REQUIRE(position_mbes.easting == Approx(18));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(180.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(225));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(5));
-        REQUIRE(std::get<2>(scs.get_targetYPR("SBES")) == Approx(10));
+        REQUIRE(relative_position_mbes.northing == relative_position_sbes.northing);
+        REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
+        REQUIRE(position_mbes.northing == position_sbes.northing);
+        REQUIRE(position_mbes.easting == position_sbes.easting);
+
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.2360679775));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(63.4349488229 + 180));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
+
+        CHECK(position_mbes.yaw == Approx(180.0));
+        CHECK(position_mbes.pitch == Approx(0.0));
+        CHECK(position_mbes.roll == Approx(0.0));
+        CHECK(position_sbes.yaw == Approx(225));
+        CHECK(position_sbes.pitch == Approx(5));
+        REQUIRE(position_sbes.roll == Approx(10));
 
         // scenario 0.3
+        // initialize sensor data
         sensor_data.gps_z           = 5;
         sensor_data.compass_heading = 90;
         sensor_data.imu_yaw         = 40; // ignored because compass_heading is valid
         sensor_data.imu_pitch       = 0;
         sensor_data.imu_roll        = 0;
-        scs.set_sensor_data(sensor_data);
-        scs.set_positionSystemXY(10, 20);
+        sensor_data.gps_northing    = 10;
+        sensor_data.gps_easting     = 20;
 
-        REQUIRE(scs.get_targetDepth("MBES") == Approx(8.0));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        // compute sensor positions
+        position_mbes = scs.compute_position(sensor_data, "MBES");
+        position_sbes = scs.compute_position(sensor_data, "SBES");
+        relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        relative_position_sbes = scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        CHECK(scs.get_targetXY("MBES", false).first == Approx(-2.0));
-        CHECK(scs.get_targetXY("MBES", false).second == Approx(1.0));
-        REQUIRE(scs.get_targetXY("MBES", false) == scs.get_targetXY("SBES", false));
-        // CHECK(scs.get_targetXY("MBES", true).first == Approx(-9));
-        // CHECK(scs.get_targetXY("MBES", true).second == Approx(-18));
-        CHECK(scs.get_targetXY("MBES", true).first == Approx(8));
-        REQUIRE(scs.get_targetXY("MBES", true).second == Approx(21));
-        REQUIRE(scs.get_targetXY("MBES", true) == scs.get_targetXY("SBES", true));
+        // check results
+        REQUIRE(position_mbes.z == Approx(8.0));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.2360679775));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(63.4349488229 + 90));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("MBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("SBES"));
+        CHECK(relative_position_mbes.northing == Approx(-2.0));
+        CHECK(relative_position_mbes.easting == Approx(1.0));
+        CHECK(position_mbes.northing == Approx(8));
+        REQUIRE(position_mbes.easting == Approx(21));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(90.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(135));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(5));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(10));
+        REQUIRE(relative_position_mbes.northing == relative_position_sbes.northing);
+        REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
+        REQUIRE(position_mbes.northing == position_sbes.northing);
+        REQUIRE(position_mbes.easting == position_sbes.easting);
+
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.2360679775));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(63.4349488229 + 90));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
+
+        CHECK(position_mbes.yaw == Approx(90.0));
+        CHECK(position_mbes.pitch == Approx(0.0));
+        CHECK(position_mbes.roll == Approx(0.0));
+        CHECK(position_sbes.yaw == Approx(135));
+        CHECK(position_sbes.pitch == Approx(5));
+        CHECK(position_sbes.roll == Approx(10));
     }
 
     SECTION("SENSOR_VALUES XY coordinates")
@@ -180,30 +234,49 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.imu_yaw         = 40;
         sensor_data.imu_pitch       = 20;
         sensor_data.imu_roll        = 10;
-        scs.set_sensor_data(sensor_data);
+        sensor_data.gps_northing    = 10;
+        sensor_data.gps_easting     = 20;
 
-        scs.set_positionSystemXY(10, 20);
-        REQUIRE(scs.get_targetDepth("MBES") == Approx(7.7605814142));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        // compute sensor positions
+        auto position_mbes = scs.compute_position(sensor_data, "MBES");
+        auto position_sbes = scs.compute_position(sensor_data, "SBES");
+        auto relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        auto relative_position_sbes =
+            scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        CHECK(scs.get_targetXY("MBES", false).first == Approx(1.262868183));
-        CHECK(scs.get_targetXY("MBES", false).second == Approx(2.1873166684));
-        REQUIRE(scs.get_targetXY("MBES", false) == scs.get_targetXY("SBES", false));
-        CHECK(scs.get_targetXY("MBES", true).first == Approx(11.262868183));
-        CHECK(scs.get_targetXY("MBES", true).second == Approx(22.1873166684));
-        REQUIRE(scs.get_targetXY("MBES", true) == scs.get_targetXY("SBES", true));
+        // check results
+        REQUIRE(position_mbes.z == Approx(7.7605814142));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.5257058925));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(59.9996008822));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("MBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("SBES"));
+        CHECK(relative_position_mbes.northing == Approx(1.262868183));
+        CHECK(relative_position_mbes.easting == Approx(2.1873166684));
+        CHECK(position_mbes.northing == Approx(11.262868183));
+        CHECK(position_mbes.easting == Approx(22.1873166684));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(25.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(20.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(10.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(71.4260001287));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(11.9252923155));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(31.4141895033));
+        REQUIRE(relative_position_mbes.northing == relative_position_sbes.northing);
+        REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
+        REQUIRE(position_mbes.northing == position_sbes.northing);
+        REQUIRE(position_mbes.easting == position_sbes.easting);
+
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.5257058925));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(59.9996008822));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
+
+        CHECK(position_mbes.yaw == Approx(25.0));
+        CHECK(position_mbes.pitch == Approx(20.0));
+        CHECK(position_mbes.roll == Approx(10.0));
+        CHECK(position_sbes.yaw == Approx(71.4260001287));
+        CHECK(position_sbes.pitch == Approx(11.9252923155));
+        CHECK(position_sbes.roll == Approx(31.4141895033));
 
         // scenario 2
         sensor_data.gps_z           = -5;
@@ -211,29 +284,47 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.imu_yaw         = 40;
         sensor_data.imu_pitch       = -5;
         sensor_data.imu_roll        = -15;
-        scs.set_sensor_data(sensor_data);
-        scs.set_positionSystemXY(-23, -20);
-        CHECK(scs.get_targetDepth("MBES") == Approx(-2.5417620175));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        sensor_data.gps_northing    = -23;
+        sensor_data.gps_easting     = -20;
 
-        CHECK(scs.get_targetXY("MBES", false).first == Approx(2.1995298195));
-        CHECK(scs.get_targetXY("MBES", false).second == Approx(1.7661071866));
-        REQUIRE(scs.get_targetXY("MBES", false) == scs.get_targetXY("SBES", false));
-        CHECK(scs.get_targetXY("MBES", true).first == Approx(-20.8004701805));
-        CHECK(scs.get_targetXY("MBES", true).second == Approx(-18.2338928134));
-        REQUIRE(scs.get_targetXY("MBES", true) == scs.get_targetXY("SBES", true));
+        // compute sensor positions
+        position_mbes = scs.compute_position(sensor_data, "MBES");
+        position_sbes = scs.compute_position(sensor_data, "SBES");
+        relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        relative_position_sbes = scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.8208271875));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(38.7626389216));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("MBES"));
+        CHECK(position_mbes.z == Approx(-2.5417620175));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(325.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(-5.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(-15.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(7.2216796191));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(11.7764820146));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(-4.429576033));
+        CHECK(relative_position_mbes.northing == Approx(2.1995298195));
+        CHECK(relative_position_mbes.easting == Approx(1.7661071866));
+        CHECK(position_mbes.northing == Approx(-20.8004701805));
+        CHECK(position_mbes.easting == Approx(-18.2338928134));
+
+        REQUIRE(relative_position_mbes.northing == relative_position_sbes.northing);
+        REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
+        REQUIRE(position_mbes.northing == position_sbes.northing);
+        REQUIRE(position_mbes.easting == position_sbes.easting);
+
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.8208271875));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(38.7626389216));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
+
+        CHECK(position_mbes.yaw == Approx(325.0));
+        CHECK(position_mbes.pitch == Approx(-5.0));
+        CHECK(position_mbes.roll == Approx(-15.0));
+        CHECK(position_sbes.yaw == Approx(7.2216796191));
+        CHECK(position_sbes.pitch == Approx(11.7764820146));
+        CHECK(position_sbes.roll == Approx(-4.429576033));
 
         // scenario 3
         sensor_data.gps_z           = 3;
@@ -241,29 +332,47 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.imu_yaw         = 30;
         sensor_data.imu_pitch       = -5;
         sensor_data.imu_roll        = -15;
-        scs.set_sensor_data(sensor_data);
-        scs.set_positionSystemXY(100, -20);
-        CHECK(scs.get_targetDepth("MBES") == Approx(5.4582379825));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        sensor_data.gps_northing    = 100;
+        sensor_data.gps_easting     = -20;
 
-        CHECK(scs.get_targetXY("MBES", false).first == Approx(-0.671075227));
-        CHECK(scs.get_targetXY("MBES", false).second == Approx(2.7398401525));
-        REQUIRE(scs.get_targetXY("MBES", false) == scs.get_targetXY("SBES", false));
-        CHECK(scs.get_targetXY("MBES", true).first == Approx(99.328924773));
-        CHECK(scs.get_targetXY("MBES", true).second == Approx(-17.2601598475));
-        REQUIRE(scs.get_targetXY("MBES", true) == scs.get_targetXY("SBES", true));
+        // compute sensor positions
+        position_mbes = scs.compute_position(sensor_data, "MBES");
+        position_sbes = scs.compute_position(sensor_data, "SBES");
+        relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        relative_position_sbes = scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.8208271875));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(103.7626389216));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("MBES"));
+        CHECK(position_mbes.z == Approx(5.4582379825));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(30.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(-5.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(-15.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(72.2216796191));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(11.7764820146));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(-4.429576033));
+        CHECK(relative_position_mbes.northing == Approx(-0.671075227));
+        CHECK(relative_position_mbes.easting == Approx(2.7398401525));
+        CHECK(position_mbes.northing == Approx(99.328924773));
+        CHECK(position_mbes.easting == Approx(-17.2601598475));
+
+        REQUIRE(relative_position_mbes.northing == relative_position_sbes.northing);
+        REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
+        REQUIRE(position_mbes.northing == position_sbes.northing);
+        REQUIRE(position_mbes.easting == position_sbes.easting);
+
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.8208271875));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(103.7626389216));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
+
+        CHECK(position_mbes.yaw == Approx(30.0));
+        CHECK(position_mbes.pitch == Approx(-5.0));
+        CHECK(position_mbes.roll == Approx(-15.0));
+        CHECK(position_sbes.yaw == Approx(72.2216796191));
+        CHECK(position_sbes.pitch == Approx(11.7764820146));
+        CHECK(position_sbes.roll == Approx(-4.429576033));
 
         // scenario 4
         sensor_data.gps_z           = -2000;
@@ -271,35 +380,52 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.imu_yaw         = 40;
         sensor_data.imu_pitch       = -59;
         sensor_data.imu_roll        = 1;
-        scs.set_sensor_data(sensor_data);
-        scs.set_positionSystemXY(23, -1000);
-        CHECK(scs.get_targetDepth("MBES") == Approx(-1997.5799764953));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        sensor_data.gps_northing    = 23;
+        sensor_data.gps_easting     = -1000;
 
-        CHECK(scs.get_targetXY("MBES", false).first == Approx(2.5433504005));
-        CHECK(scs.get_targetXY("MBES", false).second == Approx(1.2941618821));
-        REQUIRE(scs.get_targetXY("MBES", false) == scs.get_targetXY("SBES", false));
-        CHECK(scs.get_targetXY("MBES", true).first == Approx(25.5433504005));
-        CHECK(scs.get_targetXY("MBES", true).second == Approx(-998.7058381179));
-        REQUIRE(scs.get_targetXY("MBES", true) == scs.get_targetXY("SBES", true));
+        // compute sensor positions
+        position_mbes = scs.compute_position(sensor_data, "MBES");
+        position_sbes = scs.compute_position(sensor_data, "SBES");
+        relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        relative_position_sbes = scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.8536794208));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(26.9688745148));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("MBES"));
+        CHECK(position_mbes.z == Approx(-1997.5799764953));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(250.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(-59.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(1.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(308.8301085148));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(-34.4198234806));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(-36.6392731807));
+        CHECK(relative_position_mbes.northing == Approx(2.5433504005));
+        CHECK(relative_position_mbes.easting == Approx(1.2941618821));
+        CHECK(position_mbes.northing == Approx(25.5433504005));
+        CHECK(position_mbes.easting == Approx(-998.7058381179));
+
+        REQUIRE(relative_position_mbes.northing == relative_position_sbes.northing);
+        REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
+        REQUIRE(position_mbes.northing == position_sbes.northing);
+        REQUIRE(position_mbes.easting == position_sbes.easting);
+
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.8536794208));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(26.9688745148));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
+
+        CHECK(position_mbes.yaw == Approx(250.0));
+        CHECK(position_mbes.pitch == Approx(-59.0));
+        CHECK(position_mbes.roll == Approx(1.0));
+        CHECK(position_sbes.yaw == Approx(308.8301085148));
+        CHECK(position_sbes.pitch == Approx(-34.4198234806));
+        CHECK(position_sbes.roll == Approx(-36.6392731807));
     }
 
     SECTION("SENSOR_VALUES latitude and longitued")
     {
-        navdata::SensorDataLatLon  sensor_data;
-        navdata::GeoLocationLatLon position_mbes, position_sbes;
+        navdata::SensorDataLatLon sensor_data;
 
         // scenario 5 (latlon)
         sensor_data.gps_z           = 2000;
@@ -310,27 +436,45 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_latitude    = 54.123;
         sensor_data.gps_longitude   = -10.123;
 
-        position_mbes = scs.compute_position(sensor_data, "MBES");
-        position_sbes = scs.compute_position(sensor_data, "SBES");
+        auto position_mbes = scs.compute_position(sensor_data, "MBES");
+        auto position_sbes = scs.compute_position(sensor_data, "SBES");
+        auto relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        auto relative_position_sbes =
+            scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        scs.set_sensor_data(sensor_data);
-        CHECK(scs.get_targetDepth("MBES") == Approx(2002.4200235047));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        CHECK(position_mbes.z == Approx(2002.4200235047));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
         CHECK(position_mbes.latitude == Approx(54.1229869952));
         CHECK(position_mbes.longitude == Approx(-10.123067173));
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.8536794208));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(246.9688745148));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("MBES"));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.8536794208));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(246.9688745148));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(110.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(-59.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(1.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(168.8301085148));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(-34.4198234806));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(-36.6392731807));
+        CHECK(position_mbes.yaw == Approx(110.0));
+        CHECK(position_mbes.pitch == Approx(-59.0));
+        CHECK(position_mbes.roll == Approx(1.0));
+        CHECK(position_sbes.yaw == Approx(168.8301085148));
+        CHECK(position_sbes.pitch == Approx(-34.4198234806));
+        CHECK(position_sbes.roll == Approx(-36.6392731807));
+
+        // check if results with UTM are the same as with latlon
+        navdata::GeoLocationUTM position_mbes_utm =
+            scs.compute_position(navdata::SensorDataUTM(sensor_data), "MBES");
+        navdata::GeoLocationUTM position_sbes_utm =
+            scs.compute_position(navdata::SensorDataUTM(sensor_data), "SBES");
+        CHECK(position_mbes_utm == position_mbes);
+        CHECK(position_sbes_utm == position_sbes);
 
         // scenario 6 (latlon)
         sensor_data.gps_z           = 1000;
@@ -341,26 +485,42 @@ TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTT
         sensor_data.gps_latitude    = -74.123;
         sensor_data.gps_longitude   = 1.123;
 
+        // compute sensor positions
         position_mbes = scs.compute_position(sensor_data, "MBES");
         position_sbes = scs.compute_position(sensor_data, "SBES");
+        relative_position_mbes =
+            scs.compute_position(navdata::SensorData(sensor_data),
+                                 "MBES"); // convert to SensorData (without xy coordinates)
+        relative_position_sbes = scs.compute_position(navdata::SensorData(sensor_data), "SBES");
 
-        scs.set_sensor_data(sensor_data);
-        CHECK(scs.get_targetDepth("MBES") == Approx(1002.7717041909));
-        REQUIRE(scs.get_targetDepth("MBES") == scs.get_targetDepth("SBES"));
+        CHECK(position_mbes.z == Approx(1002.7717041909));
+        REQUIRE(position_mbes.z == position_sbes.z);
 
         CHECK(position_mbes.latitude == Approx(-74.1229869952));
         CHECK(position_mbes.longitude == Approx(1.123067173));
 
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").first == Approx(2.513494754));
-        CHECK(scs.get_targetPosSysDistanceAndAzimuth("MBES").second == Approx(54.7274278634));
-        REQUIRE(scs.get_targetPosSysDistanceAndAzimuth("SBES") ==
-                scs.get_targetPosSysDistanceAndAzimuth("MBES"));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .first == Approx(2.513494754));
+        CHECK(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                         relative_position_mbes.easting)
+                  .second == Approx(54.7274278634));
+        REQUIRE(scs.compute_targetPosSysDistanceAndAzimuth(relative_position_mbes.northing,
+                                                           relative_position_mbes.easting) ==
+                scs.compute_targetPosSysDistanceAndAzimuth(relative_position_sbes.northing,
+                                                           relative_position_sbes.easting));
 
-        CHECK(std::get<0>(scs.get_targetYPR("MBES")) == Approx(0.0));
-        CHECK(std::get<1>(scs.get_targetYPR("MBES")) == Approx(9.0));
-        CHECK(std::get<2>(scs.get_targetYPR("MBES")) == Approx(-1.0));
-        CHECK(std::get<0>(scs.get_targetYPR("SBES")) == Approx(45.9361957025));
-        CHECK(std::get<1>(scs.get_targetYPR("SBES")) == Approx(12.0290113349));
-        CHECK(std::get<2>(scs.get_targetYPR("SBES")) == Approx(15.7758445678));
+        CHECK(position_mbes.yaw == Approx(0.0));
+        CHECK(position_mbes.pitch == Approx(9.0));
+        CHECK(position_mbes.roll == Approx(-1.0));
+        CHECK(position_sbes.yaw == Approx(45.9361957025));
+        CHECK(position_sbes.pitch == Approx(12.0290113349));
+        CHECK(position_sbes.roll == Approx(15.7758445678));
+
+        // check if results with UTM are the same as with latlon
+        position_mbes_utm = scs.compute_position(navdata::SensorDataUTM(sensor_data), "MBES");
+        position_sbes_utm = scs.compute_position(navdata::SensorDataUTM(sensor_data), "SBES");
+        CHECK(position_mbes_utm == position_mbes);
+        CHECK(position_sbes_utm == position_sbes);
     }
 }

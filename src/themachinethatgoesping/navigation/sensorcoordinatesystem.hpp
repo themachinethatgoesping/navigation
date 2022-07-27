@@ -45,11 +45,6 @@ class SensorCoordinateSystem
     // Static Position of Heave Sensor
     // Offsets _HeaveSensorOffsets;
 
-    navdata::SensorData _sensor_data; ///< Local sensor data
-
-    double _X = 0; // Position Y in meters
-    double _Y = 0; // Position X in meters
-
   public:
     /**
      * @brief Construct a new Sensor Coordinate System object
@@ -163,48 +158,6 @@ class SensorCoordinateSystem
 
     //------------------------------------- get vessel position -----------------------------------
 
-
-    /**
-     * @brief get_targetXY: Get the depth of the target including depth sensor values and heave
-     * including motion correction)
-     * @param target_id: Name of the target
-     * @param use_VesselXY: Include the _X and _Y coordinates from the vessel (or not)
-     * @return return x,y coordinates in meters (x=northing,y=easting) (relative to _X,_Y from
-     * position system, includtion motion and depth corrections)
-     */
-    std::pair<double, double> get_targetXY(const std::string& target_id, bool use_VesselXY) const
-    {
-        navdata::GeoLocationLocal position;
-
-        if (use_VesselXY)
-        {
-            position = compute_position(navdata::SensorDataLocal(_sensor_data, _X, _Y), target_id);
-        }
-        else
-        {
-            position = compute_position(navdata::SensorData(_sensor_data), target_id);
-        }
-        return std::make_pair(position.northing, position.easting);
-    }
-
-    std::tuple<double, double, double> get_targetYPR(const std::string& target_id) const
-    {
-        auto position = compute_position(_sensor_data, target_id);
-        return std::make_tuple(position.yaw, position.pitch, position.roll);
-    }
-
-    /**
-     * @brief get_targetDepth: Get the depth of the target including depth sensor values and heave
-     * including motion correction)
-     * @param target_id: Name of the target
-     * @return return depth (world coordinates)
-     */
-    double get_targetDepth(const std::string& target_id) const
-    {
-        return compute_position(_sensor_data, target_id).z;
-    }
-
-
     std::pair<double, double> compute_targetPosSysDistanceAndAzimuth(double northing, double easting,
                                                                  bool radians = false) const
                                                                  {
@@ -246,22 +199,6 @@ class SensorCoordinateSystem
 
         return std::make_pair(distance, azimuth);
                                                                  }
-
-    /**
-     * @brief get_targetPosSysDistanceAndAzimuth: Get the target distance and azimuth (0° Noth, 90°
-     * East) of the Position system towards the target
-     * @param target_id: Name of the target
-     * @param radians: if true will output heading as radians (otherwise degrees)
-     * @return return distance,azimuth (0° Noth, 90° East) coordinates in meters,° (relative to the
-     * position system, includtion motion and depth corrections)
-     */
-    std::pair<double, double> get_targetPosSysDistanceAndAzimuth(const std::string& target_id,
-                                                                 bool radians = false) const
-    {
-        auto position = compute_position(navdata::SensorData(_sensor_data), target_id);
-        
-        return compute_targetPosSysDistanceAndAzimuth(position.northing, position.easting, radians);
-    }
 
 
     static Eigen::Quaterniond get_vesselQuat(
@@ -317,18 +254,7 @@ class SensorCoordinateSystem
             return vessel_quat;
         }
     }
-
-    //------------------------------------- get sensor information --------------------------------
-    void set_positionSystemXY(double X, double Y)
-    {
-        _X          = X;
-        _Y          = Y;
-    }
-
-    void set_sensor_data(const navdata::SensorData& sensor_data) { _sensor_data = sensor_data; }
-
-    navdata::SensorData get_sensor_data() const { return _sensor_data; }
-
+    
     //------------------------------------- Target offsets(e.g Offsets of Multibeam)---------------
     void set_targetOffsets(const std::string& target_id,
                            double             x,
