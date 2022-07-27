@@ -47,10 +47,6 @@ class SensorCoordinateSystem
 
     navdata::SensorData _sensor_data; ///< Local sensor data
 
-    bool   _Latlon_set = false;
-    double _Lat;
-    double _Lon;
-
     double _X = 0; // Position Y in meters
     double _Y = 0; // Position X in meters
 
@@ -94,7 +90,7 @@ class SensorCoordinateSystem
 
         // compute target depth
         location.z =
-            target_xyz[2] - depth_sensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
+            target_xyz[2] - depth_sensor_xyz[2] + sensor_data.gps_z - sensor_data.heave_heave;
 
         // compute target ypr
         auto target_quat = vessel_quat * target_ypr_quat;
@@ -113,47 +109,60 @@ class SensorCoordinateSystem
     navdata::GeoLocationLocal compute_position(const navdata::SensorDataLocal& sensor_data,
                                                const std::string&              target_id) const
     {
-        navdata::GeoLocationLocal location;
-
-        // first get the current roation of the vessel
-        auto vessel_quat = get_vesselQuat(sensor_data, _compass_offsets, _motion_sensor_offsets);
-
-        // convert x,y,z offsets to quaternions
-        auto depth_sensor_xyz_quat   = _depth_sensor_offsets.xyz_as_quaternion();
-        auto positionSystem_xyz_quat = _position_system_offsets.xyz_as_quaternion();
-
-        // convert target to quaternion
-
-        auto target_offsets  = get_targe_offsets(target_id);
-        auto target_xyz_quat = target_offsets.xyz_as_quaternion();
-        auto target_ypr_quat = target_offsets.ypr_as_quaternion();
-
-        // get rotated positions
-        auto target_xyz = tools::rotationfunctions::rotateXYZ(vessel_quat, target_xyz_quat);
-        auto depth_sensor_xyz =
-            tools::rotationfunctions::rotateXYZ(vessel_quat, depth_sensor_xyz_quat);
-        auto positionSystem_xyz =
-            tools::rotationfunctions::rotateXYZ(vessel_quat, positionSystem_xyz_quat);
-
-        // compute target depth
-        location.z =
-            target_xyz[2] - depth_sensor_xyz[2] + _sensor_data.gps_z - _sensor_data.heave_heave;
-
-        // compute target ypr
-        auto target_quat = vessel_quat * target_ypr_quat;
-        auto ypr         = tools::rotationfunctions::ypr_from_quaternion(target_quat);
-        location.yaw     = ypr[0];
-        location.pitch   = ypr[1];
-        location.roll    = ypr[2];
+        auto position = compute_position(navdata::SensorData(sensor_data), target_id);
 
         // coompute target xy
-        location.northing = target_xyz[0] - positionSystem_xyz[0] + _X;
-        location.easting  = target_xyz[1] - positionSystem_xyz[1] + _Y;
+        position.northing += sensor_data.gps_northing;
+        position.easting += sensor_data.gps_easting;
 
-        return location;
+        return position;
+    }
+    
+    navdata::GeoLocationUTM compute_position(const navdata::SensorDataUTM& sensor_data,
+                                               const std::string&              target_id) const
+    {
+        auto position = compute_position(navdata::SensorDataLocal(sensor_data), target_id);
+
+        return navdata::GeoLocationUTM(position,sensor_data.gps_zone,sensor_data.gps_northern_hemisphere);
+    }
+
+    navdata::GeoLocationLatLon compute_position(const navdata::SensorDataLatLon& sensor_data,
+                                               const std::string&              target_id) const
+    {        
+        auto position = compute_position(navdata::SensorData(sensor_data), target_id);                        
+
+        double distance, heading;
+        std::tie(distance, heading) = compute_targetPosSysDistanceAndAzimuth(position.northing, position.easting);
+
+        double                  target_lat, target_lon;
+        if (std::isnan(heading))
+        {
+            // this happens if there is no offset between the antenna and the target
+            if (distance == 0){
+                target_lat = sensor_data.gps_latitude;
+                target_lon = sensor_data.gps_longitude;
+            }
+
+            // this should never happen
+            else
+                throw(std::runtime_error(
+                    "vessel::get_targetLatLon[Fatal Error]: [get_targetPosSysDistanceAndAzimuth] "
+                    "heading is nan but distance is not 0! (this should not happen)"));
+        }
+        else
+        {
+        GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
+                                     GeographicLib::Constants::WGS84_f());
+        geod.Direct(sensor_data.gps_latitude, sensor_data.gps_longitude, heading, distance, target_lat, target_lon);
+
+        }
+
+        // GeoPositionLocal is implicitly converted to GeoPosition when calling this function
+        return navdata::GeoLocationLatLon(position,target_lat,target_lon);
     }
 
     //------------------------------------- get vessel position -----------------------------------
+
 
     /**
      * @brief get_targetXY: Get the depth of the target including depth sensor values and heave
@@ -195,6 +204,49 @@ class SensorCoordinateSystem
         return compute_position(_sensor_data, target_id).z;
     }
 
+
+    std::pair<double, double> compute_targetPosSysDistanceAndAzimuth(double northing, double easting,
+                                                                 bool radians = false) const
+                                                                 {
+                                                                    double distance =
+            std::sqrt(northing * northing + easting * easting);
+
+        // north 0°/360°, east 90°, south 180°, west 270°
+        double azimuth = NAN; // only when x and y are 0
+
+        if (northing == 0)
+        {
+            if (easting < 0)
+                azimuth = 1.5 * M_PI; // 270°
+            else if (easting > 0)
+                azimuth = 0.5 * M_PI; // 90°
+            // else azimuth = NAN;
+        }
+        else if (easting == 0)
+        {
+            if (northing < 0)
+                azimuth = M_PI; // 180°
+            else if (northing > 0)
+                azimuth = 0;
+        }
+        else
+        {
+            azimuth = std::atan2(easting, northing);
+        }
+
+        // move azimuth into 0-2pi range
+        static const double M_2PI = 2. * M_PI;
+        while (azimuth < 0)
+            azimuth += M_2PI;
+        while (azimuth > M_2PI)
+            azimuth -= M_2PI;
+
+        if (!radians)
+            azimuth *= 180 / M_PI;
+
+        return std::make_pair(distance, azimuth);
+                                                                 }
+
     /**
      * @brief get_targetPosSysDistanceAndAzimuth: Get the target distance and azimuth (0° Noth, 90°
      * East) of the Position system towards the target
@@ -204,80 +256,13 @@ class SensorCoordinateSystem
      * position system, includtion motion and depth corrections)
      */
     std::pair<double, double> get_targetPosSysDistanceAndAzimuth(const std::string& target_id,
-                                                                 bool               radians) const
+                                                                 bool radians = false) const
     {
-        //auto xy = get_targetXY(target_id, false);
-        
         auto position = compute_position(navdata::SensorData(_sensor_data), target_id);
-
-        double distance =
-            std::sqrt(position.northing * position.northing + position.easting * position.easting);
-
-        // north 0°/360°, east 90°, south 180°, west 270°
-        double azimuth = NAN; // only when x and y are 0
-
-        if (position.northing == 0)
-        {
-            if (position.easting < 0)
-                azimuth = 1.5 * M_PI; // 270°
-            else if (position.easting > 0)
-                azimuth = 0.5 * M_PI; // 90°
-            // else azimuth = NAN;
-        }
-        else if (position.easting == 0)
-        {
-            if (position.northing < 0)
-                azimuth = M_PI; // 180°
-            else if (position.northing > 0)
-                azimuth = 0;
-        }
-        else
-        {
-            azimuth = std::atan2(position.easting, position.northing);
-        }
-
-        while (azimuth < 0)
-            azimuth += 2 * M_PI;
-        while (azimuth > 2 * M_PI)
-            azimuth -= 2 * M_PI;
-
-        if (!radians)
-            azimuth *= 180 / M_PI;
-
-        return std::make_pair(distance, azimuth);
+        
+        return compute_targetPosSysDistanceAndAzimuth(position.northing, position.easting, radians);
     }
 
-    /**
-     * @brief get_targetLatLon: Get the lat lon position of the target using all offsets and the
-     * position from the position system
-     * @param target_id: Name of the target
-     * @return return latitude and longitude of the target in °
-     */
-    std::pair<double, double> get_targetLatLon(const std::string& target_id) const
-    {
-        double distance, heading;
-        std::tie(distance, heading) = get_targetPosSysDistanceAndAzimuth(target_id, false);
-
-        if (std::isnan(heading))
-        {
-            // this happens if there is no offset between the antenna and the target
-            if (distance == 0)
-                return std::make_pair(_Lat, _Lon);
-
-            // this should never happen
-            else
-                throw(std::runtime_error(
-                    "vessel::get_targetLatLon[Fatal Error]: [get_targetPosSysDistanceAndAzimuth] "
-                    "heading is nan but distance is not 0! (this should not happen)"));
-        }
-
-        double                  target_lat, target_lon;
-        GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
-                                     GeographicLib::Constants::WGS84_f());
-        geod.Direct(_Lat, _Lon, heading, distance, target_lat, target_lon);
-
-        return std::make_pair(target_lat, target_lon);
-    }
 
     static Eigen::Quaterniond get_vesselQuat(
         const navdata::SensorData&        sensor_data,
@@ -333,24 +318,9 @@ class SensorCoordinateSystem
         }
     }
 
-    std::tuple<double, double, double> get_vesselYPR(bool radians) const
-    {
-        auto ypr = tools::rotationfunctions::ypr_from_quaternion(
-            get_vesselQuat(_sensor_data, _compass_offsets, _motion_sensor_offsets), !radians);
-
-        return std::make_tuple(ypr[0], ypr[1], ypr[2]);
-    }
-
     //------------------------------------- get sensor information --------------------------------
-    void set_positionSystemLatLon(double lat, double lon)
-    {
-        _Latlon_set = true;
-        _Lat        = lat;
-        _Lon        = lon;
-    }
     void set_positionSystemXY(double X, double Y)
     {
-        _Latlon_set = false;
         _X          = X;
         _Y          = Y;
     }
