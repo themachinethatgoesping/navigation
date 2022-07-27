@@ -102,27 +102,6 @@ class SensorCoordinateSystem
 
 
     //------------------------------------- get vessel position -----------------------------------
-    
-    std::tuple<double, double, double> get_targetYPR(const std::string& target_id, bool radians) const
-    {
-        auto ypr =
-            tools::rotationfunctions::ypr_from_quaternion(get_targetYPR_as_Quat(target_id), !radians);
-
-        return std::make_tuple(ypr[0], ypr[1], ypr[2]);
-    }
-
-    Eigen::Quaterniond get_targetYPR_as_Quat(const std::string& target_id) const
-    {        
-        auto target_quat = get_targe_offsets(target_id).ypr_as_quaternion();
-
-        auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets);
-
-        vessel_quat.normalize();
-        target_quat.normalize();
-
-        return vessel_quat * target_quat;
-    }
-
     /**
      * @brief get_targetDepth: Get the depth of the target including depth sensor values and heave
      * including motion correction)
@@ -300,6 +279,45 @@ class SensorCoordinateSystem
         }
     }
 
+    std::tuple<double, double, double> get_targetYPR(const std::string& key, bool radians) const
+    {
+        auto ypr =
+            tools::rotationfunctions::ypr_from_quaternion(get_targetYPR_as_Quat(key), !radians);
+
+        return std::make_tuple(ypr[0], ypr[1], ypr[2]);
+    }
+
+    Eigen::Quaterniond get_targetYPR_as_Quat(const std::string& key) const
+    {
+        auto map_it = _TargetOffsetIDs.find(key);
+        if (map_it == _TargetOffsetIDs.end())
+        {
+            std::stringstream s;
+            s << "ERROR[SensorCoordinateSystem::get_target_offsets]: Could not find target key: "
+              << key << "!";
+            throw std::out_of_range(s.str());
+        }
+
+        const auto& target_offset = _TargetOffsets[map_it->second];
+
+        Eigen::Quaternion<double> target_quat;
+        target_quat = tools::rotationfunctions::quaternion_from_ypr(
+            target_offset.yaw, target_offset.pitch, target_offset.roll, true);
+
+        auto vessel_quat = get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets);
+
+        vessel_quat.normalize();
+        target_quat.normalize();
+
+        return vessel_quat * target_quat;
+    }
+
+    std::tuple<double, double, double> get_vesselYPR(bool radians) const
+    {
+        auto ypr = tools::rotationfunctions::ypr_from_quaternion(get_vesselQuat(_sensor_data, _compass_offsets,_motion_sensor_offsets), !radians);
+
+        return std::make_tuple(ypr[0], ypr[1], ypr[2]);
+    }
 
     //------------------------------------- get sensor information --------------------------------
     void set_positionSystemLatLon(double lat, double lon)
