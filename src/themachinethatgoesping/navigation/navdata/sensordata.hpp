@@ -10,7 +10,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
-#include <themachinethatgoesping/tools/helpers.hpp>
+#include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "../navtools.hpp"
@@ -78,12 +78,12 @@ struct SensorData
      */
     bool operator==(const SensorData& rhs) const
     {
-        if (tools::helpers::approx(gps_z, rhs.gps_z))
-            if (tools::helpers::approx(heave_heave, rhs.heave_heave))
-                if (tools::helpers::approx(compass_heading, rhs.compass_heading))
-                    if (tools::helpers::approx(imu_yaw, rhs.imu_yaw))
-                        if (tools::helpers::approx(imu_pitch, rhs.imu_pitch))
-                            if (tools::helpers::approx(imu_roll, rhs.imu_roll))
+        if (tools::helper::approx(gps_z, rhs.gps_z))
+            if (tools::helper::approx(heave_heave, rhs.heave_heave))
+                if (tools::helper::approx(compass_heading, rhs.compass_heading))
+                    if (tools::helper::approx(imu_yaw, rhs.imu_yaw))
+                        if (tools::helper::approx(imu_pitch, rhs.imu_pitch))
+                            if (tools::helper::approx(imu_roll, rhs.imu_roll))
                                 return true;
 
         return false;

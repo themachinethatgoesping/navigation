@@ -8,7 +8,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
-#include <themachinethatgoesping/tools/helpers.hpp>
+#include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 //#include "geolocationutm.hpp"
@@ -74,8 +74,8 @@ struct GeoLocationLocal : public GeoLocation
     bool operator==(const GeoLocationLocal& rhs) const
     {
         if (GeoLocation::operator==(rhs))
-            if (tools::helpers::approx(northing, rhs.northing))
-                if (tools::helpers::approx(easting, rhs.easting))
+            if (tools::helper::approx(northing, rhs.northing))
+                if (tools::helper::approx(easting, rhs.easting))
                     return true;
 
         return false;

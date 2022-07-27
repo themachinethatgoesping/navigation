@@ -12,7 +12,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
-#include <themachinethatgoesping/tools/helpers.hpp>
+#include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "../navtools.hpp"
@@ -94,8 +94,8 @@ struct GeoLocationLatLon : public GeoLocation
     bool operator==(const GeoLocationLatLon& other) const
     {
         if (GeoLocation::operator==(other))
-            if (tools::helpers::approx(latitude, other.latitude))
-                if (tools::helpers::approx(longitude, other.longitude))
+            if (tools::helper::approx(latitude, other.latitude))
+                if (tools::helper::approx(longitude, other.longitude))
                     return true;
 
         return false;

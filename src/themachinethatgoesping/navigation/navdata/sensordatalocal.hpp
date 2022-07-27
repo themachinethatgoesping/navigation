@@ -10,7 +10,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
-#include <themachinethatgoesping/tools/helpers.hpp>
+#include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "../navtools.hpp"
@@ -90,8 +90,8 @@ struct SensorDataLocal : public SensorData
     bool operator==(const SensorDataLocal& rhs) const
     {
         if (SensorData::operator==(rhs))
-        if (tools::helpers::approx(gps_northing, rhs.gps_northing))
-            if (tools::helpers::approx(gps_easting, rhs.gps_easting))
+        if (tools::helper::approx(gps_northing, rhs.gps_northing))
+            if (tools::helper::approx(gps_easting, rhs.gps_easting))
                                         return true;
 
         return false;

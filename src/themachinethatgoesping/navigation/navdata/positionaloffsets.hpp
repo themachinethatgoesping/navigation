@@ -7,7 +7,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
-#include <themachinethatgoesping/tools/helpers.hpp>
+#include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 namespace themachinethatgoesping {
@@ -56,12 +56,12 @@ struct PositionalOffsets
     bool operator!=(const PositionalOffsets& rhs) const { return !(operator==(rhs)); }
     bool operator==(const PositionalOffsets& rhs) const
     {
-        if (tools::helpers::approx(x, rhs.x))
-            if (tools::helpers::approx(y, rhs.y))
-                if (tools::helpers::approx(z, rhs.z))
-                    if (tools::helpers::approx(yaw, rhs.yaw))
-                        if (tools::helpers::approx(pitch, rhs.pitch))
-                            if (tools::helpers::approx(roll, rhs.roll))
+        if (tools::helper::approx(x, rhs.x))
+            if (tools::helper::approx(y, rhs.y))
+                if (tools::helper::approx(z, rhs.z))
+                    if (tools::helper::approx(yaw, rhs.yaw))
+                        if (tools::helper::approx(pitch, rhs.pitch))
+                            if (tools::helper::approx(roll, rhs.roll))
                                 return true;
 
         return false;
