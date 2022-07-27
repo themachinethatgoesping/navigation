@@ -13,6 +13,8 @@
 #include <math.h>
 #include <string>
 
+#include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
@@ -30,7 +32,7 @@ namespace navigation {
 class SensorCoordinateSystem
 {
     std::unordered_map<std::string, navdata::PositionalOffsets>
-        _TargetOffsets; /// TargetId (position in vector) for each registered target_id
+        _target_offsets; /// TargetId (position in vector) for each registered target_id
 
     navdata::PositionalOffsets _motion_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) Offsets of Motionsensor 
     navdata::PositionalOffsets _compass_offsets; /// Static Yaw (installation) Offsets of CompassOffsets 
@@ -239,6 +241,76 @@ class SensorCoordinateSystem
         const navdata::SensorData&        sensor_data,
         const navdata::PositionalOffsets& compasss_offsets,
         const navdata::PositionalOffsets& motion_sensor_offsets);
+
+    // serialization support using bitsery
+    // friend bitsery::Access;
+    // template<typename S>
+    // void serialize(S& s)
+    // {
+    //     s.object(_target_offsets);
+    //     s.object(_motion_sensor_offsets);
+    //     s.object(_compass_offsets);
+    //     s.object(_position_system_offsets);
+    //     s.object(_depth_sensor_offsets);
+    // }
+
+  public:
+    bool operator==(const SensorCoordinateSystem& other) const
+    {
+        
+        for (const auto& [target_id, target_offsets] : _target_offsets)
+        {
+            if (other._target_offsets.find(target_id) == other._target_offsets.end())
+            {
+                return false;
+            }
+            if (target_offsets != other._target_offsets.at(target_id))
+            {
+                return false;
+            }
+        }
+
+        return _motion_sensor_offsets == other._motion_sensor_offsets &&
+               _compass_offsets == other._compass_offsets &&
+               _position_system_offsets == other._position_system_offsets &&
+               _depth_sensor_offsets == other._depth_sensor_offsets;
+    }
+    bool operator!=(const SensorCoordinateSystem& other) const
+    {
+        return !(*this == other);
+    }
+
+    tools::classhelpers::ObjectPrinter __printer__() const
+    {
+        tools::classhelpers::ObjectPrinter printer("SensorCoordinateSystem");
+
+        for (const auto& [target_id, target_offsets] : _target_offsets)
+        {
+            printer.register_section("Target offsets \"" + target_id + "\"");
+            printer.append(target_offsets.__printer__());
+        }
+        
+            printer.register_section("Motion sensor offsets");
+            printer.append(_motion_sensor_offsets.__printer__());
+
+            printer.register_section("Compass offsets");
+            printer.append(_compass_offsets.__printer__());
+
+            printer.register_section("Position system offsets");
+            printer.append(_position_system_offsets.__printer__());
+
+            printer.register_section("Depth sensor offsets");
+            printer.append(_depth_sensor_offsets.__printer__());
+
+        return printer;
+    }
+
+  public:
+    // -- class helper function macros --
+    // define to_binary and from_binary functions (needs the serialize function)
+    //__BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocation)
+    // define info_string and print functions (needs the __printer__ function)
+    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };
 
 } // namespace navigation

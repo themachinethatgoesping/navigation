@@ -125,13 +125,13 @@ navdata::GeoLocationLatLon SensorCoordinateSystem::compute_target_position(
 const navdata::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(
     const std::string& target_id) const
 {
-    return _TargetOffsets.at(target_id); // throws std::out_of_range if not found
+    return _target_offsets.at(target_id); // throws std::out_of_range if not found
 }
 
 void SensorCoordinateSystem::register_target(const std::string&                target_id,
                                         const navdata::PositionalOffsets& new_offsets)
 {
-    _TargetOffsets[target_id] = new_offsets;
+    _target_offsets[target_id] = new_offsets;
 }
 
 void SensorCoordinateSystem::register_target(const std::string& target_id,
