@@ -32,14 +32,10 @@ class SensorCoordinateSystem
     std::unordered_map<std::string, navdata::PositionalOffsets>
         _TargetOffsets; /// TargetId (position in vector) for each registered target_id
 
-    // Static Roll,Pitch,Yaw Offsets of Motionsensor Installation and Position of Motionsensor
-    navdata::PositionalOffsets _motion_sensor_offsets;
-    // Static Roll,Pitch,Yaw Offsets of Motionsensor Installation and Position of Motionsensor
-    navdata::PositionalOffsets _compass_offsets;
-    // Static Position of Positionsystem
-    navdata::PositionalOffsets _position_system_offsets;
-    // Static Position of Depth Sensor
-    navdata::PositionalOffsets _depth_sensor_offsets;
+    navdata::PositionalOffsets _motion_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) Offsets of Motionsensor 
+    navdata::PositionalOffsets _compass_offsets; /// Static Yaw (installation) Offsets of CompassOffsets 
+    navdata::PositionalOffsets _position_system_offsets; /// Static x,y,z (installation) Offsets of the PositionSystem 
+    navdata::PositionalOffsets _depth_sensor_offsets;   /// Static xy,z (installation) Offsets of the depth sensor 
     // Static Position of Heave Sensor
     // Offsets _HeaveSensorOffsets;
 
