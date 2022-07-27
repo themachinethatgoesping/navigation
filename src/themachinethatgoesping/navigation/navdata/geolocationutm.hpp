@@ -162,14 +162,11 @@ struct GeoLocationUTM :public GeoLocationLocal
     {
         tools::classhelpers::ObjectPrinter printer("GeoLocationUTM");
 
-        printer.register_value("northing", northing, "positive northwards, m");
-        printer.register_value("easting", easting, "positive eastwards, m");
-        printer.register_value("zone", zone);
-        printer.register_value("northern_hemisphere", northern_hemisphere);
-        printer.register_value("z", z, "positive downwards, m");
-        printer.register_value("yaw", yaw, "90 ° at east");
-        printer.register_value("pitch", pitch, "° positve bow up");
-        printer.register_value("roll", roll, "° positive port up");
+        auto base_printer = GeoLocationLocal::__printer__();
+        base_printer.remove_sections();
+        printer.append(base_printer);
+        printer.register_value("zone", zone, "", 2);
+        printer.register_value("northern_hemisphere", northern_hemisphere, "", 3);
 
         return printer;
     }

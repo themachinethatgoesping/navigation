@@ -97,11 +97,9 @@ struct GeoLocationLocal : public GeoLocation
     {
         tools::classhelpers::ObjectPrinter printer("GeoLocationLocal");
 
-        printer.register_section("coordinates");
         printer.register_value("northing", northing, "positive northwards, m");
         printer.register_value("easting", easting, "positive eastwards, m");
 
-        printer.register_section("attitude");
         printer.append(GeoLocation::__printer__());
 
         return printer;

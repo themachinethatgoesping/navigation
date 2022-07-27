@@ -113,11 +113,9 @@ struct SensorDataLocal : public SensorData
     {
         tools::classhelpers::ObjectPrinter printer("SensorDataLocal");
 
-        printer.register_section("coordinates");
         printer.register_value("gps_northing", gps_northing, "positive northwards, m");
         printer.register_value("gps_easting", gps_easting, "positive eastwards, m");
         
-        printer.register_section("attitude");
         printer.append(SensorData::__printer__());
 
         return printer;

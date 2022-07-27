@@ -220,8 +220,6 @@ struct SensorDataUTM : public SensorDataLocal
         printer.append(base_printer);
         printer.register_value("gps_zone", gps_zone, "", 2);
         printer.register_value("gps_northern_hemisphere", gps_northern_hemisphere, "", 3);
-        printer.register_section("coordinates", 0);
-        printer.register_section("attitude", 5);
 
         return printer;
     }

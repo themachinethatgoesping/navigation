@@ -129,7 +129,6 @@ struct SensorDataLatLon : public SensorData
     {
         tools::classhelpers::ObjectPrinter printer("SensorDataLatLon");
 
-        printer.register_section("coordinates");
         printer.register_string(
             "gps_latitude",
             navtools::latitude_to_string(gps_latitude, navtools::t_latlon_format::seconds, 1),
@@ -139,7 +138,6 @@ struct SensorDataLatLon : public SensorData
             navtools::longitude_to_string(gps_latitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
 
-        printer.register_section("attitude");
         printer.append(SensorData::__printer__());
 
         return printer;
