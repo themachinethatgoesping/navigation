@@ -4,14 +4,17 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
-#include <GeographicLib/Geocentric.hpp>
-#include <GeographicLib/Geodesic.hpp>
-#include <GeographicLib/LocalCartesian.hpp>
 #include <cmath>
 #include <exception>
 #include <iostream>
 #include <math.h>
 #include <string>
+
+#include <bitsery/ext/std_map.h>
+
+#include <GeographicLib/Geocentric.hpp>
+#include <GeographicLib/Geodesic.hpp>
+#include <GeographicLib/LocalCartesian.hpp>
 
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
@@ -257,16 +260,20 @@ class SensorCoordinateSystem
         const navdata::PositionalOffsets& motion_sensor_offsets);
 
     // serialization support using bitsery
-    // friend bitsery::Access;
-    // template<typename S>
-    // void serialize(S& s)
-    // {
-    //     s.object(_target_offsets);
-    //     s.object(_motion_sensor_offsets);
-    //     s.object(_compass_offsets);
-    //     s.object(_position_system_offsets);
-    //     s.object(_depth_sensor_offsets);
-    // }
+    friend bitsery::Access;
+    template<typename S>
+    void serialize(S& s)
+    {
+        //serialize map of PositionOffsets
+        s.ext(_target_offsets, bitsery::ext::StdMap{100}, [](S& s, std::string& key, navdata::PositionalOffsets& value) {
+            s.container1b(key,100);
+            s.object(value);
+        });
+        s.object(_motion_sensor_offsets);
+        s.object(_compass_offsets);
+        s.object(_position_system_offsets);
+        s.object(_depth_sensor_offsets);
+    }
 
   public:
     bool operator==(const SensorCoordinateSystem& other) const
@@ -319,7 +326,7 @@ class SensorCoordinateSystem
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    //__BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocation)
+    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorCoordinateSystem)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
 };

@@ -22,6 +22,9 @@ TEST_CASE("sensorcoordinatesystem should support common functions", TESTTAG)
     navdata::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
     scs.register_target("mbes", targetOffsets);
     scs.set_position_system_offsets(10,20,30);
+    scs.set_compass_offsets(12);
+    scs.set_motion_sensor_offsets(1,-2,3);
+    scs.set_depth_sensor_offsets(4,5,-6);
 
     // copy constructor
     SensorCoordinateSystem scs2(scs);
@@ -38,6 +41,11 @@ TEST_CASE("sensorcoordinatesystem should support common functions", TESTTAG)
     // string conversion
     scs.print(std::cerr);
     REQUIRE(scs.info_string().size() > 0);
+
+    // serialization
+    auto buffer = scs.to_binary();
+    auto scs3 = SensorCoordinateSystem::from_binary(buffer);
+    REQUIRE(scs == scs3);
 }
 
 TEST_CASE(
