@@ -74,9 +74,7 @@ struct PositionalOffsets
      */
     Eigen::Quaterniond ypr_as_quaternion() const
     {
-        Eigen::Quaterniond ypr_quat =  Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()) * Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY()) * Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX());
-        ypr_quat.normalize();
-        return ypr_quat;
+        return tools::rotationfunctions::quaternion_from_ypr(yaw, pitch, roll);
     }
     
     /**
