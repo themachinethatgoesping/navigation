@@ -9,6 +9,7 @@ module_name = 'navigation'
 sources = [
     'module.cpp',
     'm_navtools.cpp',
+    'c_sensorcoordinatesystem.cpp',
     'navdata/c_positionaloffsets.cpp',
     'navdata/c_geolocation.cpp',
     'navdata/c_geolocationlatlon.cpp',

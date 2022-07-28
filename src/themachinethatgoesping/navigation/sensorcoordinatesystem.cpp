@@ -129,9 +129,9 @@ const navdata::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(
 }
 
 void SensorCoordinateSystem::register_target(const std::string&                target_id,
-                                             const navdata::PositionalOffsets& new_offsets)
+                                             const navdata::PositionalOffsets& target_offsets)
 {
-    _target_offsets[target_id] = new_offsets;
+    _target_offsets[target_id] = target_offsets;
 }
 
 void SensorCoordinateSystem::register_target(const std::string& target_id,
@@ -151,9 +151,9 @@ void SensorCoordinateSystem::set_motion_sensor_offsets(double yaw, double pitch,
     _motion_sensor_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
 }
 void SensorCoordinateSystem::set_motion_sensor_offsets(
-    const navdata::PositionalOffsets& new_offsets)
+    const navdata::PositionalOffsets& sensor_offsets)
 {
-    _motion_sensor_offsets = new_offsets;
+    _motion_sensor_offsets = sensor_offsets;
 }
 
 navdata::PositionalOffsets SensorCoordinateSystem::get_motion_sensor_offsets() const
@@ -165,9 +165,9 @@ void SensorCoordinateSystem::set_compass_offsets(double yaw)
 {
     _compass_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
-void SensorCoordinateSystem::set_compass_offsets(const navdata::PositionalOffsets& new_offsets)
+void SensorCoordinateSystem::set_compass_offsets(const navdata::PositionalOffsets& sensor_offsets)
 {
-    _compass_offsets = new_offsets;
+    _compass_offsets = sensor_offsets;
 }
 navdata::PositionalOffsets SensorCoordinateSystem::get_compass_offsets() const
 {
@@ -178,9 +178,9 @@ void SensorCoordinateSystem::set_depth_sensor_offsets(double x, double y, double
 {
     _depth_sensor_offsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorCoordinateSystem::set_depth_sensor_offsets(const navdata::PositionalOffsets& new_offsets)
+void SensorCoordinateSystem::set_depth_sensor_offsets(const navdata::PositionalOffsets& sensor_offsets)
 {
-    _depth_sensor_offsets = new_offsets;
+    _depth_sensor_offsets = sensor_offsets;
 }
 navdata::PositionalOffsets SensorCoordinateSystem::get_depth_sensor_offsets() const
 {
@@ -192,9 +192,9 @@ void SensorCoordinateSystem::set_position_system_offsets(double x, double y, dou
     _position_system_offsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
 void SensorCoordinateSystem::set_position_system_offsets(
-    const navdata::PositionalOffsets& new_offsets)
+    const navdata::PositionalOffsets& sensor_offsets)
 {
-    _position_system_offsets = new_offsets;
+    _position_system_offsets = sensor_offsets;
 }
 navdata::PositionalOffsets SensorCoordinateSystem::get_position_system_offsets() const
 {

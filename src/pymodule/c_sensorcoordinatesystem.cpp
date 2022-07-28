@@ -7,55 +7,163 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/navdata.hpp"
+#include "../themachinethatgoesping/navigation/sensorcoordinatesystem.hpp"
 #include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
-using namespace themachinethatgoesping::navigation::navdata;
+using namespace themachinethatgoesping::navigation;
 
-void init_c_geolocation(py::module& m)
+void init_c_sensorcoordinatesystem(py::module& m)
 {
-
-    // py::class_<GeoLocation>(
-    //     m, "GeoLocation", DOC(themachinethatgoesping, navigation, navdata, GeoLocation))
-    //     .def(py::init<GeoLocationLatLon>(),
-    //          DOC(themachinethatgoesping, navigation, navdata, GeoLocation, GeoLocation),
-    //          py::arg("geolocation_latlon"))
-    //     .def(py::init<GeoLocationLocal>(),
-    //          DOC(themachinethatgoesping, navigation, navdata, GeoLocation, GeoLocation),
-    //          py::arg("geolocation_local"))
-    //     .def(py::init<GeoLocationUTM>(),
-    //          DOC(themachinethatgoesping, navigation, navdata, GeoLocation, GeoLocation),
-    //          py::arg("geolocation_utm"))
-    //     .def(py::init<double, double, double, double>(),
-    //          DOC(themachinethatgoesping, navigation, navdata, GeoLocation, GeoLocation_2),
-    //          py::arg("z")     = 0,
-    //          py::arg("yaw")   = 0,
-    //          py::arg("pitch") = 0,
-    //          py::arg("roll")  = 0)
-    //     .def("__eq__",
-    //          &GeoLocation::operator==,
-    //          DOC(themachinethatgoesping, navigation, navdata, GeoLocation, operator_eq),
-    //          py::arg("rhs"))
-    //     .def_readwrite(
-    //         "z", &GeoLocation::z, DOC(themachinethatgoesping, navigation, navdata, GeoLocation, z))
-    //     .def_readwrite("yaw",
-    //                    &GeoLocation::yaw,
-    //                    DOC(themachinethatgoesping, navigation, navdata, GeoLocation, yaw))
-    //     .def_readwrite("pitch",
-    //                    &GeoLocation::pitch,
-    //                    DOC(themachinethatgoesping, navigation, navdata, GeoLocation, pitch))
-    //     .def_readwrite("roll",
-    //                    &GeoLocation::roll,
-    //                    DOC(themachinethatgoesping, navigation, navdata, GeoLocation, roll))
-    //     // default copy functions
-    //     __PYCLASS_DEFAULT_COPY__(GeoLocation)
-    //     // default binary functions
-    //     __PYCLASS_DEFAULT_BINARY__(GeoLocation)
-    //     // default printing functions
-    //     __PYCLASS_DEFAULT_PRINTING__(GeoLocation)
-    //     // end GeoLocation
-    //     ;
+    py::class_<SensorCoordinateSystem>(
+        m,
+        "SensorCoordinateSystem",
+        DOC(themachinethatgoesping, navigation, SensorCoordinateSystem))
+        .def(
+            py::init<SensorCoordinateSystem>(),
+            DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, SensorCoordinateSystem))
+        .def("__call__",
+             py::overload_cast<const std::string&, const navdata::SensorDataLatLon&>(
+                 &SensorCoordinateSystem::operator(), py::const_),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_call),
+             py::arg("target_id"),
+             py::arg("sensor_data"))
+        .def("__call__",
+             py::overload_cast<const std::string&, const navdata::SensorDataUTM&>(
+                 &SensorCoordinateSystem::operator(), py::const_),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_call_2),
+             py::arg("target_id"),
+             py::arg("sensor_data"))
+        .def("__call__",
+             py::overload_cast<const std::string&, const navdata::SensorDataLocal&>(
+                 &SensorCoordinateSystem::operator(), py::const_),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_call_3),
+             py::arg("target_id"),
+             py::arg("sensor_data"))
+        .def("__call__",
+             py::overload_cast<const std::string&, const navdata::SensorData&>(
+                 &SensorCoordinateSystem::operator(), py::const_),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_call_4),
+             py::arg("target_id"),
+             py::arg("sensor_data"))
+        .def("register_target",
+             py::overload_cast<const std::string&, double, double, double, double, double, double>(
+                 &SensorCoordinateSystem::register_target),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, register_target),
+             py::arg("target_id"),
+             py::arg("x"),
+             py::arg("y"),
+             py::arg("z"),
+             py::arg("yaw"),
+             py::arg("pitch"),
+             py::arg("roll"))
+        .def("register_target",
+             py::overload_cast<const std::string&, const navdata::PositionalOffsets&>(
+                 &SensorCoordinateSystem::register_target),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, register_target_2),
+             py::arg("target_id"),
+             py::arg("target_offsets"))
+        .def("get_target_offsets",
+             &SensorCoordinateSystem::get_target_offsets,
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, get_target_offsets),
+             py::arg("target_id"))
+        .def("set_motion_sensor_offsets",
+             py::overload_cast<double, double, double>(
+                 &SensorCoordinateSystem::set_motion_sensor_offsets),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 set_motion_sensor_offsets),
+             py::arg("yaw"),
+             py::arg("pitch"),
+             py::arg("roll"))
+        .def("set_motion_sensor_offsets",
+             py::overload_cast<const navdata::PositionalOffsets&>(
+                 &SensorCoordinateSystem::set_motion_sensor_offsets),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 set_motion_sensor_offsets_2),
+             py::arg("sensor_offsets"))
+        .def("get_motion_sensor_offsets",
+             &SensorCoordinateSystem::get_motion_sensor_offsets,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 get_motion_sensor_offsets))
+        .def("set_compass_offsets",
+             py::overload_cast<double>(&SensorCoordinateSystem::set_compass_offsets),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, set_compass_offsets),
+             py::arg("yaw"))
+        .def("set_compass_offsets",
+             py::overload_cast<const navdata::PositionalOffsets&>(
+                 &SensorCoordinateSystem::set_compass_offsets),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, set_compass_offsets_2),
+             py::arg("sensor_offsets"))
+        .def("get_compass_offsets",
+             &SensorCoordinateSystem::get_compass_offsets,
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, get_compass_offsets))
+        .def("set_depth_sensor_offsets",
+             py::overload_cast<double, double, double>(
+                 &SensorCoordinateSystem::set_depth_sensor_offsets),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 set_depth_sensor_offsets),
+             py::arg("x"),
+             py::arg("y"),
+             py::arg("z"))
+        .def("set_depth_sensor_offsets",
+             py::overload_cast<const navdata::PositionalOffsets&>(
+                 &SensorCoordinateSystem::set_depth_sensor_offsets),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 set_depth_sensor_offsets_2),
+             py::arg("sensor_offsets"))
+        .def("get_depth_sensor_offsets",
+             &SensorCoordinateSystem::get_depth_sensor_offsets,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 get_depth_sensor_offsets))
+        .def("set_position_system_offsets",
+             py::overload_cast<double, double, double>(
+                 &SensorCoordinateSystem::set_position_system_offsets),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 set_position_system_offsets),
+             py::arg("x"),
+             py::arg("y"),
+             py::arg("z"))
+        .def("set_position_system_offsets",
+             py::overload_cast<const navdata::PositionalOffsets&>(
+                 &SensorCoordinateSystem::set_position_system_offsets),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 set_position_system_offsets_2),
+             py::arg("sensor_offsets"))
+        .def("get_position_system_offsets",
+             &SensorCoordinateSystem::get_position_system_offsets,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 SensorCoordinateSystem,
+                 get_position_system_offsets))
+        .def("__eq__",
+             &SensorCoordinateSystem::operator==,
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_eq),
+             py::arg("other"))
+        // default copy functions
+        __PYCLASS_DEFAULT_COPY__(SensorCoordinateSystem)
+        // default binary functions
+        __PYCLASS_DEFAULT_BINARY__(SensorCoordinateSystem)
+        // default printing functions
+        __PYCLASS_DEFAULT_PRINTING__(SensorCoordinateSystem)
+        // end SensorCoordinateSystem
+        ;
 }

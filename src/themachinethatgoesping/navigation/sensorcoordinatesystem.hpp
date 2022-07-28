@@ -113,13 +113,6 @@ class SensorCoordinateSystem
      * @brief register a target (e.g. MBES) with offsets to the sensor position system
      *
      * @param target_id name of the target for reference
-     * @param offsets mounting offsets of the target
-     */
-    void register_target(const std::string& target_id, const navdata::PositionalOffsets& offsets);
-    /**
-     * @brief register a target (e.g. MBES) with offsets to the sensor position system
-     *
-     * @param target_id name of the target for reference
      * @param x x-offset of the target (in meters, positive foorward)
      * @param y y-offset of the target (in meters, positive starboard)
      * @param z z-offset of the target (in meters, positive down)
@@ -138,6 +131,14 @@ class SensorCoordinateSystem
                          double             roll);
 
     /**
+     * @brief register a target (e.g. MBES) with offsets to the sensor position system
+     *
+     * @param target_id name of the target for reference
+     * @param target_offsets mounting offsets of the target
+     */
+    void register_target(const std::string& target_id, const navdata::PositionalOffsets& target_offsets);
+
+    /**
      * @brief Get stored target offsets of a specified target
      *
      * @param target_id name of the registered target
@@ -149,6 +150,13 @@ class SensorCoordinateSystem
     /**
      * @brief Set the motion sensor offsets
      *
+     * @param sensor_offsets offsets structure (only yaw, pitch and roll are used)
+     */
+    void set_motion_sensor_offsets(const navdata::PositionalOffsets& sensor_offsets);
+
+    /**
+     * @brief Set the motion sensor offsets
+     *
      * @param yaw yaw offset of the motion sensor (righthanded around the z-axis) (in degrees, 90° =
      * east)
      * @param pitch pitch offset of the motion sensor (righthanded around the y-axis) (in degrees,
@@ -157,12 +165,7 @@ class SensorCoordinateSystem
      * positive = port up)
      */
     void set_motion_sensor_offsets(double yaw, double pitch, double roll);
-    /**
-     * @brief Set the motion sensor offsets
-     *
-     * @param new_offsets offsets structure (only yaw, pitch and roll are used)
-     */
-    void set_motion_sensor_offsets(const navdata::PositionalOffsets& new_offsets);
+    
     /**
      * @brief Get the motion sensor offsets
      *
@@ -180,9 +183,9 @@ class SensorCoordinateSystem
     /**
      * @brief Set the compass offsets
      *
-     * @param new_offsets offsets structure (only yaw is used)
+     * @param sensor_offsets offsets structure (only yaw is used)
      */
-    void set_compass_offsets(const navdata::PositionalOffsets& new_offsets);
+    void set_compass_offsets(const navdata::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered compass offsets
@@ -203,9 +206,9 @@ class SensorCoordinateSystem
     /**
      * @brief Set the depth sensor offsets
      *
-     * @param new_offsets offsets structure (only x, y and z are used)
+     * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_depth_sensor_offsets(const navdata::PositionalOffsets& new_offsets);
+    void set_depth_sensor_offsets(const navdata::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered depth sensor offsets
@@ -226,9 +229,9 @@ class SensorCoordinateSystem
     /**
      * @brief Set the position system offsets
      *
-     * @param new_offsets offsets structure (only x, y and z are used)
+     * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_position_system_offsets(const navdata::PositionalOffsets& new_offsets);
+    void set_position_system_offsets(const navdata::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered position system offsets
