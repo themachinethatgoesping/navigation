@@ -10,11 +10,11 @@ namespace navigation {
 
 // ----- compute_target_position -----
 
-navdata::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
+datastructures::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
     const std::string&         target_id,
-    const navdata::SensorData& sensor_data) const
+    const datastructures::SensorData& sensor_data) const
 {
-    navdata::GeoLocationLocal location;
+    datastructures::GeoLocationLocal location;
 
     // first get the current rotation of the vessel
     auto vessel_quat =
@@ -53,11 +53,11 @@ navdata::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
     return location;
 }
 
-navdata::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
+datastructures::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
     const std::string&              target_id,
-    const navdata::SensorDataLocal& sensor_data) const
+    const datastructures::SensorDataLocal& sensor_data) const
 {
-    auto position = compute_target_position(target_id, navdata::SensorData(sensor_data));
+    auto position = compute_target_position(target_id, datastructures::SensorData(sensor_data));
 
     // compute target xy
     position.northing += sensor_data.gps_northing;
@@ -66,24 +66,24 @@ navdata::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
     return position;
 }
 
-navdata::GeoLocationUTM SensorCoordinateSystem::compute_target_position(
+datastructures::GeoLocationUTM SensorCoordinateSystem::compute_target_position(
     const std::string&            target_id,
-    const navdata::SensorDataUTM& sensor_data) const
+    const datastructures::SensorDataUTM& sensor_data) const
 {
-    auto position = compute_target_position(target_id, navdata::SensorDataLocal(sensor_data));
+    auto position = compute_target_position(target_id, datastructures::SensorDataLocal(sensor_data));
 
-    return navdata::GeoLocationUTM(
+    return datastructures::GeoLocationUTM(
         position, sensor_data.gps_zone, sensor_data.gps_northern_hemisphere);
 }
 
-navdata::GeoLocationLatLon SensorCoordinateSystem::compute_target_position(
+datastructures::GeoLocationLatLon SensorCoordinateSystem::compute_target_position(
     const std::string&               target_id,
-    const navdata::SensorDataLatLon& sensor_data) const
+    const datastructures::SensorDataLatLon& sensor_data) const
 {
     // compute position from SensorData (no x,y or lat,lon coordinates)
     // this position is thus referenced to the gps antenna (0,0), which allows to compute
     // distance and azimuth if target towards the gps antenna
-    auto position = compute_target_position(target_id, navdata::SensorData(sensor_data));
+    auto position = compute_target_position(target_id, datastructures::SensorData(sensor_data));
 
     double distance =
         std::sqrt(position.northing * position.northing + position.easting * position.easting);
@@ -118,18 +118,18 @@ navdata::GeoLocationLatLon SensorCoordinateSystem::compute_target_position(
     }
 
     // GeoPositionLocal is implicitly converted to GeoPosition when calling this function
-    return navdata::GeoLocationLatLon(position, target_lat, target_lon);
+    return datastructures::GeoLocationLatLon(position, target_lat, target_lon);
 }
 
 // ----- get/set target offsets -----
-const navdata::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(
+const datastructures::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(
     const std::string& target_id) const
 {
     return _target_offsets.at(target_id); // throws std::out_of_range if not found
 }
 
 void SensorCoordinateSystem::add_target(const std::string&                target_id,
-                                             const navdata::PositionalOffsets& target_offsets)
+                                             const datastructures::PositionalOffsets& target_offsets)
 {
     _target_offsets[target_id] = target_offsets;
 }
@@ -142,70 +142,70 @@ void SensorCoordinateSystem::add_target(const std::string& target_id,
                                              double             pitch,
                                              double             roll)
 {
-    add_target(target_id, navdata::PositionalOffsets(x, y, z, yaw, pitch, roll));
+    add_target(target_id, datastructures::PositionalOffsets(x, y, z, yaw, pitch, roll));
 }
 
 // ----- get/set sensor offsets -----
 void SensorCoordinateSystem::set_motion_sensor_offsets(double yaw, double pitch, double roll)
 {
-    _motion_sensor_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
+    _motion_sensor_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
 }
 void SensorCoordinateSystem::set_motion_sensor_offsets(
-    const navdata::PositionalOffsets& sensor_offsets)
+    const datastructures::PositionalOffsets& sensor_offsets)
 {
     _motion_sensor_offsets = sensor_offsets;
 }
 
-navdata::PositionalOffsets SensorCoordinateSystem::get_motion_sensor_offsets() const
+datastructures::PositionalOffsets SensorCoordinateSystem::get_motion_sensor_offsets() const
 {
     return _motion_sensor_offsets;
 }
 
 void SensorCoordinateSystem::set_compass_offsets(double yaw)
 {
-    _compass_offsets = navdata::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
+    _compass_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
-void SensorCoordinateSystem::set_compass_offsets(const navdata::PositionalOffsets& sensor_offsets)
+void SensorCoordinateSystem::set_compass_offsets(const datastructures::PositionalOffsets& sensor_offsets)
 {
     _compass_offsets = sensor_offsets;
 }
-navdata::PositionalOffsets SensorCoordinateSystem::get_compass_offsets() const
+datastructures::PositionalOffsets SensorCoordinateSystem::get_compass_offsets() const
 {
     return _compass_offsets;
 }
 
 void SensorCoordinateSystem::set_depth_sensor_offsets(double x, double y, double z)
 {
-    _depth_sensor_offsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+    _depth_sensor_offsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorCoordinateSystem::set_depth_sensor_offsets(const navdata::PositionalOffsets& sensor_offsets)
+void SensorCoordinateSystem::set_depth_sensor_offsets(const datastructures::PositionalOffsets& sensor_offsets)
 {
     _depth_sensor_offsets = sensor_offsets;
 }
-navdata::PositionalOffsets SensorCoordinateSystem::get_depth_sensor_offsets() const
+datastructures::PositionalOffsets SensorCoordinateSystem::get_depth_sensor_offsets() const
 {
     return _depth_sensor_offsets;
 }
 
 void SensorCoordinateSystem::set_position_system_offsets(double x, double y, double z)
 {
-    _position_system_offsets = navdata::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+    _position_system_offsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
 void SensorCoordinateSystem::set_position_system_offsets(
-    const navdata::PositionalOffsets& sensor_offsets)
+    const datastructures::PositionalOffsets& sensor_offsets)
 {
     _position_system_offsets = sensor_offsets;
 }
-navdata::PositionalOffsets SensorCoordinateSystem::get_position_system_offsets() const
+datastructures::PositionalOffsets SensorCoordinateSystem::get_position_system_offsets() const
 {
     return _position_system_offsets;
 }
 
 // ----- helper functions -----
 Eigen::Quaterniond SensorCoordinateSystem::get_system_rotation_as_quat(
-    const navdata::SensorData&        sensor_data,
-    const navdata::PositionalOffsets& compass_offsets,
-    const navdata::PositionalOffsets& motion_sensor_offsets)
+    const datastructures::SensorData&        sensor_data,
+    const datastructures::PositionalOffsets& compass_offsets,
+    const datastructures::PositionalOffsets& motion_sensor_offsets)
 {
 
     if (std::isnan(sensor_data.compass_heading))

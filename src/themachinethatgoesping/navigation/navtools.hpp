@@ -24,9 +24,9 @@ namespace navtools {
  */
 enum class t_latlon_format
 {
-    degrees = 0, ///< lat/lon will be converted to degrees.degrees°N/S E/W
-    minutes = 1, ///< lat/lon will be converted to degrees°minutes.minutes'E/S E/W
-    seconds = 2  ///< lat/lon will be converted to degrees°minutes'seconds.seconds''E/S E/W
+    degrees = 0, /// lat/lon will be converted to degrees.degrees°N/S E/W
+    minutes = 1, /// lat/lon will be converted to degrees°minutes.minutes'E/S E/W
+    seconds = 2  /// lat/lon will be converted to degrees°minutes'seconds.seconds''E/S E/W
 };
 
 inline std::string dms_to_string(double          dms_value,

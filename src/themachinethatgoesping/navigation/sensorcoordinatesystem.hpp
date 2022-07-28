@@ -21,7 +21,7 @@
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
-#include "navdata.hpp"
+#include "datastructures.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -34,16 +34,16 @@ namespace navigation {
  */
 class SensorCoordinateSystem
 {
-    std::unordered_map<std::string, navdata::PositionalOffsets>
+    std::unordered_map<std::string, datastructures::PositionalOffsets>
         _target_offsets; /// TargetId (position in vector) for each registered target_id
 
-    navdata::PositionalOffsets
+    datastructures::PositionalOffsets
         _motion_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) offsets of the motion sensor
-    navdata::PositionalOffsets
+    datastructures::PositionalOffsets
         _compass_offsets; /// Static Yaw (installation) Offsets of CompassOffsets
-    navdata::PositionalOffsets
+    datastructures::PositionalOffsets
         _position_system_offsets; /// Static x,y,z (installation) Offsets of the PositionSystem
-    navdata::PositionalOffsets
+    datastructures::PositionalOffsets
         _depth_sensor_offsets; /// Static xy,z (installation) Offsets of the depth sensor
                                // Static Position of Heave Sensor
                                // Offsets _HeaveSensorOffsets;
@@ -64,11 +64,11 @@ class SensorCoordinateSystem
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorDataLatLon / this structure includes latitude and longitude
      * information
-     * @return navdata::GeoLocationLatLon  / this structure includes latitude and longitude
+     * @return datastructures::GeoLocationLatLon  / this structure includes latitude and longitude
      * information
      */
-    navdata::GeoLocationLatLon compute_target_position(const std::string&               target_id,
-                                          const navdata::SensorDataLatLon& sensor_data) const;
+    datastructures::GeoLocationLatLon compute_target_position(const std::string&               target_id,
+                                          const datastructures::SensorDataLatLon& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -76,11 +76,11 @@ class SensorCoordinateSystem
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorDataUTM / this structure includes northing/easting and utm zone or
      * hemisphere information
-     * @return navdata::GeoLocationUTM  / this structure includes northing/easting and utm zone or
+     * @return datastructures::GeoLocationUTM  / this structure includes northing/easting and utm zone or
      * hemisphere information
      */
-    navdata::GeoLocationUTM compute_target_position(const std::string&            target_id,
-                                       const navdata::SensorDataUTM& sensor_data) const;
+    datastructures::GeoLocationUTM compute_target_position(const std::string&            target_id,
+                                       const datastructures::SensorDataUTM& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -88,22 +88,22 @@ class SensorCoordinateSystem
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorDataLocal / this structure includes northing/easting but no zone or
      * hemisphere information
-     * @return navdata::GeoLocationLocal  / this structure includes northing/easting but no zone or
+     * @return datastructures::GeoLocationLocal  / this structure includes northing/easting but no zone or
      * hemisphere information
      */
-    navdata::GeoLocationLocal compute_target_position(const std::string&              target_id,
-                                         const navdata::SensorDataLocal& sensor_data) const;
+    datastructures::GeoLocationLocal compute_target_position(const std::string&              target_id,
+                                         const datastructures::SensorDataLocal& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorData / this structure includes no coordinate information
-     * @return navdata::GeoLocationLocal  / this structure includes northing and east, which are set
+     * @return datastructures::GeoLocationLocal  / this structure includes northing and east, which are set
      * relative to the sensor coordinate system center
      */
-    navdata::GeoLocationLocal compute_target_position(const std::string&         target_id,
-                                         const navdata::SensorData& sensor_data) const;
+    datastructures::GeoLocationLocal compute_target_position(const std::string&         target_id,
+                                         const datastructures::SensorData& sensor_data) const;
 
     // ----- get/set target offsets -----
     /**
@@ -134,15 +134,15 @@ class SensorCoordinateSystem
      * @param target_offsets mounting offsets of the target
      */
     void add_target(const std::string&                target_id,
-                         const navdata::PositionalOffsets& target_offsets);
+                         const datastructures::PositionalOffsets& target_offsets);
 
     /**
      * @brief Get stored target offsets of a specified target
      *
      * @param target_id name of the registered target
-     * @return const navdata::PositionalOffsets& offsets of the target
+     * @return const datastructures::PositionalOffsets& offsets of the target
      */
-    const navdata::PositionalOffsets& get_target_offsets(const std::string& target_id) const;
+    const datastructures::PositionalOffsets& get_target_offsets(const std::string& target_id) const;
 
     // ----- get/set sensor offsets -----
     /**
@@ -150,7 +150,7 @@ class SensorCoordinateSystem
      *
      * @param sensor_offsets offsets structure (only yaw, pitch and roll are used)
      */
-    void set_motion_sensor_offsets(const navdata::PositionalOffsets& sensor_offsets);
+    void set_motion_sensor_offsets(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Set the motion sensor offsets
@@ -167,9 +167,9 @@ class SensorCoordinateSystem
     /**
      * @brief Get the motion sensor offsets
      *
-     * @return const navdata::PositionalOffsets& offsets of the motion sensor
+     * @return const datastructures::PositionalOffsets& offsets of the motion sensor
      */
-    navdata::PositionalOffsets get_motion_sensor_offsets() const;
+    datastructures::PositionalOffsets get_motion_sensor_offsets() const;
 
     /**
      * @brief Set the compass offsets
@@ -183,14 +183,14 @@ class SensorCoordinateSystem
      *
      * @param sensor_offsets offsets structure (only yaw is used)
      */
-    void set_compass_offsets(const navdata::PositionalOffsets& sensor_offsets);
+    void set_compass_offsets(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered compass offsets
      *
-     * @return const navdata::PositionalOffsets& offsets of the compass
+     * @return const datastructures::PositionalOffsets& offsets of the compass
      */
-    navdata::PositionalOffsets get_compass_offsets() const;
+    datastructures::PositionalOffsets get_compass_offsets() const;
 
     /**
      * @brief Set the depth sensor offsets
@@ -206,14 +206,14 @@ class SensorCoordinateSystem
      *
      * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_depth_sensor_offsets(const navdata::PositionalOffsets& sensor_offsets);
+    void set_depth_sensor_offsets(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered depth sensor offsets
      *
-     * @return const navdata::PositionalOffsets& offsets of the depth sensor
+     * @return const datastructures::PositionalOffsets& offsets of the depth sensor
      */
-    navdata::PositionalOffsets get_depth_sensor_offsets() const;
+    datastructures::PositionalOffsets get_depth_sensor_offsets() const;
 
     /**
      * @brief Set the position system offsets
@@ -229,14 +229,14 @@ class SensorCoordinateSystem
      *
      * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_position_system_offsets(const navdata::PositionalOffsets& sensor_offsets);
+    void set_position_system_offsets(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered position system offsets
      *
-     * @return const navdata::PositionalOffsets& offsets of the position system
+     * @return const datastructures::PositionalOffsets& offsets of the position system
      */
-    navdata::PositionalOffsets get_position_system_offsets() const;
+    datastructures::PositionalOffsets get_position_system_offsets() const;
 
   private:
     // ----- helper functions -----
@@ -256,9 +256,9 @@ class SensorCoordinateSystem
      * system
      */
     static Eigen::Quaterniond get_system_rotation_as_quat(
-        const navdata::SensorData&        sensor_data,
-        const navdata::PositionalOffsets& compass_offsets,
-        const navdata::PositionalOffsets& motion_sensor_offsets);
+        const datastructures::SensorData&        sensor_data,
+        const datastructures::PositionalOffsets& compass_offsets,
+        const datastructures::PositionalOffsets& motion_sensor_offsets);
 
     // serialization support using bitsery
     friend bitsery::Access;
@@ -268,7 +268,7 @@ class SensorCoordinateSystem
         // serialize map of PositionOffsets
         s.ext(_target_offsets,
               bitsery::ext::StdMap{ 100 },
-              [](S& s, std::string& key, navdata::PositionalOffsets& value) {
+              [](S& s, std::string& key, datastructures::PositionalOffsets& value) {
                   s.container1b(key, 100);
                   s.object(value);
               });

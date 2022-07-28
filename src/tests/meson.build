@@ -7,15 +7,15 @@
 testcomponent = 'tools'
 
 sources = [
-    'navdata/positionaloffsets.test.cpp',
-    'navdata/geolocation.test.cpp',
-    'navdata/geolocationlatlon.test.cpp',
-    'navdata/geolocationutm.test.cpp',
-    'navdata/geolocationlocal.test.cpp',
-    'navdata/sensordata.test.cpp',
-    'navdata/sensordatalatlon.test.cpp',
-    'navdata/sensordatautm.test.cpp',
-    'navdata/sensordatalocal.test.cpp',
+    'datastructures/positionaloffsets.test.cpp',
+    'datastructures/geolocation.test.cpp',
+    'datastructures/geolocationlatlon.test.cpp',
+    'datastructures/geolocationutm.test.cpp',
+    'datastructures/geolocationlocal.test.cpp',
+    'datastructures/sensordata.test.cpp',
+    'datastructures/sensordatalatlon.test.cpp',
+    'datastructures/sensordatautm.test.cpp',
+    'datastructures/sensordatalocal.test.cpp',
     'sensorcoordinatesystem.test.cpp'
 ]
 

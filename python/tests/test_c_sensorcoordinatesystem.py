@@ -18,14 +18,14 @@ class TestNavigationSensorCoordinateSystem:
 
     def test_sensorcoordinatesystem_should_support_common_functions(self):
         """test common, simple functions"""
-        data = nav.navdata.SensorDataLatLon(53, 10, 3, 4, 10, 11, 20, 30)
+        data = nav.datastructures.SensorDataLatLon(53, 10, 3, 4, 10, 11, 20, 30)
 
         # initialize
         scs = nav.SensorCoordinateSystem()
 
         # register target
         scs.add_target(
-            "mbes", nav.navdata.PositionalOffsets(-12, 9, 3, 10, 11, 12)
+            "mbes", nav.datastructures.PositionalOffsets(-12, 9, 3, 10, 11, 12)
         )
 
         # add offsets
@@ -36,7 +36,7 @@ class TestNavigationSensorCoordinateSystem:
 
         # get target position
         position = scs.compute_target_position("mbes", data)
-        position2 = nav.navdata.GeoLocationLatLon(
+        position2 = nav.datastructures.GeoLocationLatLon(
             52.99993263333143,
             10.000048544339503,
             13.006073137528947,
