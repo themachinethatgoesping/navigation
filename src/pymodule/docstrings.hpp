@@ -25,77 +25,16 @@
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem =
 R"doc(A coordinate system that allows for specifying sensor offsets (e.g.
-gps antenna and motion sensor) and target offsets (e.g. MBES) to
-derive the geolocation and attitude of the specified targets)doc";
+gps antenna and motion sensor) and target offsets (e.g. MBES). Call
+tha class and specify target_id and current sensor data to derive the
+geolocation and attitude of the specified targets)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_SensorCoordinateSystem =
 R"doc(Construct a new, empty Sensor Coordinate System object After
 construction: add sensor offsets and targets (offstes) Then compute
 target positions for sensor data)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_TargetOffsets = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compass_offsets = R"doc(Static Roll,Pitch,Yaw (installation) Offsets of Motionsensor)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compute_target_position =
-R"doc(Compute the position of the target "target_id" based on the sensor
-data "sensor_data"
-
-Parameter ``target_id``:
-    name of the target (e.g. "MBES")
-
-Parameter ``sensor_data``:
-    SensorDataLocal / this structure includes northing/easting but no
-    zone or hemisphere informatoin
-
-Returns:
-    navdata::GeoLocationLocal / this structure includes
-    northing/easting but no zone or hemisphere informatoin)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compute_target_position_2 =
-R"doc(Compute the position of the target "target_id" based on the sensor
-data "sensor_data"
-
-Parameter ``target_id``:
-    name of the target (e.g. "MBES")
-
-Parameter ``sensor_data``:
-    SensorDataUTM / this structure includes northing/easting and utm
-    zone or hemisphere informatoin
-
-Returns:
-    navdata::GeoLocationUTM / this structure includes northing/easting
-    and utm zone or hemisphere informatoin)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compute_target_position_3 =
-R"doc(Compute the position of the target "target_id" based on the sensor
-data "sensor_data"
-
-Parameter ``target_id``:
-    name of the target (e.g. "MBES")
-
-Parameter ``sensor_data``:
-    SensorDataLatLon / this structure includes latitude and longitude
-    informatoin
-
-Returns:
-    navdata::GeoLocationLatLon / this structure includes latitude and
-    longitude informatoin)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compute_target_position_4 =
-R"doc(Compute the position of the target "target_id" based on the sensor
-data "sensor_data"
-
-Parameter ``target_id``:
-    name of the target (e.g. "MBES")
-
-Parameter ``sensor_data``:
-    SensorData / this structure includes no coordinate information
-
-Returns:
-    navdata::GeoLocationLocal / this structure includes northing and
-    east, which are set relative to the sensor coordinate system
-    center)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_depth_sensor_offsets = R"doc(Static x,y,z (installation) Offsets of the PositionSystem)doc";
 
@@ -159,7 +98,73 @@ Returns:
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_motion_sensor_offsets = R"doc(TargetId (position in vector) for each registered target_id)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_operator_call =
+R"doc(Compute the position of the target "target_id" based on the sensor
+data "sensor_data"
+
+Parameter ``target_id``:
+    name of the target (e.g. "MBES")
+
+Parameter ``sensor_data``:
+    SensorDataLatLon / this structure includes latitude and longitude
+    informatoin
+
+Returns:
+    navdata::GeoLocationLatLon / this structure includes latitude and
+    longitude informatoin)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_operator_call_2 =
+R"doc(Compute the position of the target "target_id" based on the sensor
+data "sensor_data"
+
+Parameter ``target_id``:
+    name of the target (e.g. "MBES")
+
+Parameter ``sensor_data``:
+    SensorDataUTM / this structure includes northing/easting and utm
+    zone or hemisphere informatoin
+
+Returns:
+    navdata::GeoLocationUTM / this structure includes northing/easting
+    and utm zone or hemisphere informatoin)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_operator_call_3 =
+R"doc(Compute the position of the target "target_id" based on the sensor
+data "sensor_data"
+
+Parameter ``target_id``:
+    name of the target (e.g. "MBES")
+
+Parameter ``sensor_data``:
+    SensorDataLocal / this structure includes northing/easting but no
+    zone or hemisphere informatoin
+
+Returns:
+    navdata::GeoLocationLocal / this structure includes
+    northing/easting but no zone or hemisphere informatoin)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_operator_call_4 =
+R"doc(Compute the position of the target "target_id" based on the sensor
+data "sensor_data"
+
+Parameter ``target_id``:
+    name of the target (e.g. "MBES")
+
+Parameter ``sensor_data``:
+    SensorData / this structure includes no coordinate information
+
+Returns:
+    navdata::GeoLocationLocal / this structure includes northing and
+    east, which are set relative to the sensor coordinate system
+    center)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_operator_eq = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_operator_ne = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_position_system_offsets = R"doc(Static Yaw (installation) Offsets of CompassOffsets)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_printer = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_register_target =
 R"doc(register a target (e.g. MBES) with offsets to the sensor position
@@ -198,6 +203,8 @@ Parameter ``pitch``:
 Parameter ``roll``:
     roll offset of the target (righthanded around the x-axis) (in
     degrees, positive = port up))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_compass_offsets =
 R"doc(Set the compass offsets
@@ -268,6 +275,8 @@ R"doc(Set the position system offsets
 
 Parameter ``new_offsets``:
     offsets structure (only x, y and z are used))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_target_offsets = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocation =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
