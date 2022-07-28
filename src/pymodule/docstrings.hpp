@@ -132,7 +132,7 @@ Parameter ``target_id``:
 Returns:
     const navdata::PositionalOffsets& offsets of the target)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_target_position =
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor
 data "sensor_data"
 
@@ -147,7 +147,7 @@ Returns:
     navdata::GeoLocationLatLon / this structure includes latitude and
     longitude information)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_target_position_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compute_target_position_2 =
 R"doc(Compute the position of the target "target_id" based on the sensor
 data "sensor_data"
 
@@ -162,7 +162,7 @@ Returns:
     navdata::GeoLocationUTM / this structure includes northing/easting
     and utm zone or hemisphere information)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_target_position_3 =
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compute_target_position_3 =
 R"doc(Compute the position of the target "target_id" based on the sensor
 data "sensor_data"
 
@@ -177,7 +177,7 @@ Returns:
     navdata::GeoLocationLocal / this structure includes
     northing/easting but no zone or hemisphere information)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_target_position_4 =
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compute_target_position_4 =
 R"doc(Compute the position of the target "target_id" based on the sensor
 data "sensor_data"
 

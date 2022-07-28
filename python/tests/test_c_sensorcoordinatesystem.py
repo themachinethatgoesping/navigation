@@ -35,7 +35,7 @@ class TestNavigationSensorCoordinateSystem:
         scs.set_motion_sensor_offsets(10, -10, -30)
 
         # get target position
-        position = scs.get_target_position("mbes", data)
+        position = scs.compute_target_position("mbes", data)
         position2 = nav.navdata.GeoLocationLatLon(
             52.99993263333143,
             10.000048544339503,

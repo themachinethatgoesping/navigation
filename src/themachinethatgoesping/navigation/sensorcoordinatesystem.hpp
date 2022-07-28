@@ -57,7 +57,7 @@ class SensorCoordinateSystem
      */
     SensorCoordinateSystem() = default;
 
-    // ----- get_target_position -----
+    // ----- compute_target_position -----
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
      *
@@ -67,7 +67,7 @@ class SensorCoordinateSystem
      * @return navdata::GeoLocationLatLon  / this structure includes latitude and longitude
      * information
      */
-    navdata::GeoLocationLatLon get_target_position(const std::string&               target_id,
+    navdata::GeoLocationLatLon compute_target_position(const std::string&               target_id,
                                           const navdata::SensorDataLatLon& sensor_data) const;
 
     /**
@@ -79,7 +79,7 @@ class SensorCoordinateSystem
      * @return navdata::GeoLocationUTM  / this structure includes northing/easting and utm zone or
      * hemisphere information
      */
-    navdata::GeoLocationUTM get_target_position(const std::string&            target_id,
+    navdata::GeoLocationUTM compute_target_position(const std::string&            target_id,
                                        const navdata::SensorDataUTM& sensor_data) const;
 
     /**
@@ -91,7 +91,7 @@ class SensorCoordinateSystem
      * @return navdata::GeoLocationLocal  / this structure includes northing/easting but no zone or
      * hemisphere information
      */
-    navdata::GeoLocationLocal get_target_position(const std::string&              target_id,
+    navdata::GeoLocationLocal compute_target_position(const std::string&              target_id,
                                          const navdata::SensorDataLocal& sensor_data) const;
 
     /**
@@ -102,7 +102,7 @@ class SensorCoordinateSystem
      * @return navdata::GeoLocationLocal  / this structure includes northing and east, which are set
      * relative to the sensor coordinate system center
      */
-    navdata::GeoLocationLocal get_target_position(const std::string&         target_id,
+    navdata::GeoLocationLocal compute_target_position(const std::string&         target_id,
                                          const navdata::SensorData& sensor_data) const;
 
     // ----- get/set target offsets -----

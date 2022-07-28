@@ -8,9 +8,9 @@
 namespace themachinethatgoesping {
 namespace navigation {
 
-// ----- get_target_position -----
+// ----- compute_target_position -----
 
-navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
+navdata::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
     const std::string&         target_id,
     const navdata::SensorData& sensor_data) const
 {
@@ -53,11 +53,11 @@ navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
     return location;
 }
 
-navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
+navdata::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
     const std::string&              target_id,
     const navdata::SensorDataLocal& sensor_data) const
 {
-    auto position = get_target_position(target_id, navdata::SensorData(sensor_data));
+    auto position = compute_target_position(target_id, navdata::SensorData(sensor_data));
 
     // compute target xy
     position.northing += sensor_data.gps_northing;
@@ -66,24 +66,24 @@ navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
     return position;
 }
 
-navdata::GeoLocationUTM SensorCoordinateSystem::get_target_position(
+navdata::GeoLocationUTM SensorCoordinateSystem::compute_target_position(
     const std::string&            target_id,
     const navdata::SensorDataUTM& sensor_data) const
 {
-    auto position = get_target_position(target_id, navdata::SensorDataLocal(sensor_data));
+    auto position = compute_target_position(target_id, navdata::SensorDataLocal(sensor_data));
 
     return navdata::GeoLocationUTM(
         position, sensor_data.gps_zone, sensor_data.gps_northern_hemisphere);
 }
 
-navdata::GeoLocationLatLon SensorCoordinateSystem::get_target_position(
+navdata::GeoLocationLatLon SensorCoordinateSystem::compute_target_position(
     const std::string&               target_id,
     const navdata::SensorDataLatLon& sensor_data) const
 {
     // compute position from SensorData (no x,y or lat,lon coordinates)
     // this position is thus referenced to the gps antenna (0,0), which allows to compute
     // distance and azimuth if target towards the gps antenna
-    auto position = get_target_position(target_id, navdata::SensorData(sensor_data));
+    auto position = compute_target_position(target_id, navdata::SensorData(sensor_data));
 
     double distance =
         std::sqrt(position.northing * position.northing + position.easting * position.easting);
@@ -102,7 +102,7 @@ navdata::GeoLocationLatLon SensorCoordinateSystem::get_target_position(
         // this should never happen
         else
             throw(
-                std::runtime_error("get_target_position[ERROR]: heading is nan but distance is "
+                std::runtime_error("compute_target_position[ERROR]: heading is nan but distance is "
                                    "not 0! (this should never happen)"));
     }
     else
