@@ -8,9 +8,9 @@
 namespace themachinethatgoesping {
 namespace navigation {
 
-// ----- compute_target_position -----
+// ----- get_target_position -----
 
-navdata::GeoLocationLocal SensorCoordinateSystem::operator()(
+navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
     const std::string&         target_id,
     const navdata::SensorData& sensor_data) const
 {
@@ -53,11 +53,11 @@ navdata::GeoLocationLocal SensorCoordinateSystem::operator()(
     return location;
 }
 
-navdata::GeoLocationLocal SensorCoordinateSystem::operator()(
+navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
     const std::string&              target_id,
     const navdata::SensorDataLocal& sensor_data) const
 {
-    auto position = operator()(target_id, navdata::SensorData(sensor_data));
+    auto position = get_target_position(target_id, navdata::SensorData(sensor_data));
 
     // coompute target xy
     position.northing += sensor_data.gps_northing;
@@ -66,24 +66,24 @@ navdata::GeoLocationLocal SensorCoordinateSystem::operator()(
     return position;
 }
 
-navdata::GeoLocationUTM SensorCoordinateSystem::operator()(
+navdata::GeoLocationUTM SensorCoordinateSystem::get_target_position(
     const std::string&            target_id,
     const navdata::SensorDataUTM& sensor_data) const
 {
-    auto position = operator()(target_id, navdata::SensorDataLocal(sensor_data));
+    auto position = get_target_position(target_id, navdata::SensorDataLocal(sensor_data));
 
     return navdata::GeoLocationUTM(
         position, sensor_data.gps_zone, sensor_data.gps_northern_hemisphere);
 }
 
-navdata::GeoLocationLatLon SensorCoordinateSystem::operator()(
+navdata::GeoLocationLatLon SensorCoordinateSystem::get_target_position(
     const std::string&               target_id,
     const navdata::SensorDataLatLon& sensor_data) const
 {
     // compute position from SensorData (no x,y or lat,lon coordinates)
     // this posion is thus referenced to the gps antenna (0,0), which allows to compute
     // distance and azimuth if target towards the gps antenna
-    auto position = operator()(target_id, navdata::SensorData(sensor_data));
+    auto position = get_target_position(target_id, navdata::SensorData(sensor_data));
 
     double distance =
         std::sqrt(position.northing * position.northing + position.easting * position.easting);
@@ -102,7 +102,7 @@ navdata::GeoLocationLatLon SensorCoordinateSystem::operator()(
         // this should never happen
         else
             throw(
-                std::runtime_error("compute_target_position[ERROR]: heading is nan but distance is "
+                std::runtime_error("get_target_position[ERROR]: heading is nan but distance is "
                                    "not 0! (this should never happen)"));
     }
     else
@@ -128,13 +128,13 @@ const navdata::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(
     return _target_offsets.at(target_id); // throws std::out_of_range if not found
 }
 
-void SensorCoordinateSystem::register_target(const std::string&                target_id,
+void SensorCoordinateSystem::add_target(const std::string&                target_id,
                                              const navdata::PositionalOffsets& target_offsets)
 {
     _target_offsets[target_id] = target_offsets;
 }
 
-void SensorCoordinateSystem::register_target(const std::string& target_id,
+void SensorCoordinateSystem::add_target(const std::string& target_id,
                                              double             x,
                                              double             y,
                                              double             z,
@@ -142,7 +142,7 @@ void SensorCoordinateSystem::register_target(const std::string& target_id,
                                              double             pitch,
                                              double             roll)
 {
-    register_target(target_id, navdata::PositionalOffsets(x, y, z, yaw, pitch, roll));
+    add_target(target_id, navdata::PositionalOffsets(x, y, z, yaw, pitch, roll));
 }
 
 // ----- get/set sensor offsets -----

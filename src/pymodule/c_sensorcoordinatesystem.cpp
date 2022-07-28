@@ -22,37 +22,36 @@ void init_c_sensorcoordinatesystem(py::module& m)
         m,
         "SensorCoordinateSystem",
         DOC(themachinethatgoesping, navigation, SensorCoordinateSystem))
-        .def(
-            py::init<SensorCoordinateSystem>(),
+        .def(py::init<>(),
             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, SensorCoordinateSystem))
-        .def("__call__",
+        .def("get_target_position",
              py::overload_cast<const std::string&, const navdata::SensorDataLatLon&>(
-                 &SensorCoordinateSystem::operator(), py::const_),
-             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_call),
+                 &SensorCoordinateSystem::get_target_position, py::const_),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, get_target_position),
              py::arg("target_id"),
              py::arg("sensor_data"))
-        .def("__call__",
+        .def("get_target_position",
              py::overload_cast<const std::string&, const navdata::SensorDataUTM&>(
-                 &SensorCoordinateSystem::operator(), py::const_),
-             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_call_2),
+                 &SensorCoordinateSystem::get_target_position, py::const_),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, get_target_position_2),
              py::arg("target_id"),
              py::arg("sensor_data"))
-        .def("__call__",
+        .def("get_target_position",
              py::overload_cast<const std::string&, const navdata::SensorDataLocal&>(
-                 &SensorCoordinateSystem::operator(), py::const_),
-             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_call_3),
+                 &SensorCoordinateSystem::get_target_position, py::const_),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, get_target_position_3),
              py::arg("target_id"),
              py::arg("sensor_data"))
-        .def("__call__",
+        .def("get_target_position",
              py::overload_cast<const std::string&, const navdata::SensorData&>(
-                 &SensorCoordinateSystem::operator(), py::const_),
-             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, operator_call_4),
+                 &SensorCoordinateSystem::get_target_position, py::const_),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, get_target_position_4),
              py::arg("target_id"),
              py::arg("sensor_data"))
-        .def("register_target",
+        .def("add_target",
              py::overload_cast<const std::string&, double, double, double, double, double, double>(
-                 &SensorCoordinateSystem::register_target),
-             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, register_target),
+                 &SensorCoordinateSystem::add_target),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, add_target),
              py::arg("target_id"),
              py::arg("x"),
              py::arg("y"),
@@ -60,10 +59,10 @@ void init_c_sensorcoordinatesystem(py::module& m)
              py::arg("yaw"),
              py::arg("pitch"),
              py::arg("roll"))
-        .def("register_target",
+        .def("add_target",
              py::overload_cast<const std::string&, const navdata::PositionalOffsets&>(
-                 &SensorCoordinateSystem::register_target),
-             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, register_target_2),
+                 &SensorCoordinateSystem::add_target),
+             DOC(themachinethatgoesping, navigation, SensorCoordinateSystem, add_target_2),
              py::arg("target_id"),
              py::arg("target_offsets"))
         .def("get_target_offsets",

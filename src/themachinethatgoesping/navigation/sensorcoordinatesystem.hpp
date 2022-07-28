@@ -28,8 +28,8 @@ namespace navigation {
 
 /**
  * @brief A coordinate system that allows for specifying sensor offsets (e.g. gps antenna and motion
- * sensor) and target offsets (e.g. MBES). Call tha class and specify target_id and current sensor data
- * to derive the geolocation and attitude of the specified targets
+ * sensor) and target offsets (e.g. MBES). Call the class and specify target_id and current sensor
+ * data to derive the geolocation and attitude of the specified targets
  *
  */
 class SensorCoordinateSystem
@@ -57,7 +57,7 @@ class SensorCoordinateSystem
      */
     SensorCoordinateSystem() = default;
 
-    // ----- operator() -----
+    // ----- get_target_position -----
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
      *
@@ -67,9 +67,8 @@ class SensorCoordinateSystem
      * @return navdata::GeoLocationLatLon  / this structure includes latitude and longitude
      * informatoin
      */
-    navdata::GeoLocationLatLon operator()(
-        const std::string&               target_id,
-        const navdata::SensorDataLatLon& sensor_data) const;
+    navdata::GeoLocationLatLon get_target_position(const std::string&               target_id,
+                                          const navdata::SensorDataLatLon& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -80,9 +79,8 @@ class SensorCoordinateSystem
      * @return navdata::GeoLocationUTM  / this structure includes northing/easting and utm zone or
      * hemisphere informatoin
      */
-    navdata::GeoLocationUTM operator()(
-        const std::string&            target_id,
-        const navdata::SensorDataUTM& sensor_data) const;
+    navdata::GeoLocationUTM get_target_position(const std::string&            target_id,
+                                       const navdata::SensorDataUTM& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -93,9 +91,8 @@ class SensorCoordinateSystem
      * @return navdata::GeoLocationLocal  / this structure includes northing/easting but no zone or
      * hemisphere informatoin
      */
-    navdata::GeoLocationLocal operator()(
-        const std::string&              target_id,
-        const navdata::SensorDataLocal& sensor_data) const;
+    navdata::GeoLocationLocal get_target_position(const std::string&              target_id,
+                                         const navdata::SensorDataLocal& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -105,12 +102,12 @@ class SensorCoordinateSystem
      * @return navdata::GeoLocationLocal  / this structure includes northing and east, which are set
      * relative to the sensor coordinate system center
      */
-    navdata::GeoLocationLocal operator()(const std::string&         target_id,
-                                                      const navdata::SensorData& sensor_data) const;
+    navdata::GeoLocationLocal get_target_position(const std::string&         target_id,
+                                         const navdata::SensorData& sensor_data) const;
 
     // ----- get/set target offsets -----
     /**
-     * @brief register a target (e.g. MBES) with offsets to the sensor position system
+     * @brief add a target (e.g. MBES) with offsets to the sensor position system
      *
      * @param target_id name of the target for reference
      * @param x x-offset of the target (in meters, positive foorward)
@@ -122,7 +119,7 @@ class SensorCoordinateSystem
      * @param roll roll offset of the target (righthanded around the x-axis) (in degrees, positive =
      * port up)
      */
-    void register_target(const std::string& target_id,
+    void add_target(const std::string& target_id,
                          double             x,
                          double             y,
                          double             z,
@@ -131,12 +128,13 @@ class SensorCoordinateSystem
                          double             roll);
 
     /**
-     * @brief register a target (e.g. MBES) with offsets to the sensor position system
+     * @brief add a target (e.g. MBES) with offsets to the sensor position system
      *
      * @param target_id name of the target for reference
      * @param target_offsets mounting offsets of the target
      */
-    void register_target(const std::string& target_id, const navdata::PositionalOffsets& target_offsets);
+    void add_target(const std::string&                target_id,
+                         const navdata::PositionalOffsets& target_offsets);
 
     /**
      * @brief Get stored target offsets of a specified target
@@ -165,7 +163,7 @@ class SensorCoordinateSystem
      * positive = port up)
      */
     void set_motion_sensor_offsets(double yaw, double pitch, double roll);
-    
+
     /**
      * @brief Get the motion sensor offsets
      *
@@ -267,11 +265,13 @@ class SensorCoordinateSystem
     template<typename S>
     void serialize(S& s)
     {
-        //serialize map of PositionOffsets
-        s.ext(_target_offsets, bitsery::ext::StdMap{100}, [](S& s, std::string& key, navdata::PositionalOffsets& value) {
-            s.container1b(key,100);
-            s.object(value);
-        });
+        // serialize map of PositionOffsets
+        s.ext(_target_offsets,
+              bitsery::ext::StdMap{ 100 },
+              [](S& s, std::string& key, navdata::PositionalOffsets& value) {
+                  s.container1b(key, 100);
+                  s.object(value);
+              });
         s.object(_motion_sensor_offsets);
         s.object(_compass_offsets);
         s.object(_position_system_offsets);
@@ -301,7 +301,8 @@ class SensorCoordinateSystem
     }
     bool operator!=(const SensorCoordinateSystem& other) const { return !(*this == other); }
 
-    // __printer__ function is necessery to support print() info_string() etc (defined by __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__ macro below)
+    // __printer__ function is necessery to support print() info_string() etc (defined by
+    // __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelpers::ObjectPrinter __printer__() const
     {
         tools::classhelpers::ObjectPrinter printer("SensorCoordinateSystem");
