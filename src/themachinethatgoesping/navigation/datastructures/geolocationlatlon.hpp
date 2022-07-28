@@ -129,7 +129,7 @@ struct GeoLocationLatLon : public GeoLocation
             "ddd°mm',ss.s''N/S");
         printer.register_string(
             "longitude",
-            navtools::longitude_to_string(latitude, navtools::t_latlon_format::seconds, 1),
+            navtools::longitude_to_string(longitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
 
         printer.append(GeoLocation::__printer__());
