@@ -31,7 +31,7 @@ geolocation and attitude of the specified targets)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_SensorCoordinateSystem =
 R"doc(Construct a new, empty Sensor Coordinate System object After
-construction: add sensor offsets and targets (offstes) Then compute
+construction: add sensor offsets and targets (offsets) Then compute
 target positions for sensor data)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_add_target =
@@ -41,7 +41,7 @@ Parameter ``target_id``:
     name of the target for reference
 
 Parameter ``x``:
-    x-offset of the target (in meters, positive foorward)
+    x-offset of the target (in meters, positive forward)
 
 Parameter ``y``:
     y-offset of the target (in meters, positive starboard)
@@ -50,15 +50,15 @@ Parameter ``z``:
     z-offset of the target (in meters, positive down)
 
 Parameter ``yaw``:
-    yaw offset of the target (righthanded around the z-axis) (in
+    yaw offset of the target (right-handed around the z-axis) (in
     degrees, 90° = east)
 
 Parameter ``pitch``:
-    pitch offset of the target (righthanded around the y-axis) (in
+    pitch offset of the target (right-handed around the y-axis) (in
     degrees, positive = bow up)
 
 Parameter ``roll``:
-    roll offset of the target (righthanded around the x-axis) (in
+    roll offset of the target (right-handed around the x-axis) (in
     degrees, positive = port up))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_add_target_2 =
@@ -70,7 +70,7 @@ Parameter ``target_id``:
 Parameter ``target_offsets``:
     mounting offsets of the target)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compass_offsets = R"doc(Static Roll,Pitch,Yaw (installation) Offsets of Motionsensor)doc";
+static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_compass_offsets = R"doc(Static Roll,Pitch,Yaw (installation) offsets of the motion sensor)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_depth_sensor_offsets = R"doc(Static x,y,z (installation) Offsets of the PositionSystem)doc";
 
@@ -111,7 +111,7 @@ Parameter ``sensor_data``:
     Sensor data object (used are: compass_heading, imu_yaw, imu_pitch,
     imu_roll)
 
-Parameter ``compasss_offsets``:
+Parameter ``compass_offsets``:
     Offsets of the compass (used is only yaw offset)
 
 Parameter ``motion_sensor_offsets``:
@@ -141,11 +141,11 @@ Parameter ``target_id``:
 
 Parameter ``sensor_data``:
     SensorDataLatLon / this structure includes latitude and longitude
-    informatoin
+    information
 
 Returns:
     navdata::GeoLocationLatLon / this structure includes latitude and
-    longitude informatoin)doc";
+    longitude information)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_target_position_2 =
 R"doc(Compute the position of the target "target_id" based on the sensor
@@ -156,11 +156,11 @@ Parameter ``target_id``:
 
 Parameter ``sensor_data``:
     SensorDataUTM / this structure includes northing/easting and utm
-    zone or hemisphere informatoin
+    zone or hemisphere information
 
 Returns:
     navdata::GeoLocationUTM / this structure includes northing/easting
-    and utm zone or hemisphere informatoin)doc";
+    and utm zone or hemisphere information)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_target_position_3 =
 R"doc(Compute the position of the target "target_id" based on the sensor
@@ -171,11 +171,11 @@ Parameter ``target_id``:
 
 Parameter ``sensor_data``:
     SensorDataLocal / this structure includes northing/easting but no
-    zone or hemisphere informatoin
+    zone or hemisphere information
 
 Returns:
     navdata::GeoLocationLocal / this structure includes
-    northing/easting but no zone or hemisphere informatoin)doc";
+    northing/easting but no zone or hemisphere information)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_get_target_position_4 =
 R"doc(Compute the position of the target "target_id" based on the sensor
@@ -208,7 +208,7 @@ static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSyste
 R"doc(Set the compass offsets
 
 Parameter ``yaw``:
-    yaw offset of the compass (righthanded around the z-axis) (in
+    yaw offset of the compass (right-handed around the z-axis) (in
     degrees, 90° = east))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_compass_offsets_2 =
@@ -221,7 +221,7 @@ static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSyste
 R"doc(Set the depth sensor offsets
 
 Parameter ``x``:
-    x-offset of the depth sensor (in meters, positive foorward)
+    x-offset of the depth sensor (in meters, positive forward)
 
 Parameter ``y``:
     y-offset of the depth sensor (in meters, positive starboard)
@@ -245,22 +245,22 @@ static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSyste
 R"doc(Set the motion sensor offsets
 
 Parameter ``yaw``:
-    yaw offset of the motion sensor (righthanded around the z-axis)
+    yaw offset of the motion sensor (right-handed around the z-axis)
     (in degrees, 90° = east)
 
 Parameter ``pitch``:
-    pitch offset of the motion sensor (righthanded around the y-axis)
+    pitch offset of the motion sensor (right-handed around the y-axis)
     (in degrees, positive = bow up)
 
 Parameter ``roll``:
-    roll offset of the motion sensor (righthanded around the x-axis)
+    roll offset of the motion sensor (right-handed around the x-axis)
     (in degrees, positive = port up))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorCoordinateSystem_set_position_system_offsets =
 R"doc(Set the position system offsets
 
 Parameter ``x``:
-    x-offset of the depth sensor (in meters, positive foorward)
+    x-offset of the depth sensor (in meters, positive forward)
 
 Parameter ``y``:
     y-offset of the depth sensor (in meters, positive starboard)
@@ -358,7 +358,7 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLa
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLocal =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
 sensor) unlike the default GeoLocation structure, this object stores
-local northing and easting coordinates. These coordintaes can be
+local northing and easting coordinates. These coordinates can be
 converted to UTM coordinates if the zone and hemisphere are known.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationLocal_GeoLocationLocal = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
@@ -467,7 +467,7 @@ Parameter ``location``:
     valid GeoLocationLatLon object
 
 Parameter ``setzone``:
-    set a prefered UTM zone negative means automatic, zero means UPS,
+    set a preferred UTM zone negative means automatic, zero means UPS,
     positive means a particular UTM zone
 
 Returns:
@@ -484,7 +484,7 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUT
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_GeoLocationUTM_to_geolocation_latlon =
-R"doc(Convert a utm geolocationlatlon to a unprojected location
+R"doc(Convert a utm geolocationlatlon to an unprojected location
 
 Parameter ``location_utm``:
     $Returns:
@@ -550,7 +550,7 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_PositionalOff
 R"doc(Construct a new PositionalOffsets object
 
 Parameter ``x``:
-    in m, positive foorward
+    in m, positive forward
 
 Parameter ``y``:
     in m, positive starboard
@@ -579,7 +579,7 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_PositionalOff
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_PositionalOffsets_serialize = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navdata_PositionalOffsets_x = R"doc(< in m, positive foorward)doc";
+static const char *__doc_themachinethatgoesping_navigation_navdata_PositionalOffsets_x = R"doc(< in m, positive forward)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_PositionalOffsets_y = R"doc(< in m, positive starboard)doc";
 
@@ -820,7 +820,7 @@ Parameter ``data``:
     valid SensorDataLatLon object
 
 Parameter ``setzone``:
-    set a prefered UTM zone negative means automatic, zero means UPS,
+    set a preferred UTM zone negative means automatic, zero means UPS,
     positive means a particular UTM zone
 
 Returns:
@@ -848,7 +848,7 @@ static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navdata_SensorDataUTM_to_sensordata =
-R"doc(Convert a utm sensordatalatlon to a unprojected data
+R"doc(Convert a utm sensordatalatlon to an unprojected data
 
 Parameter ``data_utm``:
     $Returns:
@@ -916,7 +916,7 @@ R"doc(convert a latitude value to a string
 Parameter ``latitude``:
     value to be converted
 
-Parameter ``precission``:
+Parameter ``precision``:
     number of digits behind the .
 
 Parameter ``format``:
@@ -932,7 +932,7 @@ R"doc(convert a latitude value to a string
 Parameter ``latitude``:
     value to be converted
 
-Parameter ``precission``:
+Parameter ``precision``:
     number of digits behind the .
 
 Parameter ``format``:
@@ -942,7 +942,7 @@ Parameter ``format``:
 Returns:
     converted latitude string)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_format = R"doc(lat/lon format specificaionts)doc";
+static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_format = R"doc(lat/lon format specifications)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_format_degrees = R"doc(< lat/lon will be converted to degrees.degrees°N/S E/W)doc";
 

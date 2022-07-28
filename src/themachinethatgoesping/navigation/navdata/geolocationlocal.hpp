@@ -20,7 +20,7 @@ namespace navdata {
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
  * unlike the default GeoLocation structure, this object stores local northing and easting
- * coordinates. These coordintaes can be converted to UTM coordinates if the zone and hemisphere are
+ * coordinates. These coordinates can be converted to UTM coordinates if the zone and hemisphere are
  * known.
  */
 struct GeoLocationLocal : public GeoLocation
@@ -110,9 +110,9 @@ struct GeoLocationLocal : public GeoLocation
     // define to_binary and from_binary functions (needs the serialize function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationLocal)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
+    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace datastrcutures
-} // namespace naviation
+} // namespace navigation
 } // namespace themachinethatgoesping

@@ -16,7 +16,7 @@ navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
 {
     navdata::GeoLocationLocal location;
 
-    // first get the current roation of the vessel
+    // first get the current rotation of the vessel
     auto vessel_quat =
         get_system_rotation_as_quat(sensor_data, _compass_offsets, _motion_sensor_offsets);
 
@@ -46,7 +46,7 @@ navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
     location.pitch   = ypr[1];
     location.roll    = ypr[2];
 
-    // coompute target xy
+    // compute target xy
     location.northing = target_xyz[0] - positionSystem_xyz[0];
     location.easting  = target_xyz[1] - positionSystem_xyz[1];
 
@@ -59,7 +59,7 @@ navdata::GeoLocationLocal SensorCoordinateSystem::get_target_position(
 {
     auto position = get_target_position(target_id, navdata::SensorData(sensor_data));
 
-    // coompute target xy
+    // compute target xy
     position.northing += sensor_data.gps_northing;
     position.easting += sensor_data.gps_easting;
 
@@ -81,7 +81,7 @@ navdata::GeoLocationLatLon SensorCoordinateSystem::get_target_position(
     const navdata::SensorDataLatLon& sensor_data) const
 {
     // compute position from SensorData (no x,y or lat,lon coordinates)
-    // this posion is thus referenced to the gps antenna (0,0), which allows to compute
+    // this position is thus referenced to the gps antenna (0,0), which allows to compute
     // distance and azimuth if target towards the gps antenna
     auto position = get_target_position(target_id, navdata::SensorData(sensor_data));
 
@@ -204,7 +204,7 @@ navdata::PositionalOffsets SensorCoordinateSystem::get_position_system_offsets()
 // ----- helper functions -----
 Eigen::Quaterniond SensorCoordinateSystem::get_system_rotation_as_quat(
     const navdata::SensorData&        sensor_data,
-    const navdata::PositionalOffsets& compasss_offsets,
+    const navdata::PositionalOffsets& compass_offsets,
     const navdata::PositionalOffsets& motion_sensor_offsets)
 {
 
@@ -252,7 +252,7 @@ Eigen::Quaterniond SensorCoordinateSystem::get_system_rotation_as_quat(
         auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(0., ypr[1], ypr[2], false);
 
         // rotate sensor quat using compass_heading
-        double heading    = sensor_data.compass_heading - compasss_offsets.yaw;
+        double heading    = sensor_data.compass_heading - compass_offsets.yaw;
         auto compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0, 0.0, true);
 
         auto vessel_quat = compass_quat * sensor_quat;

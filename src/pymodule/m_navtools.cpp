@@ -39,12 +39,12 @@ void init_m_navtools(py::module& m)
                 DOC(themachinethatgoesping, navigation, navtools, latitude_to_string),
                 py::arg("latitude"),
                 py::arg("format")     = t_latlon_format::minutes,
-                py::arg("precission") = 6);
+                py::arg("precision") = 6);
 
     m_navtools.def("longitude_to_string",
                 &longitude_to_string,
                 DOC(themachinethatgoesping, navigation, navtools, longitude_to_string),
                 py::arg("longitude"),
                 py::arg("format")     = t_latlon_format::minutes,
-                py::arg("precission") = 6);
+                py::arg("precision") = 6);
 }

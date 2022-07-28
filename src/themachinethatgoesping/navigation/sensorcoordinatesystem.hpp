@@ -38,7 +38,7 @@ class SensorCoordinateSystem
         _target_offsets; /// TargetId (position in vector) for each registered target_id
 
     navdata::PositionalOffsets
-        _motion_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) Offsets of Motionsensor
+        _motion_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) offsets of the motion sensor
     navdata::PositionalOffsets
         _compass_offsets; /// Static Yaw (installation) Offsets of CompassOffsets
     navdata::PositionalOffsets
@@ -51,7 +51,7 @@ class SensorCoordinateSystem
   public:
     /**
      * @brief Construct a new, empty Sensor Coordinate System object
-     * After construction: add sensor offsets and targets (offstes)
+     * After construction: add sensor offsets and targets (offsets)
      * Then compute target positions for sensor data
      *
      */
@@ -63,9 +63,9 @@ class SensorCoordinateSystem
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorDataLatLon / this structure includes latitude and longitude
-     * informatoin
+     * information
      * @return navdata::GeoLocationLatLon  / this structure includes latitude and longitude
-     * informatoin
+     * information
      */
     navdata::GeoLocationLatLon get_target_position(const std::string&               target_id,
                                           const navdata::SensorDataLatLon& sensor_data) const;
@@ -75,9 +75,9 @@ class SensorCoordinateSystem
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorDataUTM / this structure includes northing/easting and utm zone or
-     * hemisphere informatoin
+     * hemisphere information
      * @return navdata::GeoLocationUTM  / this structure includes northing/easting and utm zone or
-     * hemisphere informatoin
+     * hemisphere information
      */
     navdata::GeoLocationUTM get_target_position(const std::string&            target_id,
                                        const navdata::SensorDataUTM& sensor_data) const;
@@ -87,9 +87,9 @@ class SensorCoordinateSystem
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorDataLocal / this structure includes northing/easting but no zone or
-     * hemisphere informatoin
+     * hemisphere information
      * @return navdata::GeoLocationLocal  / this structure includes northing/easting but no zone or
-     * hemisphere informatoin
+     * hemisphere information
      */
     navdata::GeoLocationLocal get_target_position(const std::string&              target_id,
                                          const navdata::SensorDataLocal& sensor_data) const;
@@ -110,13 +110,13 @@ class SensorCoordinateSystem
      * @brief add a target (e.g. MBES) with offsets to the sensor position system
      *
      * @param target_id name of the target for reference
-     * @param x x-offset of the target (in meters, positive foorward)
+     * @param x x-offset of the target (in meters, positive forward)
      * @param y y-offset of the target (in meters, positive starboard)
      * @param z z-offset of the target (in meters, positive down)
-     * @param yaw yaw offset of the target (righthanded around the z-axis) (in degrees, 90° = east)
-     * @param pitch pitch offset of the target (righthanded around the y-axis) (in degrees, positive
+     * @param yaw yaw offset of the target (right-handed around the z-axis) (in degrees, 90° = east)
+     * @param pitch pitch offset of the target (right-handed around the y-axis) (in degrees, positive
      * = bow up)
-     * @param roll roll offset of the target (righthanded around the x-axis) (in degrees, positive =
+     * @param roll roll offset of the target (right-handed around the x-axis) (in degrees, positive =
      * port up)
      */
     void add_target(const std::string& target_id,
@@ -155,11 +155,11 @@ class SensorCoordinateSystem
     /**
      * @brief Set the motion sensor offsets
      *
-     * @param yaw yaw offset of the motion sensor (righthanded around the z-axis) (in degrees, 90° =
+     * @param yaw yaw offset of the motion sensor (right-handed around the z-axis) (in degrees, 90° =
      * east)
-     * @param pitch pitch offset of the motion sensor (righthanded around the y-axis) (in degrees,
+     * @param pitch pitch offset of the motion sensor (right-handed around the y-axis) (in degrees,
      * positive = bow up)
-     * @param roll roll offset of the motion sensor (righthanded around the x-axis) (in degrees,
+     * @param roll roll offset of the motion sensor (right-handed around the x-axis) (in degrees,
      * positive = port up)
      */
     void set_motion_sensor_offsets(double yaw, double pitch, double roll);
@@ -174,7 +174,7 @@ class SensorCoordinateSystem
     /**
      * @brief Set the compass offsets
      *
-     * @param yaw yaw offset of the compass (righthanded around the z-axis) (in degrees, 90° = east)
+     * @param yaw yaw offset of the compass (right-handed around the z-axis) (in degrees, 90° = east)
      */
     void set_compass_offsets(double yaw);
 
@@ -195,7 +195,7 @@ class SensorCoordinateSystem
     /**
      * @brief Set the depth sensor offsets
      *
-     * @param x x-offset of the depth sensor (in meters, positive foorward)
+     * @param x x-offset of the depth sensor (in meters, positive forward)
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
      */
@@ -218,7 +218,7 @@ class SensorCoordinateSystem
     /**
      * @brief Set the position system offsets
      *
-     * @param x x-offset of the depth sensor (in meters, positive foorward)
+     * @param x x-offset of the depth sensor (in meters, positive forward)
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
      */
@@ -239,7 +239,7 @@ class SensorCoordinateSystem
     navdata::PositionalOffsets get_position_system_offsets() const;
 
   private:
-    // ----- helper functinos -----
+    // ----- helper functions -----
     /**
      * @brief Compute the rotation of the sensor coordinate system (relative to the world reference
      * coordinate system) using the sensor data and (rotation) offsets. Note1: If compass_heading in
@@ -249,7 +249,7 @@ class SensorCoordinateSystem
      *
      * @param sensor_data Sensor data object (used are: compass_heading, imu_yaw, imu_pitch,
      * imu_roll)
-     * @param compasss_offsets Offsets of the compass (used is only yaw offset)
+     * @param compass_offsets Offsets of the compass (used is only yaw offset)
      * @param motion_sensor_offsets Offsets of the IMU (used are yaw, pitch and roll), if
      * compass_heading is used, yaw is used to correct pitch, and roll but not added to the heading
      * @return Eigen::Quaterniond Rotation of the sensor system compared to the world reference
@@ -257,7 +257,7 @@ class SensorCoordinateSystem
      */
     static Eigen::Quaterniond get_system_rotation_as_quat(
         const navdata::SensorData&        sensor_data,
-        const navdata::PositionalOffsets& compasss_offsets,
+        const navdata::PositionalOffsets& compass_offsets,
         const navdata::PositionalOffsets& motion_sensor_offsets);
 
     // serialization support using bitsery
@@ -301,8 +301,8 @@ class SensorCoordinateSystem
     }
     bool operator!=(const SensorCoordinateSystem& other) const { return !(*this == other); }
 
-    // __printer__ function is necessery to support print() info_string() etc (defined by
-    // __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__ macro below)
+    // __printer__ function is necessary to support print() info_string() etc (defined by
+    // __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelpers::ObjectPrinter __printer__() const
     {
         tools::classhelpers::ObjectPrinter printer("SensorCoordinateSystem");
@@ -333,7 +333,7 @@ class SensorCoordinateSystem
     // define to_binary and from_binary functions (needs the serialize function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorCoordinateSystem)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
+    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace navigation

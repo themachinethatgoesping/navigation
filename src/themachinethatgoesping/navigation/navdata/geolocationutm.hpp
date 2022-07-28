@@ -96,7 +96,7 @@ struct GeoLocationUTM : public GeoLocationLocal
     }
 
     /**
-     * @brief Convert a utm geolocationlatlon to a unprojected location
+     * @brief Convert a utm geolocationlatlon to an unprojected location
      *
      * @param location_utm
      * @return GeoLocationLatLon
@@ -120,7 +120,7 @@ struct GeoLocationUTM : public GeoLocationLocal
      * @brief Construct convert a GeoLocationLatLon Object to UTM
      *
      * @param location valid GeoLocationLatLon object
-     * @param setzone set a prefered UTM zone negative means automatic, zero means UPS, positive
+     * @param setzone set a preferred UTM zone negative means automatic, zero means UPS, positive
      * means a particular UTM zone
      * @return GeoLocationUTM
      */
@@ -176,7 +176,7 @@ struct GeoLocationUTM : public GeoLocationLocal
     // define to_binary and from_binary functions (needs the serialize function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationUTM)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
+    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 // backwards conversion
@@ -186,5 +186,5 @@ inline GeoLocationLatLon::GeoLocationLatLon(const GeoLocationUTM& location_utm)
 }
 
 } // namespace navdata
-} // namespace naviation
+} // namespace navigation
 } // namespace themachinethatgoesping

@@ -21,7 +21,7 @@ namespace navdata {
  */
 struct PositionalOffsets
 {
-    double x     = 0.0; ///< in m, positive foorward
+    double x     = 0.0; ///< in m, positive forward
     double y     = 0.0; ///< in m, positive starboard
     double z     = 0.0; ///< in m, positive downwards
     double yaw   = 0.0; ///< in °, 0° is north, 90° is east
@@ -37,7 +37,7 @@ struct PositionalOffsets
     /**
      * @brief Construct a new PositionalOffsets object
      *
-     * @param x in m, positive foorward
+     * @param x in m, positive forward
      * @param y in m, positive starboard
      * @param z in m, positive downwards
      * @param yaw in °, 0° is north, 90° is east
@@ -102,7 +102,7 @@ struct PositionalOffsets
     // define to_binary and from_binary functions (needs the serialize function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(PositionalOffsets)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
+    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace navdata

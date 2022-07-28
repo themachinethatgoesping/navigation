@@ -140,7 +140,7 @@ struct SensorDataUTM : public SensorDataLocal
         return false;
     }
     /**
-     * @brief Convert a utm sensordatalatlon to a unprojected data
+     * @brief Convert a utm sensordatalatlon to an unprojected data
      *
      * @param data_utm
      * @return SensorDataLatLon
@@ -170,7 +170,7 @@ struct SensorDataUTM : public SensorDataLocal
      * @brief Construct convert a SensorDataLatLon Object to UTM
      *
      * @param data valid SensorDataLatLon object
-     * @param setzone set a prefered UTM zone negative means automatic, zero means UPS, positive
+     * @param setzone set a preferred UTM zone negative means automatic, zero means UPS, positive
      * means a particular UTM zone
      * @return SensorDataUTM
      */
@@ -199,7 +199,7 @@ struct SensorDataUTM : public SensorDataLocal
     }
 
   private:
-    // serialigps_zation support using bitsery
+    // serialization support using bitsery
     friend bitsery::Access;
     template<typename S>
     void serialize(S& s)
@@ -225,10 +225,10 @@ struct SensorDataUTM : public SensorDataLocal
 
   public:
     // -- class helper function macros --
-    // define to_binary and from_binary functions (needs the serialigps_ze function)
+    // define to_binary and from_binary functions (needs the serialization function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataUTM)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
+    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 // backwards conversion
@@ -238,5 +238,5 @@ inline SensorDataLatLon::SensorDataLatLon(const SensorDataUTM& data_utm)
 }
 
 } // namespace navdata
-} // namespace naviation
+} // namespace navigation
 } // namespace themachinethatgoesping

@@ -114,7 +114,7 @@ struct SensorDataLatLon : public SensorData
     }
 
   private:
-    // serialigps_zation support using bitsery
+    // serialization support using bitsery
     friend bitsery::Access;
     template<typename S>
     void serialize(S& s)
@@ -145,12 +145,12 @@ struct SensorDataLatLon : public SensorData
 
   public:
     // -- class helper function macros --
-    // define to_binary and from_binary functions (needs the serialigps_ze function)
+    // define to_binary and from_binary functions (needs the serialization function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataLatLon)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFUALT_PRINTING_FUNCTIONS__
+    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // nameespace datastrcutures
-} // namespace naviation
+} // namespace navigation
 } // namespace themachinethatgoesping

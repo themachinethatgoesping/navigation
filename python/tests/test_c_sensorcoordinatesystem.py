@@ -20,7 +20,7 @@ class TestNavigationSensorCoordinateSystem:
         """test common, simple functions"""
         data = nav.navdata.SensorDataLatLon(53, 10, 3, 4, 10, 11, 20, 30)
 
-        # initialze
+        # initialize
         scs = nav.SensorCoordinateSystem()
 
         # register target
