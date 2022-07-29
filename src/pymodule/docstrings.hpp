@@ -23,6 +23,200 @@
 #endif
 
 
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator =
+R"doc(The NavInterpolator class: Interpolate navigation and motion
+information and transform the values using the vessel class)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Latlon_set = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Linear_Interpolator_Depth = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Linear_Interpolator_Heave = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Linear_Interpolator_Lat = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Linear_Interpolator_Lon = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Linear_Interpolator_X = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Linear_Interpolator_Y = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_NavigationInterpolator = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Slerp_Interpolator_Heading = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_Slerp_Interpolator_RPY = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_checkX = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_first_lat_time = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_compassOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_depthSensorOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_miscInterpolatorValue = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_motionSensorOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_positionSystemOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_rotationPoint = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_sensor_configurationDepth =
+R"doc(get_sensor_configurationDepth: Get the depth of the vessel including
+depth sensor values and heave including motion correction)
+
+Parameter ``timestamp:``:
+    UnixTimeStamp for the navigation interpolation
+
+Returns:
+    depth of the vessel point)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_sensor_configurationQuat = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_sensor_configurationYPR = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_sensor_configuration_at = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_targetDepth =
+R"doc(get_targetDepth: Get the depth of the target including depth sensor
+values and heave including motion correction)
+
+Parameter ``key:``:
+    Name of the target
+
+Parameter ``timestamp:``:
+    UnixTimeStamp for the navigation interpolation
+
+Returns:
+    return depth (world coordinates))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_targetLatLon =
+R"doc(get_targetLatLon: Get the lat lon position of the target using all
+offsets and the position from the position system
+
+Parameter ``key:``:
+    Name of the target
+
+Parameter ``timestamp:``:
+    UnixTimeStamp for the navigation interpolation
+
+Returns:
+    return latitude and longitude of the target in °)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_targetOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_targetPosSysDistanceAndAzimuth =
+R"doc(get_targetPosSysDistanceAndAzimuth: Get the target distance and
+azimuth (0° Noth, 90° East) of the Position system towards the target
+
+Parameter ``key:``:
+    Name of the target
+
+Parameter ``timestamp:``:
+    UnixTimeStamp for the navigation interpolation
+
+Parameter ``radians:``:
+    if true will output heading as radians (otherwise degrees)
+
+Returns:
+    return distance,azimuth (0° Noth, 90° East) coordinates in
+    meters,° (relative to the position system, includtion motion and
+    depth corrections))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_targetXY =
+R"doc(get_targetXY: Get the depth of the target including depth sensor
+values and heave including motion correction)
+
+Parameter ``key:``:
+    Name of the target
+
+Parameter ``timestamp:``:
+    UnixTimeStamp for the navigation interpolation
+
+Parameter ``use_sensor_configurationXY:``:
+    Include the _X and _Y coordinates from the vessel (or not)
+
+Returns:
+    return x,y coordinates in meters (x=northing,y=easting) (relative
+    to _X,_Y from position system, includtion motion and depth
+    corrections))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_targetYPR = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_targetYPR_as_Quat = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_updated_sensor_configurationAt = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_use_motionSensorYaw = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_valuesLatLon = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_last_lat_time = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_last_timestamp = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_print = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_sensor_configuration = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_compassHeading = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_compassOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_compassOffsets_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_depthSensorDepth = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_depthSensorOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_depthSensorOffsets_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_extrapolation_mode = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_heaveSensorHeave = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_miscInterpolatorValue = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_motionSensorOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_motionSensorOffsets_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_motionSensorPR = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_motionSensorYPR = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_positionSystemLatLon = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_positionSystemOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_positionSystemOffsets_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_positionSystemXY = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_rotationPoint = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_rotationPointZ = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_sensor_configuration = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_sensor_configurationPointWaterlineOffset = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_targetOffsets = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_targetOffsets_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_use_motionSensorYaw = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_sortX = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_str = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_update_sensor_configuration = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_use_motionSensorYaw = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration =
 R"doc(A coordinate system that allows for specifying sensor offsets (e.g.
 gps antenna and motion sensor) and target offsets (e.g. MBES). Call
