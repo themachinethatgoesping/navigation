@@ -8,7 +8,7 @@ headerdir = projectnamespace + '/navigation'
 
 # -- source files --
 sources = [
-  'sensorcoordinatesystem.cpp'
+  'sensorconfiguration.cpp'
 ]
 
 headers = [
@@ -21,7 +21,7 @@ headers = [
   'datastructures/sensordatalatlon.hpp',
   'datastructures/sensordatautm.hpp',
   'datastructures/sensordatalocal.hpp',
-  'sensorcoordinatesystem.hpp',
+  'sensorconfiguration.hpp',
   'navtools.hpp'
 ]
 

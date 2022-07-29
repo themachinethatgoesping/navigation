@@ -7,7 +7,7 @@
 #include <filesystem>
 
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include "../themachinethatgoesping/navigation/sensorcoordinatesystem.hpp"
+#include "../themachinethatgoesping/navigation/sensorconfiguration.hpp"
 
 // using namespace testing;
 using namespace std;
@@ -15,10 +15,10 @@ using namespace themachinethatgoesping::navigation;
 
 #define TESTTAG "[offsets]"
 
-TEST_CASE("sensorcoordinatesystem should support common functions", TESTTAG)
+TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
 {
     // initialize coordinate system with one target
-    SensorCoordinateSystem     scs;
+    SensorConfiguration     scs;
     datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
     scs.add_target("mbes", targetOffsets);
     scs.set_position_system_offsets(10, 20, 30);
@@ -27,7 +27,7 @@ TEST_CASE("sensorcoordinatesystem should support common functions", TESTTAG)
     scs.set_depth_sensor_offsets(4, 5, -6);
 
     // copy constructor
-    SensorCoordinateSystem scs2(scs);
+    SensorConfiguration scs2(scs);
 
     // eq operator
     REQUIRE(scs == scs2);
@@ -44,12 +44,12 @@ TEST_CASE("sensorcoordinatesystem should support common functions", TESTTAG)
 
     // serialization
     auto buffer = scs.to_binary();
-    auto scs3   = SensorCoordinateSystem::from_binary(buffer);
+    auto scs3   = SensorConfiguration::from_binary(buffer);
     REQUIRE(scs == scs3);
 }
 
 TEST_CASE(
-    "sensorcoordinatesystem should reproduce precomputed rotations when settings sensor offsets",
+    "sensorconfiguration should reproduce precomputed rotations when settings sensor offsets",
     TESTTAG)
 {
     // initialize offsets
@@ -57,7 +57,7 @@ TEST_CASE(
 
     SECTION("test depth sensor offsets")
     {
-        SensorCoordinateSystem scs;
+        SensorConfiguration scs;
         scs.add_target("mbes", targetOffsets);
         scs.set_depth_sensor_offsets(0, 0, 10);
 
@@ -66,7 +66,7 @@ TEST_CASE(
 
     SECTION("test imu sensor offsets")
     {
-        SensorCoordinateSystem scs;
+        SensorConfiguration scs;
         scs.add_target("mbes", targetOffsets);
 
         datastructures::SensorDataLocal sensor_data;
@@ -100,10 +100,10 @@ TEST_CASE(
     }
 }
 
-TEST_CASE("sensorcoordinatesystem should reproduce precomputed rotations", TESTTAG)
+TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 {
     // initialize offsets
-    SensorCoordinateSystem     scs;
+    SensorConfiguration     scs;
     datastructures::PositionalOffsets targetOffsets1(1, 2, 3, 0, 0, 0);
     datastructures::PositionalOffsets targetOffsets2(1, 2, 3, 45, 5, 10);
 

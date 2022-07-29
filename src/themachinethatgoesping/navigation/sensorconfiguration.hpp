@@ -32,7 +32,7 @@ namespace navigation {
  * data to derive the geolocation and attitude of the specified targets
  *
  */
-class SensorCoordinateSystem
+class SensorConfiguration
 {
     std::unordered_map<std::string, datastructures::PositionalOffsets>
         _target_offsets; /// TargetId (position in vector) for each registered target_id
@@ -55,7 +55,7 @@ class SensorCoordinateSystem
      * Then compute target positions for sensor data
      *
      */
-    SensorCoordinateSystem() = default;
+    SensorConfiguration() = default;
 
     // ----- compute_target_position -----
     /**
@@ -279,7 +279,7 @@ class SensorCoordinateSystem
     }
 
   public:
-    bool operator==(const SensorCoordinateSystem& other) const
+    bool operator==(const SensorConfiguration& other) const
     {
 
         for (const auto& [target_id, target_offsets] : _target_offsets)
@@ -299,13 +299,13 @@ class SensorCoordinateSystem
                _position_system_offsets == other._position_system_offsets &&
                _depth_sensor_offsets == other._depth_sensor_offsets;
     }
-    bool operator!=(const SensorCoordinateSystem& other) const { return !(*this == other); }
+    bool operator!=(const SensorConfiguration& other) const { return !(*this == other); }
 
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelpers::ObjectPrinter __printer__() const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorCoordinateSystem");
+        tools::classhelpers::ObjectPrinter printer("SensorConfiguration");
 
         for (const auto& [target_id, target_offsets] : _target_offsets)
         {
@@ -331,7 +331,7 @@ class SensorCoordinateSystem
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorCoordinateSystem)
+    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorConfiguration)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };

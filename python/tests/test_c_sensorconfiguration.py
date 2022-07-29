@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-""" tests for the SensorCoordinateSystem class
+""" tests for the SensorConfiguration class
 """
 
 # import time
@@ -13,15 +13,15 @@ from pytest import approx
 import themachinethatgoesping.navigation as nav
 
 
-class TestNavigationSensorCoordinateSystem:
+class TestNavigationSensorConfiguration:
     """class for grouping (test sections)"""
 
-    def test_sensorcoordinatesystem_should_support_common_functions(self):
+    def test_sensorconfiguration_should_support_common_functions(self):
         """test common, simple functions"""
         data = nav.datastructures.SensorDataLatLon(53, 10, 3, 4, 10, 11, 20, 30)
 
         # initialize
-        scs = nav.SensorCoordinateSystem()
+        scs = nav.SensorConfiguration()
 
         # register target
         scs.add_target(
@@ -59,7 +59,7 @@ class TestNavigationSensorCoordinateSystem:
         assert scs2 != scs
 
         # binary
-        assert scs == nav.SensorCoordinateSystem.from_binary(scs.to_binary())
+        assert scs == nav.SensorConfiguration.from_binary(scs.to_binary())
 
         # print
         print(scs)

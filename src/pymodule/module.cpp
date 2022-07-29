@@ -9,7 +9,7 @@
 
 // declare modules
 void init_m_navtools(pybind11::module& m);          // m_navtools.cpp
-void init_c_sensorcoordinatesystem(pybind11::module& m); // c_sensorcoordinatesystem.cpp
+void init_c_sensorconfiguration(pybind11::module& m); // c_sensorconfiguration.cpp
 
 PYBIND11_MODULE(PYTHON_LIB, m)
 {
@@ -19,5 +19,5 @@ PYBIND11_MODULE(PYTHON_LIB, m)
 
     init_m_navtools(m);
     init_m_datastructures(m);
-    init_c_sensorcoordinatesystem(m);
+    init_c_sensorconfiguration(m);
 }

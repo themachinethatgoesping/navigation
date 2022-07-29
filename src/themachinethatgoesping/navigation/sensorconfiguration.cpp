@@ -3,14 +3,14 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-#include "sensorcoordinatesystem.hpp"
+#include "sensorconfiguration.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 
 // ----- compute_target_position -----
 
-datastructures::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
+datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
     const std::string&         target_id,
     const datastructures::SensorData& sensor_data) const
 {
@@ -53,7 +53,7 @@ datastructures::GeoLocationLocal SensorCoordinateSystem::compute_target_position
     return location;
 }
 
-datastructures::GeoLocationLocal SensorCoordinateSystem::compute_target_position(
+datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
     const std::string&              target_id,
     const datastructures::SensorDataLocal& sensor_data) const
 {
@@ -66,7 +66,7 @@ datastructures::GeoLocationLocal SensorCoordinateSystem::compute_target_position
     return position;
 }
 
-datastructures::GeoLocationUTM SensorCoordinateSystem::compute_target_position(
+datastructures::GeoLocationUTM SensorConfiguration::compute_target_position(
     const std::string&            target_id,
     const datastructures::SensorDataUTM& sensor_data) const
 {
@@ -76,7 +76,7 @@ datastructures::GeoLocationUTM SensorCoordinateSystem::compute_target_position(
         position, sensor_data.gps_zone, sensor_data.gps_northern_hemisphere);
 }
 
-datastructures::GeoLocationLatLon SensorCoordinateSystem::compute_target_position(
+datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
     const std::string&               target_id,
     const datastructures::SensorDataLatLon& sensor_data) const
 {
@@ -122,19 +122,19 @@ datastructures::GeoLocationLatLon SensorCoordinateSystem::compute_target_positio
 }
 
 // ----- get/set target offsets -----
-const datastructures::PositionalOffsets& SensorCoordinateSystem::get_target_offsets(
+const datastructures::PositionalOffsets& SensorConfiguration::get_target_offsets(
     const std::string& target_id) const
 {
     return _target_offsets.at(target_id); // throws std::out_of_range if not found
 }
 
-void SensorCoordinateSystem::add_target(const std::string&                target_id,
+void SensorConfiguration::add_target(const std::string&                target_id,
                                              const datastructures::PositionalOffsets& target_offsets)
 {
     _target_offsets[target_id] = target_offsets;
 }
 
-void SensorCoordinateSystem::add_target(const std::string& target_id,
+void SensorConfiguration::add_target(const std::string& target_id,
                                              double             x,
                                              double             y,
                                              double             z,
@@ -146,63 +146,63 @@ void SensorCoordinateSystem::add_target(const std::string& target_id,
 }
 
 // ----- get/set sensor offsets -----
-void SensorCoordinateSystem::set_motion_sensor_offsets(double yaw, double pitch, double roll)
+void SensorConfiguration::set_motion_sensor_offsets(double yaw, double pitch, double roll)
 {
     _motion_sensor_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
 }
-void SensorCoordinateSystem::set_motion_sensor_offsets(
+void SensorConfiguration::set_motion_sensor_offsets(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
     _motion_sensor_offsets = sensor_offsets;
 }
 
-datastructures::PositionalOffsets SensorCoordinateSystem::get_motion_sensor_offsets() const
+datastructures::PositionalOffsets SensorConfiguration::get_motion_sensor_offsets() const
 {
     return _motion_sensor_offsets;
 }
 
-void SensorCoordinateSystem::set_compass_offsets(double yaw)
+void SensorConfiguration::set_compass_offsets(double yaw)
 {
     _compass_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
-void SensorCoordinateSystem::set_compass_offsets(const datastructures::PositionalOffsets& sensor_offsets)
+void SensorConfiguration::set_compass_offsets(const datastructures::PositionalOffsets& sensor_offsets)
 {
     _compass_offsets = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorCoordinateSystem::get_compass_offsets() const
+datastructures::PositionalOffsets SensorConfiguration::get_compass_offsets() const
 {
     return _compass_offsets;
 }
 
-void SensorCoordinateSystem::set_depth_sensor_offsets(double x, double y, double z)
+void SensorConfiguration::set_depth_sensor_offsets(double x, double y, double z)
 {
     _depth_sensor_offsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorCoordinateSystem::set_depth_sensor_offsets(const datastructures::PositionalOffsets& sensor_offsets)
+void SensorConfiguration::set_depth_sensor_offsets(const datastructures::PositionalOffsets& sensor_offsets)
 {
     _depth_sensor_offsets = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorCoordinateSystem::get_depth_sensor_offsets() const
+datastructures::PositionalOffsets SensorConfiguration::get_depth_sensor_offsets() const
 {
     return _depth_sensor_offsets;
 }
 
-void SensorCoordinateSystem::set_position_system_offsets(double x, double y, double z)
+void SensorConfiguration::set_position_system_offsets(double x, double y, double z)
 {
     _position_system_offsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorCoordinateSystem::set_position_system_offsets(
+void SensorConfiguration::set_position_system_offsets(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
     _position_system_offsets = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorCoordinateSystem::get_position_system_offsets() const
+datastructures::PositionalOffsets SensorConfiguration::get_position_system_offsets() const
 {
     return _position_system_offsets;
 }
 
 // ----- helper functions -----
-Eigen::Quaterniond SensorCoordinateSystem::get_system_rotation_as_quat(
+Eigen::Quaterniond SensorConfiguration::get_system_rotation_as_quat(
     const datastructures::SensorData&        sensor_data,
     const datastructures::PositionalOffsets& compass_offsets,
     const datastructures::PositionalOffsets& motion_sensor_offsets)
