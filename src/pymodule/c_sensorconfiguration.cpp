@@ -65,94 +65,94 @@ void init_c_sensorconfiguration(py::module& m)
              DOC(themachinethatgoesping, navigation, SensorConfiguration, add_target_2),
              py::arg("target_id"),
              py::arg("target_offsets"))
-        .def("get_target_offsets",
-             &SensorConfiguration::get_target_offsets,
-             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_target_offsets),
+        .def("get_offsets_target",
+             &SensorConfiguration::get_offsets_target,
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_offsets_target),
              py::arg("target_id"))
-        .def("set_motion_sensor_offsets",
+        .def("set_offsets_motion_sensor",
              py::overload_cast<double, double, double>(
-                 &SensorConfiguration::set_motion_sensor_offsets),
+                 &SensorConfiguration::set_offsets_motion_sensor),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_motion_sensor_offsets),
+                 set_offsets_motion_sensor),
              py::arg("yaw"),
              py::arg("pitch"),
              py::arg("roll"))
-        .def("set_motion_sensor_offsets",
+        .def("set_offsets_motion_sensor",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_motion_sensor_offsets),
+                 &SensorConfiguration::set_offsets_motion_sensor),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_motion_sensor_offsets_2),
+                 set_offsets_motion_sensor_2),
              py::arg("sensor_offsets"))
-        .def("get_motion_sensor_offsets",
-             &SensorConfiguration::get_motion_sensor_offsets,
+        .def("get_offsets_motion_sensor",
+             &SensorConfiguration::get_offsets_motion_sensor,
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 get_motion_sensor_offsets))
-        .def("set_compass_offsets",
-             py::overload_cast<double>(&SensorConfiguration::set_compass_offsets),
-             DOC(themachinethatgoesping, navigation, SensorConfiguration, set_compass_offsets),
+                 get_offsets_motion_sensor))
+        .def("set_offsets_compass",
+             py::overload_cast<double>(&SensorConfiguration::set_offsets_compass),
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, set_offsets_compass),
              py::arg("yaw"))
-        .def("set_compass_offsets",
+        .def("set_offsets_compass",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_compass_offsets),
-             DOC(themachinethatgoesping, navigation, SensorConfiguration, set_compass_offsets_2),
+                 &SensorConfiguration::set_offsets_compass),
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, set_offsets_compass_2),
              py::arg("sensor_offsets"))
-        .def("get_compass_offsets",
-             &SensorConfiguration::get_compass_offsets,
-             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_compass_offsets))
-        .def("set_depth_sensor_offsets",
+        .def("get_offsets_compass",
+             &SensorConfiguration::get_offsets_compass,
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_offsets_compass))
+        .def("set_offsets_depth_sensor",
              py::overload_cast<double, double, double>(
-                 &SensorConfiguration::set_depth_sensor_offsets),
+                 &SensorConfiguration::set_offsets_depth_sensor),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_depth_sensor_offsets),
+                 set_offsets_depth_sensor),
              py::arg("x"),
              py::arg("y"),
              py::arg("z"))
-        .def("set_depth_sensor_offsets",
+        .def("set_offsets_depth_sensor",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_depth_sensor_offsets),
+                 &SensorConfiguration::set_offsets_depth_sensor),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_depth_sensor_offsets_2),
+                 set_offsets_depth_sensor_2),
              py::arg("sensor_offsets"))
-        .def("get_depth_sensor_offsets",
-             &SensorConfiguration::get_depth_sensor_offsets,
+        .def("get_offsets_depth_sensor",
+             &SensorConfiguration::get_offsets_depth_sensor,
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 get_depth_sensor_offsets))
-        .def("set_position_system_offsets",
+                 get_offsets_depth_sensor))
+        .def("set_offsets_position_system",
              py::overload_cast<double, double, double>(
-                 &SensorConfiguration::set_position_system_offsets),
+                 &SensorConfiguration::set_offsets_position_system),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_position_system_offsets),
+                 set_offsets_position_system),
              py::arg("x"),
              py::arg("y"),
              py::arg("z"))
-        .def("set_position_system_offsets",
+        .def("set_offsets_position_system",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_position_system_offsets),
+                 &SensorConfiguration::set_offsets_position_system),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_position_system_offsets_2),
+                 set_offsets_position_system_2),
              py::arg("sensor_offsets"))
-        .def("get_position_system_offsets",
-             &SensorConfiguration::get_position_system_offsets,
+        .def("get_offsets_position_system",
+             &SensorConfiguration::get_offsets_position_system,
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 get_position_system_offsets))
+                 get_offsets_position_system))
         .def("__eq__",
              &SensorConfiguration::operator==,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, operator_eq),

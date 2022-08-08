@@ -29,6 +29,10 @@ information and transform the values using the vessel class)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_NavigationInterpolator = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_add_target = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_add_target_2 = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor
 data "sensor_data"
@@ -44,17 +48,51 @@ Returns:
     northing and east, which are set relative to the sensor coordinate
     system center)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_get_sensor_configuration = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_depth = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_depth_2 = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_heading = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_heading_2 = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_heave = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_heave_2 = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_ypr = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_ypr_2 = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_sensor_configuration = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_sensor_configuration_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_depth = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_depth_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_depth_3 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_heading = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_heading_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_heading_3 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_heave = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_pr = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_pr_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_pr_3 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_ypr = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_ypr_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_ypr_3 = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_extrapolation_mode = R"doc()doc";
 
@@ -171,32 +209,41 @@ Returns:
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_depth_sensor_offsets = R"doc(Static x,y,z (installation) Offsets of the PositionSystem)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_compass_offsets =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_compass =
 R"doc(Get the registered compass offsets
 
 Returns:
     const datastructures::PositionalOffsets& offsets of the compass)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_depth_sensor_offsets =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_depth_sensor =
 R"doc(Get the registered depth sensor offsets
 
 Returns:
     const datastructures::PositionalOffsets& offsets of the depth
     sensor)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_motion_sensor_offsets =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_motion_sensor =
 R"doc(Get the motion sensor offsets
 
 Returns:
     const datastructures::PositionalOffsets& offsets of the motion
     sensor)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_position_system_offsets =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_position_system =
 R"doc(Get the registered position system offsets
 
 Returns:
     const datastructures::PositionalOffsets& offsets of the position
     system)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_target =
+R"doc(Get stored target offsets of a specified target
+
+Parameter ``target_id``:
+    name of the registered target
+
+Returns:
+    const datastructures::PositionalOffsets& offsets of the target)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_system_rotation_as_quat =
 R"doc(Compute the rotation of the sensor coordinate system (relative to the
@@ -223,15 +270,6 @@ Returns:
     Eigen::Quaterniond Rotation of the sensor system compared to the
     world reference system)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_target_offsets =
-R"doc(Get stored target offsets of a specified target
-
-Parameter ``target_id``:
-    name of the registered target
-
-Returns:
-    const datastructures::PositionalOffsets& offsets of the target)doc";
-
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_motion_sensor_offsets = R"doc(TargetId (position in vector) for each registered target_id)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_operator_eq = R"doc()doc";
@@ -244,20 +282,20 @@ static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_p
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_serialize = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_compass_offsets =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_compass =
 R"doc(Set the compass offsets
 
 Parameter ``yaw``:
     yaw offset of the compass (right-handed around the z-axis) (in
     degrees, 90° = east))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_compass_offsets_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_compass_2 =
 R"doc(Set the compass offsets
 
 Parameter ``sensor_offsets``:
     offsets structure (only yaw is used))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_depth_sensor_offsets =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_depth_sensor =
 R"doc(Set the depth sensor offsets
 
 Parameter ``x``:
@@ -269,19 +307,19 @@ Parameter ``y``:
 Parameter ``z``:
     z-offset of the depth sensor (in meters, positive down))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_depth_sensor_offsets_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_depth_sensor_2 =
 R"doc(Set the depth sensor offsets
 
 Parameter ``sensor_offsets``:
     offsets structure (only x, y and z are used))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_motion_sensor_offsets =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_motion_sensor =
 R"doc(Set the motion sensor offsets
 
 Parameter ``sensor_offsets``:
     offsets structure (only yaw, pitch and roll are used))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_motion_sensor_offsets_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_motion_sensor_2 =
 R"doc(Set the motion sensor offsets
 
 Parameter ``yaw``:
@@ -296,7 +334,7 @@ Parameter ``roll``:
     roll offset of the motion sensor (right-handed around the x-axis)
     (in degrees, positive = port up))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_position_system_offsets =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_position_system =
 R"doc(Set the position system offsets
 
 Parameter ``x``:
@@ -308,7 +346,7 @@ Parameter ``y``:
 Parameter ``z``:
     z-offset of the depth sensor (in meters, positive down))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_position_system_offsets_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_position_system_2 =
 R"doc(Set the position system offsets
 
 Parameter ``sensor_offsets``:

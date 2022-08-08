@@ -29,10 +29,10 @@ class TestNavigationSensorConfiguration:
         )
 
         # add offsets
-        scs.set_compass_offsets(yaw=9)
-        scs.set_depth_sensor_offsets(0, 0, 1)
-        scs.set_position_system_offsets(1, 2, 3)
-        scs.set_motion_sensor_offsets(10, -10, -30)
+        scs.set_offsets_compass(yaw=9)
+        scs.set_offsets_depth_sensor(0, 0, 1)
+        scs.set_offsets_position_system(1, 2, 3)
+        scs.set_offsets_motion_sensor(10, -10, -30)
 
         # get target position
         position = scs.compute_target_position("mbes", data)
@@ -55,7 +55,7 @@ class TestNavigationSensorConfiguration:
         # copy
         scs2 = scs.copy()
         assert scs2 == scs
-        scs.set_compass_offsets(yaw=12)
+        scs.set_offsets_compass(yaw=12)
         assert scs2 != scs
 
         # binary

@@ -21,7 +21,7 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
         get_system_rotation_as_quat(sensor_data, _compass_offsets, _motion_sensor_offsets);
 
     // convert target to quaternion
-    auto target_offsets  = get_target_offsets(target_id);
+    auto target_offsets  = get_offsets_target(target_id);
     auto target_ypr_quat = tools::rotationfunctions::quaternion_from_ypr(
         target_offsets.yaw, target_offsets.pitch, target_offsets.roll);
 
@@ -122,7 +122,7 @@ datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
 }
 
 // ----- get/set target offsets -----
-const datastructures::PositionalOffsets& SensorConfiguration::get_target_offsets(
+const datastructures::PositionalOffsets& SensorConfiguration::get_offsets_target(
     const std::string& target_id) const
 {
     return _target_offsets.at(target_id); // throws std::out_of_range if not found
@@ -146,57 +146,57 @@ void SensorConfiguration::add_target(const std::string& target_id,
 }
 
 // ----- get/set sensor offsets -----
-void SensorConfiguration::set_motion_sensor_offsets(double yaw, double pitch, double roll)
+void SensorConfiguration::set_offsets_motion_sensor(double yaw, double pitch, double roll)
 {
     _motion_sensor_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
 }
-void SensorConfiguration::set_motion_sensor_offsets(
+void SensorConfiguration::set_offsets_motion_sensor(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
     _motion_sensor_offsets = sensor_offsets;
 }
 
-datastructures::PositionalOffsets SensorConfiguration::get_motion_sensor_offsets() const
+datastructures::PositionalOffsets SensorConfiguration::get_offsets_motion_sensor() const
 {
     return _motion_sensor_offsets;
 }
 
-void SensorConfiguration::set_compass_offsets(double yaw)
+void SensorConfiguration::set_offsets_compass(double yaw)
 {
     _compass_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
-void SensorConfiguration::set_compass_offsets(const datastructures::PositionalOffsets& sensor_offsets)
+void SensorConfiguration::set_offsets_compass(const datastructures::PositionalOffsets& sensor_offsets)
 {
     _compass_offsets = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_compass_offsets() const
+datastructures::PositionalOffsets SensorConfiguration::get_offsets_compass() const
 {
     return _compass_offsets;
 }
 
-void SensorConfiguration::set_depth_sensor_offsets(double x, double y, double z)
+void SensorConfiguration::set_offsets_depth_sensor(double x, double y, double z)
 {
     _depth_sensor_offsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorConfiguration::set_depth_sensor_offsets(const datastructures::PositionalOffsets& sensor_offsets)
+void SensorConfiguration::set_offsets_depth_sensor(const datastructures::PositionalOffsets& sensor_offsets)
 {
     _depth_sensor_offsets = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_depth_sensor_offsets() const
+datastructures::PositionalOffsets SensorConfiguration::get_offsets_depth_sensor() const
 {
     return _depth_sensor_offsets;
 }
 
-void SensorConfiguration::set_position_system_offsets(double x, double y, double z)
+void SensorConfiguration::set_offsets_position_system(double x, double y, double z)
 {
     _position_system_offsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorConfiguration::set_position_system_offsets(
+void SensorConfiguration::set_offsets_position_system(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
     _position_system_offsets = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_position_system_offsets() const
+datastructures::PositionalOffsets SensorConfiguration::get_offsets_position_system() const
 {
     return _position_system_offsets;
 }

@@ -21,10 +21,10 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     SensorConfiguration     scs;
     datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
     scs.add_target("mbes", targetOffsets);
-    scs.set_position_system_offsets(10, 20, 30);
-    scs.set_compass_offsets(12);
-    scs.set_motion_sensor_offsets(1, -2, 3);
-    scs.set_depth_sensor_offsets(4, 5, -6);
+    scs.set_offsets_position_system(10, 20, 30);
+    scs.set_offsets_compass(12);
+    scs.set_offsets_motion_sensor(1, -2, 3);
+    scs.set_offsets_depth_sensor(4, 5, -6);
 
     // copy constructor
     SensorConfiguration scs2(scs);
@@ -35,7 +35,7 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     REQUIRE(scs != scs2);
     scs2.add_target("sbes", targetOffsets);
     REQUIRE(scs == scs2);
-    scs.set_position_system_offsets(11, 20, 30);
+    scs.set_offsets_position_system(11, 20, 30);
     REQUIRE(scs != scs2);
 
     // string conversion
@@ -59,7 +59,7 @@ TEST_CASE(
     {
         SensorConfiguration scs;
         scs.add_target("mbes", targetOffsets);
-        scs.set_depth_sensor_offsets(0, 0, 10);
+        scs.set_offsets_depth_sensor(0, 0, 10);
 
         REQUIRE(scs.compute_target_position("mbes", datastructures::SensorDataLocal()).z == -7);
     }
@@ -77,7 +77,7 @@ TEST_CASE(
 
         // imu yaw offset should not influence the resulting yaw because that is influenced only by
         // the compass_heading but imu yaw offset of 90° should swap pitch and roll
-        scs.set_motion_sensor_offsets(90, 0, 0);
+        scs.set_offsets_motion_sensor(90, 0, 0);
         auto position = scs.compute_target_position("mbes", sensor_data);
 
         REQUIRE(position.yaw == Approx(90));
@@ -92,7 +92,7 @@ TEST_CASE(
         CHECK(position.pitch == Approx(10.0));
         REQUIRE(position.roll == Approx(0).scale(1.0));
 
-        scs.set_motion_sensor_offsets(0, 1, 2);
+        scs.set_offsets_motion_sensor(0, 1, 2);
         position = scs.compute_target_position("mbes", sensor_data);
         REQUIRE(position.yaw == Approx(90));
         CHECK(position.pitch == Approx(-0.9902670948));
@@ -121,8 +121,8 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes == expected_result_mbes);
         REQUIRE(position_sbes == expected_result_sbes);
 
-        REQUIRE(scs.get_target_offsets("mbes") == targetOffsets1);
-        REQUIRE(scs.get_target_offsets("sbes") == targetOffsets2);
+        REQUIRE(scs.get_offsets_target("mbes") == targetOffsets1);
+        REQUIRE(scs.get_offsets_target("sbes") == targetOffsets2);
     }
 
     SECTION("SENSOR_VALUES no roll/pitch")
