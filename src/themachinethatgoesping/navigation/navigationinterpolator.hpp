@@ -27,7 +27,7 @@ class NavigationInterpolator
     tools::vectorinterpolators::SlerpInterpolator _interpolator_motion;
     tools::vectorinterpolators::SlerpInterpolator _interpolator_compass;
 
-    // LinearInterpolator for the depth in the world koordinatesystem
+    // LinearInterpolator for the depth in the world coordinate system
     tools::vectorinterpolators::AkimaInterpolator _interpolator_heave;
     tools::vectorinterpolators::AkimaInterpolator _interpolator_depth;
 
@@ -45,6 +45,17 @@ class NavigationInterpolator
   public:
     NavigationInterpolator()          = default;
     virtual ~NavigationInterpolator() = default;
+
+    //----- operators -----
+    bool operator==(const NavigationInterpolator& other) const
+    {
+        return _sensor_configuration == other._sensor_configuration &&
+               _interpolator_motion == other._interpolator_motion &&
+               _interpolator_compass == other._interpolator_compass &&
+               _interpolator_heave == other._interpolator_heave &&
+               _interpolator_depth == other._interpolator_depth;
+    }
+    bool operator!=(const NavigationInterpolator& other) const { return !(*this == other); }
 
     //----- set sensor data -----
     void set_data_depth(const std::vector<double>& unixtime, const std::vector<double>& depth)
@@ -209,12 +220,12 @@ class NavigationInterpolator
             sensor_data.gps_z = _interpolator_depth(timestamp);
 
         if (!_interpolator_heave.empty()) // default is 0.0
-        sensor_data.heave_heave = _interpolator_heave(timestamp);
+            sensor_data.heave_heave = _interpolator_heave(timestamp);
 
-        if (!_interpolator_compass.empty())  // default is NAN (means will not be used)
-        sensor_data.compass_heading = _interpolator_compass.ypr(timestamp)[0];
+        if (!_interpolator_compass.empty()) // default is NAN (means will not be used)
+            sensor_data.compass_heading = _interpolator_compass.ypr(timestamp)[0];
 
-        if (!_interpolator_motion.empty())// default is 0.0. 0.0, 0.0
+        if (!_interpolator_motion.empty()) // default is 0.0. 0.0, 0.0
         {
             auto ypr              = _interpolator_motion.ypr(timestamp);
             sensor_data.imu_yaw   = ypr[0];
@@ -224,6 +235,52 @@ class NavigationInterpolator
 
         return _sensor_configuration.compute_target_position(target_id, sensor_data);
     }
+
+  public:
+    // __printer__ function is necessary to support print() info_string() etc (defined by
+    // __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__ macro below)
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
+    {
+        tools::classhelpers::ObjectPrinter printer("NavigationInterpolator", float_precision);
+
+        printer.register_section("Sensor offset configuration", '*');
+        printer.append(_sensor_configuration.__printer__(float_precision));
+
+        printer.register_section("Motion data", '*');
+        printer.append(_interpolator_motion.__printer__(float_precision), true);
+
+        printer.register_section("Compass data", '*');
+        printer.append(_interpolator_compass.__printer__(float_precision), true);
+
+        printer.register_section("Heave data", '*');
+        printer.append(_interpolator_heave.__printer__(float_precision), true);
+
+        printer.register_section("Depth data", '*');
+        printer.append(_interpolator_depth.__printer__(float_precision), true);
+
+        return printer;
+    }
+
+  private:
+    // serialization support using bitsery
+    friend bitsery::Access;
+    template<typename S>
+    void serialize(S& s)
+    {
+        // data
+        s.object(_sensor_configuration);
+        s.object(_interpolator_motion);
+        s.object(_interpolator_compass);
+        s.object(_interpolator_heave);
+        s.object(_interpolator_depth);
+    }
+
+  public:
+    // -- class helper function macros --
+    // define to_binary and from_binary functions (needs the serialize function)
+    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NavigationInterpolator)
+    // define info_string and print functions (needs the __printer__ function)
+    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace navigation

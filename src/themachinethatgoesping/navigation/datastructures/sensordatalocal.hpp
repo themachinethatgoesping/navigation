@@ -108,14 +108,14 @@ struct SensorDataLocal : public SensorData
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorDataLocal");
+        tools::classhelpers::ObjectPrinter printer("SensorDataLocal", float_precision);
 
         printer.register_value("gps_northing", gps_northing, "positive northwards, m");
         printer.register_value("gps_easting", gps_easting, "positive eastwards, m");
 
-        printer.append(SensorData::__printer__());
+        printer.append(SensorData::__printer__(float_precision));
 
         return printer;
     }

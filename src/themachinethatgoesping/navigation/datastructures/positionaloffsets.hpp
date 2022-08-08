@@ -83,9 +83,9 @@ struct PositionalOffsets
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("PositionalOffsets");
+        tools::classhelpers::ObjectPrinter printer("PositionalOffsets", float_precision);
 
         printer.register_value("x", x, "positive forwards, m");
         printer.register_value("y", y, "positive starboard, m");

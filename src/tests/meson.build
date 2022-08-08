@@ -16,7 +16,8 @@ sources = [
     'datastructures/sensordatalatlon.test.cpp',
     'datastructures/sensordatautm.test.cpp',
     'datastructures/sensordatalocal.test.cpp',
-    'sensorconfiguration.test.cpp'
+    'sensorconfiguration.test.cpp',
+    'navigationinterpolator.test.cpp'
 ]
 
 foreach source : sources

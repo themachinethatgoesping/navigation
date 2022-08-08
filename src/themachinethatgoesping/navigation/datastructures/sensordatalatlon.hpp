@@ -22,7 +22,7 @@ namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
-// foorwad declarations for location conversions
+// forward declarations for location conversions
 struct SensorDataUTM; // defined in sensordatautm.hpp
 
 /**
@@ -125,9 +125,9 @@ struct SensorDataLatLon : public SensorData
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorDataLatLon");
+        tools::classhelpers::ObjectPrinter printer("SensorDataLatLon", float_precision);
 
         printer.register_string(
             "gps_latitude",
@@ -138,7 +138,7 @@ struct SensorDataLatLon : public SensorData
             navtools::longitude_to_string(gps_longitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
 
-        printer.append(SensorData::__printer__());
+        printer.append(SensorData::__printer__(float_precision));
 
         return printer;
     }
@@ -151,6 +151,6 @@ struct SensorDataLatLon : public SensorData
     __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-} // nameespace datastrcutures
+} // namespace datastructures
 } // namespace navigation
 } // namespace themachinethatgoesping

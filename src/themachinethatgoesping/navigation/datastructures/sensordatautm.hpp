@@ -210,11 +210,11 @@ struct SensorDataUTM : public SensorDataLocal
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorDataUTM");
+        tools::classhelpers::ObjectPrinter printer("SensorDataUTM", float_precision);
 
-        auto base_printer = SensorDataLocal::__printer__();
+        auto base_printer = SensorDataLocal::__printer__(float_precision);
         base_printer.remove_sections();
         printer.append(base_printer);
         printer.register_value("gps_zone", gps_zone, "", 2);

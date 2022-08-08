@@ -22,7 +22,7 @@ namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
-// foorwad declarations for location conversions
+// forward declarations for location conversions
 struct GeoLocationUTM; // defined in geolocationutm.hpp
 
 /**
@@ -119,9 +119,9 @@ struct GeoLocationLatLon : public GeoLocation
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("GeoLocationLatLon");
+        tools::classhelpers::ObjectPrinter printer("GeoLocationLatLon", float_precision);
 
         printer.register_string(
             "latitude",
@@ -132,7 +132,7 @@ struct GeoLocationLatLon : public GeoLocation
             navtools::longitude_to_string(longitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
 
-        printer.append(GeoLocation::__printer__());
+        printer.append(GeoLocation::__printer__(float_precision));
 
         return printer;
     }

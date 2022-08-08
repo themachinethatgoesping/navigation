@@ -64,9 +64,17 @@ static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolato
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_motion_2 = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_operator_eq = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_operator_ne = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_printer = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_sensor_configuration = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_sensor_configuration_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_compass = R"doc()doc";
 

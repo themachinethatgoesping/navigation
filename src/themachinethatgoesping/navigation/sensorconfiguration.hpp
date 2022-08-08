@@ -303,27 +303,27 @@ class SensorConfiguration
 
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__ macro below)
-    tools::classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorConfiguration");
+        tools::classhelpers::ObjectPrinter printer("SensorConfiguration", float_precision);
 
         for (const auto& [target_id, target_offsets] : _target_offsets)
         {
             printer.register_section("Target offsets \"" + target_id + "\"");
-            printer.append(target_offsets.__printer__());
+            printer.append(target_offsets.__printer__(float_precision));
         }
 
         printer.register_section("Motion sensor offsets");
-        printer.append(_motion_sensor_offsets.__printer__());
+        printer.append(_motion_sensor_offsets.__printer__(float_precision));
 
         printer.register_section("Compass offsets");
-        printer.append(_compass_offsets.__printer__());
+        printer.append(_compass_offsets.__printer__(float_precision));
 
         printer.register_section("Position system offsets");
-        printer.append(_position_system_offsets.__printer__());
+        printer.append(_position_system_offsets.__printer__(float_precision));
 
         printer.register_section("Depth sensor offsets");
-        printer.append(_depth_sensor_offsets.__printer__());
+        printer.append(_depth_sensor_offsets.__printer__(float_precision));
 
         return printer;
     }

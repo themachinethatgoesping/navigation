@@ -104,9 +104,9 @@ struct SensorData
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorData");
+        tools::classhelpers::ObjectPrinter printer("SensorData", float_precision);
 
         printer.register_value("gps_z", gps_z, "positive downwards, m");
         printer.register_value("heave_heave", heave_heave, "positive upwards, m");
@@ -135,6 +135,6 @@ struct SensorData
     __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-} // nameespace datastrcutures
+} // namespace datastructures
 } // namespace navigation
 } // namespace themachinethatgoesping

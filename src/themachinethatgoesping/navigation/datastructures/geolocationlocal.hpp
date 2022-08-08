@@ -93,14 +93,14 @@ struct GeoLocationLocal : public GeoLocation
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__() const
+    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("GeoLocationLocal");
+        tools::classhelpers::ObjectPrinter printer("GeoLocationLocal", float_precision);
 
         printer.register_value("northing", northing, "positive northwards, m");
         printer.register_value("easting", easting, "positive eastwards, m");
 
-        printer.append(GeoLocation::__printer__());
+        printer.append(GeoLocation::__printer__(float_precision));
 
         return printer;
     }
@@ -113,6 +113,6 @@ struct GeoLocationLocal : public GeoLocation
     __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-} // namespace datastrcutures
+} // namespace datastructures
 } // namespace navigation
 } // namespace themachinethatgoesping
