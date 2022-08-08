@@ -47,4 +47,12 @@ void init_m_navtools(py::module& m)
                 py::arg("longitude"),
                 py::arg("format")     = t_latlon_format::minutes,
                 py::arg("precision") = 6);
+
+    //----- utm conversion -----
+    // m_navtools.det("utm_to_latlon", py::overload_cast<const std::vector<double>&, const std::vector<double>&, int, bool>(&utm_to_latlon),
+    //             DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
+    //             py::arg("northing"),
+    //             py::arg("easting") ,
+    //             py::arg("zone") ,
+    //             py::arg("northern_hemisphere"));
 }

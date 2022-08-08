@@ -7,7 +7,7 @@
 #include <filesystem>
 
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include "../themachinethatgoesping/navigation/navigationinterpolator.hpp"
+#include "../themachinethatgoesping/navigation/navigationinterpolatorlatlon.hpp"
 
 // using namespace testing;
 using namespace std;
@@ -15,10 +15,10 @@ using namespace themachinethatgoesping::navigation;
 
 #define TESTTAG "[offsets]"
 
-TEST_CASE("navigationinterpolator should support common functions", TESTTAG)
+TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTAG)
 {
     // // initialize coordinate system with one target
-    NavigationInterpolator            navint;
+    NavigationInterpolatorLatLon            navint;
     datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
     navint.add_target("mbes", targetOffsets);
     navint.set_data_depth({ 0, 1, 2, 3 }, { 10, -10, -11, 9 }, 0, 0, 1);
@@ -26,9 +26,11 @@ TEST_CASE("navigationinterpolator should support common functions", TESTTAG)
     navint.set_data_compass({ 0.5, 6 }, { 10, 20 });
     navint.set_data_motion_sensor(
         { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, { 2, -3, -4, 2 }, 1, -2, 3);
+    navint.set_data_position_system(
+        { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, 10,-10,5);
 
     // copy constructor
-    NavigationInterpolator navint2(navint);
+    NavigationInterpolatorLatLon navint2(navint);
 
     // eq operator
     REQUIRE(navint == navint2);
@@ -46,17 +48,20 @@ TEST_CASE("navigationinterpolator should support common functions", TESTTAG)
 
     // serialization
     auto buffer  = navint.to_binary();
-    auto navint3 = NavigationInterpolator::from_binary(buffer);
+    auto navint3 = NavigationInterpolatorLatLon::from_binary(buffer);
     REQUIRE(navint == navint3);
 
     // compute a target position
-    datastructures::GeoLocationLocal expected_position(
-        -6.1504901054, -22.3747281527, -7.3232973266, 11.0909090909, 0.7830655476, -6.1148918992);
+    datastructures::GeoLocationLatLon expected_position(
+        -10.7631, -1.16473, -7.3232973266, 11.0909090909, 0.7830655476, -6.1148918992);
     auto target_position_mbes = navint.compute_target_position("mbes", 1.1);
     auto target_position_sbes = navint.compute_target_position("sbes", 1.1);
 
-    expected_position_sbes.print(std::cerr, 6);
-    target_position_sbes.print(std::cerr, 10);
+    expected_position.print(std::cerr, 7);
+    target_position_mbes.print(std::cerr, 7);
+    target_position_sbes.print(std::cerr, 7);
+    std::cerr << target_position_mbes.latitude << std::endl;
+    std::cerr << target_position_mbes.longitude << std::endl;
 
     REQUIRE(target_position_mbes == expected_position);
     REQUIRE(target_position_sbes == expected_position);

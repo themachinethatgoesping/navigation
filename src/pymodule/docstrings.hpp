@@ -27,6 +27,51 @@ static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolato
 R"doc(The NavInterpolator class: Interpolate navigation and motion
 information and transform the values using the vessel class)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal =
+R"doc(The NavInterpolator class: Interpolate navigation and motion
+information and transform the values using the vessel class)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_NavigationInterpolatorLocal = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_compute_target_position =
+R"doc(Compute the position of the target "target_id" based on the sensor
+data "sensor_data"
+
+Parameter ``target_id``:
+    name of the target (e.g. "MBES")
+
+Parameter ``sensor_data``:
+    SensorData / this structure includes no coordinate information
+
+Returns:
+    datastructures::GeoLocationLocal / this structure includes
+    northing and east, which are set relative to the sensor coordinate
+    system center)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_interpolator_easting = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_interpolator_easting_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_interpolator_northing = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_interpolator_northing_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_operator_eq = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_operator_ne = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_serialize = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_set_data_position_system = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_set_data_position_system_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_set_data_position_system_3 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_set_extrapolation_mode = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_NavigationInterpolator = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_add_target = R"doc()doc";

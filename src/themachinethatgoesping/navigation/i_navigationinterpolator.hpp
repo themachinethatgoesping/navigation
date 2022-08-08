@@ -19,8 +19,9 @@ namespace navigation {
  * @brief The NavInterpolator class: Interpolate navigation and motion information and transform the
  * values using the vessel class
  */
-class NavigationInterpolator
+class I_NavigationInterpolator
 {
+  protected:
     SensorConfiguration _sensor_configuration;
 
     // SlerpInterpolator that stores unixtime, roll, pitch, yaw -> Motion of Vessel on the Water
@@ -43,11 +44,15 @@ class NavigationInterpolator
     }
 
   public:
-    NavigationInterpolator()          = default;
-    virtual ~NavigationInterpolator() = default;
+    I_NavigationInterpolator(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
+                               tools::vectorinterpolators::t_extr_mode::extrapolate)
+    {
+        set_extrapolation_mode(extrapolation_mode);
+    }
+    virtual ~I_NavigationInterpolator() = default;
 
     //----- operators -----
-    bool operator==(const NavigationInterpolator& other) const
+    bool operator==(const I_NavigationInterpolator& other) const
     {
         return _sensor_configuration == other._sensor_configuration &&
                _interpolator_motion == other._interpolator_motion &&
@@ -55,7 +60,7 @@ class NavigationInterpolator
                _interpolator_heave == other._interpolator_heave &&
                _interpolator_depth == other._interpolator_depth;
     }
-    bool operator!=(const NavigationInterpolator& other) const { return !(*this == other); }
+    bool operator!=(const I_NavigationInterpolator& other) const { return !(*this == other); }
 
     //----- set sensor data -----
     void set_data_depth(const std::vector<double>& unixtime, const std::vector<double>& depth)
@@ -203,45 +208,13 @@ class NavigationInterpolator
 
     SensorConfiguration& sensor_configuration() { return _sensor_configuration; }
 
-    //------------------------------------- get vessel position -----------------------------------
-    /**
-     * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
-     *
-     * @param target_id name of the target (e.g. "MBES")
-     * @param sensor_data SensorData / this structure includes no coordinate information
-     * @return datastructures::GeoLocationLocal  / this structure includes northing and east, which
-     * are set relative to the sensor coordinate system center
-     */
-    datastructures::GeoLocationLocal compute_target_position(const std::string& target_id,
-                                                             double             timestamp)
-    {
-        datastructures::SensorData sensor_data;
-        if (!_interpolator_depth.empty()) // default is 0.0
-            sensor_data.gps_z = _interpolator_depth(timestamp);
-
-        if (!_interpolator_heave.empty()) // default is 0.0
-            sensor_data.heave_heave = _interpolator_heave(timestamp);
-
-        if (!_interpolator_compass.empty()) // default is NAN (means will not be used)
-            sensor_data.compass_heading = _interpolator_compass.ypr(timestamp)[0];
-
-        if (!_interpolator_motion.empty()) // default is 0.0. 0.0, 0.0
-        {
-            auto ypr              = _interpolator_motion.ypr(timestamp);
-            sensor_data.imu_yaw   = ypr[0];
-            sensor_data.imu_pitch = ypr[1];
-            sensor_data.imu_roll  = ypr[2];
-        }
-
-        return _sensor_configuration.compute_target_position(target_id, sensor_data);
-    }
 
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("NavigationInterpolator", float_precision);
+        tools::classhelpers::ObjectPrinter printer("I_NavigationInterpolator", float_precision);
 
         printer.register_section("Sensor offset configuration", '*');
         printer.append(_sensor_configuration.__printer__(float_precision));
@@ -278,7 +251,7 @@ class NavigationInterpolator
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NavigationInterpolator)
+    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(I_NavigationInterpolator)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
 };
