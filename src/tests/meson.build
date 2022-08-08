@@ -21,6 +21,7 @@ sources = [
 
 foreach source : sources
     testname = projectnamespace + '._' + testcomponent + '.' + source.split('.')[0] + '_.test'
+    testname = testname.replace('/', '.')
 
     testexe = executable(testname,
             sources: [source, 'test_main.cpp'],
