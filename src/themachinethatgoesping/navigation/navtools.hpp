@@ -10,10 +10,12 @@
  *
  */
 
+#include <stdexcept>
+#include <vector>
+#include <tuple>
+
 #include <fmt/core.h>
 #include <magic_enum.hpp>
-#include <stdexcept>
-
 #include <GeographicLib/UTMUPS.hpp>
 
 namespace themachinethatgoesping {

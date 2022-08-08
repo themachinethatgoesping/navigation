@@ -19,7 +19,7 @@ void init_m_navtools(py::module& m)
 {
 
     auto m_navtools =
-        m.def_submodule("navtools", "Convinient functions for converting latlon and utm strings.");
+        m.def_submodule("navtools", "Convenient functions for converting latlon and utm strings.");
 
     py::enum_<t_latlon_format>(
         m_navtools, "t_latlon_format", DOC(themachinethatgoesping, navigation, navtools, t_latlon_format))

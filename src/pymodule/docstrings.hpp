@@ -23,9 +23,118 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator =
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator =
 R"doc(The NavInterpolator class: Interpolate navigation and motion
 information and transform the values using the vessel class)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_I_NavigationInterpolator = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_add_target = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_add_target_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_compass = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_compass_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_depth = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_depth_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_heave = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_heave_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_motion = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_motion_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_operator_eq = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_operator_ne = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_sensor_configuration = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_sensor_configuration_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_serialize = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_compass = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_compass_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_compass_3 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_depth = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_depth_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_depth_3 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_heave = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_motion_sensor = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_motion_sensor_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_motion_sensor_3 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_motion_sensor_4 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_motion_sensor_5 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_motion_sensor_6 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_extrapolation_mode = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_sensor_configuration = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon =
+R"doc(The NavInterpolator class: Interpolate navigation and motion
+information and transform the values using the vessel class)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_NavigationInterpolatorLatLon = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_compute_target_position =
+R"doc(Compute the position of the target "target_id" based on the sensor
+data "sensor_data"
+
+Parameter ``target_id``:
+    name of the target (e.g. "MBES")
+
+Parameter ``sensor_data``:
+    SensorData / this structure includes no coordinate information
+
+Returns:
+    datastructures::GeoLocationLocal / this structure includes
+    latitude and east, which are set relative to the sensor coordinate
+    system center)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_interpolator_latitude = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_interpolator_latitude_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_interpolator_longitude = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_interpolator_longitude_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_operator_eq = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_operator_ne = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_serialize = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_set_data_position_system = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_set_data_position_system_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_set_data_position_system_3 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_set_extrapolation_mode = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal =
 R"doc(The NavInterpolator class: Interpolate navigation and motion
@@ -71,85 +180,6 @@ static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolato
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_set_data_position_system_3 = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_set_extrapolation_mode = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_NavigationInterpolator = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_add_target = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_add_target_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_compute_target_position =
-R"doc(Compute the position of the target "target_id" based on the sensor
-data "sensor_data"
-
-Parameter ``target_id``:
-    name of the target (e.g. "MBES")
-
-Parameter ``sensor_data``:
-    SensorData / this structure includes no coordinate information
-
-Returns:
-    datastructures::GeoLocationLocal / this structure includes
-    northing and east, which are set relative to the sensor coordinate
-    system center)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_compass = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_compass_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_depth = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_depth_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_heave = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_heave_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_motion = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_interpolator_motion_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_operator_eq = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_operator_ne = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_sensor_configuration = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_sensor_configuration_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_serialize = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_compass = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_compass_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_compass_3 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_depth = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_depth_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_depth_3 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_heave = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_motion_sensor = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_motion_sensor_2 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_motion_sensor_3 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_motion_sensor_4 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_motion_sensor_5 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_data_motion_sensor_6 = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_extrapolation_mode = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolator_set_sensor_configuration = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration =
 R"doc(A coordinate system that allows for specifying sensor offsets (e.g.
