@@ -82,60 +82,63 @@ class NavigationInterpolator
     }
 
     void set_data_motion_sensor(const std::vector<double>& unixtime,
-                      const std::vector<double>& yaw,
-                      const std::vector<double>& pitch,
-                      const std::vector<double>& roll)
+                                const std::vector<double>& yaw,
+                                const std::vector<double>& pitch,
+                                const std::vector<double>& roll)
     {
         _interpolator_motion.set_data_XYPR(unixtime, yaw, pitch, roll);
     }
     void set_data_motion_sensor(const std::vector<double>& unixtime,
-                      const std::vector<double>& yaw,
-                      const std::vector<double>& pitch,
-                      const std::vector<double>& roll,
-                      double                     offset_yaw,
-                      double                     offset_pitch,
-                      double                     offset_roll)
+                                const std::vector<double>& yaw,
+                                const std::vector<double>& pitch,
+                                const std::vector<double>& roll,
+                                double                     offset_yaw,
+                                double                     offset_pitch,
+                                double                     offset_roll)
     {
         _sensor_configuration.set_offsets_motion_sensor(offset_yaw, offset_pitch, offset_roll);
         _interpolator_motion.set_data_XYPR(unixtime, yaw, pitch, roll);
     }
     void set_data_motion_sensor(const std::vector<double>&               unixtime,
-                      const std::vector<double>&               yaw,
-                      const std::vector<double>&               pitch,
-                      const std::vector<double>&               roll,
-                      const datastructures::PositionalOffsets& sensor_offsets)
+                                const std::vector<double>&               yaw,
+                                const std::vector<double>&               pitch,
+                                const std::vector<double>&               roll,
+                                const datastructures::PositionalOffsets& sensor_offsets)
     {
         _sensor_configuration.set_offsets_motion_sensor(sensor_offsets);
         _interpolator_motion.set_data_XYPR(unixtime, yaw, pitch, roll);
     }
     void set_data_motion_sensor(const std::vector<double>& unixtime,
-                     const std::vector<double>& pitch,
-                     const std::vector<double>& roll)
+                                const std::vector<double>& pitch,
+                                const std::vector<double>& roll)
     {
         std::vector<double> yaw(pitch.size(), 0.0);
         _interpolator_motion.set_data_XYPR(unixtime, yaw, pitch, roll);
     }
     void set_data_motion_sensor(const std::vector<double>& unixtime,
-                     const std::vector<double>& pitch,
-                     const std::vector<double>& roll,
-                     double                     offset_yaw,
-                     double                     offset_pitch,
-                     double                     offset_roll)
+                                const std::vector<double>& pitch,
+                                const std::vector<double>& roll,
+                                double                     offset_yaw,
+                                double                     offset_pitch,
+                                double                     offset_roll)
     {
         _sensor_configuration.set_offsets_motion_sensor(offset_yaw, offset_pitch, offset_roll);
         std::vector<double> yaw(pitch.size(), 0.0);
         _interpolator_motion.set_data_XYPR(unixtime, yaw, pitch, roll);
     }
     void set_data_motion_sensor(const std::vector<double>&               unixtime,
-                     const std::vector<double>&               pitch,
-                     const std::vector<double>&               roll,
-                     const datastructures::PositionalOffsets& sensor_offsets)
+                                const std::vector<double>&               pitch,
+                                const std::vector<double>&               roll,
+                                const datastructures::PositionalOffsets& sensor_offsets)
     {
         _sensor_configuration.set_offsets_motion_sensor(sensor_offsets);
         std::vector<double> yaw(pitch.size(), 0.0);
         _interpolator_motion.set_data_XYPR(unixtime, yaw, pitch, roll);
     }
-    tools::vectorinterpolators::SlerpInterpolator& interpolator_motion() { return _interpolator_motion; }
+    tools::vectorinterpolators::SlerpInterpolator& interpolator_motion()
+    {
+        return _interpolator_motion;
+    }
 
     void set_data_compass(const std::vector<double>& unixtime, const std::vector<double>& heading)
     {
@@ -202,14 +205,22 @@ class NavigationInterpolator
                                                              double             timestamp)
     {
         datastructures::SensorData sensor_data;
-        sensor_data.gps_z           = _interpolator_depth(timestamp);
-        sensor_data.heave_heave     = _interpolator_heave(timestamp);
+        if (!_interpolator_depth.empty()) // default is 0.0
+            sensor_data.gps_z = _interpolator_depth(timestamp);
+
+        if (!_interpolator_heave.empty()) // default is 0.0
+        sensor_data.heave_heave = _interpolator_heave(timestamp);
+
+        if (!_interpolator_compass.empty())  // default is NAN (means will not be used)
         sensor_data.compass_heading = _interpolator_compass.ypr(timestamp)[0];
 
-        auto ypr              = _interpolator_motion.ypr(timestamp);
-        sensor_data.imu_yaw   = ypr[0];
-        sensor_data.imu_pitch = ypr[1];
-        sensor_data.imu_roll  = ypr[2];
+        if (!_interpolator_motion.empty())// default is 0.0. 0.0, 0.0
+        {
+            auto ypr              = _interpolator_motion.ypr(timestamp);
+            sensor_data.imu_yaw   = ypr[0];
+            sensor_data.imu_pitch = ypr[1];
+            sensor_data.imu_roll  = ypr[2];
+        }
 
         return _sensor_configuration.compute_target_position(target_id, sensor_data);
     }

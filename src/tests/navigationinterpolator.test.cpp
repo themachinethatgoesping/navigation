@@ -18,9 +18,9 @@ using namespace themachinethatgoesping::navigation;
 TEST_CASE("navigationinterpolator should support common functions", TESTTAG)
 {
     // // initialize coordinate system with one target
-    // NavigationInterpolator     scs;
-    // datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
-    // scs.add_target("mbes", targetOffsets);
+    NavigationInterpolator     scs;
+    datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
+    scs.add_target("mbes", targetOffsets);
     // scs.set_offsets_position_system(10, 20, 30);
     // scs.set_offsets_compass(12);
     // scs.set_offsets_motion_sensor(1, -2, 3);
