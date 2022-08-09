@@ -32,8 +32,8 @@ struct GeoLocationUTM; // defined in geolocationutm.hpp
  */
 struct GeoLocationLatLon : public GeoLocation
 {
-    double latitude  = 0.0; /// in °, positive northwards
-    double longitude = 0.0; /// in °, positive eastwards
+    double latitude  = 0.0; ///< in °, positive northwards
+    double longitude = 0.0; ///< in °, positive eastwards
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *

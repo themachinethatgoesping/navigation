@@ -9,7 +9,6 @@ module_name = 'navigation'
 sources = [
     'module.cpp',
     'm_navtools.cpp',
-    'c_sensorconfiguration.cpp',
     'datastructures/c_positionaloffsets.cpp',
     'datastructures/c_geolocation.cpp',
     'datastructures/c_geolocationlatlon.cpp',
@@ -19,7 +18,10 @@ sources = [
     'datastructures/c_sensordatalocal.cpp',
     'datastructures/c_sensordatalatlon.cpp',
     'datastructures/c_sensordatautm.cpp',
-    'datastructures/c_sensordatalocal.cpp'
+    'datastructures/c_sensordatalocal.cpp',
+    'c_sensorconfiguration.cpp',
+    'c_navigationinterpolatorlocal.cpp',
+    'c_navigationinterpolatorlatlon.cpp'
 ]
 
 # define python module

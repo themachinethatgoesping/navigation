@@ -47,7 +47,7 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
     REQUIRE(navint.info_string().size() > 0);
 
     // serialization
-    auto buffer  = navint.to_binary();
+    auto buffer = navint.to_binary();
     auto navint3 = NavigationInterpolatorLocal::from_binary(buffer);
     REQUIRE(navint == navint3);
 

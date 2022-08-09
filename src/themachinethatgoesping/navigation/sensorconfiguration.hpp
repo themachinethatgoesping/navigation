@@ -35,16 +35,16 @@ namespace navigation {
 class SensorConfiguration
 {
     std::unordered_map<std::string, datastructures::PositionalOffsets>
-        _target_offsets; /// TargetId (position in vector) for each registered target_id
+        _target_offsets; ///< TargetId (position in vector) for each registered target_id
 
     datastructures::PositionalOffsets
-        _attitude_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor
+        _attitude_sensor_offsets; ///< Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor
     datastructures::PositionalOffsets
-        _compass_offsets; /// Static Yaw (installation) Offsets of CompassOffsets
+        _compass_offsets; ///< Static Yaw (installation) Offsets of CompassOffsets
     datastructures::PositionalOffsets
-        _position_system_offsets; /// Static x,y,z (installation) Offsets of the PositionSystem
+        _position_system_offsets; ///< Static x,y,z (installation) Offsets of the PositionSystem
     datastructures::PositionalOffsets
-        _depth_sensor_offsets; /// Static xy,z (installation) Offsets of the depth sensor
+        _depth_sensor_offsets; ///< Static xy,z (installation) Offsets of the depth sensor
                                // Static Position of Heave Sensor
                                // Offsets _HeaveSensorOffsets;
 

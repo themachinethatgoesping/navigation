@@ -18,26 +18,26 @@ namespace navigation {
 /**
  * @brief The NavInterpolator class: Interpolate attitude information and transform the
  * values using the offsets specified in the sensor configuration class
- * This is an interface class that specifiese attitude information but not the position
+ * This is an interface class that specifies attitude information but not the position
  */
 class I_NavigationInterpolator
 {
   protected:
-    SensorConfiguration _sensor_configuration; /// sensor configuration that stores the offsets
+    SensorConfiguration _sensor_configuration; ///< sensor configuration that stores the offsets
 
-    // SlerpInterpolator that stores unixtime, roll, pitch, yaw -> Attitude of Vessel on the Water
-    tools::vectorinterpolators::SlerpInterpolator _interpolator_attitude; /// interpolator that stores attitude data (yaw, pitch and roll) yaw is only used if the compass data is NAN [°]
-    tools::vectorinterpolators::SlerpInterpolator _interpolator_compass; /// interpolator that stores compass data (yaw) [°]
+    // SlerpInterpolator that stores timestamp, roll, pitch, yaw -> Attitude of Vessel on the Water
+    tools::vectorinterpolators::SlerpInterpolator _interpolator_attitude; ///< interpolator that stores attitude data (yaw, pitch and roll) yaw is only used if the compass data is NAN [°]
+    tools::vectorinterpolators::SlerpInterpolator _interpolator_compass; ///< interpolator that stores compass data (yaw) [°]
 
     // LinearInterpolator for the depth in the world coordinate system
-    tools::vectorinterpolators::AkimaInterpolator _interpolator_heave; /// interpolator that stores heave data (relative change in depth, positive upwards) [m]
-    tools::vectorinterpolators::AkimaInterpolator _interpolator_depth; /// interpolator that stores depth data (depth, positive downwards) [m] 
+    tools::vectorinterpolators::AkimaInterpolator _interpolator_heave; ///< interpolator that stores heave data (relative change in depth, positive upwards) [m]
+    tools::vectorinterpolators::AkimaInterpolator _interpolator_depth; ///< interpolator that stores depth data (depth, positive downwards) [m] 
 
   public:
     /**
      * @brief Construct a new i navigationinterpolator interface
      * 
-     * @param extrapolation_mode 
+     * @param extrapolation_mode extrapolate, fail or nearest
      */
     I_NavigationInterpolator(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                tools::vectorinterpolators::t_extr_mode::extrapolate)
@@ -50,7 +50,7 @@ class I_NavigationInterpolator
     /**
      * @brief Set the extrapolation mode for the attitude, compass, heave and depth interpolators
      * 
-     * @param extrapolation_mode 
+     * @param extrapolation_mode extrapolate, fail or nearest
      */
     virtual void set_extrapolation_mode(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                             tools::vectorinterpolators::t_extr_mode::extrapolate)
@@ -77,47 +77,47 @@ class I_NavigationInterpolator
     /**
      * @brief Set the depth data
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param depth in meters, positive downwards
      */
-    void set_data_depth(const std::vector<double>& unixtime, const std::vector<double>& depth)
+    void set_data_depth(const std::vector<double>& timestamp, const std::vector<double>& depth)
     {
-        _interpolator_depth.set_data_XY(unixtime, depth);
+        _interpolator_depth.set_data_XY(timestamp, depth);
     }
 
     /**
      * @brief Set the depth data and specify the offsets of the depth sensor
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param depth in meters, positive downwards
      * @param offset_x in meters, positive forwards
      * @param offset_y in meters, positive starboard
      * @param offset_z in meters, positive downwards
      */
-    void set_data_depth(const std::vector<double>& unixtime,
+    void set_data_depth(const std::vector<double>& timestamp,
                         const std::vector<double>& depth,
                         double                     offset_x,
                         double                     offset_y,
                         double                     offset_z)
     {
         _sensor_configuration.set_offsets_depth_sensor(offset_x, offset_y, offset_z);
-        _interpolator_depth.set_data_XY(unixtime, depth);
+        _interpolator_depth.set_data_XY(timestamp, depth);
     }
 
     
     /**
      * @brief Set the depth data and specify the offsets of the depth sensor
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param depth in meters, positive downwards
      * @param sensor_offsets structure that contains the depth sensor offsets
      */
-    void set_data_depth(const std::vector<double>&               unixtime,
+    void set_data_depth(const std::vector<double>&               timestamp,
                         const std::vector<double>&               depth,
                         const datastructures::PositionalOffsets& sensor_offsets)
     {
         _sensor_configuration.set_offsets_depth_sensor(sensor_offsets);
-        _interpolator_depth.set_data_XY(unixtime, depth);
+        _interpolator_depth.set_data_XY(timestamp, depth);
     }
 
     /**
@@ -133,12 +133,12 @@ class I_NavigationInterpolator
     /**
      * @brief Set the heave data
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param heave in meters, positive upwards
      */
-    void set_data_heave(const std::vector<double>& unixtime, const std::vector<double>& heave)
+    void set_data_heave(const std::vector<double>& timestamp, const std::vector<double>& heave)
     {
-        _interpolator_heave.set_data_XY(unixtime, heave);
+        _interpolator_heave.set_data_XY(timestamp, heave);
     }
 
     /**
@@ -154,23 +154,23 @@ class I_NavigationInterpolator
     /**
      * @brief Set the attitude data
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param yaw in °, positive clockwise (north is 0°)
      * @param pitch in °, positive is bow up
      * @param roll in °, positive is port up
      */
-    void set_data_attitude_sensor(const std::vector<double>& unixtime,
+    void set_data_attitude_sensor(const std::vector<double>& timestamp,
                                 const std::vector<double>& yaw,
                                 const std::vector<double>& pitch,
                                 const std::vector<double>& roll)
     {
-        _interpolator_attitude.set_data_XYPR(unixtime, yaw, pitch, roll);
+        _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
     }
     
     /**
      * @brief Set the attitude data and additionally specify the offsets of the attitude sensor
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param yaw in °, positive clockwise (north is 0°)
      * @param pitch in °, positive is bow up
      * @param roll in °, positive is port up
@@ -178,7 +178,7 @@ class I_NavigationInterpolator
      * @param offset_pitch in °, positive is bow up
      * @param offset_roll in °, positive is port up
      */
-    void set_data_attitude_sensor(const std::vector<double>& unixtime,
+    void set_data_attitude_sensor(const std::vector<double>& timestamp,
                                 const std::vector<double>& yaw,
                                 const std::vector<double>& pitch,
                                 const std::vector<double>& roll,
@@ -187,55 +187,55 @@ class I_NavigationInterpolator
                                 double                     offset_roll)
     {
         _sensor_configuration.set_offsets_attitude_sensor(offset_yaw, offset_pitch, offset_roll);
-        _interpolator_attitude.set_data_XYPR(unixtime, yaw, pitch, roll);
+        _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
     }
 
     
     /**
      * @brief Set the attitude data and additionally specify the offsets of the attitude sensor
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param yaw in °, positive clockwise (north is 0°)
      * @param pitch in °, positive is bow up
      * @param roll in °, positive is port up
      * @param sensor_offsets structure that contains the attitude sensor offsets
      */
-    void set_data_attitude_sensor(const std::vector<double>&               unixtime,
+    void set_data_attitude_sensor(const std::vector<double>&               timestamp,
                                 const std::vector<double>&               yaw,
                                 const std::vector<double>&               pitch,
                                 const std::vector<double>&               roll,
                                 const datastructures::PositionalOffsets& sensor_offsets)
     {
         _sensor_configuration.set_offsets_attitude_sensor(sensor_offsets);
-        _interpolator_attitude.set_data_XYPR(unixtime, yaw, pitch, roll);
+        _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
     }
 
     /**
      * @brief Set the attitude data (no yaw)
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param pitch in °, positive is bow up
      * @param roll in °, positive is port up
      */
-    void set_data_attitude_sensor(const std::vector<double>& unixtime,
+    void set_data_attitude_sensor(const std::vector<double>& timestamp,
                                 const std::vector<double>& pitch,
                                 const std::vector<double>& roll)
     {
         std::vector<double> yaw(pitch.size(), 0.0);
-        _interpolator_attitude.set_data_XYPR(unixtime, yaw, pitch, roll);
+        _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
     }
 
     /**
      * @brief Set the attitude data (no yaw) and additionally specify the offsets of the attitude sensor
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param pitch in °, positive is bow up
      * @param roll in °, positive is port up
      * @param offset_yaw in °, positive clockwise
      * @param offset_pitch in °, positive is bow up
      * @param offset_roll in °, positive is port up
      */
-    void set_data_attitude_sensor(const std::vector<double>& unixtime,
+    void set_data_attitude_sensor(const std::vector<double>& timestamp,
                                 const std::vector<double>& pitch,
                                 const std::vector<double>& roll,
                                 double                     offset_yaw,
@@ -244,25 +244,25 @@ class I_NavigationInterpolator
     {
         _sensor_configuration.set_offsets_attitude_sensor(offset_yaw, offset_pitch, offset_roll);
         std::vector<double> yaw(pitch.size(), 0.0);
-        _interpolator_attitude.set_data_XYPR(unixtime, yaw, pitch, roll);
+        _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
     }
 
     /**
      * @brief Set the attitude data (no yaw) and additionally specify the offsets of the attitude sensor
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param pitch in °, positive is bow up
      * @param roll in °, positive is port up
      * @param sensor_offsets structure that contains the attitude sensor offsets
      */
-    void set_data_attitude_sensor(const std::vector<double>&               unixtime,
+    void set_data_attitude_sensor(const std::vector<double>&               timestamp,
                                 const std::vector<double>&               pitch,
                                 const std::vector<double>&               roll,
                                 const datastructures::PositionalOffsets& sensor_offsets)
     {
         _sensor_configuration.set_offsets_attitude_sensor(sensor_offsets);
         std::vector<double> yaw(pitch.size(), 0.0);
-        _interpolator_attitude.set_data_XYPR(unixtime, yaw, pitch, roll);
+        _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
     }
 
     /**
@@ -278,45 +278,45 @@ class I_NavigationInterpolator
     /**
      * @brief Set the compass data
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param heading in °, positive clockwise (north is 0°)
      */
-    void set_data_compass(const std::vector<double>& unixtime, const std::vector<double>& heading)
+    void set_data_compass(const std::vector<double>& timestamp, const std::vector<double>& heading)
     {
         std::vector<double> pr(heading.size(), 0.0);
-        _interpolator_compass.set_data_XYPR(unixtime, heading, pr, pr);
+        _interpolator_compass.set_data_XYPR(timestamp, heading, pr, pr);
     }
 
     /**
      * @brief Set the compass data and additionally specify the offsets of the compass sensor
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param heading in °, positive clockwise (north is 0°)
      * @param offset_heading in °, positive clockwise
      */
-    void set_data_compass(const std::vector<double>& unixtime,
+    void set_data_compass(const std::vector<double>& timestamp,
                           const std::vector<double>& heading,
                           double                     offset_heading)
     {
         std::vector<double> pr(heading.size(), 0.0);
         _sensor_configuration.set_offsets_compass(offset_heading);
-        _interpolator_compass.set_data_XYPR(unixtime, heading, pr, pr);
+        _interpolator_compass.set_data_XYPR(timestamp, heading, pr, pr);
     }
 
     /**
      * @brief Set the compass data and additionally specify the offsets of the compass sensor
      * 
-     * @param unixtime in seconds since epoch
+     * @param timestamp in seconds since epoch
      * @param heading in °, positive clockwise (north is 0°)
      * @param sensor_offsets structure that contains the compass sensor offsets
      */
-    void set_data_compass(const std::vector<double>&               unixtime,
+    void set_data_compass(const std::vector<double>&               timestamp,
                           const std::vector<double>&               heading,
                           const datastructures::PositionalOffsets& sensor_offsets)
     {
         std::vector<double> pr(heading.size(), 0.0);
         _sensor_configuration.set_offsets_compass(sensor_offsets);
-        _interpolator_compass.set_data_XYPR(unixtime, heading, pr, pr);
+        _interpolator_compass.set_data_XYPR(timestamp, heading, pr, pr);
     }
 
     /**
@@ -414,7 +414,7 @@ class I_NavigationInterpolator
     template<typename S>
     void serialize(S& s)
     {
-        // data
+        // // data
         s.object(_sensor_configuration);
         s.object(_interpolator_attitude);
         s.object(_interpolator_compass);

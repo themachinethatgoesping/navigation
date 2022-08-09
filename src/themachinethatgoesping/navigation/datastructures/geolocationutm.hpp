@@ -24,8 +24,8 @@ namespace datastructures {
  */
 struct GeoLocationUTM : public GeoLocationLocal
 {
-    int  zone                = 0;    /// UTM/UPS zone number
-    bool northern_hemisphere = true; /// if true: northern hemisphere, else: southern hemisphere
+    int  zone                = 0;    ///< UTM/UPS zone number
+    bool northern_hemisphere = true; ///< if true: northern hemisphere, else: southern hemisphere
 
     /**
      * @brief Construct a new Sensor Position object

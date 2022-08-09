@@ -8,8 +8,10 @@
 #include "datastructures/module.hpp"
 
 // declare modules
-void init_m_navtools(pybind11::module& m);          // m_navtools.cpp
-void init_c_sensorconfiguration(pybind11::module& m); // c_sensorconfiguration.cpp
+void init_m_navtools(pybind11::module& m);                     // m_navtools.cpp
+void init_c_sensorconfiguration(pybind11::module& m);          // c_sensorconfiguration.cpp
+void init_c_NavigationInterpolatorLocal(pybind11::module& m);  // c_navigationinterpolatorlocal.cpp
+void init_c_NavigationInterpolatorLatLon(pybind11::module& m); // c_navigationinterpolatorlatlon.cpp
 
 PYBIND11_MODULE(PYTHON_LIB, m)
 {
@@ -20,4 +22,6 @@ PYBIND11_MODULE(PYTHON_LIB, m)
     init_m_navtools(m);
     init_m_datastructures(m);
     init_c_sensorconfiguration(m);
+    init_c_NavigationInterpolatorLocal(m);
+    init_c_NavigationInterpolatorLatLon(m);
 }

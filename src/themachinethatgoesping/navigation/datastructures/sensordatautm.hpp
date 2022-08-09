@@ -29,9 +29,9 @@ namespace datastructures {
  */
 struct SensorDataUTM : public SensorDataLocal
 {
-    int  gps_zone = 0; /// UTM/UPS zone number
+    int  gps_zone = 0; ///< UTM/UPS zone number
     bool gps_northern_hemisphere =
-        true; /// if true: northern hemisphere, else: southern hemisphere
+        true; ///< if true: northern hemisphere, else: southern hemisphere
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)

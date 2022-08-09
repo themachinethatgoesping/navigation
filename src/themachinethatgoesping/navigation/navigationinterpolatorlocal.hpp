@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <bitsery/ext/inheritance.h>
+
 #include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
@@ -17,17 +19,25 @@ namespace themachinethatgoesping {
 namespace navigation {
 
 /**
- * @brief The NavInterpolator class: Interpolate navigation and attitude information and transform the
- * values using the vessel class
+ * @brief The NavInterpolator class: Interpolate navigation (northing/esting no zone specified)
+ * values and attitude information and transform the values using the offsets specified in the
+ * sensor configuration class
  */
 class NavigationInterpolatorLocal : public I_NavigationInterpolator
 {
 
     // LinearInterpolator for the depth in the world coordinate system
-    tools::vectorinterpolators::AkimaInterpolator _interpolator_northing;
-    tools::vectorinterpolators::AkimaInterpolator _interpolator_easting;
+    tools::vectorinterpolators::AkimaInterpolator
+        _interpolator_northing; ///< interpolator for the northing data
+    tools::vectorinterpolators::AkimaInterpolator
+        _interpolator_easting; ///< interpolator for the easting data
 
   public:
+    /**
+     * @brief Set the extrapolation mode for all interpolators
+     *
+     * @param extrapolation_mode extrapolate, fail or nearest
+     */
     void set_extrapolation_mode(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
     {
@@ -38,6 +48,12 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     }
 
   public:
+    /**
+     * @brief Construct a new i navigationinterpolator interface
+     *
+     * @param extrapolation_mode extrapolate, fail or nearest
+     */
+
     NavigationInterpolatorLocal(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
     {
@@ -56,15 +72,33 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     bool operator!=(const NavigationInterpolatorLocal& other) const { return !(*this == other); }
 
     //----- set sensor data -----
-    void set_data_position_system(const std::vector<double>& unixtime,
+    /**
+     * @brief Set the data of the position system (northing, easting)
+     *
+     * @param timestamp in seconds since epoch
+     * @param northing northing in meters
+     * @param easting easting in meters
+     */
+    void set_data_position_system(const std::vector<double>& timestamp,
                                   const std::vector<double>& northing,
                                   const std::vector<double>& easting)
     {
-        _interpolator_northing.set_data_XY(unixtime, northing);
-        _interpolator_easting.set_data_XY(unixtime, easting);
+        _interpolator_northing.set_data_XY(timestamp, northing);
+        _interpolator_easting.set_data_XY(timestamp, easting);
     }
 
-    void set_data_position_system(const std::vector<double>& unixtime,
+    /**
+     * @briefSet the data of the position system (northing, easting) and the offsets of the
+     * position system
+     *
+     * @param timestamp in seconds since epoch
+     * @param northing in meters
+     * @param easting in meters
+     * @param offset_x in m, positive forward
+     * @param offset_y in m, positive starboard
+     * @param offset_z in m, positive down
+     */
+    void set_data_position_system(const std::vector<double>& timestamp,
                                   const std::vector<double>& northing,
                                   const std::vector<double>& easting,
                                   double                     offset_x,
@@ -72,38 +106,71 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
                                   double                     offset_z)
     {
         _sensor_configuration.set_offsets_position_system(offset_x, offset_y, offset_z);
-        _interpolator_northing.set_data_XY(unixtime, northing);
-        _interpolator_easting.set_data_XY(unixtime, easting);
+        set_data_position_system(timestamp, northing, easting);
     }
-    void set_data_position_system(const std::vector<double>&               unixtime,
+
+    /**
+     * @briefSet the data of the position system (northing, easting) and the offsets of the
+     * position system
+     *
+     * @param timestamp in seconds since epoch
+     * @param northing in meters
+     * @param easting in meters
+     * @param sensor_offsets structure containing the offsets of the position system
+     */
+    void set_data_position_system(const std::vector<double>&               timestamp,
                                   const std::vector<double>&               northing,
                                   const std::vector<double>&               easting,
                                   const datastructures::PositionalOffsets& sensor_offsets)
     {
         _sensor_configuration.set_offsets_position_system(sensor_offsets);
-        _interpolator_northing.set_data_XY(unixtime, northing);
-        _interpolator_easting.set_data_XY(unixtime, easting);
+        set_data_position_system(timestamp, northing, easting);
     }
+
+    /**
+     * @brief direct reference to the northing interpolator object
+     *
+     * @return interpolator_northing&
+     */
     tools::vectorinterpolators::AkimaInterpolator& interpolator_northing()
     {
         return _interpolator_northing;
     }
+
+    /**
+     * @brief direct reference to the easting interpolator object
+     *
+     * @return interpolator_easting&
+     */
     tools::vectorinterpolators::AkimaInterpolator& interpolator_easting()
     {
         return _interpolator_easting;
     }
 
-    //------------------------------------- get vessel position -----------------------------------
+    //----- compute the position of the target sensors -----
     /**
-     * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
+     * @brief Compute the position of the target "target_id" based on the sensor data for the given
+     * timestamp stamp
      *
      * @param target_id name of the target (e.g. "MBES")
-     * @param sensor_data SensorData / this structure includes no coordinate information
-     * @return datastructures::GeoLocationLocal  / this structure includes northing and east, which
-     * are set relative to the sensor coordinate system center
+     * @param timestamp timestamp in seconds since epoch
+     * @return datastructure that contains the position of the target in the world coordinate system
      */
     datastructures::GeoLocationLocal compute_target_position(const std::string& target_id,
                                                              double             timestamp)
+    {
+        return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
+    }
+
+    //----- compute the position of the target sensors -----
+    /**
+     * @brief Interpolate the saved sensor data for a specified timestamp stamp
+     *
+     * @param timestamp timestamp in seconds since epoch
+     * @return datastructure that contains the sensor data interpolated for the given timestamp
+     * stamp
+     */
+    datastructures::SensorDataLocal get_sensor_data(double timestamp)
     {
         datastructures::SensorDataLocal sensor_data;
         if (!_interpolator_depth.empty()) // default is 0.0
@@ -126,7 +193,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
         sensor_data.gps_northing = _interpolator_northing(timestamp);
         sensor_data.gps_easting  = _interpolator_easting(timestamp);
 
-        return _sensor_configuration.compute_target_position(target_id, sensor_data);
+        return sensor_data;
     }
 
   public:
@@ -153,12 +220,12 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     template<typename S>
     void serialize(S& s)
     {
-        // serialize base class
-        s.ext(*this, bitsery::ext::BaseClass<I_NavigationInterpolator>{});
-
         // data
         s.object(_interpolator_northing);
         s.object(_interpolator_easting);
+        
+        // serialize base class
+        s.ext(*this, bitsery::ext::BaseClass<I_NavigationInterpolator>{});
     }
 
   public:

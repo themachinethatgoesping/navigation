@@ -25,8 +25,8 @@ namespace datastructures {
  */
 struct GeoLocationLocal : public GeoLocation
 {
-    double northing = 0.0; /// in m, positive northwards
-    double easting  = 0.0; /// in m, positive eastwards
+    double northing = 0.0; ///< in m, positive northwards
+    double easting  = 0.0; ///< in m, positive eastwards
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)

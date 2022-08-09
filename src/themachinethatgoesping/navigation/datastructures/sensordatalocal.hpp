@@ -28,8 +28,8 @@ namespace datastructures {
  */
 struct SensorDataLocal : public SensorData
 {
-    double gps_northing = 0.0; /// in m, positive northwards
-    double gps_easting  = 0.0; /// in m, positive eastwards
+    double gps_northing = 0.0; ///< in m, positive northwards
+    double gps_easting  = 0.0; ///< in m, positive eastwards
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)

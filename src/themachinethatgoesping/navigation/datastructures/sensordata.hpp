@@ -28,13 +28,13 @@ namespace datastructures {
  */
 struct SensorData
 {
-    double gps_z       = 0.0; /// in m, positive downwards
-    double heave_heave = 0.0; /// from heave sensor, will be added to gps_z in m, positive upwards
+    double gps_z       = 0.0; ///< in m, positive downwards
+    double heave_heave = 0.0; ///< from heave sensor, will be added to gps_z in m, positive upwards
     double compass_heading =
-        NAN; /// from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
-    double imu_yaw   = 0.0; /// from attitude sensor, in °, 0° is north, 90° is east
-    double imu_pitch = 0.0; /// from attitude sensor, in °, positive means bow up
-    double imu_roll  = 0.0; /// from attitude sensor, in °, positive means port up
+        NAN; ///< from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
+    double imu_yaw   = 0.0; ///< from attitude sensor, in °, 0° is north, 90° is east
+    double imu_pitch = 0.0; ///< from attitude sensor, in °, positive means bow up
+    double imu_roll  = 0.0; ///< from attitude sensor, in °, positive means port up
 
     /**
      * @brief Construct a new SensorData object

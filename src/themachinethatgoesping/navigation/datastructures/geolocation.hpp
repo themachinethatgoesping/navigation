@@ -26,10 +26,10 @@ namespace datastructures {
  */
 struct GeoLocation
 {
-    double z     = 0;   /// in m, positive downwards
-    double yaw   = 0.0; /// in °, 0° is north, 90° is east
-    double pitch = 0.0; /// in °, positive means bow up
-    double roll  = 0.0; /// in °, positive means port up
+    double z     = 0;   ///< in m, positive downwards
+    double yaw   = 0.0; ///< in °, 0° is north, 90° is east
+    double pitch = 0.0; ///< in °, positive means bow up
+    double roll  = 0.0; ///< in °, positive means port up
 
     /**
      * @brief Construct a new Position object

@@ -21,12 +21,12 @@ namespace datastructures {
  */
 struct PositionalOffsets
 {
-    double x     = 0.0; /// in m, positive forward
-    double y     = 0.0; /// in m, positive starboard
-    double z     = 0.0; /// in m, positive downwards
-    double yaw   = 0.0; /// in °, positive means clockwise rotation
-    double pitch = 0.0; /// in °, positive means bow up
-    double roll  = 0.0; /// in °, positive means port up
+    double x     = 0.0; ///< in m, positive forward
+    double y     = 0.0; ///< in m, positive starboard
+    double z     = 0.0; ///< in m, positive downwards
+    double yaw   = 0.0; ///< in °, positive means clockwise rotation
+    double pitch = 0.0; ///< in °, positive means bow up
+    double roll  = 0.0; ///< in °, positive means port up
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
