@@ -24,7 +24,7 @@ TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTA
     navint.set_data_depth({ 0, 1, 2, 3 }, { 10, -10, -11, 9 }, 0, 0, 1);
     navint.set_data_heave({ 0, 1, 2, 3 }, { -1, -2, 3, 4 });
     navint.set_data_compass({ 0.5, 6 }, { 10, 20 });
-    navint.set_data_motion_sensor(
+    navint.set_data_attitude_sensor(
         { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, { 2, -3, -4, 2 }, 1, -2, 3);
     navint.set_data_position_system(
         { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, 10,-10,5);

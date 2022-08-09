@@ -27,7 +27,7 @@ namespace themachinethatgoesping {
 namespace navigation {
 
 /**
- * @brief A coordinate system that allows for specifying sensor offsets (e.g. gps antenna and motion
+ * @brief A coordinate system that allows for specifying sensor offsets (e.g. gps antenna and attitude
  * sensor) and target offsets (e.g. MBES). Call the class and specify target_id and current sensor
  * data to derive the geolocation and attitude of the specified targets
  *
@@ -38,7 +38,7 @@ class SensorConfiguration
         _target_offsets; /// TargetId (position in vector) for each registered target_id
 
     datastructures::PositionalOffsets
-        _motion_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) offsets of the motion sensor
+        _attitude_sensor_offsets; /// Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor
     datastructures::PositionalOffsets
         _compass_offsets; /// Static Yaw (installation) Offsets of CompassOffsets
     datastructures::PositionalOffsets
@@ -146,30 +146,30 @@ class SensorConfiguration
 
     // ----- get/set sensor offsets -----
     /**
-     * @brief Set the motion sensor offsets
+     * @brief Set the attitude sensor offsets
      *
      * @param sensor_offsets offsets structure (only yaw, pitch and roll are used)
      */
-    void set_offsets_motion_sensor(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_offsets_attitude_sensor(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
-     * @brief Set the motion sensor offsets
+     * @brief Set the attitude sensor offsets
      *
-     * @param yaw yaw offset of the motion sensor (right-handed around the z-axis) (in degrees, 90° =
+     * @param yaw yaw offset of the attitude sensor (right-handed around the z-axis) (in degrees, 90° =
      * east)
-     * @param pitch pitch offset of the motion sensor (right-handed around the y-axis) (in degrees,
+     * @param pitch pitch offset of the attitude sensor (right-handed around the y-axis) (in degrees,
      * positive = bow up)
-     * @param roll roll offset of the motion sensor (right-handed around the x-axis) (in degrees,
+     * @param roll roll offset of the attitude sensor (right-handed around the x-axis) (in degrees,
      * positive = port up)
      */
-    void set_offsets_motion_sensor(double yaw, double pitch, double roll);
+    void set_offsets_attitude_sensor(double yaw, double pitch, double roll);
 
     /**
-     * @brief Get the motion sensor offsets
+     * @brief Get the attitude sensor offsets
      *
-     * @return const datastructures::PositionalOffsets& offsets of the motion sensor
+     * @return const datastructures::PositionalOffsets& offsets of the attitude sensor
      */
-    datastructures::PositionalOffsets get_offsets_motion_sensor() const;
+    datastructures::PositionalOffsets get_offsets_attitude_sensor() const;
 
     /**
      * @brief Set the compass offsets
@@ -244,13 +244,13 @@ class SensorConfiguration
      * @brief Compute the rotation of the sensor coordinate system (relative to the world reference
      * coordinate system) using the sensor data and (rotation) offsets. Note1: If compass_heading in
      * SensorData is NAN, the imu_yaw is used (and compass_offsets are ignored) Note2: if
-     * compass_heading is used the motion_sensor_offset yaw will be used to correct the
-     * motion_sensor_offset roll and pitch but will not be added to the heading
+     * compass_heading is used the attitude_sensor_offset yaw will be used to correct the
+     * attitude_sensor_offset roll and pitch but will not be added to the heading
      *
      * @param sensor_data Sensor data object (used are: compass_heading, imu_yaw, imu_pitch,
      * imu_roll)
      * @param compass_offsets Offsets of the compass (used is only yaw offset)
-     * @param motion_sensor_offsets Offsets of the IMU (used are yaw, pitch and roll), if
+     * @param attitude_sensor_offsets Offsets of the IMU (used are yaw, pitch and roll), if
      * compass_heading is used, yaw is used to correct pitch, and roll but not added to the heading
      * @return Eigen::Quaterniond Rotation of the sensor system compared to the world reference
      * system
@@ -258,7 +258,7 @@ class SensorConfiguration
     static Eigen::Quaterniond get_system_rotation_as_quat(
         const datastructures::SensorData&        sensor_data,
         const datastructures::PositionalOffsets& compass_offsets,
-        const datastructures::PositionalOffsets& motion_sensor_offsets);
+        const datastructures::PositionalOffsets& attitude_sensor_offsets);
 
     // serialization support using bitsery
     friend bitsery::Access;
@@ -272,7 +272,7 @@ class SensorConfiguration
                   s.container1b(key, 100);
                   s.object(value);
               });
-        s.object(_motion_sensor_offsets);
+        s.object(_attitude_sensor_offsets);
         s.object(_compass_offsets);
         s.object(_position_system_offsets);
         s.object(_depth_sensor_offsets);
@@ -294,7 +294,7 @@ class SensorConfiguration
             }
         }
 
-        return _motion_sensor_offsets == other._motion_sensor_offsets &&
+        return _attitude_sensor_offsets == other._attitude_sensor_offsets &&
                _compass_offsets == other._compass_offsets &&
                _position_system_offsets == other._position_system_offsets &&
                _depth_sensor_offsets == other._depth_sensor_offsets;
@@ -313,8 +313,8 @@ class SensorConfiguration
             printer.append(target_offsets.__printer__(float_precision));
         }
 
-        printer.register_section("Motion sensor offsets");
-        printer.append(_motion_sensor_offsets.__printer__(float_precision));
+        printer.register_section("Attitude sensor offsets");
+        printer.append(_attitude_sensor_offsets.__printer__(float_precision));
 
         printer.register_section("Compass offsets");
         printer.append(_compass_offsets.__printer__(float_precision));

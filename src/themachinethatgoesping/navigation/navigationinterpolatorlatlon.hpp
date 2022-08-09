@@ -17,8 +17,8 @@ namespace themachinethatgoesping {
 namespace navigation {
 
 /**
- * @brief The NavInterpolator class: Interpolate navigation and motion information and transform the
- * values using the vessel class
+ * @brief The NavInterpolator class: Interpolate navigation (lat/lon) values and attitude information and transform the
+ * values using the offsets specified in the sensor configuration class
  */
 class NavigationInterpolatorLatLon : public I_NavigationInterpolator
 {
@@ -114,9 +114,9 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
         if (!_interpolator_compass.empty()) // default is NAN (means will not be used)
             sensor_data.compass_heading = _interpolator_compass.ypr(timestamp)[0];
 
-        if (!_interpolator_motion.empty()) // default is 0.0. 0.0, 0.0
+        if (!_interpolator_attitude.empty()) // default is 0.0. 0.0, 0.0
         {
-            auto ypr              = _interpolator_motion.ypr(timestamp);
+            auto ypr              = _interpolator_attitude.ypr(timestamp);
             sensor_data.imu_yaw   = ypr[0];
             sensor_data.imu_pitch = ypr[1];
             sensor_data.imu_roll  = ypr[2];

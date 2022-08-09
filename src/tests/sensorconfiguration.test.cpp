@@ -23,7 +23,7 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     scs.add_target("mbes", targetOffsets);
     scs.set_offsets_position_system(10, 20, 30);
     scs.set_offsets_compass(12);
-    scs.set_offsets_motion_sensor(1, -2, 3);
+    scs.set_offsets_attitude_sensor(1, -2, 3);
     scs.set_offsets_depth_sensor(4, 5, -6);
 
     // copy constructor
@@ -77,7 +77,7 @@ TEST_CASE(
 
         // imu yaw offset should not influence the resulting yaw because that is influenced only by
         // the compass_heading but imu yaw offset of 90° should swap pitch and roll
-        scs.set_offsets_motion_sensor(90, 0, 0);
+        scs.set_offsets_attitude_sensor(90, 0, 0);
         auto position = scs.compute_target_position("mbes", sensor_data);
 
         REQUIRE(position.yaw == Approx(90));
@@ -92,7 +92,7 @@ TEST_CASE(
         CHECK(position.pitch == Approx(10.0));
         REQUIRE(position.roll == Approx(0).scale(1.0));
 
-        scs.set_offsets_motion_sensor(0, 1, 2);
+        scs.set_offsets_attitude_sensor(0, 1, 2);
         position = scs.compute_target_position("mbes", sensor_data);
         REQUIRE(position.yaw == Approx(90));
         CHECK(position.pitch == Approx(-0.9902670948));

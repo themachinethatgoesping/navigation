@@ -69,30 +69,30 @@ void init_c_sensorconfiguration(py::module& m)
              &SensorConfiguration::get_offsets_target,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, get_offsets_target),
              py::arg("target_id"))
-        .def("set_offsets_motion_sensor",
+        .def("set_offsets_attitude_sensor",
              py::overload_cast<double, double, double>(
-                 &SensorConfiguration::set_offsets_motion_sensor),
+                 &SensorConfiguration::set_offsets_attitude_sensor),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_motion_sensor),
+                 set_offsets_attitude_sensor),
              py::arg("yaw"),
              py::arg("pitch"),
              py::arg("roll"))
-        .def("set_offsets_motion_sensor",
+        .def("set_offsets_attitude_sensor",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_offsets_motion_sensor),
+                 &SensorConfiguration::set_offsets_attitude_sensor),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_motion_sensor_2),
+                 set_offsets_attitude_sensor_2),
              py::arg("sensor_offsets"))
-        .def("get_offsets_motion_sensor",
-             &SensorConfiguration::get_offsets_motion_sensor,
+        .def("get_offsets_attitude_sensor",
+             &SensorConfiguration::get_offsets_attitude_sensor,
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 get_offsets_motion_sensor))
+                 get_offsets_attitude_sensor))
         .def("set_offsets_compass",
              py::overload_cast<double>(&SensorConfiguration::set_offsets_compass),
              DOC(themachinethatgoesping, navigation, SensorConfiguration, set_offsets_compass),

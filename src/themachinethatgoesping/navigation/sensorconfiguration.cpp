@@ -18,7 +18,7 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
 
     // first get the current rotation of the vessel
     auto vessel_quat =
-        get_system_rotation_as_quat(sensor_data, _compass_offsets, _motion_sensor_offsets);
+        get_system_rotation_as_quat(sensor_data, _compass_offsets, _attitude_sensor_offsets);
 
     // convert target to quaternion
     auto target_offsets  = get_offsets_target(target_id);
@@ -146,19 +146,19 @@ void SensorConfiguration::add_target(const std::string& target_id,
 }
 
 // ----- get/set sensor offsets -----
-void SensorConfiguration::set_offsets_motion_sensor(double yaw, double pitch, double roll)
+void SensorConfiguration::set_offsets_attitude_sensor(double yaw, double pitch, double roll)
 {
-    _motion_sensor_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
+    _attitude_sensor_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
 }
-void SensorConfiguration::set_offsets_motion_sensor(
+void SensorConfiguration::set_offsets_attitude_sensor(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
-    _motion_sensor_offsets = sensor_offsets;
+    _attitude_sensor_offsets = sensor_offsets;
 }
 
-datastructures::PositionalOffsets SensorConfiguration::get_offsets_motion_sensor() const
+datastructures::PositionalOffsets SensorConfiguration::get_offsets_attitude_sensor() const
 {
-    return _motion_sensor_offsets;
+    return _attitude_sensor_offsets;
 }
 
 void SensorConfiguration::set_offsets_compass(double yaw)
@@ -205,7 +205,7 @@ datastructures::PositionalOffsets SensorConfiguration::get_offsets_position_syst
 Eigen::Quaterniond SensorConfiguration::get_system_rotation_as_quat(
     const datastructures::SensorData&        sensor_data,
     const datastructures::PositionalOffsets& compass_offsets,
-    const datastructures::PositionalOffsets& motion_sensor_offsets)
+    const datastructures::PositionalOffsets& attitude_sensor_offsets)
 {
 
     if (std::isnan(sensor_data.compass_heading))
@@ -213,9 +213,9 @@ Eigen::Quaterniond SensorConfiguration::get_system_rotation_as_quat(
         // if compass_heading is nan, the imu_yaw will be used as heading
         // convert offset to quaternion
         Eigen::Quaternion<double> imu_offset_quat =
-            tools::rotationfunctions::quaternion_from_ypr(motion_sensor_offsets.yaw,
-                                                          motion_sensor_offsets.pitch,
-                                                          motion_sensor_offsets.roll,
+            tools::rotationfunctions::quaternion_from_ypr(attitude_sensor_offsets.yaw,
+                                                          attitude_sensor_offsets.pitch,
+                                                          attitude_sensor_offsets.roll,
                                                           true);
 
         // convert sensor yaw,pitch,roll to quaternion
@@ -233,9 +233,9 @@ Eigen::Quaterniond SensorConfiguration::get_system_rotation_as_quat(
         // if compass_heading is nan, the imu_yaw will be used as heading
         // convert offset to quaternion
         Eigen::Quaternion<double> imu_offset_quat =
-            tools::rotationfunctions::quaternion_from_ypr(motion_sensor_offsets.yaw,
-                                                          motion_sensor_offsets.pitch,
-                                                          motion_sensor_offsets.roll,
+            tools::rotationfunctions::quaternion_from_ypr(attitude_sensor_offsets.yaw,
+                                                          attitude_sensor_offsets.pitch,
+                                                          attitude_sensor_offsets.roll,
                                                           true);
 
         // convert sensor pitch,roll to quaternion (ignore reported yaw)
