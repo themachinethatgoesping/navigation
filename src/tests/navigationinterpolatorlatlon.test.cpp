@@ -65,4 +65,6 @@ TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTA
 
     REQUIRE(target_position_mbes == expected_position);
     REQUIRE(target_position_sbes == expected_position);
+
 }
+

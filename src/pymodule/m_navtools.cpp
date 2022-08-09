@@ -21,8 +21,9 @@ void init_m_navtools(py::module& m)
     auto m_navtools =
         m.def_submodule("navtools", "Convenient functions for converting latlon and utm strings.");
 
-    py::enum_<t_latlon_format>(
-        m_navtools, "t_latlon_format", DOC(themachinethatgoesping, navigation, navtools, t_latlon_format))
+    py::enum_<t_latlon_format>(m_navtools,
+                               "t_latlon_format",
+                               DOC(themachinethatgoesping, navigation, navtools, t_latlon_format))
         .value("degrees", t_latlon_format::degrees)
         .value("minutes", t_latlon_format::minutes)
         .value("seconds", t_latlon_format::seconds)
@@ -34,25 +35,83 @@ void init_m_navtools(py::module& m)
 
     py::implicitly_convertible<std::string, t_latlon_format>();
 
+    //----- latitude_to_string -----
     m_navtools.def("latitude_to_string",
-                &latitude_to_string,
-                DOC(themachinethatgoesping, navigation, navtools, latitude_to_string),
-                py::arg("latitude"),
-                py::arg("format")     = t_latlon_format::minutes,
-                py::arg("precision") = 6);
+                   &latitude_to_string,
+                   DOC(themachinethatgoesping, navigation, navtools, latitude_to_string),
+                   py::arg("latitude"),
+                   py::arg("format")    = t_latlon_format::minutes,
+                   py::arg("precision") = 6);
 
+    // vectorized call
+    m_navtools.def(
+        "latitude_to_string",
+        [](const std::vector<double>& latitudes, t_latlon_format format, size_t precision) {
+            std::vector<std::string> result;
+            result.reserve(latitudes.size());
+            for (auto& latitude : latitudes)
+            {
+                result.push_back(latitude_to_string(latitude, format, precision));
+            }
+            return result;
+        },
+        DOC(themachinethatgoesping, navigation, navtools, latitude_to_string),
+        py::arg("latitude"),
+        py::arg("format")    = t_latlon_format::minutes,
+        py::arg("precision") = 6);
+
+    //----- longitude_to_string -----
     m_navtools.def("longitude_to_string",
-                &longitude_to_string,
-                DOC(themachinethatgoesping, navigation, navtools, longitude_to_string),
-                py::arg("longitude"),
-                py::arg("format")     = t_latlon_format::minutes,
-                py::arg("precision") = 6);
+                   &longitude_to_string,
+                   DOC(themachinethatgoesping, navigation, navtools, longitude_to_string),
+                   py::arg("longitude"),
+                   py::arg("format")    = t_latlon_format::minutes,
+                   py::arg("precision") = 6);
+
+    // vectorized call
+    m_navtools.def(
+        "longitude_to_string",
+        [](const std::vector<double>& longitudes, t_latlon_format format, size_t precision) {
+            std::vector<std::string> result;
+            result.reserve(longitudes.size());
+            for (auto& longitude : longitudes)
+            {
+                result.push_back(longitude_to_string(longitude, format, precision));
+            }
+            return result;
+        },
+        DOC(themachinethatgoesping, navigation, navtools, longitude_to_string),
+        py::arg("longitude"),
+        py::arg("format")    = t_latlon_format::minutes,
+        py::arg("precision") = 6);
 
     //----- utm conversion -----
-    // m_navtools.det("utm_to_latlon", py::overload_cast<const std::vector<double>&, const std::vector<double>&, int, bool>(&utm_to_latlon),
-    //             DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
-    //             py::arg("northing"),
-    //             py::arg("easting") ,
-    //             py::arg("zone") ,
-    //             py::arg("northern_hemisphere"));
+    //TODO: documentation is not updated to include these functions for some reason
+    m_navtools.def(
+        "utm_to_latlon",
+        py::overload_cast<const std::vector<double>&, const std::vector<double>&, int, bool>(
+            &utm_to_latlon),
+        //DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
+        py::arg("northing"),
+        py::arg("easting"),
+        py::arg("zone"),
+        py::arg("northern_hemisphere"));
+
+    m_navtools.def(
+        "utm_to_latlon",
+        py::overload_cast<const std::vector<double>&, const std::vector<double>&, const std::vector<int>&, const std::vector<bool>&>(
+            &utm_to_latlon),
+        //DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
+        py::arg("northing"),
+        py::arg("easting"),
+        py::arg("zone"),
+        py::arg("northern_hemisphere"));
+
+    m_navtools.def(
+        "latlon_to_utm",
+        &latlon_to_utm,
+        //DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
+        py::arg("latitude"),
+        py::arg("longitude"),
+        py::arg("setzone"));
 }

@@ -1090,7 +1090,7 @@ Parameter ``format``:
     degrees°minutes'seconds''N/S)
 
 Returns:
-    converted latitude string)doc";
+    converteds latitude string)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_longitude_to_string =
 R"doc(convert a latitude value to a string

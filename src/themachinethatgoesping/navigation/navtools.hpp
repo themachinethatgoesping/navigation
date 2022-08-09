@@ -67,7 +67,7 @@ inline std::string dms_to_string(double          dms_value,
  * @param latitude value to be converted
  * @param precision number of digits behind the .
  * @param format latlon format (degrees°N/S, degrees°minutes'N/S or degrees°minutes'seconds''N/S)
- * @return converted latitude string
+ * @return converteds latitude string
  */
 inline std::string latitude_to_string(double          latitude,
                                       t_latlon_format format    = t_latlon_format::minutes,
@@ -99,7 +99,6 @@ inline std::string longitude_to_string(double          longitude,
     return dms_to_string(longitude, format, precision, sign);
 }
 
-//----- utm conversion -----
 /**
  * @brief Convert utm coordinates to latitude longitude using Geographic lib
  * 
