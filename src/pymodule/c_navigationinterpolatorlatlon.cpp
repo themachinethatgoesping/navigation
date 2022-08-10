@@ -25,11 +25,12 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
         m,
         "NavigationInterpolatorLatLon",
         DOC(themachinethatgoesping, navigation, NavigationInterpolatorLatLon))
-        .def(py::init<t_extr_mode>(),
+        .def(py::init<const SensorConfiguration&, t_extr_mode>(),
              DOC(themachinethatgoesping,
                  navigation,
                  NavigationInterpolatorLatLon,
                  NavigationInterpolatorLatLon),
+             py::arg("sensor_configuration"),
              py::arg("extrapolation_mode") = t_extr_mode::extrapolate)
         .def("set_extrapolation_mode",
              &NavigationInterpolatorLatLon::set_extrapolation_mode,
@@ -63,7 +64,9 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
         .def_property(
             "sensor_configuration",
             &NavigationInterpolatorLatLon::sensor_configuration,
-            &NavigationInterpolatorLatLon::set_sensor_configuration,
+            [](NavigationInterpolatorLatLon& self, const SensorConfiguration& arg) {
+                self.sensor_configuration() = arg;
+            },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, sensor_configuration))
         .def("add_target",
              py::overload_cast<const std::string&, double, double, double, double, double, double>(
@@ -82,49 +85,18 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
              DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, add_target_2),
              py::arg("target_id"),
              py::arg("target_offsets"))
-        .def("set_data_position_system",
+        .def("set_data_position",
              py::overload_cast<const std::vector<double>&,
                                const std::vector<double>&,
                                const std::vector<double>&>(
-                 &NavigationInterpolatorLatLon::set_data_position_system),
+                 &NavigationInterpolatorLatLon::set_data_position),
              DOC(themachinethatgoesping,
                  navigation,
                  NavigationInterpolatorLatLon,
-                 set_data_position_system),
+                 set_data_position),
              py::arg("timestamp"),
              py::arg("latitude"),
              py::arg("longitude"))
-        .def("set_data_position_system",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               double,
-                               double,
-                               double>(&NavigationInterpolatorLatLon::set_data_position_system),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 NavigationInterpolatorLatLon,
-                 set_data_position_system_2),
-             py::arg("timestamp"),
-             py::arg("latitude"),
-             py::arg("longitude"),
-             py::arg("offset_x"),
-             py::arg("offset_y"),
-             py::arg("offset_z"))
-        .def("set_data_position_system",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               const datastructures::PositionalOffsets&>(
-                 &NavigationInterpolatorLatLon::set_data_position_system),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 NavigationInterpolatorLatLon,
-                 set_data_position_system_3),
-             py::arg("timestamp"),
-             py::arg("latitude"),
-             py::arg("longitude"),
-             py::arg("sensor_offsets"))
 
         // set heave data
         .def("set_data_heave",
@@ -141,147 +113,44 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
              DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_depth),
              py::arg("timestamp"),
              py::arg("depth"))
-        .def("set_data_depth",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               double,
-                               double,
-                               double>(&NavigationInterpolatorLatLon::set_data_depth),
-             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_depth_2),
-             py::arg("timestamp"),
-             py::arg("depth"),
-             py::arg("offset_x"),
-             py::arg("offset_y"),
-             py::arg("offset_z"))
-        .def("set_data_depth",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const datastructures::PositionalOffsets&>(
-                 &NavigationInterpolatorLatLon::set_data_depth),
-             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_depth_3),
-             py::arg("timestamp"),
-             py::arg("depth"),
-             py::arg("sensor_offsets"))
 
         // set attitude data
-        .def("set_data_attitude_sensor",
+        .def("set_data_attitude",
              py::overload_cast<const std::vector<double>&,
                                const std::vector<double>&,
                                const std::vector<double>&,
                                const std::vector<double>&>(
-                 &NavigationInterpolatorLatLon::set_data_attitude_sensor),
+                 &NavigationInterpolatorLatLon::set_data_attitude),
              DOC(themachinethatgoesping,
                  navigation,
                  I_NavigationInterpolator,
-                 set_data_attitude_sensor),
+                 set_data_attitude),
              py::arg("timestamp"),
              py::arg("yaw"),
              py::arg("pitch"),
              py::arg("roll"))
-        .def("set_data_attitude_sensor",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               double,
-                               double,
-                               double>(&NavigationInterpolatorLatLon::set_data_attitude_sensor),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 I_NavigationInterpolator,
-                 set_data_attitude_sensor_2),
-             py::arg("timestamp"),
-             py::arg("yaw"),
-             py::arg("pitch"),
-             py::arg("roll"),
-             py::arg("offset_yaw"),
-             py::arg("offset_pitch"),
-             py::arg("offset_roll"))
-        .def("set_data_attitude_sensor",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               const datastructures::PositionalOffsets&>(
-                 &NavigationInterpolatorLatLon::set_data_attitude_sensor),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 I_NavigationInterpolator,
-                 set_data_attitude_sensor_3),
-             py::arg("timestamp"),
-             py::arg("yaw"),
-             py::arg("pitch"),
-             py::arg("roll"),
-             py::arg("sensor_offsets"))
 
         // set attitude data (no yaw)
-        .def("set_data_attitude_sensor",
+        .def("set_data_attitude",
              py::overload_cast<const std::vector<double>&,
                                const std::vector<double>&,
                                const std::vector<double>&>(
-                 &NavigationInterpolatorLatLon::set_data_attitude_sensor),
+                 &NavigationInterpolatorLatLon::set_data_attitude),
              DOC(themachinethatgoesping,
                  navigation,
                  I_NavigationInterpolator,
-                 set_data_attitude_sensor_4),
+                 set_data_attitude_2),
              py::arg("timestamp"),
              py::arg("pitch"),
              py::arg("roll"))
-        .def("set_data_attitude_sensor",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               double,
-                               double,
-                               double>(&NavigationInterpolatorLatLon::set_data_attitude_sensor),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 I_NavigationInterpolator,
-                 set_data_attitude_sensor_5),
-             py::arg("timestamp"),
-             py::arg("pitch"),
-             py::arg("roll"),
-             py::arg("offset_yaw"),
-             py::arg("offset_pitch"),
-             py::arg("offset_roll"))
-        .def("set_data_attitude_sensor",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               const datastructures::PositionalOffsets&>(
-                 &NavigationInterpolatorLatLon::set_data_attitude_sensor),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 I_NavigationInterpolator,
-                 set_data_attitude_sensor_6),
-             py::arg("timestamp"),
-             py::arg("pitch"),
-             py::arg("roll"),
-             py::arg("sensor_offsets"))
 
         // set data compass
-        .def("set_data_compass",
+        .def("set_data_heading",
              py::overload_cast<const std::vector<double>&, const std::vector<double>&>(
-                 &NavigationInterpolatorLatLon::set_data_compass),
-             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_compass),
+                 &NavigationInterpolatorLatLon::set_data_heading),
+             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_heading),
              py::arg("timestamp"),
              py::arg("heading"))
-        .def("set_data_compass",
-             py::overload_cast<const std::vector<double>&, const std::vector<double>&, double>(
-                 &NavigationInterpolatorLatLon::set_data_compass),
-             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_compass_2),
-             py::arg("timestamp"),
-             py::arg("heading"),
-             py::arg("offset_heading"))
-        .def("set_data_compass",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const datastructures::PositionalOffsets&>(
-                 &NavigationInterpolatorLatLon::set_data_compass),
-             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_compass_3),
-             py::arg("timestamp"),
-             py::arg("heading"),
-             py::arg("sensor_offsets"))
 
         // access interpolators
         // latitude / longitude
@@ -332,15 +201,12 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
                 I_NavigationInterpolator,
                 interpolator_attitude))
         .def_property(
-            "interpolator_compass",
-            &NavigationInterpolatorLatLon::interpolator_compass,
+            "interpolator_heading",
+            &NavigationInterpolatorLatLon::interpolator_heading,
             [](NavigationInterpolatorLatLon& self,
                const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator&
-                   interpolator) { self.interpolator_compass() = interpolator; },
-            DOC(themachinethatgoesping,
-                navigation,
-                I_NavigationInterpolator,
-                interpolator_compass))
+                   interpolator) { self.interpolator_heading() = interpolator; },
+            DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heading))
 
         .def("__eq__",
              &NavigationInterpolatorLatLon::operator==,

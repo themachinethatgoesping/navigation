@@ -36,7 +36,7 @@ struct SensorDataLatLon : public SensorData
     double gps_longitude = 0.0; ///< in °, positive eastwards
     // double gps_z         = 0.0; ///< in m, positive downwards
     // double heave_heave     = 0.0; ///< from heave sensor, will be added to gps_z in m, positive
-    // upwards double compass_heading = NAN; ///< from compass, replaces imu_yaw if not NAN, in °,
+    // upwards double heading_source = NAN; ///< from compass, replaces imu_yaw if not NAN, in °,
     // 0° is north, 90° is east double imu_yaw     = 0.0; ///< from attitude sensor, in °, 0° is
     // north, 90° is east double imu_pitch = 0.0;   ///< from attitude sensor, in °, positive means
     // bow up double imu_roll  = 0.0;   ///< from attitude sensor, in °, positive means port up
@@ -75,7 +75,7 @@ struct SensorDataLatLon : public SensorData
      * @param gps_longitude in °, positive eastwards
      * @param gps_z in m, positive downwards
      * @param heave_heave from heave sensor, will be added to gps_z in m, positive upwards
-     * @param compass_heading from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
+     * @param heading_source from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
      * east
      * @param imu_yaw in °, 0° is north, 90° is east
      * @param imu_pitch in °, positive means bow up
@@ -85,11 +85,11 @@ struct SensorDataLatLon : public SensorData
                      double gps_longitude,
                      double gps_z,
                      double heave_heave,
-                     double compass_heading,
+                     double heading_source,
                      double imu_yaw,
                      double imu_pitch,
                      double imu_roll)
-        : SensorData(gps_z, heave_heave, compass_heading, imu_yaw, imu_pitch, imu_roll)
+        : SensorData(gps_z, heave_heave, heading_source, imu_yaw, imu_pitch, imu_roll)
         , gps_latitude(gps_latitude)
         , gps_longitude(gps_longitude)
     {

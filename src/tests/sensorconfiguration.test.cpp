@@ -21,10 +21,10 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     SensorConfiguration     scs;
     datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
     scs.add_target("mbes", targetOffsets);
-    scs.set_offsets_position_system(10, 20, 30);
-    scs.set_offsets_compass(12);
-    scs.set_offsets_attitude_sensor(1, -2, 3);
-    scs.set_offsets_depth_sensor(4, 5, -6);
+    scs.set_offsets_position_source(10, 20, 30);
+    scs.set_offsets_heading_source(12);
+    scs.set_offsets_attitude_source(1, -2, 3);
+    scs.set_offsets_depth_source(4, 5, -6);
 
     // copy constructor
     SensorConfiguration scs2(scs);
@@ -35,7 +35,7 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     REQUIRE(scs != scs2);
     scs2.add_target("sbes", targetOffsets);
     REQUIRE(scs == scs2);
-    scs.set_offsets_position_system(11, 20, 30);
+    scs.set_offsets_position_source(11, 20, 30);
     REQUIRE(scs != scs2);
 
     // string conversion
@@ -59,7 +59,7 @@ TEST_CASE(
     {
         SensorConfiguration scs;
         scs.add_target("mbes", targetOffsets);
-        scs.set_offsets_depth_sensor(0, 0, 10);
+        scs.set_offsets_depth_source(0, 0, 10);
 
         REQUIRE(scs.compute_target_position("mbes", datastructures::SensorDataLocal()).z == -7);
     }
@@ -70,14 +70,14 @@ TEST_CASE(
         scs.add_target("mbes", targetOffsets);
 
         datastructures::SensorDataLocal sensor_data;
-        sensor_data.compass_heading = 90;
+        sensor_data.heading_source = 90;
         sensor_data.imu_roll        = 0;
         sensor_data.imu_pitch       = 20;
         sensor_data.imu_yaw         = 130; // should not influence the results
 
         // imu yaw offset should not influence the resulting yaw because that is influenced only by
-        // the compass_heading but imu yaw offset of 90° should swap pitch and roll
-        scs.set_offsets_attitude_sensor(90, 0, 0);
+        // the heading_source but imu yaw offset of 90° should swap pitch and roll
+        scs.set_offsets_attitude_source(90, 0, 0);
         auto position = scs.compute_target_position("mbes", sensor_data);
 
         REQUIRE(position.yaw == Approx(90));
@@ -92,7 +92,7 @@ TEST_CASE(
         CHECK(position.pitch == Approx(10.0));
         REQUIRE(position.roll == Approx(0).scale(1.0));
 
-        scs.set_offsets_attitude_sensor(0, 1, 2);
+        scs.set_offsets_attitude_source(0, 1, 2);
         position = scs.compute_target_position("mbes", sensor_data);
         REQUIRE(position.yaw == Approx(90));
         CHECK(position.pitch == Approx(-0.9902670948));
@@ -130,8 +130,8 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // initialize sensor data
         datastructures::SensorDataLocal sensor_data;
         sensor_data.gps_z           = 5;
-        sensor_data.compass_heading = 0;
-        sensor_data.imu_yaw         = 40; // ignored because compass_heading is valid
+        sensor_data.heading_source = 0;
+        sensor_data.imu_yaw         = 40; // ignored because heading_source is valid
         sensor_data.imu_pitch       = 0;
         sensor_data.imu_roll        = 0;
         sensor_data.gps_northing    = 10;
@@ -169,8 +169,8 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // scenario 0.2
         // initialize sensor data
         sensor_data.gps_z           = 5;
-        sensor_data.compass_heading = 180;
-        sensor_data.imu_yaw         = 40; // ignored because compass_heading is valid
+        sensor_data.heading_source = 180;
+        sensor_data.imu_yaw         = 40; // ignored because heading_source is valid
         sensor_data.imu_pitch       = 0;
         sensor_data.imu_roll        = 0;
         sensor_data.gps_northing    = 10;
@@ -208,8 +208,8 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // scenario 0.3
         // initialize sensor data
         sensor_data.gps_z           = 5;
-        sensor_data.compass_heading = 90;
-        sensor_data.imu_yaw         = 40; // ignored because compass_heading is valid
+        sensor_data.heading_source = 90;
+        sensor_data.imu_yaw         = 40; // ignored because heading_source is valid
         sensor_data.imu_pitch       = 0;
         sensor_data.imu_roll        = 0;
         sensor_data.gps_northing    = 10;
@@ -250,7 +250,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         datastructures::SensorDataLocal sensor_data;
         // scenario 1
         sensor_data.gps_z           = 5;
-        sensor_data.compass_heading = 25;
+        sensor_data.heading_source = 25;
         sensor_data.imu_yaw         = 40;
         sensor_data.imu_pitch       = 20;
         sensor_data.imu_roll        = 10;
@@ -288,7 +288,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 2
         sensor_data.gps_z           = -5;
-        sensor_data.compass_heading = -35;
+        sensor_data.heading_source = -35;
         sensor_data.imu_yaw         = 40;
         sensor_data.imu_pitch       = -5;
         sensor_data.imu_roll        = -15;
@@ -325,7 +325,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 3
         sensor_data.gps_z           = 3;
-        sensor_data.compass_heading = NAN;
+        sensor_data.heading_source = NAN;
         sensor_data.imu_yaw         = 30;
         sensor_data.imu_pitch       = -5;
         sensor_data.imu_roll        = -15;
@@ -362,7 +362,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 4
         sensor_data.gps_z           = -2000;
-        sensor_data.compass_heading = -470;
+        sensor_data.heading_source = -470;
         sensor_data.imu_yaw         = 40;
         sensor_data.imu_pitch       = -59;
         sensor_data.imu_roll        = 1;
@@ -398,13 +398,13 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Approx(-36.6392731807));
     }
 
-    SECTION("SENSOR_VALUES latitude and longitued")
+    SECTION("SENSOR_VALUES latitude and longitude")
     {
         datastructures::SensorDataLatLon sensor_data;
 
         // scenario 5 (latlon)
         sensor_data.gps_z           = 2000;
-        sensor_data.compass_heading = 470;
+        sensor_data.heading_source = 470;
         sensor_data.imu_yaw         = 40;
         sensor_data.imu_pitch       = -59;
         sensor_data.imu_roll        = 1;
@@ -441,7 +441,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 6 (latlon)
         sensor_data.gps_z           = 1000;
-        sensor_data.compass_heading = 360;
+        sensor_data.heading_source = 360;
         sensor_data.imu_yaw         = 40;
         sensor_data.imu_pitch       = 9;
         sensor_data.imu_roll        = -1;

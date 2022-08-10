@@ -23,7 +23,7 @@ TEST_CASE("SensorDataLatLon should support common functions", TESTTAG)
     data.gps_longitude = 2;
     data.gps_z         = 3;
 
-    data.compass_heading = 10;
+    data.heading_source = 10;
     data.heave_heave = 1;
 
     data.imu_yaw   = 10;
@@ -45,10 +45,10 @@ TEST_CASE("SensorDataLatLon should support common functions", TESTTAG)
     REQUIRE(data.info_string().size() != 0);
 
     data.print(std::cerr);
-    data.compass_heading = NAN;
+    data.heading_source = NAN;
     REQUIRE(data.info_string().find("invalid") != std::string::npos);
 
-    data.compass_heading = 12;
+    data.heading_source = 12;
     data.print(std::cerr);
     REQUIRE(data.info_string().find("valid") != std::string::npos);
 }

@@ -38,13 +38,13 @@ class SensorConfiguration
         _target_offsets; ///< TargetId (position in vector) for each registered target_id
 
     datastructures::PositionalOffsets
-        _attitude_sensor_offsets; ///< Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor
+        _attitude_source_offsets; ///< Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor
     datastructures::PositionalOffsets
         _compass_offsets; ///< Static Yaw (installation) Offsets of CompassOffsets
     datastructures::PositionalOffsets
-        _position_system_offsets; ///< Static x,y,z (installation) Offsets of the PositionSystem
+        _position_source_offsets; ///< Static x,y,z (installation) Offsets of the PositionSystem
     datastructures::PositionalOffsets
-        _depth_sensor_offsets; ///< Static xy,z (installation) Offsets of the depth sensor
+        _depth_source_offsets; ///< Static xy,z (installation) Offsets of the depth sensor
                                // Static Position of Heave Sensor
                                // Offsets _HeaveSensorOffsets;
 
@@ -150,7 +150,7 @@ class SensorConfiguration
      *
      * @param sensor_offsets offsets structure (only yaw, pitch and roll are used)
      */
-    void set_offsets_attitude_sensor(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_offsets_attitude_source(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Set the attitude sensor offsets
@@ -162,35 +162,35 @@ class SensorConfiguration
      * @param roll roll offset of the attitude sensor (right-handed around the x-axis) (in degrees,
      * positive = port up)
      */
-    void set_offsets_attitude_sensor(double yaw, double pitch, double roll);
+    void set_offsets_attitude_source(double yaw, double pitch, double roll);
 
     /**
      * @brief Get the attitude sensor offsets
      *
      * @return const datastructures::PositionalOffsets& offsets of the attitude sensor
      */
-    datastructures::PositionalOffsets get_offsets_attitude_sensor() const;
+    datastructures::PositionalOffsets get_offsets_attitude_source() const;
 
     /**
      * @brief Set the compass offsets
      *
      * @param yaw yaw offset of the compass (right-handed around the z-axis) (in degrees, 90° = east)
      */
-    void set_offsets_compass(double yaw);
+    void set_offsets_heading_source(double yaw);
 
     /**
      * @brief Set the compass offsets
      *
      * @param sensor_offsets offsets structure (only yaw is used)
      */
-    void set_offsets_compass(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_offsets_heading_source(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered compass offsets
      *
      * @return const datastructures::PositionalOffsets& offsets of the compass
      */
-    datastructures::PositionalOffsets get_offsets_compass() const;
+    datastructures::PositionalOffsets get_offsets_heading_source() const;
 
     /**
      * @brief Set the depth sensor offsets
@@ -199,21 +199,21 @@ class SensorConfiguration
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
      */
-    void set_offsets_depth_sensor(double x, double y, double z);
+    void set_offsets_depth_source(double x, double y, double z);
 
     /**
      * @brief Set the depth sensor offsets
      *
      * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_offsets_depth_sensor(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_offsets_depth_source(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered depth sensor offsets
      *
      * @return const datastructures::PositionalOffsets& offsets of the depth sensor
      */
-    datastructures::PositionalOffsets get_offsets_depth_sensor() const;
+    datastructures::PositionalOffsets get_offsets_depth_source() const;
 
     /**
      * @brief Set the position system offsets
@@ -222,43 +222,43 @@ class SensorConfiguration
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
      */
-    void set_offsets_position_system(double x, double y, double z);
+    void set_offsets_position_source(double x, double y, double z);
 
     /**
      * @brief Set the position system offsets
      *
      * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_offsets_position_system(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_offsets_position_source(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered position system offsets
      *
      * @return const datastructures::PositionalOffsets& offsets of the position system
      */
-    datastructures::PositionalOffsets get_offsets_position_system() const;
+    datastructures::PositionalOffsets get_offsets_position_source() const;
 
   private:
     // ----- helper functions -----
     /**
      * @brief Compute the rotation of the sensor coordinate system (relative to the world reference
-     * coordinate system) using the sensor data and (rotation) offsets. Note1: If compass_heading in
+     * coordinate system) using the sensor data and (rotation) offsets. Note1: If heading_source in
      * SensorData is NAN, the imu_yaw is used (and compass_offsets are ignored) Note2: if
-     * compass_heading is used the attitude_sensor_offset yaw will be used to correct the
-     * attitude_sensor_offset roll and pitch but will not be added to the heading
+     * heading_source is used the attitude_source_offset yaw will be used to correct the
+     * attitude_source_offset roll and pitch but will not be added to the heading
      *
-     * @param sensor_data Sensor data object (used are: compass_heading, imu_yaw, imu_pitch,
+     * @param sensor_data Sensor data object (used are: heading_source, imu_yaw, imu_pitch,
      * imu_roll)
      * @param compass_offsets Offsets of the compass (used is only yaw offset)
-     * @param attitude_sensor_offsets Offsets of the IMU (used are yaw, pitch and roll), if
-     * compass_heading is used, yaw is used to correct pitch, and roll but not added to the heading
+     * @param attitude_source_offsets Offsets of the IMU (used are yaw, pitch and roll), if
+     * heading_source is used, yaw is used to correct pitch, and roll but not added to the heading
      * @return Eigen::Quaterniond Rotation of the sensor system compared to the world reference
      * system
      */
     static Eigen::Quaterniond get_system_rotation_as_quat(
         const datastructures::SensorData&        sensor_data,
         const datastructures::PositionalOffsets& compass_offsets,
-        const datastructures::PositionalOffsets& attitude_sensor_offsets);
+        const datastructures::PositionalOffsets& attitude_source_offsets);
 
     // serialization support using bitsery
     friend bitsery::Access;
@@ -272,10 +272,10 @@ class SensorConfiguration
                   s.container1b(key, 100);
                   s.object(value);
               });
-        s.object(_attitude_sensor_offsets);
+        s.object(_attitude_source_offsets);
         s.object(_compass_offsets);
-        s.object(_position_system_offsets);
-        s.object(_depth_sensor_offsets);
+        s.object(_position_source_offsets);
+        s.object(_depth_source_offsets);
     }
 
   public:
@@ -294,10 +294,10 @@ class SensorConfiguration
             }
         }
 
-        return _attitude_sensor_offsets == other._attitude_sensor_offsets &&
+        return _attitude_source_offsets == other._attitude_source_offsets &&
                _compass_offsets == other._compass_offsets &&
-               _position_system_offsets == other._position_system_offsets &&
-               _depth_sensor_offsets == other._depth_sensor_offsets;
+               _position_source_offsets == other._position_source_offsets &&
+               _depth_source_offsets == other._depth_source_offsets;
     }
     bool operator!=(const SensorConfiguration& other) const { return !(*this == other); }
 
@@ -314,16 +314,16 @@ class SensorConfiguration
         }
 
         printer.register_section("Attitude sensor offsets");
-        printer.append(_attitude_sensor_offsets.__printer__(float_precision));
+        printer.append(_attitude_source_offsets.__printer__(float_precision));
 
         printer.register_section("Compass offsets");
         printer.append(_compass_offsets.__printer__(float_precision));
 
         printer.register_section("Position system offsets");
-        printer.append(_position_system_offsets.__printer__(float_precision));
+        printer.append(_position_source_offsets.__printer__(float_precision));
 
         printer.register_section("Depth sensor offsets");
-        printer.append(_depth_sensor_offsets.__printer__(float_precision));
+        printer.append(_depth_source_offsets.__printer__(float_precision));
 
         return printer;
     }

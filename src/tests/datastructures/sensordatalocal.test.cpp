@@ -23,7 +23,7 @@ TEST_CASE("SensorDataLocal should support common functions", TESTTAG)
     data.gps_easting  = 549841.192;
     data.gps_z        = 3;
 
-    data.compass_heading = 10;
+    data.heading_source = 10;
     data.heave_heave = 1;
 
     data.imu_yaw   = 10;
@@ -56,7 +56,7 @@ TEST_CASE("SensorDataLocal should support common utm/local conversions", TESTTAG
     int  zone                = 31;
     bool northern_hemisphere = true;
 
-    data.compass_heading = 10;
+    data.heading_source = 10;
     data.heave_heave = 1;
     
     data.imu_yaw   = 10;

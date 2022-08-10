@@ -93,7 +93,7 @@ struct SensorDataUTM : public SensorDataLocal
      * @param gps_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      * @param gps_z in m, positive downwards
      * @param heave_heave from heave sensor, will be added to gps_z in m, positive upwards
-     * @param compass_heading from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
+     * @param heading_source from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
      * east
      * @param imu_yaw in °, 0° is north, 90° is east
      * @param imu_pitch in °, positive means bow up
@@ -105,7 +105,7 @@ struct SensorDataUTM : public SensorDataLocal
                   bool   gps_northern_hemisphere,
                   double gps_z,
                   double heave_heave,
-                  double compass_heading,
+                  double heading_source,
                   double imu_yaw,
                   double imu_pitch,
                   double imu_roll)
@@ -113,7 +113,7 @@ struct SensorDataUTM : public SensorDataLocal
                           gps_easting,
                           gps_z,
                           heave_heave,
-                          compass_heading,
+                          heading_source,
                           imu_yaw,
                           imu_pitch,
                           imu_roll)
@@ -151,7 +151,7 @@ struct SensorDataUTM : public SensorDataLocal
                               0,
                               data_utm.gps_z,
                               data_utm.heave_heave,
-                              data_utm.compass_heading,
+                              data_utm.heading_source,
                               data_utm.imu_yaw,
                               data_utm.imu_pitch,
                               data_utm.imu_roll);
@@ -182,7 +182,7 @@ struct SensorDataUTM : public SensorDataLocal
                                0,
                                data.gps_z,
                                data.heave_heave,
-                               data.compass_heading,
+                               data.heading_source,
                                data.imu_yaw,
                                data.imu_pitch,
                                data.imu_roll);

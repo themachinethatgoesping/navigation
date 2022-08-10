@@ -52,10 +52,10 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @brief Construct a new i navigationinterpolator interface
      *
      * @param extrapolation_mode extrapolate, fail or nearest
-     */    
-    NavigationInterpolatorLocal(SensorConfiguration                     sensor_configuration,
-                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
+     */
+    NavigationInterpolatorLocal(const SensorConfiguration&              sensor_configuration,
+                                tools::vectorinterpolators::t_extr_mode extrapolation_mode =
+                                    tools::vectorinterpolators::t_extr_mode::extrapolate)
         : I_NavigationInterpolator(sensor_configuration)
     {
         set_extrapolation_mode(extrapolation_mode);
@@ -80,7 +80,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param northing northing in meters
      * @param easting easting in meters
      */
-    void set_data_position_system(const std::vector<double>& timestamp,
+    void set_data_position(const std::vector<double>& timestamp,
                                   const std::vector<double>& northing,
                                   const std::vector<double>& easting)
     {
@@ -99,15 +99,15 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param offset_y in m, positive starboard
      * @param offset_z in m, positive down
      */
-    void set_data_position_system(const std::vector<double>& timestamp,
+    void set_data_position(const std::vector<double>& timestamp,
                                   const std::vector<double>& northing,
                                   const std::vector<double>& easting,
                                   double                     offset_x,
                                   double                     offset_y,
                                   double                     offset_z)
     {
-        _sensor_configuration.set_offsets_position_system(offset_x, offset_y, offset_z);
-        set_data_position_system(timestamp, northing, easting);
+        _sensor_configuration.set_offsets_position_source(offset_x, offset_y, offset_z);
+        set_data_position(timestamp, northing, easting);
     }
 
     /**
@@ -119,13 +119,13 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param easting in meters
      * @param sensor_offsets structure containing the offsets of the position system
      */
-    void set_data_position_system(const std::vector<double>&               timestamp,
+    void set_data_position(const std::vector<double>&               timestamp,
                                   const std::vector<double>&               northing,
                                   const std::vector<double>&               easting,
                                   const datastructures::PositionalOffsets& sensor_offsets)
     {
-        _sensor_configuration.set_offsets_position_system(sensor_offsets);
-        set_data_position_system(timestamp, northing, easting);
+        _sensor_configuration.set_offsets_position_source(sensor_offsets);
+        set_data_position(timestamp, northing, easting);
     }
 
     /**
@@ -180,8 +180,8 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
         if (!_interpolator_heave.empty()) // default is 0.0
             sensor_data.heave_heave = _interpolator_heave(timestamp);
 
-        if (!_interpolator_compass.empty()) // default is NAN (means will not be used)
-            sensor_data.compass_heading = _interpolator_compass.ypr(timestamp)[0];
+        if (!_interpolator_heading.empty()) // default is NAN (means will not be used)
+            sensor_data.heading_source = _interpolator_heading.ypr(timestamp)[0];
 
         if (!_interpolator_attitude.empty()) // default is 0.0. 0.0, 0.0
         {
@@ -219,7 +219,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     // serialization support using bitsery
     friend class bitsery::Access;
 
-    NavigationInterpolatorLocal() = default; // bitsery needs a default constructor 
+    NavigationInterpolatorLocal() = default; // bitsery needs a default constructor
 
     template<typename S>
     void serialize(S& s)
@@ -227,7 +227,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
         // data
         s.object(_interpolator_northing);
         s.object(_interpolator_easting);
-        
+
         // serialize base class
         s.ext(*this, bitsery::ext::BaseClass<I_NavigationInterpolator>{});
     }

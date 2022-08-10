@@ -54,7 +54,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
 
-    NavigationInterpolatorLatLon(SensorConfiguration                     sensor_configuration,
+    NavigationInterpolatorLatLon(const SensorConfiguration&              sensor_configuration,
                                  tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                      tools::vectorinterpolators::t_extr_mode::extrapolate)
         : I_NavigationInterpolator(sensor_configuration)
@@ -81,7 +81,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @param latitude latitude in °
      * @param longitude longitude in °
      */
-    void set_data_position_system(const std::vector<double>& timestamp,
+    void set_data_position(const std::vector<double>& timestamp,
                                   const std::vector<double>& latitude,
                                   const std::vector<double>& longitude)
     {
@@ -154,8 +154,8 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
         if (!_interpolator_heave.empty()) // default is 0.0
             sensor_data.heave_heave = _interpolator_heave(timestamp);
 
-        if (!_interpolator_compass.empty()) // default is NAN (means will not be used)
-            sensor_data.compass_heading = _interpolator_compass.ypr(timestamp)[0];
+        if (!_interpolator_heading.empty()) // default is NAN (means will not be used)
+            sensor_data.heading_source = _interpolator_heading.ypr(timestamp)[0];
 
         if (!_interpolator_attitude.empty()) // default is 0.0. 0.0, 0.0
         {
@@ -189,12 +189,11 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
         return printer;
     }
 
-
   private:
     // serialization support using bitsery
     friend class bitsery::Access;
-    
-    NavigationInterpolatorLatLon() = default; // bitsery needs a default constructor 
+
+    NavigationInterpolatorLatLon() = default; // bitsery needs a default constructor
 
     template<typename S>
     void serialize(S& s)

@@ -34,7 +34,7 @@ void init_c_sensordatalocal(py::module& m)
              py::arg("gps_easting")     = 0,
              py::arg("gps_z")           = 0,
              py::arg("heave_heave")     = 0,
-             py::arg("compass_heading") = 0,
+             py::arg("heading_source") = 0,
              py::arg("imu_yaw")         = 0,
              py::arg("imu_pitch")       = 0,
              py::arg("imu_roll")        = 0)

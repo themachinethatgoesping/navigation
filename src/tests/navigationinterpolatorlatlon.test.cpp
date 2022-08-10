@@ -19,9 +19,9 @@ TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTA
 {
     // setup sensor configuration
     SensorConfiguration sensor_configuration;
-    sensor_configuration.set_offsets_depth_sensor(0, 0, 1);
-    sensor_configuration.set_offsets_attitude_sensor(1, -2, 3);
-    sensor_configuration.set_offsets_position_system(10, -10, 5);
+    sensor_configuration.set_offsets_depth_source(0, 0, 1);
+    sensor_configuration.set_offsets_attitude_source(1, -2, 3);
+    sensor_configuration.set_offsets_position_source(10, -10, 5);
 
     datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
     sensor_configuration.add_target("mbes", targetOffsets);
@@ -31,10 +31,10 @@ TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTA
     
     navint.set_data_depth({ 0, 1, 2, 3 }, { 10, -10, -11, 9 });
     navint.set_data_heave({ 0, 1, 2, 3 }, { -1, -2, 3, 4 });
-    navint.set_data_compass({ 0.5, 6 }, { 10, 20 });
-    navint.set_data_attitude_sensor(
+    navint.set_data_heading({ 0.5, 6 }, { 10, 20 });
+    navint.set_data_attitude(
         { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, { 2, -3, -4, 2 });
-    navint.set_data_position_system({ 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 });
+    navint.set_data_position({ 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 });
 
     // copy constructor
     NavigationInterpolatorLatLon navint2(navint);
@@ -45,7 +45,7 @@ TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTA
     REQUIRE(navint != navint2);
     navint2.add_target("sbes", targetOffsets);
     REQUIRE(navint == navint2);
-    navint.sensor_configuration().set_offsets_position_system(11, 20, 30);
+    navint.sensor_configuration().set_offsets_position_source(11, 20, 30);
     REQUIRE(navint != navint2);
 
     // string conversion

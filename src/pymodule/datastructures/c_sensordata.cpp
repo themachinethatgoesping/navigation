@@ -30,7 +30,7 @@ void init_c_sensordata(py::module& m)
              DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData_2),
              py::arg("gps_z")           = 0,
              py::arg("heave_heave")     = 0,
-             py::arg("compass_heading") = 0,
+             py::arg("heading_source") = 0,
              py::arg("imu_yaw")         = 0,
              py::arg("imu_pitch")       = 0,
              py::arg("imu_roll")        = 0)
@@ -45,9 +45,9 @@ void init_c_sensordata(py::module& m)
                        &SensorData::heave_heave,
                        DOC(themachinethatgoesping, navigation, datastructures, SensorData, heave_heave))
         .def_readwrite(
-            "compass_heading",
-            &SensorData::compass_heading,
-            DOC(themachinethatgoesping, navigation, datastructures, SensorData, compass_heading))
+            "heading_source",
+            &SensorData::heading_source,
+            DOC(themachinethatgoesping, navigation, datastructures, SensorData, heading_source))
         .def_readwrite("imu_yaw",
                        &SensorData::imu_yaw,
                        DOC(themachinethatgoesping, navigation, datastructures, SensorData, imu_yaw))

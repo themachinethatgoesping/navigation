@@ -25,7 +25,7 @@ TEST_CASE("SensorDataUTM should support common functions", TESTTAG)
     data.gps_northern_hemisphere = true;
     data.gps_z                   = 3;
 
-    data.compass_heading = 10;
+    data.heading_source = 10;
     data.heave_heave = 1;
 
     data.imu_yaw   = 10;
@@ -58,7 +58,7 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     data.gps_northern_hemisphere = true;
     data.gps_z                   = 3;
 
-    data.compass_heading = 10;
+    data.heading_source = 10;
     data.heave_heave = 1;
     
     data.imu_yaw   = 10;
@@ -104,11 +104,11 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     REQUIRE(SensorDataLatLon(data_south).gps_longitude == Approx(174.780011));
 
     // test info strings
-    data_utm.compass_heading = NAN;
+    data_utm.heading_source = NAN;
     data_utm.print(std::cerr);
     REQUIRE(data_utm.info_string().find("invalid") != std::string::npos);
 
-    data_utm.compass_heading = 12;
+    data_utm.heading_source = 12;
     data_utm.print(std::cerr);
     REQUIRE(data_utm.info_string().find("valid") != std::string::npos);
 }

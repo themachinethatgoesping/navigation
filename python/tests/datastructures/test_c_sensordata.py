@@ -30,7 +30,7 @@ class TestNavigationSensorData:
         assert data == SensorData.from_binary(data.to_binary())
 
         # print
-        data2.compass_heading = np.nan
+        data2.heading_source = np.nan
         print(data2)
         assert "valid" in str(data)
         assert "invalid" in str(data2)

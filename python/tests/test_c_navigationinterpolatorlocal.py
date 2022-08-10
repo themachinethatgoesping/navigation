@@ -17,25 +17,32 @@ class TestNavigationNavigationInterpolatorLocal:
     """class for grouping (test sections)"""
 
     def test_navigationinterpolatorlocal_should_support_common_functions(self):
-        # initialize
-        navi = nav.NavigationInterpolatorLocal("extrapolate")
+        # initialize sensor configuration
+        scs = nav.SensorConfiguration()
 
         # register target
-        navi.add_target(
+        scs.add_target(
             "mbes", nav.datastructures.PositionalOffsets(-12, 9, 3, 10, 11, 12)
         )
 
         # add offsets
-        navi.sensor_configuration.set_offsets_compass(yaw=9)
-        navi.sensor_configuration.set_offsets_depth_sensor(0, 0, 1)
-        navi.sensor_configuration.set_offsets_position_system(1, 2, 3)
-        navi.sensor_configuration.set_offsets_attitude_sensor(10, -10, -30)
+        scs.set_offsets_heading_source(yaw=9)
+        scs.set_offsets_depth_source(0, 0, 1)
+        scs.set_offsets_position_source(1, 2, 3)
+        scs.set_offsets_attitude_source(10, -10, -30)
+
+
+        # initialize interpolator
+        navi = nav.NavigationInterpolatorLocal(scs, "extrapolate")
+
+        # change some offsets
+        navi.sensor_configuration.set_offsets_position_source(10,0,0)
 
         # add some data
-        navi.set_data_position_system([1,2,3,4], [10,20,10,20], [-10,1,2,-4],10,0,0)
+        navi.set_data_position([1,2,3,4], [10,20,10,20], [-10,1,2,-4])
         navi.set_data_heave([0,5],[0,20])
-        navi.set_data_compass([1,2],[-20,20])
-        navi.set_data_attitude_sensor([2,3],[10,20],[-20,1])
+        navi.set_data_heading([1,2],[-20,20])
+        navi.set_data_attitude([2,3],[10,20],[-20,1])
         
         # get target position
         pos = navi("mbes",1.5)
@@ -60,7 +67,7 @@ class TestNavigationNavigationInterpolatorLocal:
         # copy
         navi2 = navi.copy()
         assert navi2 == navi
-        navi.sensor_configuration.set_offsets_compass(yaw=12)
+        navi.sensor_configuration.set_offsets_heading_source(yaw=12)
         assert navi2 != navi
 
         assert navi == nav.NavigationInterpolatorLocal.from_binary(navi.to_binary())

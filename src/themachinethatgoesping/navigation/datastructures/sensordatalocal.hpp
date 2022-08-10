@@ -58,7 +58,7 @@ struct SensorDataLocal : public SensorData
      * @param gpd_easting in m, positive eastwards
      * @param gps_z in m, positive downwards
      * @param heave_heave from heave sensor, will be added to gps_z in m, positive upwards
-     * @param compass_heading from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
+     * @param heading_source from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
      * east
      * @param imu_yaw in °, 0° is north, 90° is east
      * @param imu_pitch in °, positive means bow up
@@ -68,11 +68,11 @@ struct SensorDataLocal : public SensorData
                     double gps_easting,
                     double gps_z,
                     double heave_heave,
-                    double compass_heading,
+                    double heading_source,
                     double imu_yaw,
                     double imu_pitch,
                     double imu_roll)
-        : SensorData(gps_z, heave_heave, compass_heading, imu_yaw, imu_pitch, imu_roll)
+        : SensorData(gps_z, heave_heave, heading_source, imu_yaw, imu_pitch, imu_roll)
         , gps_northing(gps_northing)
         , gps_easting(gps_easting)
     {

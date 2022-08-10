@@ -26,12 +26,19 @@ class I_NavigationInterpolator
     SensorConfiguration _sensor_configuration; ///< sensor configuration that stores the offsets
 
     // SlerpInterpolator that stores timestamp, roll, pitch, yaw -> Attitude of Vessel on the Water
-    tools::vectorinterpolators::SlerpInterpolator _interpolator_attitude; ///< interpolator that stores attitude data (yaw, pitch and roll) yaw is only used if the compass data is NAN [°]
-    tools::vectorinterpolators::SlerpInterpolator _interpolator_compass; ///< interpolator that stores compass data (yaw) [°]
+    tools::vectorinterpolators::SlerpInterpolator
+        _interpolator_attitude; ///< interpolator that stores attitude data (yaw, pitch and roll)
+                                ///< yaw is only used if the compass data is NAN [°]
+    tools::vectorinterpolators::SlerpInterpolator
+        _interpolator_heading; ///< interpolator that stores compass data (yaw) [°]
 
     // LinearInterpolator for the depth in the world coordinate system
-    tools::vectorinterpolators::AkimaInterpolator _interpolator_heave; ///< interpolator that stores heave data (relative change in depth, positive upwards) [m]
-    tools::vectorinterpolators::AkimaInterpolator _interpolator_depth; ///< interpolator that stores depth data (depth, positive downwards) [m] 
+    tools::vectorinterpolators::AkimaInterpolator
+        _interpolator_heave; ///< interpolator that stores heave data (relative change in depth,
+                             ///< positive upwards) [m]
+    tools::vectorinterpolators::AkimaInterpolator
+        _interpolator_depth; ///< interpolator that stores depth data (depth, positive downwards)
+                             ///< [m]
 
   public:
     /**
@@ -39,7 +46,7 @@ class I_NavigationInterpolator
      *
      * @param extrapolation_mode extrapolate, fail or nearest
      */
-    I_NavigationInterpolator(SensorConfiguration                     sensor_configuration,
+    I_NavigationInterpolator(const SensorConfiguration&              sensor_configuration,
                              tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                  tools::vectorinterpolators::t_extr_mode::extrapolate)
         : _sensor_configuration(sensor_configuration)
@@ -59,7 +66,7 @@ class I_NavigationInterpolator
                                             tools::vectorinterpolators::t_extr_mode::extrapolate)
     {
         _interpolator_attitude.set_extrapolation_mode(extrapolation_mode);
-        _interpolator_compass.set_extrapolation_mode(extrapolation_mode);
+        _interpolator_heading.set_extrapolation_mode(extrapolation_mode);
 
         _interpolator_heave.set_extrapolation_mode(extrapolation_mode);
         _interpolator_depth.set_extrapolation_mode(extrapolation_mode);
@@ -70,7 +77,7 @@ class I_NavigationInterpolator
     {
         return _sensor_configuration == other._sensor_configuration &&
                _interpolator_attitude == other._interpolator_attitude &&
-               _interpolator_compass == other._interpolator_compass &&
+               _interpolator_heading == other._interpolator_heading &&
                _interpolator_heave == other._interpolator_heave &&
                _interpolator_depth == other._interpolator_depth;
     }
@@ -87,7 +94,7 @@ class I_NavigationInterpolator
     {
         _interpolator_depth.set_data_XY(timestamp, depth);
     }
-    
+
     /**
      * @brief Set the heave data
      *
@@ -107,7 +114,7 @@ class I_NavigationInterpolator
      * @param pitch in °, positive is bow up
      * @param roll in °, positive is port up
      */
-    void set_data_attitude_sensor(const std::vector<double>& timestamp,
+    void set_data_attitude(const std::vector<double>& timestamp,
                                   const std::vector<double>& yaw,
                                   const std::vector<double>& pitch,
                                   const std::vector<double>& roll)
@@ -116,15 +123,30 @@ class I_NavigationInterpolator
     }
     
     /**
+     * @brief Set the attitude data (no yaw)
+     *
+     * @param timestamp in seconds since epoch
+     * @param pitch in °, positive is bow up
+     * @param roll in °, positive is port up
+     */
+    void set_data_attitude(const std::vector<double>& timestamp,
+                                  const std::vector<double>& pitch,
+                                  const std::vector<double>& roll)
+    {
+        std::vector<double> yaw(timestamp.size(), 0.0);
+        _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
+    }
+
+    /**
      * @brief Set the compass data
      *
      * @param timestamp in seconds since epoch
      * @param heading in °, positive clockwise (north is 0°)
      */
-    void set_data_compass(const std::vector<double>& timestamp, const std::vector<double>& heading)
+    void set_data_heading(const std::vector<double>& timestamp, const std::vector<double>& heading)
     {
         std::vector<double> pr(heading.size(), 0.0);
-        _interpolator_compass.set_data_XYPR(timestamp, heading, pr, pr);
+        _interpolator_heading.set_data_XYPR(timestamp, heading, pr, pr);
     }
 
     /**
@@ -160,11 +182,11 @@ class I_NavigationInterpolator
     /**
      * @brief direct reference to the compass data interpolator
      *
-     * @return interpolator_compass&
+     * @return interpolator_heading&
      */
-    tools::vectorinterpolators::SlerpInterpolator& interpolator_compass()
+    tools::vectorinterpolators::SlerpInterpolator& interpolator_heading()
     {
-        return _interpolator_compass;
+        return _interpolator_heading;
     }
 
     //----- pass through functions -----
@@ -210,7 +232,6 @@ class I_NavigationInterpolator
      */
     SensorConfiguration& sensor_configuration() { return _sensor_configuration; }
 
-
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__ macro below)
@@ -225,7 +246,7 @@ class I_NavigationInterpolator
         printer.append(_interpolator_attitude.__printer__(float_precision), true);
 
         printer.register_section("Compass data", '*');
-        printer.append(_interpolator_compass.__printer__(float_precision), true);
+        printer.append(_interpolator_heading.__printer__(float_precision), true);
 
         printer.register_section("Heave data", '*');
         printer.append(_interpolator_heave.__printer__(float_precision), true);
@@ -239,16 +260,16 @@ class I_NavigationInterpolator
   protected:
     // serialization support using bitsery
     friend class bitsery::Access;
-    
-    I_NavigationInterpolator() = default; // bitsery needs a default constructor 
-    
+
+    I_NavigationInterpolator() = default; // bitsery needs a default constructor
+
     template<typename S>
     void serialize(S& s)
     {
         // // data
         s.object(_sensor_configuration);
         s.object(_interpolator_attitude);
-        s.object(_interpolator_compass);
+        s.object(_interpolator_heading);
         s.object(_interpolator_heave);
         s.object(_interpolator_depth);
     }
