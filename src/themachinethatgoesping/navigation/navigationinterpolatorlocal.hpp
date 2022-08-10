@@ -19,7 +19,7 @@ namespace themachinethatgoesping {
 namespace navigation {
 
 /**
- * @brief The NavInterpolator class: Interpolate navigation (northing/esting no zone specified)
+ * @brief The NavInterpolator class: Interpolate navigation (northing/easting no zone specified)
  * values and attitude information and transform the values using the offsets specified in the
  * sensor configuration class
  */
@@ -155,7 +155,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param timestamp timestamp in seconds since epoch
-     * @return datastructure that contains the position of the target in the world coordinate system
+     * @return data structure that contains the position of the target in the world coordinate system
      */
     datastructures::GeoLocationLocal compute_target_position(const std::string& target_id,
                                                              double             timestamp)
@@ -168,7 +168,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @brief Interpolate the saved sensor data for a specified timestamp stamp
      *
      * @param timestamp timestamp in seconds since epoch
-     * @return datastructure that contains the sensor data interpolated for the given timestamp
+     * @return data structure that contains the sensor data interpolated for the given timestamp
      * stamp
      */
     datastructures::SensorDataLocal get_sensor_data(double timestamp)
@@ -180,13 +180,13 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
         if (!_interpolator_heave.empty()) // default is 0.0
             sensor_data.heave = _interpolator_heave(timestamp);
 
-        if (!_interpolator_heading.empty()) // default is NAN (means will not be used)
+        if (!_interpolator_heading.empty()) // default is 0.0
             sensor_data.heading = _interpolator_heading.ypr(timestamp)[0];
 
-        if (!_interpolator_attitude.empty()) // default is 0.0. 0.0, 0.0
+        if (!_interpolator_attitude.empty()) // default is 0.0. 0.0
         {
             auto ypr              = _interpolator_attitude.ypr(timestamp);
-            sensor_data.imu_yaw   = ypr[0];
+            //sensor_data.imu_yaw   = ypr[0];
             sensor_data.pitch = ypr[1];
             sensor_data.roll  = ypr[2];
         }

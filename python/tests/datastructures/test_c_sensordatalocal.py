@@ -13,8 +13,8 @@ class Test_navigation_SensorDataLocal:
     # define actual tests (must start with "test_"
     # test case 1
     def test_SensorDataLocal_should_support_common_functions(self):
-        data = SensorDataLocal(5427745.995, 314082.699, 3, 4, 10, 11, 20, 30)
-        data_base = SensorData(3, 4, 10, 11, 20, 30)
+        data = SensorDataLocal(5427745.995, 314082.699, 3, 4, 10, 20, 30)
+        data_base = SensorData(3, 4, 10, 20, 30)
         print(data)
 
         #compare to base
@@ -34,7 +34,7 @@ class Test_navigation_SensorDataLocal:
         assert data == SensorDataLocal.from_binary(data.to_binary())
 
     def test_SensorDataLocal_should_support_utm_conversions(self):
-        data = SensorDataLocal(5427745.995, 314082.699, 3, 4, 10, 11, 20, 30)
+        data = SensorDataLocal(5427745.995, 314082.699, 3, 4, 10, 20, 30)
 
         zone = 60
         northern_hemisphere = False

@@ -28,13 +28,12 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
     sensor_configuration.add_target("mbes", targetOffsets);
 
     // // initialize coordinate system with one target
-    NavigationInterpolatorLocal       navint(sensor_configuration);
-    
+    NavigationInterpolatorLocal navint(sensor_configuration);
+
     navint.set_data_depth({ 0, 1, 2, 3 }, { 10, -10, -11, 9 });
     navint.set_data_heave({ 0, 1, 2, 3 }, { -1, -2, 3, 4 });
     navint.set_data_heading({ 0.5, 6 }, { 10, 20 });
-    navint.set_data_attitude(
-        { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, { 2, -3, -4, 2 });
+    navint.set_data_attitude({ 0, 1, 2, 3 }, { 1, -1, -2, 3 }, { 2, -3, -4, 2 });
     navint.set_data_position({ 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 });
 
     // copy constructor
@@ -61,7 +60,13 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
 
     // compute a target position
     datastructures::GeoLocationLocal expected_position(
-        -16.9134943, -23.5392578, -7.3232973266, 11.0909090909, 0.7830655476, -6.1148918992);
+        //-16.9134943, -23.5392578, -7.3232973266, 11.0909090909, 0.7830655476, -6.1148918992);
+        -16.9132381,
+        -23.5388528,
+        -7.3232528,
+        11.0909091,
+        0.7822953,
+        -6.1140918);
     auto target_position_mbes = navint.compute_target_position("mbes", 1.1);
     auto target_position_sbes = navint.compute_target_position("sbes", 1.1);
 

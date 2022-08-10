@@ -21,7 +21,6 @@ class Test_navigation_SensorDataUTM:
             3, 
             4,
             10,
-            11, 
             20, 
             30)
         data_base = SensorDataLocal(
@@ -30,14 +29,12 @@ class Test_navigation_SensorDataUTM:
             3, 
             4,
             10,
-            11, 
             20, 
             30)
         data_base_base = SensorData(
             3, 
             4,
             10,
-            11, 
             20, 
             30)
         print(data)
@@ -70,7 +67,6 @@ class Test_navigation_SensorDataUTM:
             3, 
             4,
             10,
-            11, 
             20, 
             30)
         print(data)
@@ -83,6 +79,6 @@ class Test_navigation_SensorDataUTM:
         assert data == data_latlon
         assert SensorDataUTM.from_sensordata(data_latlon) == data_latlon
 
-        assert data_latlon.gps_latitude == approx(-41.280330)
-        assert data_latlon.gps_longitude == approx(174.780011)
+        assert data_latlon.latitude == approx(-41.280330)
+        assert data_latlon.longitude == approx(174.780011)
 

@@ -28,13 +28,11 @@ namespace datastructures {
  */
 struct SensorData
 {
-    double depth       = 0.0; ///< in m, positive downwards
-    double heave = 0.0; ///< from heave sensor, will be added to depth in m, positive upwards
-    double heading =
-        NAN; ///< from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is east
-    double imu_yaw   = 0.0; ///< from attitude sensor, in °, 0° is north, 90° is east
-    double pitch = 0.0; ///< from attitude sensor, in °, positive means bow up
-    double roll  = 0.0; ///< from attitude sensor, in °, positive means port up
+    double depth   = 0.0; ///< in m, positive downwards
+    double heave   = 0.0; ///< from heave source, will be added to depth in m, positive upwards
+    double heading = 0.0; ///< from heading source in °, 0° is north, 90° is east
+    double pitch   = 0.0; ///< from attitude source, in °, positive means bow up
+    double roll    = 0.0; ///< from attitude source, in °, positive means port up
 
     /**
      * @brief Construct a new SensorData object
@@ -45,24 +43,16 @@ struct SensorData
     /**
      * @brief Construct a new SensorData object
      *
-     * @param depth in m, positive downwards
+     * @param depth from depth source, in m, positive downwards
      * @param heave from heave sensor, will be added to depth in m, positive upwards
-     * @param heading from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
-     * east
-     * @param imu_yaw in °, 0° is north, 90° is east
-     * @param pitch in °, positive means bow up
-     * @param roll in °, positive means port up
+     * @param heading from heading source, in °, 0° is north, 90° is east
+     * @param pitch from attitude source, in °, positive means bow up
+     * @param roll from attitude source, in °, positive means port up
      */
-    SensorData(double depth,
-               double heave,
-               double heading,
-               double imu_yaw,
-               double pitch,
-               double roll)
+    SensorData(double depth, double heave, double heading, double pitch, double roll)
         : depth(depth)
         , heave(heave)
         , heading(heading)
-        , imu_yaw(imu_yaw)
         , pitch(pitch)
         , roll(roll)
     {
@@ -81,10 +71,9 @@ struct SensorData
         if (tools::helper::approx(depth, rhs.depth))
             if (tools::helper::approx(heave, rhs.heave))
                 if (tools::helper::approx(heading, rhs.heading))
-                    if (tools::helper::approx(imu_yaw, rhs.imu_yaw))
-                        if (tools::helper::approx(pitch, rhs.pitch))
-                            if (tools::helper::approx(roll, rhs.roll))
-                                return true;
+                    if (tools::helper::approx(pitch, rhs.pitch))
+                        if (tools::helper::approx(roll, rhs.roll))
+                            return true;
 
         return false;
     }
@@ -98,7 +87,6 @@ struct SensorData
         s.value8b(depth);
         s.value8b(heave);
         s.value8b(heading);
-        s.value8b(imu_yaw);
         s.value8b(pitch);
         s.value8b(roll);
     }
@@ -110,17 +98,7 @@ struct SensorData
 
         printer.register_value("depth", depth, "positive downwards, m");
         printer.register_value("heave", heave, "positive upwards, m");
-
-        if (std::isnan(heading))
-        {
-            printer.register_value("heading", heading, "90 ° at east (invalid)");
-            printer.register_value("imu_yaw", imu_yaw, "90 ° at east (used");
-        }
-        else
-        {
-            printer.register_value("heading", heading, "90 ° at east (valid)");
-            printer.register_value("imu_yaw", imu_yaw, "90 ° at east (unused");
-        }
+        printer.register_value("heading", heading, "0° is north, 90 ° is east");
         printer.register_value("pitch", pitch, "° positive bow up");
         printer.register_value("roll", roll, "° positive port up");
 

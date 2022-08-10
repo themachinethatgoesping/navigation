@@ -19,14 +19,13 @@ TEST_CASE("SensorDataLatLon should support common functions", TESTTAG)
     // initialize data
     auto data = SensorDataLatLon();
 
-    data.gps_latitude  = 1;
-    data.gps_longitude = 2;
+    data.latitude  = 1;
+    data.longitude = 2;
     data.depth         = 3;
 
     data.heading = 10;
     data.heave = 1;
 
-    data.imu_yaw   = 10;
     data.pitch = 20;
     data.roll  = 30;
 
@@ -44,11 +43,7 @@ TEST_CASE("SensorDataLatLon should support common functions", TESTTAG)
     // test print does not crash
     REQUIRE(data.info_string().size() != 0);
 
-    data.print(std::cerr);
-    data.heading = NAN;
-    REQUIRE(data.info_string().find("invalid") != std::string::npos);
-
     data.heading = 12;
     data.print(std::cerr);
-    REQUIRE(data.info_string().find("valid") != std::string::npos);
+    REQUIRE(data.info_string().find("heading") != std::string::npos);
 }

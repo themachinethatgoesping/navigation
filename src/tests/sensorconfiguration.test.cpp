@@ -72,10 +72,9 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
         sensor_data.heading = 90;
         sensor_data.roll    = 0;
         sensor_data.pitch   = 20;
-        sensor_data.imu_yaw = 130; // should not influence the results
 
         // imu yaw offset should not influence the resulting yaw because that is influenced only by
-        // the heading_source but imu yaw offset of 90° should swap pitch and roll
+        // the heading but imu yaw offset of 90° should swap pitch and roll
         scs.set_offsets_attitude_source(90, 0, 0);
         auto position = scs.compute_target_position("mbes", sensor_data);
 
@@ -130,7 +129,6 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         datastructures::SensorDataLocal sensor_data;
         sensor_data.depth        = 5;
         sensor_data.heading      = 0;
-        sensor_data.imu_yaw      = 40; // ignored because heading_source is valid
         sensor_data.pitch        = 0;
         sensor_data.roll         = 0;
         sensor_data.northing = 10;
@@ -171,7 +169,6 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // initialize sensor data
         sensor_data.depth        = 5;
         sensor_data.heading      = 180;
-        sensor_data.imu_yaw      = 40; // ignored because heading_source is valid
         sensor_data.pitch        = 0;
         sensor_data.roll         = 0;
         sensor_data.northing = 10;
@@ -212,7 +209,6 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // initialize sensor data
         sensor_data.depth        = 5;
         sensor_data.heading      = 90;
-        sensor_data.imu_yaw      = 40; // ignored because heading_source is valid
         sensor_data.pitch        = 0;
         sensor_data.roll         = 0;
         sensor_data.northing = 10;
@@ -256,7 +252,6 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // scenario 1
         sensor_data.depth        = 5;
         sensor_data.heading      = 25;
-        sensor_data.imu_yaw      = 40;
         sensor_data.pitch        = 20;
         sensor_data.roll         = 10;
         sensor_data.northing = 10;
@@ -296,7 +291,6 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // scenario 2
         sensor_data.depth        = -5;
         sensor_data.heading      = -35;
-        sensor_data.imu_yaw      = 40;
         sensor_data.pitch        = -5;
         sensor_data.roll         = -15;
         sensor_data.northing = -23;
@@ -334,8 +328,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 3
         sensor_data.depth        = 3;
-        sensor_data.heading      = NAN;
-        sensor_data.imu_yaw      = 30;
+        sensor_data.heading      = 30;
         sensor_data.pitch        = -5;
         sensor_data.roll         = -15;
         sensor_data.northing = 100;
@@ -374,7 +367,6 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // scenario 4
         sensor_data.depth        = -2000;
         sensor_data.heading      = -470;
-        sensor_data.imu_yaw      = 40;
         sensor_data.pitch        = -59;
         sensor_data.roll         = 1;
         sensor_data.northing = 23;
@@ -418,11 +410,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // scenario 5 (latlon)
         sensor_data.depth         = 2000;
         sensor_data.heading       = 470;
-        sensor_data.imu_yaw       = 40;
         sensor_data.pitch         = -59;
         sensor_data.roll          = 1;
-        sensor_data.gps_latitude  = 54.123;
-        sensor_data.gps_longitude = -10.123;
+        sensor_data.latitude  = 54.123;
+        sensor_data.longitude = -10.123;
 
         auto position_mbes          = scs.compute_target_position("mbes", sensor_data);
         auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
@@ -457,11 +448,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // scenario 6 (latlon)
         sensor_data.depth         = 1000;
         sensor_data.heading       = 360;
-        sensor_data.imu_yaw       = 40;
         sensor_data.pitch         = 9;
         sensor_data.roll          = -1;
-        sensor_data.gps_latitude  = -74.123;
-        sensor_data.gps_longitude = 1.123;
+        sensor_data.latitude  = -74.123;
+        sensor_data.longitude = 1.123;
 
         // compute sensor positions
         position_mbes          = scs.compute_target_position("mbes", sensor_data);

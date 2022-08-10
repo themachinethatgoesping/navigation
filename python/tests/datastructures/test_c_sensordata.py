@@ -17,7 +17,7 @@ class TestNavigationSensorData:
     def test_sensordata_should_support_common_functions(self):
         """test common, simple functions
         """
-        data = SensorData(3, 4, 10, 11, 20, 30)
+        data = SensorData(3, 4, 10, 20, 30)
         print(data)
 
         # copy
@@ -30,7 +30,4 @@ class TestNavigationSensorData:
         assert data == SensorData.from_binary(data.to_binary())
 
         # print
-        data2.heading = np.nan
-        print(data2)
-        assert "valid" in str(data)
-        assert "invalid" in str(data2)
+        assert "heading" in str(data)

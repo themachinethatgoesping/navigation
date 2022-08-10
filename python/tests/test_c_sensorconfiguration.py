@@ -18,7 +18,7 @@ class TestNavigationSensorConfiguration:
 
     def test_sensorconfiguration_should_support_common_functions(self):
         """test common, simple functions"""
-        data = nav.datastructures.SensorDataLatLon(53, 10, 3, 4, 10, 11, 20, 30)
+        data = nav.datastructures.SensorDataLatLon(53, 10, 3, 4, 10, 20, 30)
 
         # initialize
         scs = nav.SensorConfiguration()

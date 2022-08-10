@@ -27,10 +27,9 @@ class I_NavigationInterpolator
 
     // SlerpInterpolator that stores timestamp, roll, pitch, yaw -> Attitude of Vessel on the Water
     tools::vectorinterpolators::SlerpInterpolator
-        _interpolator_attitude; ///< interpolator that stores attitude data (yaw, pitch and roll)
-                                ///< yaw is only used if the compass data is NAN [°]
+        _interpolator_attitude; ///< interpolator that stores attitude data (pitch and roll)
     tools::vectorinterpolators::SlerpInterpolator
-        _interpolator_heading; ///< interpolator that stores compass data (yaw) [°]
+        _interpolator_heading; ///< interpolator that stores compass data (yaw/heading) [°]
 
     // LinearInterpolator for the depth in the world coordinate system
     tools::vectorinterpolators::AkimaInterpolator
@@ -105,25 +104,9 @@ class I_NavigationInterpolator
     {
         _interpolator_heave.set_data_XY(timestamp, heave);
     }
-
-    /**
-     * @brief Set the attitude data
-     *
-     * @param timestamp in seconds since epoch
-     * @param yaw in °, positive clockwise (north is 0°)
-     * @param pitch in °, positive is bow up
-     * @param roll in °, positive is port up
-     */
-    void set_data_attitude(const std::vector<double>& timestamp,
-                                  const std::vector<double>& yaw,
-                                  const std::vector<double>& pitch,
-                                  const std::vector<double>& roll)
-    {
-        _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
-    }
     
     /**
-     * @brief Set the attitude data (no yaw)
+     * @brief Set the attitude data (no yaw, ythis is set in set_data_heading)
      *
      * @param timestamp in seconds since epoch
      * @param pitch in °, positive is bow up

@@ -114,22 +114,6 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
              py::arg("timestamp"),
              py::arg("depth"))
 
-        // set attitude data
-        .def("set_data_attitude",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&>(
-                 &NavigationInterpolatorLocal::set_data_attitude),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 I_NavigationInterpolator,
-                 set_data_attitude),
-             py::arg("timestamp"),
-             py::arg("yaw"),
-             py::arg("pitch"),
-             py::arg("roll"))
-
         // set attitude data (no yaw)
         .def("set_data_attitude",
              py::overload_cast<const std::vector<double>&,
@@ -139,7 +123,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
              DOC(themachinethatgoesping,
                  navigation,
                  I_NavigationInterpolator,
-                 set_data_attitude_2),
+                 set_data_attitude),
              py::arg("timestamp"),
              py::arg("pitch"),
              py::arg("roll"))

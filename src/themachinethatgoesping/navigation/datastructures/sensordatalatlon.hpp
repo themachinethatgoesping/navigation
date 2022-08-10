@@ -32,14 +32,8 @@ struct SensorDataUTM; // defined in sensordatautm.hpp
  */
 struct SensorDataLatLon : public SensorData
 {
-    double gps_latitude  = 0.0; ///< in °, positive northwards
-    double gps_longitude = 0.0; ///< in °, positive eastwards
-    // double depth         = 0.0; ///< in m, positive downwards
-    // double heave     = 0.0; ///< from heave sensor, will be added to depth in m, positive
-    // upwards double heading_source = NAN; ///< from compass, replaces imu_yaw if not NAN, in °,
-    // 0° is north, 90° is east double imu_yaw     = 0.0; ///< from attitude sensor, in °, 0° is
-    // north, 90° is east double pitch = 0.0;   ///< from attitude sensor, in °, positive means
-    // bow up double roll  = 0.0;   ///< from attitude sensor, in °, positive means port up
+    double latitude  = 0.0; ///< in °, positive northwards
+    double longitude = 0.0; ///< in °, positive eastwards
 
     /**
      * @brief Construct a new SensorDataLatLon object (all offsets set to 0)
@@ -51,13 +45,13 @@ struct SensorDataLatLon : public SensorData
      * @brief Construct a new Sensor Data Lat Lon object using a base sensor data object
      *
      * @param data
-     * @param gps_latitude in °, positive northwards
-     * @param gps_longitude in °, positive eastwards
+     * @param latitude in °, positive northwards
+     * @param longitude in °, positive eastwards
      */
-    SensorDataLatLon(const SensorData& data, double gps_latitude, double gps_longitude)
+    SensorDataLatLon(const SensorData& data, double latitude, double longitude)
         : SensorData(data)
-        , gps_latitude(gps_latitude)
-        , gps_longitude(gps_longitude)
+        , latitude(latitude)
+        , longitude(longitude)
     {
     }
 
@@ -71,27 +65,24 @@ struct SensorDataLatLon : public SensorData
     /**
      * @brief Construct a new SensorDataLatLon object
      *
-     * @param gps_latitude in °, positive northwards
-     * @param gps_longitude in °, positive eastwards
+     * @param latitude in °, positive northwards
+     * @param longitude in °, positive eastwards
      * @param depth in m, positive downwards
      * @param heave from heave sensor, will be added to depth in m, positive upwards
-     * @param heading_source from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
-     * east
-     * @param imu_yaw in °, 0° is north, 90° is east
+     * @param heading  in °, 0° is north, 90° is east
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    SensorDataLatLon(double gps_latitude,
-                     double gps_longitude,
+    SensorDataLatLon(double latitude,
+                     double longitude,
                      double depth,
                      double heave,
-                     double heading_source,
-                     double imu_yaw,
+                     double heading,
                      double pitch,
                      double roll)
-        : SensorData(depth, heave, heading_source, imu_yaw, pitch, roll)
-        , gps_latitude(gps_latitude)
-        , gps_longitude(gps_longitude)
+        : SensorData(depth, heave, heading, pitch, roll)
+        , latitude(latitude)
+        , longitude(longitude)
     {
     }
 
@@ -106,8 +97,8 @@ struct SensorDataLatLon : public SensorData
     bool operator==(const SensorDataLatLon& rhs) const
     {
         if (SensorData::operator==(rhs))
-            if (tools::helper::approx(gps_latitude, rhs.gps_latitude))
-                if (tools::helper::approx(gps_longitude, rhs.gps_longitude))
+            if (tools::helper::approx(latitude, rhs.latitude))
+                if (tools::helper::approx(longitude, rhs.longitude))
                     return true;
 
         return false;
@@ -120,8 +111,8 @@ struct SensorDataLatLon : public SensorData
     void serialize(S& s)
     {
         s.ext(*this, bitsery::ext::BaseClass<SensorData>{});
-        s.value8b(gps_latitude);
-        s.value8b(gps_longitude);
+        s.value8b(latitude);
+        s.value8b(longitude);
     }
 
   public:
@@ -130,12 +121,12 @@ struct SensorDataLatLon : public SensorData
         tools::classhelpers::ObjectPrinter printer("SensorDataLatLon", float_precision);
 
         printer.register_string(
-            "gps_latitude",
-            navtools::latitude_to_string(gps_latitude, navtools::t_latlon_format::seconds, 1),
+            "latitude",
+            navtools::latitude_to_string(latitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''N/S");
         printer.register_string(
-            "gps_longitude",
-            navtools::longitude_to_string(gps_longitude, navtools::t_latlon_format::seconds, 1),
+            "longitude",
+            navtools::longitude_to_string(longitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
 
         printer.append(SensorData::__printer__(float_precision));

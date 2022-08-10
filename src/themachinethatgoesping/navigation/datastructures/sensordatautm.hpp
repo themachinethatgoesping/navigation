@@ -88,14 +88,12 @@ struct SensorDataUTM : public SensorDataLocal
      * @brief Construct a new SensorDataUTM object
      *
      * @param northing in m, positive northwards
-     * @param gpd_easting in m, positive eastwards
+     * @param easting in m, positive eastwards
      * @param utm_zone UTM/UPS zone number
      * @param utm_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      * @param depth in m, positive downwards
-     * @param heave from heave sensor, will be added to depth in m, positive upwards
-     * @param heading_source from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
-     * east
-     * @param imu_yaw in °, 0° is north, 90° is east
+     * @param heave is added to depth in m, positive upwards
+     * @param heading in °, 0° is north, 90° is east
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
@@ -105,16 +103,14 @@ struct SensorDataUTM : public SensorDataLocal
                   bool   utm_northern_hemisphere,
                   double depth,
                   double heave,
-                  double heading_source,
-                  double imu_yaw,
+                  double heading,
                   double pitch,
                   double roll)
         : SensorDataLocal(northing,
                           easting,
                           depth,
                           heave,
-                          heading_source,
-                          imu_yaw,
+                          heading,
                           pitch,
                           roll)
         , utm_zone(utm_zone)
@@ -152,7 +148,6 @@ struct SensorDataUTM : public SensorDataLocal
                               data_utm.depth,
                               data_utm.heave,
                               data_utm.heading,
-                              data_utm.imu_yaw,
                               data_utm.pitch,
                               data_utm.roll);
 
@@ -160,8 +155,8 @@ struct SensorDataUTM : public SensorDataLocal
                                        data_utm.utm_northern_hemisphere,
                                        data_utm.easting,
                                        data_utm.northing,
-                                       data.gps_latitude,
-                                       data.gps_longitude);
+                                       data.latitude,
+                                       data.longitude);
 
         return data;
     }
@@ -183,12 +178,11 @@ struct SensorDataUTM : public SensorDataLocal
                                data.depth,
                                data.heave,
                                data.heading,
-                               data.imu_yaw,
                                data.pitch,
                                data.roll);
 
-        GeographicLib::UTMUPS::Forward(data.gps_latitude,
-                                       data.gps_longitude,
+        GeographicLib::UTMUPS::Forward(data.latitude,
+                                       data.longitude,
                                        data_utm.utm_zone,
                                        data_utm.utm_northern_hemisphere,
                                        data_utm.easting,

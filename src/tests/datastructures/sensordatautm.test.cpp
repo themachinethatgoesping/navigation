@@ -28,7 +28,6 @@ TEST_CASE("SensorDataUTM should support common functions", TESTTAG)
     data.heading = 10;
     data.heave   = 1;
 
-    data.imu_yaw = 10;
     data.pitch   = 20;
     data.roll    = 30;
 
@@ -61,7 +60,6 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     data.heading = 10;
     data.heave   = 1;
 
-    data.imu_yaw = 10;
     data.pitch   = 20;
     data.roll    = 30;
 
@@ -96,19 +94,15 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     REQUIRE(data_south == SensorDataLatLon(data_south));
 
     // test precomputed conversion (north)
-    REQUIRE(data_latlon.gps_latitude == Approx(51.024224));
-    REQUIRE(data_latlon.gps_longitude == Approx(3.710670));
+    REQUIRE(data_latlon.latitude == Approx(51.024224));
+    REQUIRE(data_latlon.longitude == Approx(3.710670));
 
     // test precomputed conversion (north)
-    REQUIRE(SensorDataLatLon(data_south).gps_latitude == Approx(-41.280330));
-    REQUIRE(SensorDataLatLon(data_south).gps_longitude == Approx(174.780011));
+    REQUIRE(SensorDataLatLon(data_south).latitude == Approx(-41.280330));
+    REQUIRE(SensorDataLatLon(data_south).longitude == Approx(174.780011));
 
     // test info strings
-    data_utm.heading = NAN;
-    data_utm.print(std::cerr);
-    REQUIRE(data_utm.info_string().find("invalid") != std::string::npos);
-
     data_utm.heading = 12;
     data_utm.print(std::cerr);
-    REQUIRE(data_utm.info_string().find("valid") != std::string::npos);
+    REQUIRE(data_utm.info_string().find("heading") != std::string::npos);
 }

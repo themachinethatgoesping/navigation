@@ -8,17 +8,18 @@
 namespace themachinethatgoesping {
 namespace navigation {
 
-// ----- compute_target_position -----Compile failed: command 'msvc-14.3' failed: No such file or directory
+// ----- compute_target_position -----Compile failed: command 'msvc-14.3' failed: No such file or
+// directory
 
 datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
-    const std::string&         target_id,
+    const std::string&                target_id,
     const datastructures::SensorData& sensor_data) const
 {
     datastructures::GeoLocationLocal location;
 
     // first get the current rotation of the vessel
     auto vessel_quat =
-        get_system_rotation_as_quat(sensor_data, _heading_offsets, _attitude_source_offsets);
+        get_system_rotation_as_quat(sensor_data, _offsets_heading_source, _offsets_attitude_source);
 
     // convert target to quaternion
     auto target_offsets  = get_offsets_target(target_id);
@@ -29,11 +30,11 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
     auto target_xyz = tools::rotationfunctions::rotateXYZ(
         vessel_quat, target_offsets.x, target_offsets.y, target_offsets.z);
     auto depth_source_xyz = tools::rotationfunctions::rotateXYZ(
-        vessel_quat, _depth_source_offsets.x, _depth_source_offsets.y, _depth_source_offsets.z);
+        vessel_quat, _offsets_depth_source.x, _offsets_depth_source.y, _offsets_depth_source.z);
     auto positionSystem_xyz = tools::rotationfunctions::rotateXYZ(vessel_quat,
-                                                                  _position_source_offsets.x,
-                                                                  _position_source_offsets.y,
-                                                                  _position_source_offsets.z);
+                                                                  _offsets_position_source.x,
+                                                                  _offsets_position_source.y,
+                                                                  _offsets_position_source.z);
 
     // compute target depth
     location.z = target_xyz[2] - depth_source_xyz[2] + sensor_data.depth - sensor_data.heave;
@@ -54,7 +55,7 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
 }
 
 datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
-    const std::string&              target_id,
+    const std::string&                     target_id,
     const datastructures::SensorDataLocal& sensor_data) const
 {
     auto position = compute_target_position(target_id, datastructures::SensorData(sensor_data));
@@ -67,17 +68,18 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
 }
 
 datastructures::GeoLocationUTM SensorConfiguration::compute_target_position(
-    const std::string&            target_id,
+    const std::string&                   target_id,
     const datastructures::SensorDataUTM& sensor_data) const
 {
-    auto position = compute_target_position(target_id, datastructures::SensorDataLocal(sensor_data));
+    auto position =
+        compute_target_position(target_id, datastructures::SensorDataLocal(sensor_data));
 
     return datastructures::GeoLocationUTM(
         position, sensor_data.utm_zone, sensor_data.utm_northern_hemisphere);
 }
 
 datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
-    const std::string&               target_id,
+    const std::string&                      target_id,
     const datastructures::SensorDataLatLon& sensor_data) const
 {
     // compute position from SensorData (no x,y or lat,lon coordinates)
@@ -95,8 +97,8 @@ datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
         // this happens if there is no offset between the antenna and the target
         if (distance == 0)
         {
-            target_lat = sensor_data.gps_latitude;
-            target_lon = sensor_data.gps_longitude;
+            target_lat = sensor_data.latitude;
+            target_lon = sensor_data.longitude;
         }
 
         // this should never happen
@@ -109,8 +111,8 @@ datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
     {
         GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
                                      GeographicLib::Constants::WGS84_f());
-        geod.Direct(sensor_data.gps_latitude,
-                    sensor_data.gps_longitude,
+        geod.Direct(sensor_data.latitude,
+                    sensor_data.longitude,
                     heading,
                     distance,
                     target_lat,
@@ -128,19 +130,19 @@ const datastructures::PositionalOffsets& SensorConfiguration::get_offsets_target
     return _target_offsets.at(target_id); // throws std::out_of_range if not found
 }
 
-void SensorConfiguration::add_target(const std::string&                target_id,
-                                             const datastructures::PositionalOffsets& target_offsets)
+void SensorConfiguration::add_target(const std::string&                       target_id,
+                                     const datastructures::PositionalOffsets& target_offsets)
 {
     _target_offsets[target_id] = target_offsets;
 }
 
 void SensorConfiguration::add_target(const std::string& target_id,
-                                             double             x,
-                                             double             y,
-                                             double             z,
-                                             double             yaw,
-                                             double             pitch,
-                                             double             roll)
+                                     double             x,
+                                     double             y,
+                                     double             z,
+                                     double             yaw,
+                                     double             pitch,
+                                     double             roll)
 {
     add_target(target_id, datastructures::PositionalOffsets(x, y, z, yaw, pitch, roll));
 }
@@ -148,117 +150,94 @@ void SensorConfiguration::add_target(const std::string& target_id,
 // ----- get/set sensor offsets -----
 void SensorConfiguration::set_offsets_attitude_source(double yaw, double pitch, double roll)
 {
-    _attitude_source_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
+    _offsets_attitude_source = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
 }
 void SensorConfiguration::set_offsets_attitude_source(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
-    _attitude_source_offsets = sensor_offsets;
+    _offsets_attitude_source = sensor_offsets;
 }
 
 datastructures::PositionalOffsets SensorConfiguration::get_offsets_attitude_source() const
 {
-    return _attitude_source_offsets;
+    return _offsets_attitude_source;
 }
 
 void SensorConfiguration::set_offsets_heading_source(double yaw)
 {
-    _heading_offsets = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
+    _offsets_heading_source = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
-void SensorConfiguration::set_offsets_heading_source(const datastructures::PositionalOffsets& sensor_offsets)
+void SensorConfiguration::set_offsets_heading_source(
+    const datastructures::PositionalOffsets& sensor_offsets)
 {
-    _heading_offsets = sensor_offsets;
+    _offsets_heading_source = sensor_offsets;
 }
 datastructures::PositionalOffsets SensorConfiguration::get_offsets_heading_source() const
 {
-    return _heading_offsets;
+    return _offsets_heading_source;
 }
 
 void SensorConfiguration::set_offsets_depth_source(double x, double y, double z)
 {
-    _depth_source_offsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+    _offsets_depth_source = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorConfiguration::set_offsets_depth_source(const datastructures::PositionalOffsets& sensor_offsets)
+void SensorConfiguration::set_offsets_depth_source(
+    const datastructures::PositionalOffsets& sensor_offsets)
 {
-    _depth_source_offsets = sensor_offsets;
+    _offsets_depth_source = sensor_offsets;
 }
 datastructures::PositionalOffsets SensorConfiguration::get_offsets_depth_source() const
 {
-    return _depth_source_offsets;
+    return _offsets_depth_source;
 }
 
 void SensorConfiguration::set_offsets_position_source(double x, double y, double z)
 {
-    _position_source_offsets = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+    _offsets_position_source = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
 }
 void SensorConfiguration::set_offsets_position_source(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
-    _position_source_offsets = sensor_offsets;
+    _offsets_position_source = sensor_offsets;
 }
 datastructures::PositionalOffsets SensorConfiguration::get_offsets_position_source() const
 {
-    return _position_source_offsets;
+    return _offsets_position_source;
 }
 
 // ----- helper functions -----
 Eigen::Quaterniond SensorConfiguration::get_system_rotation_as_quat(
     const datastructures::SensorData&        sensor_data,
-    const datastructures::PositionalOffsets& heading_offsets,
-    const datastructures::PositionalOffsets& attitude_source_offsets)
+    const datastructures::PositionalOffsets& offsets_heading_source,
+    const datastructures::PositionalOffsets& offsets_attitude_source)
 {
+    // convert offset to quaternion
+    Eigen::Quaternion<double> imu_offset_quat =
+        tools::rotationfunctions::quaternion_from_ypr(offsets_attitude_source.yaw,
+                                                      offsets_attitude_source.pitch,
+                                                      offsets_attitude_source.roll,
+                                                      true);
 
-    if (std::isnan(sensor_data.heading))
-    {
-        // if heading_source is nan, the imu_yaw will be used as heading
-        // convert offset to quaternion
-        Eigen::Quaternion<double> imu_offset_quat =
-            tools::rotationfunctions::quaternion_from_ypr(attitude_source_offsets.yaw,
-                                                          attitude_source_offsets.pitch,
-                                                          attitude_source_offsets.roll,
-                                                          true);
+    // convert sensor pitch,roll to quaternion (ignore reported yaw)
+    auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
+        0.0, sensor_data.pitch, sensor_data.roll, true);
 
-        // convert sensor yaw,pitch,roll to quaternion
-        auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
-            sensor_data.imu_yaw, sensor_data.pitch, sensor_data.roll, true);
+    // compute roll and pitch using the imu_offsets (including yaw offset)
+    // TODO: check if the order is correct
+    auto pr_quat = imu_sensor_quat * imu_offset_quat.inverse();
+    pr_quat.normalize();
 
-        // return sensor yaw, pitch, roll corrected for (rotated by) the sensor offsets
-        // TODO: check if the order is correct
-        auto vessel_quat = imu_sensor_quat * imu_offset_quat.inverse();
-        vessel_quat.normalize();
-        return vessel_quat;
-    }
-    else
-    {
-        // if heading_source is nan, the imu_yaw will be used as heading
-        // convert offset to quaternion
-        Eigen::Quaternion<double> imu_offset_quat =
-            tools::rotationfunctions::quaternion_from_ypr(attitude_source_offsets.yaw,
-                                                          attitude_source_offsets.pitch,
-                                                          attitude_source_offsets.roll,
-                                                          true);
+    // compute sensor quat using the correct pitch and roll (ignore yaw)
+    auto ypr         = tools::rotationfunctions::ypr_from_quaternion(pr_quat, false);
+    auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(0., ypr[1], ypr[2], false);
 
-        // convert sensor pitch,roll to quaternion (ignore reported yaw)
-        auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
-            0.0, sensor_data.pitch, sensor_data.roll, true);
+    // rotate sensor quat using heading
+    double heading      = sensor_data.heading - offsets_heading_source.yaw;
+    auto   compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0, 0.0, true);
 
-        // compute roll and pitch using the imu_offsets (including yaw offset)
-        // TODO: check if the order is correct
-        auto pr_quat = imu_sensor_quat * imu_offset_quat.inverse();
-        pr_quat.normalize();
-
-        // compute sensor quat using the correct pitch and roll (ignore yaw)
-        auto ypr         = tools::rotationfunctions::ypr_from_quaternion(pr_quat, false);
-        auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(0., ypr[1], ypr[2], false);
-
-        // rotate sensor quat using heading_source
-        double heading    = sensor_data.heading - heading_offsets.yaw;
-        auto compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0, 0.0, true);
-
-        auto vessel_quat = compass_quat * sensor_quat;
-        vessel_quat.normalize();
-        return vessel_quat;
-    }
+    auto vessel_quat = compass_quat * sensor_quat;
+    vessel_quat.normalize();
+    return vessel_quat;
 }
 } // namespace navigation
 } // namespace themachinethatgoesping

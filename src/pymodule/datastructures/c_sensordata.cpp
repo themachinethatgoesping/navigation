@@ -26,12 +26,11 @@ void init_c_sensordata(py::module& m)
              DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData))
         .def(py::init<SensorDataUTM>(),
              DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData))
-        .def(py::init<double, double, double, double, double, double>(),
+        .def(py::init<double, double, double, double, double>(),
              DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData_2),
              py::arg("depth")   = 0,
              py::arg("heave")   = 0,
              py::arg("heading") = 0,
-             py::arg("imu_yaw") = 0,
              py::arg("pitch")   = 0,
              py::arg("roll")    = 0)
         .def("__eq__",
@@ -47,9 +46,6 @@ void init_c_sensordata(py::module& m)
         .def_readwrite("heading",
                        &SensorData::heading,
                        DOC(themachinethatgoesping, navigation, datastructures, SensorData, heading))
-        .def_readwrite("imu_yaw",
-                       &SensorData::imu_yaw,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, imu_yaw))
         .def_readwrite("pitch",
                        &SensorData::pitch,
                        DOC(themachinethatgoesping, navigation, datastructures, SensorData, pitch))

@@ -26,7 +26,6 @@ TEST_CASE("SensorDataLocal should support common functions", TESTTAG)
     data.heading = 10;
     data.heave = 1;
 
-    data.imu_yaw   = 10;
     data.pitch = 20;
     data.roll  = 30;
 
@@ -59,7 +58,6 @@ TEST_CASE("SensorDataLocal should support common utm/local conversions", TESTTAG
     data.heading = 10;
     data.heave = 1;
     
-    data.imu_yaw   = 10;
     data.pitch = 20;
     data.roll  = 30;
 

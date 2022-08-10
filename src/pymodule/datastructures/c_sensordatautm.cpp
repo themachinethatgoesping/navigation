@@ -36,7 +36,7 @@ void init_c_sensordatautm(py::module& m)
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_4),
              py::arg("sensordatalatlon"),
              py::arg("setutm_zone") = -1)
-        .def(py::init<double, double, int, bool, double, double, double, double, double, double>(),
+        .def(py::init<double, double, int, bool, double, double, double, double, double>(),
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_5),
              py::arg("northing")            = 0,
              py::arg("easting")             = 0,
@@ -44,8 +44,7 @@ void init_c_sensordatautm(py::module& m)
              py::arg("utm_northern_hemisphere") = true,
              py::arg("depth")                   = 0,
              py::arg("heave")             = 0,
-             py::arg("heading_source")         = 0,
-             py::arg("imu_yaw")                 = 0,
+             py::arg("heading")         = 0,
              py::arg("pitch")               = 0,
              py::arg("roll")                = 0)
         .def("__eq__",

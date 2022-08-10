@@ -55,12 +55,10 @@ struct SensorDataLocal : public SensorData
      * @brief Construct a new SensorDataLocal object
      *
      * @param northing in m, positive northwards
-     * @param gpd_easting in m, positive eastwards
+     * @param easting in m, positive eastwards
      * @param depth in m, positive downwards
      * @param heave from heave sensor, will be added to depth in m, positive upwards
-     * @param heading_source from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
-     * east
-     * @param imu_yaw in °, 0° is north, 90° is east
+     * @param heading in °, 0° is north, 90° is east
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
@@ -68,11 +66,10 @@ struct SensorDataLocal : public SensorData
                     double easting,
                     double depth,
                     double heave,
-                    double heading_source,
-                    double imu_yaw,
+                    double heading,
                     double pitch,
                     double roll)
-        : SensorData(depth, heave, heading_source, imu_yaw, pitch, roll)
+        : SensorData(depth, heave, heading, pitch, roll)
         , northing(northing)
         , easting(easting)
     {
