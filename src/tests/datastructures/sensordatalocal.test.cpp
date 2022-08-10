@@ -19,16 +19,16 @@ TEST_CASE("SensorDataLocal should support common functions", TESTTAG)
     // initialize data
     auto data = SensorDataLocal();
 
-    data.gps_northing = 5652759.000;
-    data.gps_easting  = 549841.192;
-    data.gps_z        = 3;
+    data.northing = 5652759.000;
+    data.easting  = 549841.192;
+    data.depth        = 3;
 
-    data.heading_source = 10;
-    data.heave_heave = 1;
+    data.heading = 10;
+    data.heave = 1;
 
     data.imu_yaw   = 10;
-    data.imu_pitch = 20;
-    data.imu_roll  = 30;
+    data.pitch = 20;
+    data.roll  = 30;
 
     // test copy
     REQUIRE(data == SensorDataLocal(data));
@@ -50,18 +50,18 @@ TEST_CASE("SensorDataLocal should support common utm/local conversions", TESTTAG
     // initialize data
     auto data = SensorDataLocal();
 
-    data.gps_northing        = 5652759.000;
-    data.gps_easting         = 549841.192;
-    data.gps_z               = 3;
+    data.northing        = 5652759.000;
+    data.easting         = 549841.192;
+    data.depth               = 3;
     int  zone                = 31;
     bool northern_hemisphere = true;
 
-    data.heading_source = 10;
-    data.heave_heave = 1;
+    data.heading = 10;
+    data.heave = 1;
     
     data.imu_yaw   = 10;
-    data.imu_pitch = 20;
-    data.imu_roll  = 30;
+    data.pitch = 20;
+    data.roll  = 30;
 
     // test utm/lat lon conversion
     SensorDataUTM data_utm(data, zone, northern_hemisphere);

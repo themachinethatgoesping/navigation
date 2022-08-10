@@ -19,18 +19,18 @@ TEST_CASE("SensorDataUTM should support common functions", TESTTAG)
     // initialize data
     auto data = SensorDataUTM();
 
-    data.gps_northing            = 5652759.000;
-    data.gps_easting             = 549841.192;
-    data.gps_zone                = 31;
-    data.gps_northern_hemisphere = true;
-    data.gps_z                   = 3;
+    data.northing            = 5652759.000;
+    data.easting             = 549841.192;
+    data.utm_zone                = 31;
+    data.utm_northern_hemisphere = true;
+    data.depth                   = 3;
 
-    data.heading_source = 10;
-    data.heave_heave = 1;
+    data.heading = 10;
+    data.heave   = 1;
 
-    data.imu_yaw   = 10;
-    data.imu_pitch = 20;
-    data.imu_roll  = 30;
+    data.imu_yaw = 10;
+    data.pitch   = 20;
+    data.roll    = 30;
 
     // test copy
     REQUIRE(data == SensorDataUTM(data));
@@ -52,28 +52,28 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     // initialize data
     auto data = SensorDataUTM();
 
-    data.gps_northing            = 5652759.000;
-    data.gps_easting             = 549841.192;
-    data.gps_zone                = 31;
-    data.gps_northern_hemisphere = true;
-    data.gps_z                   = 3;
+    data.northing            = 5652759.000;
+    data.easting             = 549841.192;
+    data.utm_zone                = 31;
+    data.utm_northern_hemisphere = true;
+    data.depth                   = 3;
 
-    data.heading_source = 10;
-    data.heave_heave = 1;
-    
-    data.imu_yaw   = 10;
-    data.imu_pitch = 20;
-    data.imu_roll  = 30;
+    data.heading = 10;
+    data.heave   = 1;
 
-    auto data_south                = SensorDataUTM(data);
-    data_south.gps_northing            = 5427745.995;
-    data_south.gps_easting             = 314082.699;
-    data_south.gps_zone                = 60;
-    data_south.gps_northern_hemisphere = false;
+    data.imu_yaw = 10;
+    data.pitch   = 20;
+    data.roll    = 30;
+
+    auto data_south                    = SensorDataUTM(data);
+    data_south.northing            = 5427745.995;
+    data_south.easting             = 314082.699;
+    data_south.utm_zone                = 60;
+    data_south.utm_northern_hemisphere = false;
 
     // test utm/lat lon conversion
-    SensorDataLatLon    data_latlon(data);
-    SensorDataUTM data_utm(data_latlon);
+    SensorDataLatLon data_latlon(data);
+    SensorDataUTM    data_utm(data_latlon);
 
     data_latlon.print(std::cerr);
     data.print(std::cerr);
@@ -104,11 +104,11 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     REQUIRE(SensorDataLatLon(data_south).gps_longitude == Approx(174.780011));
 
     // test info strings
-    data_utm.heading_source = NAN;
+    data_utm.heading = NAN;
     data_utm.print(std::cerr);
     REQUIRE(data_utm.info_string().find("invalid") != std::string::npos);
 
-    data_utm.heading_source = 12;
+    data_utm.heading = 12;
     data_utm.print(std::cerr);
     REQUIRE(data_utm.info_string().find("valid") != std::string::npos);
 }

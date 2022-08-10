@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation;
 TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
 {
     // initialize coordinate system with one target
-    SensorConfiguration     scs;
+    SensorConfiguration               scs;
     datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
     scs.add_target("mbes", targetOffsets);
     scs.set_offsets_position_source(10, 20, 30);
@@ -48,9 +48,8 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     REQUIRE(scs == scs3);
 }
 
-TEST_CASE(
-    "sensorconfiguration should reproduce precomputed rotations when settings sensor offsets",
-    TESTTAG)
+TEST_CASE("sensorconfiguration should reproduce precomputed rotations when settings sensor offsets",
+          TESTTAG)
 {
     // initialize offsets
     datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
@@ -70,10 +69,10 @@ TEST_CASE(
         scs.add_target("mbes", targetOffsets);
 
         datastructures::SensorDataLocal sensor_data;
-        sensor_data.heading_source = 90;
-        sensor_data.imu_roll        = 0;
-        sensor_data.imu_pitch       = 20;
-        sensor_data.imu_yaw         = 130; // should not influence the results
+        sensor_data.heading = 90;
+        sensor_data.roll    = 0;
+        sensor_data.pitch   = 20;
+        sensor_data.imu_yaw = 130; // should not influence the results
 
         // imu yaw offset should not influence the resulting yaw because that is influenced only by
         // the heading_source but imu yaw offset of 90° should swap pitch and roll
@@ -84,8 +83,8 @@ TEST_CASE(
         CHECK(position.pitch == Approx(0.0).scale(1.0));
         REQUIRE(position.roll == Approx(-20));
 
-        sensor_data.imu_roll  = 10;
-        sensor_data.imu_pitch = 0;
+        sensor_data.roll  = 10;
+        sensor_data.pitch = 0;
 
         position = scs.compute_target_position("mbes", sensor_data);
         REQUIRE(position.yaw == Approx(90));
@@ -103,7 +102,7 @@ TEST_CASE(
 TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 {
     // initialize offsets
-    SensorConfiguration     scs;
+    SensorConfiguration               scs;
     datastructures::PositionalOffsets targetOffsets1(1, 2, 3, 0, 0, 0);
     datastructures::PositionalOffsets targetOffsets2(1, 2, 3, 45, 5, 10);
 
@@ -129,21 +128,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
     {
         // initialize sensor data
         datastructures::SensorDataLocal sensor_data;
-        sensor_data.gps_z           = 5;
-        sensor_data.heading_source = 0;
-        sensor_data.imu_yaw         = 40; // ignored because heading_source is valid
-        sensor_data.imu_pitch       = 0;
-        sensor_data.imu_roll        = 0;
-        sensor_data.gps_northing    = 10;
-        sensor_data.gps_easting     = 20;
+        sensor_data.depth        = 5;
+        sensor_data.heading      = 0;
+        sensor_data.imu_yaw      = 40; // ignored because heading_source is valid
+        sensor_data.pitch        = 0;
+        sensor_data.roll         = 0;
+        sensor_data.northing = 10;
+        sensor_data.easting  = 20;
 
         // compute sensor positions
-        auto position_mbes = scs.compute_target_position("mbes", sensor_data);
-        auto position_sbes = scs.compute_target_position("sbes", sensor_data);
-        auto relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        auto relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        auto position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        auto relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        auto relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         // check results
         REQUIRE(position_mbes.z == Approx(8.0));
@@ -168,21 +169,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 0.2
         // initialize sensor data
-        sensor_data.gps_z           = 5;
-        sensor_data.heading_source = 180;
-        sensor_data.imu_yaw         = 40; // ignored because heading_source is valid
-        sensor_data.imu_pitch       = 0;
-        sensor_data.imu_roll        = 0;
-        sensor_data.gps_northing    = 10;
-        sensor_data.gps_easting     = 20;
+        sensor_data.depth        = 5;
+        sensor_data.heading      = 180;
+        sensor_data.imu_yaw      = 40; // ignored because heading_source is valid
+        sensor_data.pitch        = 0;
+        sensor_data.roll         = 0;
+        sensor_data.northing = 10;
+        sensor_data.easting  = 20;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         // check results
         REQUIRE(position_mbes.z == Approx(8.0));
@@ -207,21 +210,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 0.3
         // initialize sensor data
-        sensor_data.gps_z           = 5;
-        sensor_data.heading_source = 90;
-        sensor_data.imu_yaw         = 40; // ignored because heading_source is valid
-        sensor_data.imu_pitch       = 0;
-        sensor_data.imu_roll        = 0;
-        sensor_data.gps_northing    = 10;
-        sensor_data.gps_easting     = 20;
+        sensor_data.depth        = 5;
+        sensor_data.heading      = 90;
+        sensor_data.imu_yaw      = 40; // ignored because heading_source is valid
+        sensor_data.pitch        = 0;
+        sensor_data.roll         = 0;
+        sensor_data.northing = 10;
+        sensor_data.easting  = 20;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         // check results
         REQUIRE(position_mbes.z == Approx(8.0));
@@ -249,21 +254,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
     {
         datastructures::SensorDataLocal sensor_data;
         // scenario 1
-        sensor_data.gps_z           = 5;
-        sensor_data.heading_source = 25;
-        sensor_data.imu_yaw         = 40;
-        sensor_data.imu_pitch       = 20;
-        sensor_data.imu_roll        = 10;
-        sensor_data.gps_northing    = 10;
-        sensor_data.gps_easting     = 20;
+        sensor_data.depth        = 5;
+        sensor_data.heading      = 25;
+        sensor_data.imu_yaw      = 40;
+        sensor_data.pitch        = 20;
+        sensor_data.roll         = 10;
+        sensor_data.northing = 10;
+        sensor_data.easting  = 20;
 
         // compute sensor positions
-        auto position_mbes = scs.compute_target_position("mbes", sensor_data);
-        auto position_sbes = scs.compute_target_position("sbes", sensor_data);
-        auto relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        auto relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        auto position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        auto relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        auto relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         // check results
         REQUIRE(position_mbes.z == Approx(7.7605814142));
@@ -287,21 +294,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Approx(31.4141895033));
 
         // scenario 2
-        sensor_data.gps_z           = -5;
-        sensor_data.heading_source = -35;
-        sensor_data.imu_yaw         = 40;
-        sensor_data.imu_pitch       = -5;
-        sensor_data.imu_roll        = -15;
-        sensor_data.gps_northing    = -23;
-        sensor_data.gps_easting     = -20;
+        sensor_data.depth        = -5;
+        sensor_data.heading      = -35;
+        sensor_data.imu_yaw      = 40;
+        sensor_data.pitch        = -5;
+        sensor_data.roll         = -15;
+        sensor_data.northing = -23;
+        sensor_data.easting  = -20;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         CHECK(position_mbes.z == Approx(-2.5417620175));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -324,21 +333,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Approx(-4.429576033));
 
         // scenario 3
-        sensor_data.gps_z           = 3;
-        sensor_data.heading_source = NAN;
-        sensor_data.imu_yaw         = 30;
-        sensor_data.imu_pitch       = -5;
-        sensor_data.imu_roll        = -15;
-        sensor_data.gps_northing    = 100;
-        sensor_data.gps_easting     = -20;
+        sensor_data.depth        = 3;
+        sensor_data.heading      = NAN;
+        sensor_data.imu_yaw      = 30;
+        sensor_data.pitch        = -5;
+        sensor_data.roll         = -15;
+        sensor_data.northing = 100;
+        sensor_data.easting  = -20;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         CHECK(position_mbes.z == Approx(5.4582379825));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -361,21 +372,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Approx(-4.429576033));
 
         // scenario 4
-        sensor_data.gps_z           = -2000;
-        sensor_data.heading_source = -470;
-        sensor_data.imu_yaw         = 40;
-        sensor_data.imu_pitch       = -59;
-        sensor_data.imu_roll        = 1;
-        sensor_data.gps_northing    = 23;
-        sensor_data.gps_easting     = -1000;
+        sensor_data.depth        = -2000;
+        sensor_data.heading      = -470;
+        sensor_data.imu_yaw      = 40;
+        sensor_data.pitch        = -59;
+        sensor_data.roll         = 1;
+        sensor_data.northing = 23;
+        sensor_data.easting  = -1000;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         CHECK(position_mbes.z == Approx(-1997.5799764953));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -403,20 +416,22 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         datastructures::SensorDataLatLon sensor_data;
 
         // scenario 5 (latlon)
-        sensor_data.gps_z           = 2000;
-        sensor_data.heading_source = 470;
-        sensor_data.imu_yaw         = 40;
-        sensor_data.imu_pitch       = -59;
-        sensor_data.imu_roll        = 1;
-        sensor_data.gps_latitude    = 54.123;
-        sensor_data.gps_longitude   = -10.123;
+        sensor_data.depth         = 2000;
+        sensor_data.heading       = 470;
+        sensor_data.imu_yaw       = 40;
+        sensor_data.pitch         = -59;
+        sensor_data.roll          = 1;
+        sensor_data.gps_latitude  = 54.123;
+        sensor_data.gps_longitude = -10.123;
 
-        auto position_mbes = scs.compute_target_position("mbes", sensor_data);
-        auto position_sbes = scs.compute_target_position("sbes", sensor_data);
-        auto relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        auto relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        auto position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        auto relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        auto relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         CHECK(position_mbes.z == Approx(2002.4200235047));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -440,21 +455,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes_utm == position_sbes);
 
         // scenario 6 (latlon)
-        sensor_data.gps_z           = 1000;
-        sensor_data.heading_source = 360;
-        sensor_data.imu_yaw         = 40;
-        sensor_data.imu_pitch       = 9;
-        sensor_data.imu_roll        = -1;
-        sensor_data.gps_latitude    = -74.123;
-        sensor_data.gps_longitude   = 1.123;
+        sensor_data.depth         = 1000;
+        sensor_data.heading       = 360;
+        sensor_data.imu_yaw       = 40;
+        sensor_data.pitch         = 9;
+        sensor_data.roll          = -1;
+        sensor_data.gps_latitude  = -74.123;
+        sensor_data.gps_longitude = 1.123;
 
         // compute sensor positions
-        position_mbes = scs.compute_target_position("mbes", sensor_data);
-        position_sbes = scs.compute_target_position("sbes", sensor_data);
-        relative_position_mbes =
-            scs.compute_target_position("mbes",
-                datastructures::SensorData(sensor_data)); // convert to SensorData (without xy coordinates)
-        relative_position_sbes = scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+        position_mbes          = scs.compute_target_position("mbes", sensor_data);
+        position_sbes          = scs.compute_target_position("sbes", sensor_data);
+        relative_position_mbes = scs.compute_target_position(
+            "mbes",
+            datastructures::SensorData(
+                sensor_data)); // convert to SensorData (without xy coordinates)
+        relative_position_sbes =
+            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         CHECK(position_mbes.z == Approx(1002.7717041909));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -470,8 +487,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Approx(15.7758445678));
 
         // check if results with UTM are the same as with latlon
-        position_mbes_utm = scs.compute_target_position("mbes", datastructures::SensorDataUTM(sensor_data));
-        position_sbes_utm = scs.compute_target_position("sbes", datastructures::SensorDataUTM(sensor_data));
+        position_mbes_utm =
+            scs.compute_target_position("mbes", datastructures::SensorDataUTM(sensor_data));
+        position_sbes_utm =
+            scs.compute_target_position("sbes", datastructures::SensorDataUTM(sensor_data));
         CHECK(position_mbes_utm == position_mbes);
         CHECK(position_sbes_utm == position_sbes);
     }

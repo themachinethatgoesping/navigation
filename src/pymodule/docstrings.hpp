@@ -444,8 +444,6 @@ Parameter ``target_offsets``:
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_attitude_source_offsets = R"doc(< Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_compass_offsets = R"doc(< Static Yaw (installation) Offsets of CompassOffsets)doc";
-
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor
 data "sensor_data"
@@ -548,16 +546,16 @@ static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_g
 R"doc(Compute the rotation of the sensor coordinate system (relative to the
 world reference coordinate system) using the sensor data and
 (rotation) offsets. Note1: If heading_source in SensorData is NAN, the
-imu_yaw is used (and compass_offsets are ignored) Note2: if
+imu_yaw is used (and heading_offsets are ignored) Note2: if
 heading_source is used the attitude_source_offset yaw will be used to
 correct the attitude_source_offset roll and pitch but will not be
 added to the heading
 
 Parameter ``sensor_data``:
-    Sensor data object (used are: heading_source, imu_yaw, imu_pitch,
-    imu_roll)
+    Sensor data object (used are: heading_source, imu_yaw, pitch,
+    roll)
 
-Parameter ``compass_offsets``:
+Parameter ``heading_offsets``:
     Offsets of the compass (used is only yaw offset)
 
 Parameter ``attitude_source_offsets``:
@@ -568,6 +566,8 @@ Parameter ``attitude_source_offsets``:
 Returns:
     Eigen::Quaterniond Rotation of the sensor system compared to the
     world reference system)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_heading_offsets = R"doc(< Static Yaw (installation) Offsets of CompassOffsets)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_operator_eq = R"doc()doc";
 
@@ -1002,11 +1002,11 @@ Parameter ``gps_latitude``:
 Parameter ``gps_longitude``:
     in °, positive eastwards
 
-Parameter ``gps_z``:
+Parameter ``depth``:
     in m, positive downwards
 
-Parameter ``heave_heave``:
-    from heave sensor, will be added to gps_z in m, positive upwards
+Parameter ``heave``:
+    from heave sensor, will be added to depth in m, positive upwards
 
 Parameter ``heading_source``:
     from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
@@ -1015,10 +1015,10 @@ Parameter ``heading_source``:
 Parameter ``imu_yaw``:
     in °, 0° is north, 90° is east
 
-Parameter ``imu_pitch``:
+Parameter ``pitch``:
     in °, positive means bow up
 
-Parameter ``imu_roll``:
+Parameter ``roll``:
     in °, positive means port up)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_gps_latitude = R"doc(< in °, positive northwards)doc";
@@ -1054,27 +1054,27 @@ R"doc(Construct a new Sensor Data Local object using a base sensor data
 object
 
 Parameter ``data``:
-    $Parameter ``gps_northing``:
+    $Parameter ``northing``:
 
 in m, positive northwards
 
-Parameter ``gps_easting``:
+Parameter ``easting``:
     in m, positive eastwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_SensorDataLocal_3 =
 R"doc(Construct a new SensorDataLocal object
 
-Parameter ``gps_northing``:
+Parameter ``northing``:
     in m, positive northwards
 
 Parameter ``gpd_easting``:
     in m, positive eastwards
 
-Parameter ``gps_z``:
+Parameter ``depth``:
     in m, positive downwards
 
-Parameter ``heave_heave``:
-    from heave sensor, will be added to gps_z in m, positive upwards
+Parameter ``heave``:
+    from heave sensor, will be added to depth in m, positive upwards
 
 Parameter ``heading_source``:
     from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
@@ -1083,15 +1083,15 @@ Parameter ``heading_source``:
 Parameter ``imu_yaw``:
     in °, 0° is north, 90° is east
 
-Parameter ``imu_pitch``:
+Parameter ``pitch``:
     in °, positive means bow up
 
-Parameter ``imu_roll``:
+Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_gps_easting = R"doc(< in m, positive eastwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_easting = R"doc(< in m, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_gps_northing = R"doc(< in m, positive northwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_northing = R"doc(< in m, positive northwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_operator_eq =
 R"doc(Check if two SensorDataLocal objects are equal
@@ -1124,17 +1124,17 @@ R"doc(Construct a new Sensor Data Local object using a base sensor data
 object
 
 Parameter ``data``:
-    $Parameter ``gps_northing``:
+    $Parameter ``northing``:
 
 in m, positive northwards
 
-Parameter ``gps_easting``:
+Parameter ``easting``:
     in m, positive eastwards
 
-Parameter ``gps_zone``:
+Parameter ``utm_zone``:
     UTM/UPS zone number
 
-Parameter ``gps_northern_hemisphere``:
+Parameter ``utm_northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_3 =
@@ -1142,11 +1142,11 @@ R"doc(Construct an SensorDataUTM object from an existing SensorDataLocal
 object (using a known zone and hemisphere)
 
 Parameter ``data_local``:
-    $Parameter ``gps_zone``:
+    $Parameter ``utm_zone``:
 
 UTM/UPS zone number
 
-Parameter ``gps_northern_hemisphere``:
+Parameter ``utm_northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_4 =
@@ -1157,23 +1157,23 @@ class))doc";
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_5 =
 R"doc(Construct a new SensorDataUTM object
 
-Parameter ``gps_northing``:
+Parameter ``northing``:
     in m, positive northwards
 
 Parameter ``gpd_easting``:
     in m, positive eastwards
 
-Parameter ``gps_zone``:
+Parameter ``utm_zone``:
     UTM/UPS zone number
 
-Parameter ``gps_northern_hemisphere``:
+Parameter ``utm_northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere
 
-Parameter ``gps_z``:
+Parameter ``depth``:
     in m, positive downwards
 
-Parameter ``heave_heave``:
-    from heave sensor, will be added to gps_z in m, positive upwards
+Parameter ``heave``:
+    from heave sensor, will be added to depth in m, positive upwards
 
 Parameter ``heading_source``:
     from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
@@ -1182,10 +1182,10 @@ Parameter ``heading_source``:
 Parameter ``imu_yaw``:
     in °, 0° is north, 90° is east
 
-Parameter ``imu_pitch``:
+Parameter ``pitch``:
     in °, positive means bow up
 
-Parameter ``imu_roll``:
+Parameter ``roll``:
     in °, positive means port up)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_from_sensordata =
@@ -1200,10 +1200,6 @@ Parameter ``setzone``:
 
 Returns:
     SensorDataUTM)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_gps_northern_hemisphere = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_gps_zone = R"doc(< UTM/UPS zone number)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_operator_eq =
 R"doc(Check if two SensorDataUTM objects are equal
@@ -1230,39 +1226,39 @@ Parameter ``data_utm``:
 
 SensorDataLatLon)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_utm_northern_hemisphere = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_SensorData = R"doc(Construct a new SensorData object)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_SensorData_2 =
 R"doc(Construct a new SensorData object
 
-Parameter ``gps_z``:
+Parameter ``depth``:
     in m, positive downwards
 
-Parameter ``heave_heave``:
-    from heave sensor, will be added to gps_z in m, positive upwards
+Parameter ``heave``:
+    from heave sensor, will be added to depth in m, positive upwards
 
-Parameter ``heading_source``:
+Parameter ``heading``:
     from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90°
     is east
 
 Parameter ``imu_yaw``:
     in °, 0° is north, 90° is east
 
-Parameter ``imu_pitch``:
+Parameter ``pitch``:
     in °, positive means bow up
 
-Parameter ``imu_roll``:
+Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_gps_z = R"doc(< in m, positive downwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_depth = R"doc(< in m, positive downwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_heading_source = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_heading = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_heave_heave = R"doc(< from heave sensor, will be added to gps_z in m, positive upwards)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_imu_pitch = R"doc(< from attitude sensor, in °, positive means bow up)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_imu_roll = R"doc(< from attitude sensor, in °, positive means port up)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_heave = R"doc(< from heave sensor, will be added to depth in m, positive upwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_imu_yaw = R"doc(< from attitude sensor, in °, 0° is north, 90° is east)doc";
 
@@ -1279,7 +1275,11 @@ Returns:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_operator_ne = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_pitch = R"doc(< from attitude sensor, in °, positive means bow up)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_roll = R"doc(< from attitude sensor, in °, positive means port up)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_serialize = R"doc()doc";
 

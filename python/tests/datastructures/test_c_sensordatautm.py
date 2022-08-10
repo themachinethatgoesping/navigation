@@ -54,7 +54,7 @@ class Test_navigation_SensorDataUTM:
         # copy
         data2 = data.copy()
         assert data == data2
-        data2.gps_northing = 100
+        data2.northing = 100
         assert data != data2
 
         # binary

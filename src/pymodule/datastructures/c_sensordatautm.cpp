@@ -23,45 +23,45 @@ void init_c_sensordatautm(py::module& m)
         .def(py::init<const SensorData&, double, double, int, bool>(),
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_2),
              py::arg("sensordatalatlon"),
-             py::arg("gps_northing"),
-             py::arg("gps_easting"),
-             py::arg("gps_zone"),
-             py::arg("gps_northern_hemisphere"))
+             py::arg("northing"),
+             py::arg("easting"),
+             py::arg("utm_zone"),
+             py::arg("utm_northern_hemisphere"))
         .def(py::init<const SensorDataLocal&, int, bool>(),
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_3),
              py::arg("sensordata_local"),
-             py::arg("gps_zone"),
-             py::arg("gps_northern_hemisphere"))
+             py::arg("utm_zone"),
+             py::arg("utm_northern_hemisphere"))
         .def(py::init<const SensorDataLatLon&, int>(),
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_4),
              py::arg("sensordatalatlon"),
-             py::arg("setgps_zone") = -1)
+             py::arg("setutm_zone") = -1)
         .def(py::init<double, double, int, bool, double, double, double, double, double, double>(),
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_5),
-             py::arg("gps_northing")            = 0,
-             py::arg("gps_easting")             = 0,
-             py::arg("gps_zone")                = 0,
-             py::arg("gps_northern_hemisphere") = true,
-             py::arg("gps_z")                   = 0,
-             py::arg("heave_heave")             = 0,
+             py::arg("northing")            = 0,
+             py::arg("easting")             = 0,
+             py::arg("utm_zone")                = 0,
+             py::arg("utm_northern_hemisphere") = true,
+             py::arg("depth")                   = 0,
+             py::arg("heave")             = 0,
              py::arg("heading_source")         = 0,
              py::arg("imu_yaw")                 = 0,
-             py::arg("imu_pitch")               = 0,
-             py::arg("imu_roll")                = 0)
+             py::arg("pitch")               = 0,
+             py::arg("roll")                = 0)
         .def("__eq__",
              &SensorDataUTM::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, operator_eq),
              py::arg("rhs"))
-        .def_readwrite("gps_zone",
-                       &SensorDataUTM::gps_zone,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, gps_zone))
-        .def_readwrite("gps_northern_hemisphere",
-                       &SensorDataUTM::gps_northern_hemisphere,
+        .def_readwrite("utm_zone",
+                       &SensorDataUTM::utm_zone,
+                       DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, utm_zone))
+        .def_readwrite("utm_northern_hemisphere",
+                       &SensorDataUTM::utm_northern_hemisphere,
                        DOC(themachinethatgoesping,
                            navigation,
                            datastructures,
                            SensorDataUTM,
-                           gps_northern_hemisphere))
+                           utm_northern_hemisphere))
         // static functions
         .def_static("to_sensordata",
                     &SensorDataUTM::to_sensordata,
@@ -72,7 +72,7 @@ void init_c_sensordatautm(py::module& m)
             &SensorDataUTM::from_sensordata,
             DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, from_sensordata),
             py::arg("sensordatalatlon"),
-            py::arg("setgps_zone") = -1)
+            py::arg("setutm_zone") = -1)
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(SensorDataUTM)
         // default binary functions

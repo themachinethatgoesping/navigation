@@ -19,14 +19,14 @@ TEST_CASE("SensorData should support common functions", TESTTAG)
     // initialize data
     auto data = SensorData();
 
-    data.gps_z         = 3;
+    data.depth = 3;
 
-    data.heading_source = 10;
-    data.heave_heave = 1;
+    data.heading = 10;
+    data.heave   = 1;
 
-    data.imu_yaw   = 10;
-    data.imu_pitch = 20;
-    data.imu_roll  = 30;
+    data.imu_yaw = 10;
+    data.pitch   = 20;
+    data.roll    = 30;
 
     // test copy
     REQUIRE(data == SensorData(data));
@@ -43,10 +43,10 @@ TEST_CASE("SensorData should support common functions", TESTTAG)
     REQUIRE(data.info_string().size() != 0);
 
     data.print(std::cerr);
-    data.heading_source = NAN;
+    data.heading = NAN;
     REQUIRE(data.info_string().find("invalid") != std::string::npos);
 
-    data.heading_source = 12;
+    data.heading = 12;
     data.print(std::cerr);
     REQUIRE(data.info_string().find("valid") != std::string::npos);
 }

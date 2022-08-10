@@ -175,24 +175,24 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     {
         datastructures::SensorDataLocal sensor_data;
         if (!_interpolator_depth.empty()) // default is 0.0
-            sensor_data.gps_z = _interpolator_depth(timestamp);
+            sensor_data.depth = _interpolator_depth(timestamp);
 
         if (!_interpolator_heave.empty()) // default is 0.0
-            sensor_data.heave_heave = _interpolator_heave(timestamp);
+            sensor_data.heave = _interpolator_heave(timestamp);
 
         if (!_interpolator_heading.empty()) // default is NAN (means will not be used)
-            sensor_data.heading_source = _interpolator_heading.ypr(timestamp)[0];
+            sensor_data.heading = _interpolator_heading.ypr(timestamp)[0];
 
         if (!_interpolator_attitude.empty()) // default is 0.0. 0.0, 0.0
         {
             auto ypr              = _interpolator_attitude.ypr(timestamp);
             sensor_data.imu_yaw   = ypr[0];
-            sensor_data.imu_pitch = ypr[1];
-            sensor_data.imu_roll  = ypr[2];
+            sensor_data.pitch = ypr[1];
+            sensor_data.roll  = ypr[2];
         }
 
-        sensor_data.gps_northing = _interpolator_northing(timestamp);
-        sensor_data.gps_easting  = _interpolator_easting(timestamp);
+        sensor_data.northing = _interpolator_northing(timestamp);
+        sensor_data.easting  = _interpolator_easting(timestamp);
 
         return sensor_data;
     }

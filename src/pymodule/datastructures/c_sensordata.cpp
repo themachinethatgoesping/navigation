@@ -28,35 +28,34 @@ void init_c_sensordata(py::module& m)
              DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData))
         .def(py::init<double, double, double, double, double, double>(),
              DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData_2),
-             py::arg("gps_z")           = 0,
-             py::arg("heave_heave")     = 0,
-             py::arg("heading_source") = 0,
-             py::arg("imu_yaw")         = 0,
-             py::arg("imu_pitch")       = 0,
-             py::arg("imu_roll")        = 0)
+             py::arg("depth")   = 0,
+             py::arg("heave")   = 0,
+             py::arg("heading") = 0,
+             py::arg("imu_yaw") = 0,
+             py::arg("pitch")   = 0,
+             py::arg("roll")    = 0)
         .def("__eq__",
              &SensorData::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, SensorData, operator_eq),
              py::arg("other"))
-        .def_readwrite("gps_z",
-                       &SensorData::gps_z,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, gps_z))
-        .def_readwrite("heave_heave",
-                       &SensorData::heave_heave,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, heave_heave))
-        .def_readwrite(
-            "heading_source",
-            &SensorData::heading_source,
-            DOC(themachinethatgoesping, navigation, datastructures, SensorData, heading_source))
+        .def_readwrite("depth",
+                       &SensorData::depth,
+                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, depth))
+        .def_readwrite("heave",
+                       &SensorData::heave,
+                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, heave))
+        .def_readwrite("heading",
+                       &SensorData::heading,
+                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, heading))
         .def_readwrite("imu_yaw",
                        &SensorData::imu_yaw,
                        DOC(themachinethatgoesping, navigation, datastructures, SensorData, imu_yaw))
-        .def_readwrite("imu_pitch",
-                       &SensorData::imu_pitch,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, imu_pitch))
-        .def_readwrite("imu_roll",
-                       &SensorData::imu_roll,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, imu_roll))
+        .def_readwrite("pitch",
+                       &SensorData::pitch,
+                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, pitch))
+        .def_readwrite("roll",
+                       &SensorData::roll,
+                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, roll))
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(SensorData)
         // default binary functions

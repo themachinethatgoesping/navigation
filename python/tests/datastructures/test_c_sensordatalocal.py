@@ -27,7 +27,7 @@ class Test_navigation_SensorDataLocal:
         # copy
         data2 = data.copy()
         assert data == data2
-        data2.gps_northing = 100
+        data2.northing = 100
         assert data != data2
 
         # binary
@@ -41,7 +41,7 @@ class Test_navigation_SensorDataLocal:
 
         # create a new SensorData object by explicit conversion
         data_utm = SensorDataUTM(
-            data, gps_zone=zone, gps_northern_hemisphere=northern_hemisphere
+            data, utm_zone=zone, utm_northern_hemisphere=northern_hemisphere
         )
 
         # SensorDataLocal is implicitly convertible and therefore also comparable to SensorData

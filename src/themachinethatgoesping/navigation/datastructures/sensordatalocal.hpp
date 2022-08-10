@@ -28,8 +28,8 @@ namespace datastructures {
  */
 struct SensorDataLocal : public SensorData
 {
-    double gps_northing = 0.0; ///< in m, positive northwards
-    double gps_easting  = 0.0; ///< in m, positive eastwards
+    double northing = 0.0; ///< in m, positive northwards
+    double easting  = 0.0; ///< in m, positive eastwards
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
@@ -41,40 +41,40 @@ struct SensorDataLocal : public SensorData
      * @brief Construct a new Sensor Data Local object using a base sensor data object
      *
      * @param data
-     * @param gps_northing in m, positive northwards
-     * @param gps_easting in m, positive eastwards
+     * @param northing in m, positive northwards
+     * @param easting in m, positive eastwards
      */
-    SensorDataLocal(const SensorData& data, double gps_northing, double gps_easting)
+    SensorDataLocal(const SensorData& data, double northing, double easting)
         : SensorData(data)
-        , gps_northing(gps_northing)
-        , gps_easting(gps_easting)
+        , northing(northing)
+        , easting(easting)
     {
     }
 
     /**
      * @brief Construct a new SensorDataLocal object
      *
-     * @param gps_northing in m, positive northwards
+     * @param northing in m, positive northwards
      * @param gpd_easting in m, positive eastwards
-     * @param gps_z in m, positive downwards
-     * @param heave_heave from heave sensor, will be added to gps_z in m, positive upwards
+     * @param depth in m, positive downwards
+     * @param heave from heave sensor, will be added to depth in m, positive upwards
      * @param heading_source from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
      * east
      * @param imu_yaw in °, 0° is north, 90° is east
-     * @param imu_pitch in °, positive means bow up
-     * @param imu_roll in °, positive means port up
+     * @param pitch in °, positive means bow up
+     * @param roll in °, positive means port up
      */
-    SensorDataLocal(double gps_northing,
-                    double gps_easting,
-                    double gps_z,
-                    double heave_heave,
+    SensorDataLocal(double northing,
+                    double easting,
+                    double depth,
+                    double heave,
                     double heading_source,
                     double imu_yaw,
-                    double imu_pitch,
-                    double imu_roll)
-        : SensorData(gps_z, heave_heave, heading_source, imu_yaw, imu_pitch, imu_roll)
-        , gps_northing(gps_northing)
-        , gps_easting(gps_easting)
+                    double pitch,
+                    double roll)
+        : SensorData(depth, heave, heading_source, imu_yaw, pitch, roll)
+        , northing(northing)
+        , easting(easting)
     {
     }
 
@@ -89,8 +89,8 @@ struct SensorDataLocal : public SensorData
     bool operator==(const SensorDataLocal& rhs) const
     {
         if (SensorData::operator==(rhs))
-            if (tools::helper::approx(gps_northing, rhs.gps_northing))
-                if (tools::helper::approx(gps_easting, rhs.gps_easting))
+            if (tools::helper::approx(northing, rhs.northing))
+                if (tools::helper::approx(easting, rhs.easting))
                     return true;
 
         return false;
@@ -103,8 +103,8 @@ struct SensorDataLocal : public SensorData
     void serialize(S& s)
     {
         s.ext(*this, bitsery::ext::BaseClass<SensorData>{});
-        s.value8b(gps_northing);
-        s.value8b(gps_easting);
+        s.value8b(northing);
+        s.value8b(easting);
     }
 
   public:
@@ -112,8 +112,8 @@ struct SensorDataLocal : public SensorData
     {
         tools::classhelpers::ObjectPrinter printer("SensorDataLocal", float_precision);
 
-        printer.register_value("gps_northing", gps_northing, "positive northwards, m");
-        printer.register_value("gps_easting", gps_easting, "positive eastwards, m");
+        printer.register_value("northing", northing, "positive northwards, m");
+        printer.register_value("easting", easting, "positive eastwards, m");
 
         printer.append(SensorData::__printer__(float_precision));
 

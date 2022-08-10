@@ -31,12 +31,12 @@ void init_c_sensordatalatlon(py::module& m)
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataLatLon, SensorDataLatLon_4),
              py::arg("gps_latitude")    = 0,
              py::arg("gps_longitude")   = 0,
-             py::arg("gps_z")           = 0,
-             py::arg("heave_heave")     = 0,
+             py::arg("depth")           = 0,
+             py::arg("heave")     = 0,
              py::arg("heading_source") = 0,
              py::arg("imu_yaw")         = 0,
-             py::arg("imu_pitch")       = 0,
-             py::arg("imu_roll")        = 0)
+             py::arg("pitch")       = 0,
+             py::arg("roll")        = 0)
         .def("__eq__",
              &SensorDataLatLon::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataLatLon, operator_eq),

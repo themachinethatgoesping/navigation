@@ -34,12 +34,12 @@ struct SensorDataLatLon : public SensorData
 {
     double gps_latitude  = 0.0; ///< in °, positive northwards
     double gps_longitude = 0.0; ///< in °, positive eastwards
-    // double gps_z         = 0.0; ///< in m, positive downwards
-    // double heave_heave     = 0.0; ///< from heave sensor, will be added to gps_z in m, positive
+    // double depth         = 0.0; ///< in m, positive downwards
+    // double heave     = 0.0; ///< from heave sensor, will be added to depth in m, positive
     // upwards double heading_source = NAN; ///< from compass, replaces imu_yaw if not NAN, in °,
     // 0° is north, 90° is east double imu_yaw     = 0.0; ///< from attitude sensor, in °, 0° is
-    // north, 90° is east double imu_pitch = 0.0;   ///< from attitude sensor, in °, positive means
-    // bow up double imu_roll  = 0.0;   ///< from attitude sensor, in °, positive means port up
+    // north, 90° is east double pitch = 0.0;   ///< from attitude sensor, in °, positive means
+    // bow up double roll  = 0.0;   ///< from attitude sensor, in °, positive means port up
 
     /**
      * @brief Construct a new SensorDataLatLon object (all offsets set to 0)
@@ -73,23 +73,23 @@ struct SensorDataLatLon : public SensorData
      *
      * @param gps_latitude in °, positive northwards
      * @param gps_longitude in °, positive eastwards
-     * @param gps_z in m, positive downwards
-     * @param heave_heave from heave sensor, will be added to gps_z in m, positive upwards
+     * @param depth in m, positive downwards
+     * @param heave from heave sensor, will be added to depth in m, positive upwards
      * @param heading_source from compass, replaces imu_yaw if not NAN, in °, 0° is north, 90° is
      * east
      * @param imu_yaw in °, 0° is north, 90° is east
-     * @param imu_pitch in °, positive means bow up
-     * @param imu_roll in °, positive means port up
+     * @param pitch in °, positive means bow up
+     * @param roll in °, positive means port up
      */
     SensorDataLatLon(double gps_latitude,
                      double gps_longitude,
-                     double gps_z,
-                     double heave_heave,
+                     double depth,
+                     double heave,
                      double heading_source,
                      double imu_yaw,
-                     double imu_pitch,
-                     double imu_roll)
-        : SensorData(gps_z, heave_heave, heading_source, imu_yaw, imu_pitch, imu_roll)
+                     double pitch,
+                     double roll)
+        : SensorData(depth, heave, heading_source, imu_yaw, pitch, roll)
         , gps_latitude(gps_latitude)
         , gps_longitude(gps_longitude)
     {
