@@ -17,17 +17,25 @@ using namespace themachinethatgoesping::navigation;
 
 TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG)
 {
-    // // initialize coordinate system with one target
-    NavigationInterpolatorLocal            navint;
+
+    // setup sensor configuration
+    SensorConfiguration sensor_configuration;
+    sensor_configuration.set_offsets_depth_sensor(0, 0, 1);
+    sensor_configuration.set_offsets_attitude_sensor(1, -2, 3);
+    sensor_configuration.set_offsets_position_system(10, -10, 5);
+
     datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
-    navint.add_target("mbes", targetOffsets);
-    navint.set_data_depth({ 0, 1, 2, 3 }, { 10, -10, -11, 9 }, 0, 0, 1);
+    sensor_configuration.add_target("mbes", targetOffsets);
+
+    // // initialize coordinate system with one target
+    NavigationInterpolatorLocal       navint(sensor_configuration);
+    
+    navint.set_data_depth({ 0, 1, 2, 3 }, { 10, -10, -11, 9 });
     navint.set_data_heave({ 0, 1, 2, 3 }, { -1, -2, 3, 4 });
     navint.set_data_compass({ 0.5, 6 }, { 10, 20 });
     navint.set_data_attitude_sensor(
-        { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, { 2, -3, -4, 2 }, 1, -2, 3);
-    navint.set_data_position_system(
-        { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, 10,-10,5);
+        { 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 }, { 2, -3, -4, 2 });
+    navint.set_data_position_system({ 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 });
 
     // copy constructor
     NavigationInterpolatorLocal navint2(navint);
@@ -47,7 +55,7 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
     REQUIRE(navint.info_string().size() > 0);
 
     // serialization
-    auto buffer = navint.to_binary();
+    auto buffer  = navint.to_binary();
     auto navint3 = NavigationInterpolatorLocal::from_binary(buffer);
     REQUIRE(navint == navint3);
 

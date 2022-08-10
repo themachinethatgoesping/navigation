@@ -52,10 +52,11 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @brief Construct a new i navigationinterpolator interface
      *
      * @param extrapolation_mode extrapolate, fail or nearest
-     */
-
-    NavigationInterpolatorLocal(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                    tools::vectorinterpolators::t_extr_mode::extrapolate)
+     */    
+    NavigationInterpolatorLocal(SensorConfiguration                     sensor_configuration,
+                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
+                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
+        : I_NavigationInterpolator(sensor_configuration)
     {
         set_extrapolation_mode(extrapolation_mode);
     }
@@ -216,7 +217,10 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
 
   private:
     // serialization support using bitsery
-    friend bitsery::Access;
+    friend class bitsery::Access;
+
+    NavigationInterpolatorLocal() = default; // bitsery needs a default constructor 
+
     template<typename S>
     void serialize(S& s)
     {

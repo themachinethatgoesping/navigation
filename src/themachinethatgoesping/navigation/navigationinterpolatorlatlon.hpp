@@ -54,8 +54,10 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
 
-    NavigationInterpolatorLatLon(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
+    NavigationInterpolatorLatLon(SensorConfiguration                     sensor_configuration,
+                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                      tools::vectorinterpolators::t_extr_mode::extrapolate)
+        : I_NavigationInterpolator(sensor_configuration)
     {
         set_extrapolation_mode(extrapolation_mode);
     }
@@ -88,46 +90,6 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     }
 
     /**
-     * @briefSet the data of the position system (latitude, longitude) and the offsets of the
-     * position system
-     *
-     * @param timestamp in seconds since epoch
-     * @param latitude in °
-     * @param longitude in °
-     * @param offset_x in m, positive forward
-     * @param offset_y in m, positive starboard
-     * @param offset_z in m, positive down
-     */
-    void set_data_position_system(const std::vector<double>& timestamp,
-                                  const std::vector<double>& latitude,
-                                  const std::vector<double>& longitude,
-                                  double                     offset_x,
-                                  double                     offset_y,
-                                  double                     offset_z)
-    {
-        _sensor_configuration.set_offsets_position_system(offset_x, offset_y, offset_z);
-        set_data_position_system(timestamp, latitude, longitude);
-    }
-
-    /**
-     * @briefSet the data of the position system (latitude, longitude) and the offsets of the
-     * position system
-     *
-     * @param timestamp in seconds since epoch
-     * @param latitude in °
-     * @param longitude in °
-     * @param sensor_offsets structure containing the offsets of the position system
-     */
-    void set_data_position_system(const std::vector<double>&               timestamp,
-                                  const std::vector<double>&               latitude,
-                                  const std::vector<double>&               longitude,
-                                  const datastructures::PositionalOffsets& sensor_offsets)
-    {
-        _sensor_configuration.set_offsets_position_system(sensor_offsets);
-        set_data_position_system(timestamp, latitude, longitude);
-    }
-
-    /**
      * @brief direct reference to the latitude interpolator object
      *
      * @return interpolator_latitude&
@@ -156,13 +118,12 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @param timestamp timestamp in seconds since epoch
      * @return datastructure that contains the position of the target in the world coordinate system
      */
-    datastructures::GeoLocationLatLon operator()(const std::string& target_id,
-                                                              double             timestamp)
+    datastructures::GeoLocationLatLon operator()(const std::string& target_id, double timestamp)
     {
         return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
     }
 
-/**
+    /**
      * @brief Compute the position of the target "target_id" based on the sensor data for the given
      * timestamp stamp
      *
@@ -175,14 +136,14 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     {
         return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
     }
-    
 
     //----- compute the position of the target sensors -----
     /**
      * @brief Interpolate the saved sensor data for a specified timestamp stamp
      *
      * @param timestamp timestamp in seconds since epoch
-     * @return datastructure that contains the sensor data interpolated for the given timestamp stamp
+     * @return datastructure that contains the sensor data interpolated for the given timestamp
+     * stamp
      */
     datastructures::SensorDataLatLon get_sensor_data(double timestamp)
     {
@@ -228,9 +189,13 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
         return printer;
     }
 
+
   private:
     // serialization support using bitsery
-    friend bitsery::Access;
+    friend class bitsery::Access;
+    
+    NavigationInterpolatorLatLon() = default; // bitsery needs a default constructor 
+
     template<typename S>
     void serialize(S& s)
     {
