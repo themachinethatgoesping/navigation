@@ -4,7 +4,7 @@
 
 #---------- general test case header --------------
 
-testcomponent = 'tools'
+testcomponent = 'navigation'
 
 sources = [
     'datastructures/positionaloffsets.test.cpp',
