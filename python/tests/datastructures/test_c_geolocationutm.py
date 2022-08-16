@@ -2,9 +2,12 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.datastructures import GeoLocationUTM, GeoLocationLatLon
+from themachinethatgoesping.navigation.datastructures import (
+    GeoLocationUTM,
+    GeoLocationLatLon,
+)
 
-import time
+# import time
 from pytest import approx
 
 
@@ -13,15 +16,7 @@ class Test_navigation_GeoLocationUTM:
     # define actual tests (must start with "test_"
     # test case 1
     def test_GeoLocationUTM_should_support_common_functions(self):
-        location = GeoLocationUTM(
-            5427745.995, 
-            314082.699, 
-            60, 
-            False, 
-            3, 
-            10, 
-            20, 
-            30)
+        location = GeoLocationUTM(5427745.995, 314082.699, 60, False, 3, 10, 20, 30)
         print(location)
 
         # print
@@ -36,23 +31,14 @@ class Test_navigation_GeoLocationUTM:
         # binary
         assert location == GeoLocationUTM.from_binary(location.to_binary())
 
-    
     def test_GeoLocationUTM_should_support_latlon_conversions(self):
-        location = GeoLocationUTM(
-            5427745.995, 
-            314082.699, 
-            60, 
-            False, 
-            3, 
-            10, 
-            20, 
-            30)
+        location = GeoLocationUTM(5427745.995, 314082.699, 60, False, 3, 10, 20, 30)
         print(location)
 
-        #create a new GeoLocationLatLon object by explicit conversion
+        # create a new GeoLocationLatLon object by explicit conversion
         location_latlon = GeoLocationLatLon(location)
 
-        #GeoLocationUTM is implicitly convertible and therefore also comparable to GeoLocationLatLon
+        # GeoLocationUTM is implicitly convertible and therefore also comparable to GeoLocationLatLon
         assert location == location_latlon
         assert GeoLocationUTM(location_latlon) == location_latlon
 
