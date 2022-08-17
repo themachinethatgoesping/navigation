@@ -108,7 +108,7 @@ struct GeoLocationLatLon : public GeoLocation
     }
 
   private:
-    // serialization support using bitsery
+    // ----- bitsery -----
     friend bitsery::Access;
     template<typename S>
     void serialize(S& s)
@@ -119,6 +119,7 @@ struct GeoLocationLatLon : public GeoLocation
     }
 
   public:
+  // ----- objectprinter -----
     tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
         tools::classhelpers::ObjectPrinter printer("GeoLocationLatLon", float_precision);
