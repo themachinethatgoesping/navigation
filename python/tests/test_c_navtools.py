@@ -4,8 +4,6 @@
 
 from themachinethatgoesping.navigation import navtools
 
-import time
-import pytest
 from pytest import approx
 
 

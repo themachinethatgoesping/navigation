@@ -2,10 +2,13 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.datastructures import SensorDataLocal, SensorDataUTM, SensorData
+from themachinethatgoesping.navigation.datastructures import (
+    SensorDataLocal,
+    SensorDataUTM,
+    SensorData,
+)
 
-import time
-from pytest import approx, raises
+from pytest import raises  # , approx
 
 
 # define class for grouping (test sections)
@@ -17,9 +20,9 @@ class Test_navigation_SensorDataLocal:
         data_base = SensorData(3, 4, 10, 20, 30)
         print(data)
 
-        #compare to base
+        # compare to base
         assert data_base == SensorData(data)
-        assert data == SensorDataLocal(data_base,5427745.995, 314082.699)
+        assert data == SensorDataLocal(data_base, 5427745.995, 314082.699)
 
         # print
         assert len(str(data)) != 0
@@ -52,11 +55,8 @@ class Test_navigation_SensorDataLocal:
 
         # this should work, but fails since data_utm is declared as a derived class from data_local
         with raises(TypeError):
-            data == data_utm
+            data == data_utm  # pylint: disable=pointless-statement
 
         # this does not work because local coordinates are not comparable to utm coordinates unless the zone and hemisphere are known
         with raises(TypeError):
-            data_utm == data
-
-
-       
+            data_utm == data  # pylint: disable=pointless-statement

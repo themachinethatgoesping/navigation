@@ -2,10 +2,13 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.datastructures import GeoLocationLocal, GeoLocationUTM, GeoLocationLatLon
+from themachinethatgoesping.navigation.datastructures import (
+    GeoLocationLocal,
+    GeoLocationUTM,
+    #GeoLocationLatLon,
+)
 
-import time
-from pytest import approx, raises
+from pytest import raises#, approx
 
 
 # define class for grouping (test sections)
@@ -45,12 +48,9 @@ class Test_navigation_GeoLocationLocal:
 
         # this does not work because local coordinates are not comparable to utm coordinates unless the zone and hemisphere are known
         with raises(TypeError):
-            location_utm == location
+            location_utm == location # pylint: disable=pointless-statement
 
         assert GeoLocationLocal(location_utm) == location
         assert location_utm == (
-            GeoLocationUTM(
-                location, zone=zone, northern_hemisphere=northern_hemisphere
-            )
+            GeoLocationUTM(location, zone=zone, northern_hemisphere=northern_hemisphere)
         )
-

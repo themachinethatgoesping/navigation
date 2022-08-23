@@ -5,18 +5,16 @@
 """ tests for the SensorData class
 """
 
-# import time
 # import pytest
-import numpy as np
 
 from themachinethatgoesping.navigation.datastructures import SensorData
+
 
 class TestNavigationSensorData:
     """class for grouping (test sections)"""
 
     def test_sensordata_should_support_common_functions(self):
-        """test common, simple functions
-        """
+        """test common, simple functions"""
         data = SensorData(3, 4, 10, 20, 30)
         print(data)
 
