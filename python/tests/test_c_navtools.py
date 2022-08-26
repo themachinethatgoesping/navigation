@@ -79,7 +79,7 @@ class Test_navigation_navtools:
             ]
         )
         assert zone == 23
-        assert north == True
+        assert north
 
         # assert backward conversion is correct
         lat, lon = navtools.utm_to_latlon(northing, easting, zone, north)
