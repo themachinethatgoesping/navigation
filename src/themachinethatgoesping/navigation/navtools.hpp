@@ -15,7 +15,6 @@
 #include <tuple>
 
 #include <fmt/core.h>
-#include <magic_enum.hpp>
 #include <GeographicLib/UTMUPS.hpp>
 
 namespace themachinethatgoesping {
