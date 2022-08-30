@@ -13,11 +13,12 @@ void init_c_sensorconfiguration(pybind11::module& m);          // c_sensorconfig
 void init_c_NavigationInterpolatorLocal(pybind11::module& m);  // c_navigationinterpolatorlocal.cpp
 void init_c_NavigationInterpolatorLatLon(pybind11::module& m); // c_navigationinterpolatorlatlon.cpp
 
-PYBIND11_MODULE(PYTHON_LIB, m)
+PYBIND11_MODULE(MODULE_NAME, m)
 {
     pybind11::add_ostream_redirect(m, "ostream_redirect");
 
     m.doc() = "Python module to store, interpolate and transform navigation data";
+    m.attr("__version__") = MODULE_VERSION;
 
     init_m_navtools(m);
     init_m_datastructures(m);

@@ -36,7 +36,7 @@ py_navigation = pymod.extension_module(
     override_options: [
         #'cpp_rtti=true',
     ],
-    cpp_args : '-DPYTHON_LIB='+module_name,
+    cpp_args : ['-DMODULE_NAME='+module_name, '-DMODULE_VERSION=' + '"' + meson.project_version() + '"'],
     install : true,
     install_dir : pythoninstallpath,
     install_tag : 'python-runtime'
