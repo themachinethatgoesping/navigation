@@ -209,12 +209,6 @@ jobs:
     - uses: actions/setup-python@v3
       with:
         python-version: '3.x'
-        
-    - name: Set up Clang
-      uses: egor-tensin/setup-clang@v1
-      with:
-        version: latest
-        platform: x64
 
     - name: checkout main repository
       uses: actions/checkout@v3
@@ -227,12 +221,14 @@ jobs:
       with:
         key: ci-mac  # name for the cache
         
-    - run: brew install libomp boost
+    - run: brew install libomp boost llvm
     
     - run: pip install meson ninja pytest
     
     - name: configure meson
       run: meson setup builddir/; meson configure builddir -Dpython.install_env=auto
+      env:
+        CXX:  clang++-14
 
     - name: compile project
       run: meson compile -C builddir/
