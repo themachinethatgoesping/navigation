@@ -202,10 +202,7 @@ jobs:
 
   macos:
     name: Build and install with meson on macOS
-    runs-on: macos-latest
-    
-    env:
-      CC: msvc-14.3
+    runs-on: macos-12
       
     steps:
     
