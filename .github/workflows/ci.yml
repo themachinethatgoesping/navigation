@@ -222,11 +222,14 @@ jobs:
         key: ci-mac  # name for the cache
         
     - run: brew install libomp boost llvm
+    - run: brew upgrade libomp llvm
     
     - run: pip install meson ninja pytest
     
     - name: configure meson
       run: meson setup builddir/; meson configure builddir -Dpython.install_env=auto
+      env: 
+        - CXX: /usr/local/opt/llvm/bin/clang++
 
     - name: compile project
       run: meson compile -C builddir/
