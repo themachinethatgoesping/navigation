@@ -21,7 +21,16 @@ sources = [
     'datastructures/c_sensordatalocal.cpp',
     'c_sensorconfiguration.cpp',
     'c_navigationinterpolatorlocal.cpp',
-    'c_navigationinterpolatorlatlon.cpp'
+    'c_navigationinterpolatorlatlon.cpp',
+    'nmea_0183/c_nmeabase.cpp',
+    'nmea_0183/c_nmea_zda.cpp',
+    'nmea_0183/c_nmea_vlw.cpp',
+    'nmea_0183/c_nmea_vtg.cpp',
+    'nmea_0183/c_nmea_vhw.cpp',
+    'nmea_0183/c_nmea_rmc.cpp',
+    'nmea_0183/c_nmea_hdt.cpp',
+    'nmea_0183/c_nmea_gll.cpp',
+    'nmea_0183/c_nmea_gga.cpp'
 ]
 
 # define python module

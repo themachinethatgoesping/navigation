@@ -25,7 +25,17 @@ headers = [
   'sensorconfiguration.hpp',
   'i_navigationinterpolator.hpp',
   'navigationinterpolatorlocal.hpp',
-  'navigationinterpolatorlatlon.hpp'
+  'navigationinterpolatorlatlon.hpp',
+  'nmea_0183.hpp',
+  'nmea_0183/nmeabase.hpp',
+  'nmea_0183/nmea_zda.hpp',
+  'nmea_0183/nmea_vlw.hpp',
+  'nmea_0183/nmea_vtg.hpp',
+  'nmea_0183/nmea_vhw.hpp',
+  'nmea_0183/nmea_rmc.hpp',
+  'nmea_0183/nmea_hdt.hpp',
+  'nmea_0183/nmea_gll.hpp',
+  'nmea_0183/nmea_gga.hpp'
 ]
 
 # -- targets --

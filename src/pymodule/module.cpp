@@ -6,6 +6,7 @@
 #include <pybind11/pybind11.h>
 
 #include "datastructures/module.hpp"
+#include "nmea_0183/module.hpp"
 
 // declare modules
 void init_m_navtools(pybind11::module& m);                     // m_navtools.cpp
@@ -25,4 +26,5 @@ PYBIND11_MODULE(MODULE_NAME, m)
     init_c_sensorconfiguration(m);
     init_c_NavigationInterpolatorLocal(m);
     init_c_NavigationInterpolatorLatLon(m);
+    init_m_nmea_0183(m);
 }
