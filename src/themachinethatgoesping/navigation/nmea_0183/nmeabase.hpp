@@ -95,16 +95,12 @@ class NMEABase
 
     double get_field_as_double(size_t index) const
     {
-        double result;
-        std::from_chars(get_field(index).data(), get_field(index).data() + get_field(index).size(), result);
-        return result;
+        return std::stod(std::string(get_field(index)));
     }
 
     int get_field_as_int(size_t index) const
     {
-        int result;
-        std::from_chars(get_field(index).data(), get_field(index).data() + get_field(index).size(), result);
-        return result;
+        return std::stoi(std::string(get_field(index)));
     }
 
 

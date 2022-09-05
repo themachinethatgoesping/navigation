@@ -51,9 +51,9 @@ class NMEA_GGA : public NMEABase
     }
     double latitude() const
     {
-        double degrees, minutes;
-        std::from_chars(get_field(1).data(), get_field(1).data() + 2, degrees);
-        std::from_chars(get_field(1).data()+2, get_field(1).data() + get_field(1).size(), minutes);
+        auto field = get_field(1);
+        double degrees = std::stod(std::string(field.substr(0,2)));
+        double minutes = std::stod(std::string(field.substr(2,field.size()-2)));
 
         if (get_field(2) == "N" )
             return (degrees + minutes / 60);
@@ -61,9 +61,9 @@ class NMEA_GGA : public NMEABase
     }
     double longitude() const
     {
-        double degrees, minutes;
-        std::from_chars(get_field(3).data(), get_field(3).data() + 3, degrees);
-        std::from_chars(get_field(3).data()+3, get_field(3).data() + get_field(3).size(), minutes);
+        auto field = get_field(3);
+        double degrees = std::stod(std::string(field.substr(0,2)));
+        double minutes = std::stod(std::string(field.substr(2,field.size()-2)));
         
         if (get_field(4) == "E" )
             return (degrees + minutes / 60);
