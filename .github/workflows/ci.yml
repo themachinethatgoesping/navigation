@@ -227,8 +227,6 @@ jobs:
     
     - name: configure meson
       run: meson setup builddir/; meson configure builddir -Dpython.install_env=auto
-      env:
-        CXX:  clang++-14
 
     - name: compile project
       run: meson compile -C builddir/
