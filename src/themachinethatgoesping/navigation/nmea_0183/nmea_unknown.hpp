@@ -9,7 +9,6 @@
 #include <charconv>
 
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
-#include <themachinethatgoesping/tools/timeconv.hpp>
 
 #include "nmea_base.hpp"
 
@@ -18,51 +17,43 @@ namespace navigation {
 namespace nmea_0183 {
 
 /**
- * @brief The NMEA HDT datagram contains the true vessel heading typically received from a compass.
+ * @brief Thie NMEA datagram was not yet implemented in themachinethatgoesping.
  * 
  */
-class NMEA_HDT : public NMEA_Base
+class NMEA_Unknown : public NMEA_Base
 {
 
   public:
   /**
-   * @brief Construct a new nmea hdt object from an existing NMEA_Base datagram
+   * @brief Construct a new nmea Unknown object from an existing NMEA_Base datagram
    * 
    * @param base Underlying NMEA_Base datagram
    * @param check Check if the NMEA string is valid
    */
-    NMEA_HDT(NMEA_Base&& base, bool check = false)
+    NMEA_Unknown(NMEA_Base&& base, bool check = false)
     : NMEA_Base(std::move(base))
     {
         if (check) {
-            if(get_type() != "HDT")
-                throw std::runtime_error("NMEA_HDT: wrong sentence type");
+            if(get_type() != "Unknown")
+                throw std::runtime_error("NMEA_Unknown: wrong sentence type");
         }
         parse_fields();
     }
 
-    // ----- NMEA HDT attributes -----
-    double heading_degrees_true() const
-    {
-        return get_field_as_double(0);
-    }    
+    
 
     // ----- objectprinter -----
     tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("NMEA HDT Datagram", float_precision);
+        tools::classhelpers::ObjectPrinter printer("NMEA Datagram (not implemented)", float_precision);
 
         printer.append(NMEA_Base::__printer__(float_precision));
-
-        printer.register_section("HDT attributes");
-        printer.register_value("heading_degrees_true", heading_degrees_true());
-
         return printer;
     }
 
     // ----- class helper macros -----
     __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NMEA_HDT)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NMEA_Unknown)
 };
 
 } // nmea_0183

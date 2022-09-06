@@ -10,7 +10,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 
-#include "nmeabase.hpp"
+#include "nmea_base.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -20,18 +20,18 @@ namespace nmea_0183 {
  * @brief The NMEA VLW datagram contains the distance of the vessel traveled by the vessel.
  * 
  */
-class NMEA_VLW : public NMEABase
+class NMEA_VLW : public NMEA_Base
 {
 
   public:
   /**
-   * @brief Construct a new nmea vlw object from an existing NMEABase datagram
+   * @brief Construct a new nmea vlw object from an existing NMEA_Base datagram
    * 
-   * @param base Underlying NMEABase datagram
+   * @param base Underlying NMEA_Base datagram
    * @param check Check if the NMEA string is valid
    */
-    NMEA_VLW(NMEABase&& base, bool check = false)
-    : NMEABase(std::move(base))
+    NMEA_VLW(NMEA_Base&& base, bool check = false)
+    : NMEA_Base(std::move(base))
     {
         if (check) {
             if(get_type() != "VLW")
@@ -69,7 +69,7 @@ class NMEA_VLW : public NMEABase
     {
         tools::classhelpers::ObjectPrinter printer("NMEA VLW Datagram", float_precision);
 
-        printer.append(NMEABase::__printer__(float_precision));
+        printer.append(NMEA_Base::__printer__(float_precision));
 
         printer.register_section("VLW attributes");
         printer.register_value("total_water_distance_nautical_miles", total_water_distance_nautical_miles(),"nm");

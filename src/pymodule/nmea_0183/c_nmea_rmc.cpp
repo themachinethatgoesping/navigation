@@ -18,15 +18,15 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_rmc(py::module& m)
 {
 
-    py::class_<NMEA_RMC, NMEABase>(
+    py::class_<NMEA_RMC, NMEA_Base>(
         m, "NMEA_RMC", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_RMC))
-        .def(py::init<NMEABase, bool>(),
+        .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_RMC,
                  NMEA_RMC),
-             py::arg("nmeabase"),
+             py::arg("nmea_base"),
              py::arg("check") = true)
 
         // RMC attributes

@@ -18,15 +18,15 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_gll(py::module& m)
 {
 
-    py::class_<NMEA_GLL, NMEABase>(
+    py::class_<NMEA_GLL, NMEA_Base>(
         m, "NMEA_GLL", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GLL))
-        .def(py::init<NMEABase, bool>(),
+        .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_GLL,
                  NMEA_GLL),
-             py::arg("nmeabase"),
+             py::arg("nmea_base"),
              py::arg("check") = true)
 
         // GLL attributes

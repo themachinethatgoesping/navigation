@@ -18,15 +18,15 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_vtg(py::module& m)
 {
 
-    py::class_<NMEA_VTG, NMEABase>(
+    py::class_<NMEA_VTG, NMEA_Base>(
         m, "NMEA_VTG", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_VTG))
-        .def(py::init<NMEABase, bool>(),
+        .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_VTG,
                  NMEA_VTG),
-             py::arg("nmeabase"),
+             py::arg("nmea_base"),
              py::arg("check") = true)
 
         // VTG attributes

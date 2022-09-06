@@ -15,58 +15,58 @@ namespace themachinethatgoesping {
 namespace navigation {
 namespace nmea_0183 {
 
-class NMEABase
+class NMEA_Base
 {
     protected:
     std::string _sentence;
     std::vector<int> _fields;
 
   public:
-    NMEABase() = default;
+    NMEA_Base() = default;
 
-    NMEABase(std::string data)
+    NMEA_Base(std::string data)
         : _sentence(std::move(data))
     {
         parse_fields();
     }
 
-    // NMEABase(std::string&& data)
+    // NMEA_Base(std::string&& data)
     //     : _sentence(std::move(data))
     // {
     //     parse_fields();
     // }
 
-    static NMEABase from_stream(std::istream& is, size_t length)
+    static NMEA_Base from_stream(std::istream& is, size_t length)
     {
-        NMEABase nmea_sentence;
-        nmea_sentence._sentence.resize(length);
-        is.read(nmea_sentence._sentence.data(), nmea_sentence._sentence.size());
+        NMEA_Base nmea_base;
+        nmea_base._sentence.resize(length);
+        is.read(nmea_base._sentence.data(), nmea_base._sentence.size());
 
-        return nmea_sentence;
+        return nmea_base;
     }
 
-    static NMEABase from_stream(std::istream& is)
+    static NMEA_Base from_stream(std::istream& is)
     {
-        NMEABase nmea_sentence;
+        NMEA_Base nmea_base;
         size_t size;
         is.read(reinterpret_cast<char*>(&size), sizeof(size));
-        nmea_sentence._sentence.resize(size);
-        is.read(nmea_sentence._sentence.data(), nmea_sentence._sentence.size());
+        nmea_base._sentence.resize(size);
+        is.read(nmea_base._sentence.data(), nmea_base._sentence.size());
 
-        return nmea_sentence;
+        return nmea_base;
     }
 
     void to_stream(std::ostream& os)
     {
-        NMEABase nmea_sentence;
-        size_t size = nmea_sentence.size();
+        NMEA_Base nmea_base;
+        size_t size = nmea_base.size();
         os.write(reinterpret_cast<char*>(&size), sizeof(size));
-        os.write(nmea_sentence._sentence.data(), nmea_sentence._sentence.size());
+        os.write(nmea_base._sentence.data(), nmea_base._sentence.size());
     }
 
     // operators
-    bool   operator==(const NMEABase& other) const { return _sentence == other._sentence; }
-    bool   operator!=(const NMEABase& other) const { return _sentence != other._sentence; }
+    bool   operator==(const NMEA_Base& other) const { return _sentence == other._sentence; }
+    bool   operator!=(const NMEA_Base& other) const { return _sentence != other._sentence; }
     size_t size() const { return _sentence.size(); }
 
 
@@ -90,7 +90,7 @@ class NMEABase
         if (index < _fields.size() - 1)
             return std::string_view(_sentence).substr(_fields[index] + 1, _fields[index + 1] - _fields[index] - 1);
             
-        throw std::out_of_range("NMEABase::get_field: index out of range");
+        throw std::out_of_range("NMEA_Base::get_field: index out of range");
     }
 
     double get_field_as_double(size_t index) const
@@ -170,7 +170,7 @@ class NMEABase
 
     // ----- class helper macros -----
     __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NMEABase)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NMEA_Base)
 };
 
 } // nmea_0183

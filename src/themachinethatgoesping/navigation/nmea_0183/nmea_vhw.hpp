@@ -10,7 +10,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 
-#include "nmeabase.hpp"
+#include "nmea_base.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -20,18 +20,18 @@ namespace nmea_0183 {
  * @brief The NMEA VHW datagram contains the vessel's compass heading and the speed relative to the water.
  * 
  */
-class NMEA_VHW : public NMEABase
+class NMEA_VHW : public NMEA_Base
 {
 
   public:
   /**
-   * @brief Construct a new nmea vhw object from an existing NMEABase datagram
+   * @brief Construct a new nmea vhw object from an existing NMEA_Base datagram
    * 
-   * @param base Underlying NMEABase datagram
+   * @param base Underlying NMEA_Base datagram
    * @param check Check if the NMEA string is valid
    */
-    NMEA_VHW(NMEABase&& base, bool check = false)
-    : NMEABase(std::move(base))
+    NMEA_VHW(NMEA_Base&& base, bool check = false)
+    : NMEA_Base(std::move(base))
     {
         if (check) {
             if(get_type() != "VHW")
@@ -65,7 +65,7 @@ class NMEA_VHW : public NMEABase
     {
         tools::classhelpers::ObjectPrinter printer("NMEA VHW Datagram", float_precision);
 
-        printer.append(NMEABase::__printer__(float_precision));
+        printer.append(NMEA_Base::__printer__(float_precision));
 
         printer.register_section("VHW attributes");
         printer.register_value("vessel_heading_true", vessel_heading_true(), "°, true");

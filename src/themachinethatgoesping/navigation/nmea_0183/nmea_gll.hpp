@@ -12,7 +12,7 @@
 #include <themachinethatgoesping/tools/timeconv.hpp>
 
 #include "../navtools.hpp"
-#include "nmeabase.hpp"
+#include "nmea_base.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -23,18 +23,18 @@ namespace nmea_0183 {
 a global navigation satellite system (GNSS device).
  * 
  */
-class NMEA_GLL : public NMEABase
+class NMEA_GLL : public NMEA_Base
 {
 
   public:
   /**
-   * @brief Construct a new nmea gll object from an existing NMEABase datagram
+   * @brief Construct a new nmea gll object from an existing NMEA_Base datagram
    * 
-   * @param base Underlying NMEABase datagram
+   * @param base Underlying NMEA_Base datagram
    * @param check Check if the NMEA string is valid
    */
-    NMEA_GLL(NMEABase&& base, bool check = false)
-    : NMEABase(std::move(base))
+    NMEA_GLL(NMEA_Base&& base, bool check = false)
+    : NMEA_Base(std::move(base))
     {
         if (check) {
             if(get_type() != "GLL")
@@ -103,7 +103,7 @@ class NMEA_GLL : public NMEABase
     {
         tools::classhelpers::ObjectPrinter printer("NMEA GLL Datagram", float_precision);
 
-        printer.append(NMEABase::__printer__(float_precision));
+        printer.append(NMEA_Base::__printer__(float_precision));
 
         printer.register_section("GLL attributes");
 

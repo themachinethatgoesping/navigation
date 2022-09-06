@@ -18,15 +18,15 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_hdt(py::module& m)
 {
 
-    py::class_<NMEA_HDT, NMEABase>(
+    py::class_<NMEA_HDT, NMEA_Base>(
         m, "NMEA_HDT", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_HDT))
-        .def(py::init<NMEABase, bool>(),
+        .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_HDT,
                  NMEA_HDT),
-             py::arg("nmeabase"),
+             py::arg("nmea_base"),
              py::arg("check") = true)
 
         // HDT attributes

@@ -18,15 +18,15 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_gga(py::module& m)
 {
 
-    py::class_<NMEA_GGA, NMEABase>(
+    py::class_<NMEA_GGA, NMEA_Base>(
         m, "NMEA_GGA", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GGA))
-        .def(py::init<NMEABase, bool>(),
+        .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_GGA,
                  NMEA_GGA),
-             py::arg("nmeabase"),
+             py::arg("nmea_base"),
              py::arg("check") = true)
 
         // GGA attributes

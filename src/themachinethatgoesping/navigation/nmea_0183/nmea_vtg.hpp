@@ -10,7 +10,7 @@
 
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 
-#include "nmeabase.hpp"
+#include "nmea_base.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -20,18 +20,18 @@ namespace nmea_0183 {
  * @brief The NMEA VBW datagram contains the vessels course and speed over ground.
  * 
  */
-class NMEA_VTG : public NMEABase
+class NMEA_VTG : public NMEA_Base
 {
 
   public:
   /**
-   * @brief Construct a new nmea vtg object from an existing NMEABase datagram
+   * @brief Construct a new nmea vtg object from an existing NMEA_Base datagram
    * 
-   * @param base Underlying NMEABase datagram
+   * @param base Underlying NMEA_Base datagram
    * @param check Check if the NMEA string is valid
    */
-    NMEA_VTG(NMEABase&& base, bool check = false)
-    : NMEABase(std::move(base))
+    NMEA_VTG(NMEA_Base&& base, bool check = false)
+    : NMEA_Base(std::move(base))
     {
         if (check) {
             if(get_type() != "VTG")
@@ -65,7 +65,7 @@ class NMEA_VTG : public NMEABase
     {
         tools::classhelpers::ObjectPrinter printer("NMEA VTG Datagram", float_precision);
 
-        printer.append(NMEABase::__printer__(float_precision));
+        printer.append(NMEA_Base::__printer__(float_precision));
 
         printer.register_section("VTG attributes");
         printer.register_value("course_over_ground_degrees_true", course_over_ground_degrees_true(),"° (true)");

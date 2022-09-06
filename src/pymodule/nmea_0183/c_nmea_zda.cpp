@@ -18,15 +18,15 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_zda(py::module& m)
 {
 
-    py::class_<NMEA_ZDA, NMEABase>(
+    py::class_<NMEA_ZDA, NMEA_Base>(
         m, "NMEA_ZDA", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_ZDA))
-        .def(py::init<NMEABase, bool>(),
+        .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_ZDA,
                  NMEA_ZDA),
-             py::arg("nmeabase"),
+             py::arg("nmea_base"),
              py::arg("check") = true)
 
         // ZDA attributes

@@ -18,15 +18,15 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_vlw(py::module& m)
 {
 
-    py::class_<NMEA_VLW, NMEABase>(
+    py::class_<NMEA_VLW, NMEA_Base>(
         m, "NMEA_VLW", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_VLW))
-        .def(py::init<NMEABase, bool>(),
+        .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_VLW,
                  NMEA_VLW),
-             py::arg("nmeabase"),
+             py::arg("nmea_base"),
              py::arg("check") = true)
 
         // VLW attributes
