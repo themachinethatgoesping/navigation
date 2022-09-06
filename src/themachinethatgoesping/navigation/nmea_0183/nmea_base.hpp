@@ -95,12 +95,20 @@ class NMEA_Base
 
     double get_field_as_double(size_t index) const
     {
-        return std::stod(std::string(get_field(index)));
+        auto field = get_field(index);
+        if (field.empty())
+            return std::numeric_limits<double>::quiet_NaN();
+
+        return std::stod(std::string(field));
     }
 
     int get_field_as_int(size_t index) const
     {
-        return std::stoi(std::string(get_field(index)));
+        auto field = get_field(index);
+        if (field.empty())
+            return 0;
+
+        return std::stoi(std::string(field));
     }
 
 
