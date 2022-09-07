@@ -28,18 +28,32 @@ void init_c_nmea_base(py::module& m)
              &NMEA_Base::operator==,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, operator_eq),
              py::arg("other"))
-        .def("get_type",
-             &NMEA_Base::get_type,
-             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_type))
-        .def("get_sender",
-             &NMEA_Base::get_sender,
-             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_sender))
-        .def("get_name",
-             &NMEA_Base::get_name,
-             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_name))
+        .def("get_sentence_type",
+             &NMEA_Base::get_sentence_type,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_sentence_type))
+        .def("get_sender_id",
+             &NMEA_Base::get_sender_id,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_sender_id))
+        .def("get_sentence_id",
+             &NMEA_Base::get_sentence_id,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_sentence_id))
         .def("get_sentence",
              &NMEA_Base::get_sentence,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_sentence))
+
+        // access the parsed fields
+        .def("get_field",
+             &NMEA_Base::get_field,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field),
+             py::arg("index"))
+        .def("get_field_as_int",
+             &NMEA_Base::get_field_as_int,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_int),
+             py::arg("index"))
+        .def("get_field_as_double",
+             &NMEA_Base::get_field_as_double,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_double),
+             py::arg("index"))
 
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_Base)

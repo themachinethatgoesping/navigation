@@ -30,34 +30,48 @@ void init_c_nmea_vtg(py::module& m)
              py::arg("check") = true)
 
         // VTG attributes
-        .def_property_readonly("course_over_ground_degrees_true",
-             &NMEA_VTG::course_over_ground_degrees_true,
+        .def("get_course_over_ground_degrees_true",
+             &NMEA_VTG::get_course_over_ground_degrees_true,
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_VTG,
-                 course_over_ground_degrees_true))
-        .def_property_readonly("course_over_ground_degrees_magnetic",
-                &NMEA_VTG::course_over_ground_degrees_magnetic,
+                 get_course_over_ground_degrees_true))
+        .def("get_course_over_ground_degrees_magnetic",
+                &NMEA_VTG::get_course_over_ground_degrees_magnetic,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_VTG,
-                    course_over_ground_degrees_magnetic))
-        .def_property_readonly("speed_over_ground_knots",
-                &NMEA_VTG::speed_over_ground_knots,
+                    get_course_over_ground_degrees_magnetic))
+        .def("get_speed_over_ground_knots",
+                &NMEA_VTG::get_speed_over_ground_knots,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_VTG,
-                    speed_over_ground_knots))
-        .def_property_readonly("speed_over_ground_kmh",
-                &NMEA_VTG::speed_over_ground_kmh,
+                    get_speed_over_ground_knots))
+        .def("get_speed_over_ground_kmh",
+                &NMEA_VTG::get_speed_over_ground_kmh,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_VTG,
-                    speed_over_ground_kmh))
+                    get_speed_over_ground_kmh))
+        .def("get_mode",
+                &NMEA_VTG::get_mode,
+                DOC(themachinethatgoesping,
+                    navigation,
+                    nmea_0183,
+                    NMEA_VTG,
+                    get_mode))
+        .def("get_mode_explained",
+                &NMEA_VTG::get_mode_explained,
+                DOC(themachinethatgoesping,
+                    navigation,
+                    nmea_0183,
+                    NMEA_VTG,
+                    get_mode_explained))
 
         
         // default copy functions

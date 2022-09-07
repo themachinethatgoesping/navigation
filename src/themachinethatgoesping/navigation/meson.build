@@ -27,6 +27,7 @@ headers = [
   'navigationinterpolatorlocal.hpp',
   'navigationinterpolatorlatlon.hpp',
   'nmea_0183.hpp',
+  'nmea_0183/helper.hpp',
   'nmea_0183/nmea_base.hpp',
   'nmea_0183/nmea_zda.hpp',
   'nmea_0183/nmea_vlw.hpp',

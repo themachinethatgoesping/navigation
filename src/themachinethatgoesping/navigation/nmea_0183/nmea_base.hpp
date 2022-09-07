@@ -5,11 +5,13 @@
 
 #pragma once
 
-#include <string>
 #include <charconv>
+#include <string>
 
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelpers/stream.hpp>
+
+#include <themachinethatgoesping/tools/helper.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -17,8 +19,8 @@ namespace nmea_0183 {
 
 class NMEA_Base
 {
-    protected:
-    std::string _sentence;
+  protected:
+    std::string      _sentence;
     std::vector<int> _fields;
 
   public:
@@ -48,7 +50,7 @@ class NMEA_Base
     static NMEA_Base from_stream(std::istream& is)
     {
         NMEA_Base nmea_base;
-        size_t size;
+        size_t    size;
         is.read(reinterpret_cast<char*>(&size), sizeof(size));
         nmea_base._sentence.resize(size);
         is.read(nmea_base._sentence.data(), nmea_base._sentence.size());
@@ -56,12 +58,11 @@ class NMEA_Base
         return nmea_base;
     }
 
-    void to_stream(std::ostream& os)
+    void to_stream(std::ostream& os) const
     {
-        NMEA_Base nmea_base;
-        size_t size = nmea_base.size();
+        size_t size = this->size();
         os.write(reinterpret_cast<char*>(&size), sizeof(size));
-        os.write(nmea_base._sentence.data(), nmea_base._sentence.size());
+        os.write(this->_sentence.data(), this->_sentence.size());
     }
 
     // operators
@@ -69,11 +70,10 @@ class NMEA_Base
     bool   operator!=(const NMEA_Base& other) const { return _sentence != other._sentence; }
     size_t size() const { return _sentence.size(); }
 
-
     void parse_fields()
     {
         _fields.clear();
-        // find all ',' 
+        // find all ','
         size_t i = 0;
         for (; i < _sentence.size(); i++)
         {
@@ -88,36 +88,30 @@ class NMEA_Base
     std::string_view get_field(size_t index) const
     {
         if (index < _fields.size() - 1)
-            return std::string_view(_sentence).substr(_fields[index] + 1, _fields[index + 1] - _fields[index] - 1);
-            
-        throw std::out_of_range("NMEA_Base::get_field: index out of range");
+            return std::string_view(_sentence).substr(_fields[index] + 1,
+                                                      _fields[index + 1] - _fields[index] - 1);
+
+        return "";
     }
 
     double get_field_as_double(size_t index) const
     {
-        auto field = get_field(index);
-        if (field.empty())
-            return std::numeric_limits<double>::quiet_NaN();
-
-        return std::stod(std::string(field));
+        return themachinethatgoesping::tools::helper::string_to_double(get_field(index));
     }
 
     int get_field_as_int(size_t index) const
     {
-        auto field = get_field(index);
-        if (field.empty())
+        try
+        {
+            return std::stoi(std::string(get_field(index)));
+        }
+        catch (...)
+        {
             return 0;
-
-        return std::stoi(std::string(field));
+        }
     }
 
-
-    void to_stream(std::ostream& os) const
-    {
-        os.write(_sentence.data(), _sentence.size());
-    }
-
-    std::string_view get_sender() const
+    std::string_view get_sender_id() const
     {
         try
         {
@@ -132,7 +126,7 @@ class NMEA_Base
         }
     }
 
-    std::string_view get_type() const
+    std::string_view get_sentence_type() const
     {
         try
         {
@@ -147,7 +141,7 @@ class NMEA_Base
         }
     }
 
-    std::string_view get_name() const
+    std::string_view get_sentence_id() const
     {
         try
         {
@@ -169,8 +163,8 @@ class NMEA_Base
     {
         tools::classhelpers::ObjectPrinter printer("NMEA sentence", float_precision);
 
-        printer.register_value("Sender", get_sender(), "");
-        printer.register_value("Type", get_type(), "");
+        printer.register_value("Sender", get_sender_id(), "");
+        printer.register_value("Type", get_sentence_type(), "");
         printer.register_value("Full sentence", get_sentence(), "");
 
         return printer;

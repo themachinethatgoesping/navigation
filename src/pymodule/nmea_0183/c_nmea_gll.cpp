@@ -30,46 +30,46 @@ void init_c_nmea_gll(py::module& m)
              py::arg("check") = true)
 
         // GLL attributes
-        .def_property_readonly("latitude",
-                &NMEA_GLL::latitude,
+        .def("get_latitude",
+                &NMEA_GLL::get_latitude,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GLL,
-                    latitude))
-        .def_property_readonly("longitude",
-                &NMEA_GLL::longitude,
+                    get_latitude))
+        .def("get_longitude",
+                &NMEA_GLL::get_longitude,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GLL,
-                    longitude))
-        .def_property_readonly("coordinated_universal_time",
-             &NMEA_GLL::coordinated_universal_time,
+                    get_longitude))
+        .def("get_utc_time_string",
+             &NMEA_GLL::get_utc_time_string,
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_GLL,
-                 coordinated_universal_time))
-        .def_property_readonly("status",
-                &NMEA_GLL::status,
+                 get_utc_time_string))
+        .def("get_status",
+                &NMEA_GLL::get_status,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GLL,
-                    status))
-        .def_property_readonly("mode",
-                &NMEA_GLL::mode,             DOC(themachinethatgoesping,
+                    get_status))
+        .def("get_mode",
+                &NMEA_GLL::get_mode,             DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GLL,
-                    mode))  
-        .def_property_readonly("mode_explained",
-                &NMEA_GLL::mode,             DOC(themachinethatgoesping,
+                    get_mode))  
+        .def("get_mode_explained",
+                &NMEA_GLL::get_mode_explained,             DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GLL,
-                    mode))  
+                    get_mode_explained))  
         
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_GLL)

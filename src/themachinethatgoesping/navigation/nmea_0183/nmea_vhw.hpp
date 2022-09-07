@@ -3,6 +3,8 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
+//TODO: write tests
+
 #pragma once
 
 #include <string>
@@ -34,31 +36,37 @@ class NMEA_VHW : public NMEA_Base
     : NMEA_Base(std::move(base))
     {
         if (check) {
-            if(get_type() != "VHW")
-                throw std::runtime_error("NMEA_VHW: wrong sentence type");
+            if(get_sentence_type() != "VHW")
+                throw std::runtime_error(fmt::format("NMEA_VHW: wrong sentence type [{}]", get_sentence_type()));
         }
         parse_fields();
     }
 
     // ----- NMEA VHW attributes -----
-    double vessel_heading_true() const
+    double get_vessel_heading_true() const
     {
         return get_field_as_double(0);
     }
-    double vessel_heading_magnetic() const
+    double get_vessel_heading_magnetic() const
     {
         return get_field_as_double(2);
     }
-    double speed_over_water_knots() const
+    double get_speed_over_water_knots() const
     {
         return get_field_as_double(4);
     }
-    double speed_over_water_kmh() const
+    double get_speed_over_water_kmh() const
     {
         return get_field_as_double(6);
     }
-
     
+
+    // ----- binary streaming -----
+    // this has to be explicit, because otherwise the compiler will use the base class version
+    static NMEA_VHW from_stream(std::istream& is)
+    {
+        return NMEA_VHW(std::move(NMEA_Base::from_stream(is)),true);
+    }    
 
     // ----- objectprinter -----
     tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
@@ -68,10 +76,10 @@ class NMEA_VHW : public NMEA_Base
         printer.append(NMEA_Base::__printer__(float_precision));
 
         printer.register_section("VHW attributes");
-        printer.register_value("vessel_heading_true", vessel_heading_true(), "°, true");
-        printer.register_value("vessel_heading_magnetic", vessel_heading_magnetic(), "°, magnetic");
-        printer.register_value("speed_over_water_knots", speed_over_water_knots(), "knots");
-        printer.register_value("speed_over_water_kmh", speed_over_water_kmh(), "km/h");
+        printer.register_value("vessel_heading_true", get_vessel_heading_true(), "°, true");
+        printer.register_value("vessel_heading_magnetic", get_vessel_heading_magnetic(), "°, magnetic");
+        printer.register_value("speed_over_water_knots", get_speed_over_water_knots(), "knots");
+        printer.register_value("speed_over_water_kmh", get_speed_over_water_kmh(), "km/h");
 
         return printer;
     }

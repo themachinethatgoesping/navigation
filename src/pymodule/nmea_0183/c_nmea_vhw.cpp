@@ -30,34 +30,34 @@ void init_c_nmea_vhw(py::module& m)
              py::arg("check") = true)
 
         // VHW attributes
-        .def_property_readonly("vessel_heading_true",
-                               &NMEA_VHW::vessel_heading_true,
+        .def("get_vessel_heading_true",
+                               &NMEA_VHW::get_vessel_heading_true,
                                DOC(themachinethatgoesping,
                                    navigation,
                                    nmea_0183,
                                    NMEA_VHW,
-                                   vessel_heading_true))
-        .def_property_readonly("vessel_heading_magnetic",
-                                 &NMEA_VHW::vessel_heading_magnetic,
+                                   get_vessel_heading_true))
+        .def("get_vessel_heading_magnetic",
+                                 &NMEA_VHW::get_vessel_heading_magnetic,
                                  DOC(themachinethatgoesping,
                                       navigation,
                                       nmea_0183,
                                       NMEA_VHW,
-                                      vessel_heading_magnetic))
-        .def_property_readonly("speed_over_water_knots",
-                                 &NMEA_VHW::speed_over_water_knots,
+                                      get_vessel_heading_magnetic))
+        .def("get_speed_over_water_knots",
+                                 &NMEA_VHW::get_speed_over_water_knots,
                                  DOC(themachinethatgoesping,
                                       navigation,
                                       nmea_0183,
                                       NMEA_VHW,
-                                      speed_over_water_knots))
-        .def_property_readonly("speed_over_water_kmh",
-                                    &NMEA_VHW::speed_over_water_kmh,
+                                      get_speed_over_water_knots))
+        .def("get_speed_over_water_kmh",
+                                    &NMEA_VHW::get_speed_over_water_kmh,
                                     DOC(themachinethatgoesping,
                                         navigation,
                                         nmea_0183,
                                         NMEA_VHW,
-                                        speed_over_water_kmh))
+                                        get_speed_over_water_kmh))
 
         
         // default copy functions

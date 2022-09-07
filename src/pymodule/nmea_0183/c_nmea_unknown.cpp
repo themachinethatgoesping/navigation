@@ -29,19 +29,6 @@ void init_c_nmea_unknown(py::module& m)
              py::arg("nmea_base"),
              py::arg("check") = true)
 
-        // access the parsed fields
-        .def("get_field",
-             &NMEA_Base::get_field,
-             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field),
-             py::arg("index"))
-        .def("get_field_as_int",
-             &NMEA_Base::get_field_as_int,
-             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_int),
-             py::arg("index"))
-        .def("get_field_as_double",
-             &NMEA_Base::get_field_as_double,
-             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_double),
-             py::arg("index"))
         
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_Unknown)

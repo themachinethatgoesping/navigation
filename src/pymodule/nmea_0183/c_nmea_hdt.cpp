@@ -30,13 +30,13 @@ void init_c_nmea_hdt(py::module& m)
              py::arg("check") = true)
 
         // HDT attributes
-        .def_property_readonly("heading_degrees_true",
-                &NMEA_HDT::heading_degrees_true,
+        .def("get_heading_degrees_true",
+                &NMEA_HDT::get_heading_degrees_true,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_HDT,
-                    heading_degrees_true))
+                    get_heading_degrees_true))
         
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_HDT)

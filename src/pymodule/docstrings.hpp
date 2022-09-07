@@ -1290,12 +1290,6 @@ static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_for
 R"doc(< lat/lon will be converted to degrees°minutes'seconds.seconds''E/S
 E/W)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEADecoder = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEADecoder_decode = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEADecoder_from_stream = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_NMEA_Base = R"doc()doc";
@@ -1316,13 +1310,13 @@ static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_g
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_field_as_int = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_name = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_sender = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_sender_id = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_sentence = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_type = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_sentence_id = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_sentence_type = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_operator_eq = R"doc()doc";
 
@@ -1337,8 +1331,6 @@ static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_s
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_size = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_to_stream = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_to_stream_2 = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA =
 R"doc(The NMEA GGA datagram contains time, position, and fix. Typically
@@ -1355,29 +1347,31 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_age_of_differential_gps_data = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_altitude = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_age_of_differential_gps_data = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_coordinated_universal_time = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_altitude = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_differential_reference_station_id = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_differential_reference_station_id = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_geoidal_separation = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_geoidal_separation = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_horizontal_dilution_of_precision = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_horizontal_dilution_of_precision = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_latitude = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_latitude = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_longitude = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_longitude = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_number_of_satellites = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_number_of_satellites = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_quality = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_quality_explained = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_get_utc_time_string = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_quality = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA_quality_explained = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL =
 R"doc(The NMEA GLL datagram contains time, position, and status. Typically
@@ -1394,19 +1388,21 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_coordinated_universal_time = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_latitude = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_get_latitude = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_longitude = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_get_longitude = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_mode = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_get_mode = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_mode_explained = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_get_mode_explained = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_get_status = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_get_utc_time_string = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_status = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_HDT =
 R"doc(The NMEA HDT datagram contains the true vessel heading typically
@@ -1423,7 +1419,9 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_HDT_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_HDT_heading_degrees_true = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_HDT_from_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_HDT_get_heading_degrees_true = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_HDT_printer = R"doc()doc";
 
@@ -1443,27 +1441,29 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_coordinated_universal_time = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_course_over_ground_degrees_true = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_course_over_ground_degrees_true = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_date = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_latitude = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_latitude = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_longitude = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_longitude = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_magnetic_variation = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_magnetic_variation = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_mode = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_mode = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_mode_explained = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_mode_explained = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_speed_over_ground_knots = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_status = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_utc_date_string = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_get_utc_time_string = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_speed_over_ground_knots = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_status = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_RMC_to_date_string =
 R"doc(Convert the datagram into a date time string Note: this function uses
@@ -1496,6 +1496,8 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Unknown_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Unknown_from_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Unknown_printer = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW =
@@ -1513,15 +1515,17 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_from_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_get_speed_over_water_kmh = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_get_speed_over_water_knots = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_get_vessel_heading_magnetic = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_get_vessel_heading_true = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_speed_over_water_kmh = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_speed_over_water_knots = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_vessel_heading_magnetic = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VHW_vessel_heading_true = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW =
 R"doc(The NMEA VLW datagram contains the distance of the vessel traveled by
@@ -1538,15 +1542,17 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_from_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_get_total_ground_distance_nautical_miles = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_get_total_water_distance_nautical_miles = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_get_trip_ground_distance_nautical_miles = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_get_trip_water_distance_nautical_miles = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_total_ground_distance_nautical_miles = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_total_water_distance_nautical_miles = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_trip_ground_distance_nautical_miles = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VLW_trip_water_distance_nautical_miles = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG =
 R"doc(The NMEA VBW datagram contains the vessels course and speed over
@@ -1563,19 +1569,25 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_course_over_ground_degrees_magnetic = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_course_over_ground_degrees_true = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_get_course_over_ground_degrees_magnetic = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_get_course_over_ground_degrees_true = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_get_mode = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_get_mode_explained = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_get_speed_over_ground_kmh = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_get_speed_over_ground_knots = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_speed_over_ground_kmh = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_VTG_speed_over_ground_knots = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA =
-R"doc(The NMEA ZDA datagram contains the universal time code (UTC), day,
-month, year and local time zone offsets.)doc";
+R"doc(The NMEA ZDA datagram contains the universal time code (UTC), get_day,
+get_month, get_year and local time zone offsets.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_NMEA_ZDA =
 R"doc(Construct a new nmea zda object from an existing NMEA_Base datagram
@@ -1588,15 +1600,19 @@ Parameter ``check``:
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_coordinated_universal_time = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_day = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_get_day = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_local_zone_hours = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_get_local_zone_hours = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_local_zone_minutes = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_get_local_zone_minutes = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_month = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_get_month = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_get_utc_time_string = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_get_year = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_printer = R"doc()doc";
 
@@ -1617,7 +1633,27 @@ R"doc(Convert the datagram into a unixtime stamp
 Returns:
     unixtime (seconds since 1970-01-01 00:00:00 UTC))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_ZDA_year = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_decode = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_decode_2 = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_from_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_nmea_latitude_field_to_double =
+R"doc(convert dddd.mm to double (this is the format used in NMEA 0183)
+
+Parameter ``field``:
+    $Returns:
+
+double)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_nmea_longitude_field_to_double =
+R"doc(convert dddmm.mm to double (this is the format used in NMEA 0183)
+
+Parameter ``field``:
+    $Returns:
+
+double)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_t_NMEA_0183 = R"doc()doc";
 

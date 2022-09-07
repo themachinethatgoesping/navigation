@@ -30,34 +30,34 @@ void init_c_nmea_vlw(py::module& m)
              py::arg("check") = true)
 
         // VLW attributes
-        .def_property_readonly("total_water_distance_nautical_miles",
-             &NMEA_VLW::total_water_distance_nautical_miles,
+        .def("get_total_water_distance_nautical_miles",
+             &NMEA_VLW::get_total_water_distance_nautical_miles,
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_VLW,
-                 total_water_distance_nautical_miles))
-        .def_property_readonly("trip_water_distance_nautical_miles",
-                &NMEA_VLW::trip_water_distance_nautical_miles,
+                 get_total_water_distance_nautical_miles))
+        .def("get_trip_water_distance_nautical_miles",
+                &NMEA_VLW::get_trip_water_distance_nautical_miles,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_VLW,
-                    trip_water_distance_nautical_miles))
-        .def_property_readonly("total_ground_distance_nautical_miles",
-                &NMEA_VLW::total_ground_distance_nautical_miles,
+                    get_trip_water_distance_nautical_miles))
+        .def("get_total_ground_distance_nautical_miles",
+                &NMEA_VLW::get_total_ground_distance_nautical_miles,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_VLW,
-                    total_ground_distance_nautical_miles))
-        .def_property_readonly("trip_ground_distance_nautical_miles",
-                &NMEA_VLW::trip_ground_distance_nautical_miles,
+                    get_total_ground_distance_nautical_miles))
+        .def("get_trip_ground_distance_nautical_miles",
+                &NMEA_VLW::get_trip_ground_distance_nautical_miles,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_VLW,
-                    trip_ground_distance_nautical_miles))
+                    get_trip_ground_distance_nautical_miles))
 
         
         // default copy functions

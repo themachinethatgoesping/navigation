@@ -30,48 +30,48 @@ void init_c_nmea_zda(py::module& m)
              py::arg("check") = true)
 
         // ZDA attributes
-        .def_property_readonly("coordinated_universal_time",
-             &NMEA_ZDA::coordinated_universal_time,
+        .def("get_utc_time_string",
+             &NMEA_ZDA::get_utc_time_string,
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_ZDA,
-                 coordinated_universal_time))
-        .def_property_readonly("day",
-                &NMEA_ZDA::day,
+                 get_utc_time_string))
+        .def("get_day",
+                &NMEA_ZDA::get_day,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_ZDA,
-                    day))
-        .def_property_readonly("month",
-                &NMEA_ZDA::month,
+                    get_day))
+        .def("get_month",
+                &NMEA_ZDA::get_month,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_ZDA,
-                    month))
-        .def_property_readonly("year",
-                &NMEA_ZDA::year,
+                    get_month))
+        .def("get_year",
+                &NMEA_ZDA::get_year,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_ZDA,
-                    year))
-        .def_property_readonly("local_zone_hours",
-                &NMEA_ZDA::local_zone_hours,
+                    get_year))
+        .def("get_local_zone_hours",
+                &NMEA_ZDA::get_local_zone_hours,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_ZDA,
-                    local_zone_hours))
-        .def_property_readonly("local_zone_minutes",
-                &NMEA_ZDA::local_zone_minutes,
+                    get_local_zone_hours))
+        .def("get_local_zone_minutes",
+                &NMEA_ZDA::get_local_zone_minutes,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_ZDA,
-                    local_zone_minutes))
+                    get_local_zone_minutes))
 
         // Converted attributes
         .def("to_timestamp",

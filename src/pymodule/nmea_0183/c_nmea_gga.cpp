@@ -30,83 +30,83 @@ void init_c_nmea_gga(py::module& m)
              py::arg("check") = true)
 
         // GGA attributes
-        .def_property_readonly("coordinated_universal_time",
-             &NMEA_GGA::coordinated_universal_time,
+        .def("get_utc_time_string",
+             &NMEA_GGA::get_utc_time_string,
              DOC(themachinethatgoesping,
                  navigation,
                  nmea_0183,
                  NMEA_GGA,
-                 coordinated_universal_time))
-        .def_property_readonly("latitude",
-                &NMEA_GGA::latitude,
+                 get_utc_time_string))
+        .def("get_latitude",
+                &NMEA_GGA::get_latitude,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    latitude))
-        .def_property_readonly("longitude",
-                &NMEA_GGA::longitude,
+                    get_latitude))
+        .def("get_longitude",
+                &NMEA_GGA::get_longitude,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    longitude))
-        .def_property_readonly("quality",
-                &NMEA_GGA::quality,
+                    get_longitude))
+        .def("get_quality",
+                &NMEA_GGA::get_quality,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    quality))
-        .def_property_readonly("quality_explained",
-                &NMEA_GGA::quality_explained,
+                    get_quality))
+        .def("get_quality_explained",
+                &NMEA_GGA::get_quality_explained,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    quality_explained))
-        .def_property_readonly("number_of_satellites",
-                &NMEA_GGA::number_of_satellites,
+                    get_quality_explained))
+        .def("get_number_of_satellites",
+                &NMEA_GGA::get_number_of_satellites,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    number_of_satellites))
-        .def_property_readonly("horizontal_dilution_of_precision",
-                &NMEA_GGA::horizontal_dilution_of_precision,
+                    get_number_of_satellites))
+        .def("get_horizontal_dilution_of_precision",
+                &NMEA_GGA::get_horizontal_dilution_of_precision,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    horizontal_dilution_of_precision))
-        .def_property_readonly("altitude",
-                &NMEA_GGA::altitude,
+                    get_horizontal_dilution_of_precision))
+        .def("get_altitude",
+                &NMEA_GGA::get_altitude,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    altitude))
-        .def_property_readonly("geoidal_separation",
-                &NMEA_GGA::geoidal_separation,
+                    get_altitude))
+        .def("get_geoidal_separation",
+                &NMEA_GGA::get_geoidal_separation,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    geoidal_separation))
-        .def_property_readonly("age_of_differential_gps_data",
-                &NMEA_GGA::age_of_differential_gps_data,
+                    get_geoidal_separation))
+        .def("get_age_of_differential_gps_data",
+                &NMEA_GGA::get_age_of_differential_gps_data,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    age_of_differential_gps_data))
-        .def_property_readonly("differential_reference_station_id",
-                &NMEA_GGA::differential_reference_station_id,
+                    get_age_of_differential_gps_data))
+        .def("get_differential_reference_station_id",
+                &NMEA_GGA::get_differential_reference_station_id,
                 DOC(themachinethatgoesping,
                     navigation,
                     nmea_0183,
                     NMEA_GGA,
-                    differential_reference_station_id))                    
+                    get_differential_reference_station_id))                    
 
         
         // default copy functions

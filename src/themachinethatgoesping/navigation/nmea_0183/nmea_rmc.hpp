@@ -5,13 +5,14 @@
 
 #pragma once
 
-#include <string>
 #include <charconv>
+#include <string>
 
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 #include <themachinethatgoesping/tools/timeconv.hpp>
 
 #include "../navtools.hpp"
+#include "helper.hpp"
 #include "nmea_base.hpp"
 
 namespace themachinethatgoesping {
@@ -19,82 +20,69 @@ namespace navigation {
 namespace nmea_0183 {
 
 /**
- * @brief The NMEA RMC datagram contains time, date, position, course and speed data. Typically received from
-a global navigation satellite system (GNSS device).
- * 
+ * @brief The NMEA RMC datagram contains time, date, position, course and speed data. Typically
+received from a global navigation satellite system (GNSS device).
+ *
  */
 class NMEA_RMC : public NMEA_Base
 {
 
   public:
-  /**
-   * @brief Construct a new nmea rmc object from an existing NMEA_Base datagram
-   * 
-   * @param base Underlying NMEA_Base datagram
-   * @param check Check if the NMEA string is valid
-   */
+    /**
+     * @brief Construct a new nmea rmc object from an existing NMEA_Base datagram
+     *
+     * @param base Underlying NMEA_Base datagram
+     * @param check Check if the NMEA string is valid
+     */
     NMEA_RMC(NMEA_Base&& base, bool check = false)
-    : NMEA_Base(std::move(base))
+        : NMEA_Base(std::move(base))
     {
-        if (check) {
-            if(get_type() != "RMC")
-                throw std::runtime_error("NMEA_RMC: wrong sentence type");
+        if (check)
+        {
+            if (get_sentence_type() != "RMC")
+                throw std::runtime_error(
+                    fmt::format("NMEA_RMC: wrong sentence type [{}]", get_sentence_type()));
         }
         parse_fields();
     }
 
     // ----- NMEA RMC attributes -----
-    std::string coordinated_universal_time() const
-    {
-        return std::string(get_field(0));
-    }
-    bool status() const
-    {
-        return get_field(1) == "A";
-    }
-    double latitude() const
-    {
-        auto field = get_field(2);
-        double degrees = std::stod(std::string(field.substr(0,2)));
-        double minutes = std::stod(std::string(field.substr(2,field.size()-2)));
+    std::string get_utc_time_string() const { return std::string(get_field(0)); }
+    bool        get_status() const { return get_field(1) == "A"; }
 
-        if (get_field(3) == "N" )
-            return (degrees + minutes / 60);
-        else return -(degrees + minutes / 60);
-    }
-    double longitude() const
+    double get_latitude() const
     {
-        auto field = get_field(4);
-        double degrees = std::stod(std::string(field.substr(0,2)));
-        double minutes = std::stod(std::string(field.substr(2,field.size()-2)));
-        
-        if (get_field(5) == "E" )
-            return (degrees + minutes / 60);
-        else return -(degrees + minutes / 60);
+        if (get_field(3) == "N")
+            return nmea_latitude_field_to_double(get_field(2));
+        else
+            return -nmea_latitude_field_to_double(get_field(2));
     }
-    double speed_over_ground_knots() const
+    double get_longitude() const
     {
-        return get_field_as_double(6);
+        if (get_field(5) == "E")
+            return nmea_longitude_field_to_double(get_field(4));
+        else
+            return -nmea_longitude_field_to_double(get_field(4));
     }
-    double course_over_ground_degrees_true() const
+
+    double      get_speed_over_ground_knots() const { return get_field_as_double(6); }
+    double      get_course_over_ground_degrees_true() const { return get_field_as_double(7); }
+    std::string get_utc_date_string() const { return std::string(get_field(8)); }
+    double      get_magnetic_variation() const { return get_field_as_double(9); }
+    char        get_mode() const
     {
-        return get_field_as_double(7);
+        try
+        {
+            return get_field(10)[0];
+        }
+        catch (std::out_of_range& e)
+        {
+            return '\x00';
+        }
     }
-    std::string date() const
+    std::string get_mode_explained() const
     {
-        return std::string(get_field(8));
-    }
-    double magnetic_variation() const
-    {
-        return get_field_as_double(9);
-    }
-    char mode() const
-    {
-        return get_field(10)[0];
-    }
-    std::string mode_explained() const
-    {
-        char mode = this->mode();
+        char mode = this->get_mode();
         if (mode == 'A')
             return "Autonomous";
         if (mode == 'D')
@@ -113,30 +101,50 @@ class NMEA_RMC : public NMEA_Base
     // ----- conversions -----
     /**
      * @brief Convert the datagram into a unixtime stamp
-     * 
+     *
      * @return unixtime (seconds since 1970-01-01 00:00:00 UTC)
      */
-    double to_timestamp () const
+    double to_timestamp() const
     {
-        using themachinethatgoesping::tools::timeconv::datestring_to_unixtime;
-        std::string datestring = coordinated_universal_time() + '-' + date();
+        try
+        {
+            using themachinethatgoesping::tools::timeconv::datestring_to_unixtime;
+            auto field_time = get_field(0);
+            auto field_date = get_field(8);
 
-        return datestring_to_unixtime( datestring, "%H%M%S-%d%m%y" );
+            if (field_time.size() < 6 || field_date.size() < 6)
+                return std::numeric_limits<double>::quiet_NaN();
+
+            auto date_time = get_utc_time_string() + "-" + get_utc_date_string()+'-' + "0000";
+            double timestamp = datestring_to_unixtime(date_time, "%H%M%S-%d%m%y-%z");
+            return timestamp;
+        }
+        catch (...)
+        {
+            return std::numeric_limits<double>::quiet_NaN();
+        }
     }
 
     /**
      * @brief Convert the datagram into a date time string
      *        Note: this function uses to_timestamp()
-     * 
-     * @param format Format string (see https://howardhinnant.github.io/date/date.html#to_stream_formatting)
+     *
+     * @param format Format string (see
+     * https://howardhinnant.github.io/date/date.html#to_stream_formatting)
      * @return date time string
      */
     std::string to_date_string(const std::string& format = "%z__%d-%m-%Y__%H:%M:%S") const
     {
         using themachinethatgoesping::tools::timeconv::unixtime_to_datestring;
-        return unixtime_to_datestring(to_timestamp(),2,format);
+        return unixtime_to_datestring(to_timestamp(), 2, format);
     }
-    
+
+    // ----- binary streaming -----
+    // this has to be explicit, because otherwise the compiler will use the base class version
+    static NMEA_RMC from_stream(std::istream& is)
+    {
+        return NMEA_RMC(std::move(NMEA_Base::from_stream(is)), true);
+    }
 
     // ----- objectprinter -----
     tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
@@ -146,28 +154,28 @@ class NMEA_RMC : public NMEA_Base
         printer.append(NMEA_Base::__printer__(float_precision));
 
         printer.register_section("RMC attributes");
-        printer.register_value("coordinated_universal_time", coordinated_universal_time(),"HHMMSS.SS");
-        printer.register_value("status", status());
+        printer.register_value("utc_time_string", get_utc_time_string(), "HHMMSS.SS");
+        printer.register_value("status", get_status());
 
         printer.register_string(
             "latitude",
-            navtools::latitude_to_string(latitude(), navtools::t_latlon_format::minutes, 2),
+            navtools::latitude_to_string(get_latitude(), navtools::t_latlon_format::minutes, 2),
             "ddd°mm.mm'N/S");
         printer.register_string(
             "longitude",
-            navtools::longitude_to_string(longitude(), navtools::t_latlon_format::minutes, 2),
+            navtools::longitude_to_string(get_longitude(), navtools::t_latlon_format::minutes, 2),
             "ddd°mm.mm'E/W");
 
-        printer.register_value("speed_over_ground_knots", speed_over_ground_knots());
-        printer.register_value("course_over_ground_degrees_true", course_over_ground_degrees_true());
-        printer.register_value("date", date());
-        printer.register_value("magnetic_variation", magnetic_variation());
-        printer.register_value("mode", this->mode(),mode_explained());
+        printer.register_value("speed_over_ground_knots", get_speed_over_ground_knots());
+        printer.register_value("course_over_ground_degrees_true",
+                               get_course_over_ground_degrees_true());
+        printer.register_value("date", get_utc_date_string());
+        printer.register_value("magnetic_variation", get_magnetic_variation());
+        printer.register_value("mode", get_mode(), get_mode_explained());
 
         printer.register_section("Converted attributes");
         printer.register_value("to_timestamp", std::to_string(to_timestamp()), "unixtime");
         printer.register_value("to_date_string", to_date_string());
-        
 
         return printer;
     }

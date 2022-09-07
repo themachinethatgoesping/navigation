@@ -11,6 +11,7 @@
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 #include <themachinethatgoesping/tools/timeconv.hpp>
 
+#include "helper.hpp"
 #include "../navtools.hpp"
 #include "nmea_base.hpp"
 
@@ -37,50 +38,49 @@ class NMEA_GLL : public NMEA_Base
     : NMEA_Base(std::move(base))
     {
         if (check) {
-            if(get_type() != "GLL")
-                throw std::runtime_error("NMEA_GLL: wrong sentence type");
+            if(get_sentence_type() != "GLL")
+                throw std::runtime_error(fmt::format("NMEA_GLL: wrong sentence type [{}]", get_sentence_type()));
         }
         parse_fields();
     }
 
     // ----- NMEA GLL attributes -----
-    double latitude() const
+    double get_latitude() const
     {
-        auto field = get_field(0);
-        double degrees = std::stod(std::string(field.substr(0,2)));
-        double minutes = std::stod(std::string(field.substr(2,field.size()-2)));
-
         if (get_field(1) == "N" )
-            return (degrees + minutes / 60);
-        else return -(degrees + minutes / 60);
+            return nmea_latitude_field_to_double(get_field(0));
+        else 
+            return -nmea_latitude_field_to_double(get_field(0));
     }
-    double longitude() const
+    double get_longitude() const
     {
-        auto field = get_field(2);
-        double degrees = std::stod(std::string(field.substr(0,2)));
-        double minutes = std::stod(std::string(field.substr(2,field.size()-2)));
-        
         if (get_field(3) == "E" )
-            return (degrees + minutes / 60);
-        else return -(degrees + minutes / 60);
+            return nmea_longitude_field_to_double(get_field(2));
+        else 
+            return -nmea_longitude_field_to_double(get_field(2));
     }
 
-    std::string coordinated_universal_time() const
+    std::string get_utc_time_string() const
     {
         return std::string(get_field(4));
     }
-    bool status() const
+    bool get_status() const
     {
         return get_field(5) == "A";
     }
 
-    char mode() const
+    char get_mode() const
     {
+        try{
         return get_field(6)[0];
+        }
+        catch(std::out_of_range& e){
+            return '\x00';
+        }
     }
-    std::string mode_explained() const
+    std::string get_mode_explained() const
     {
-        char mode = this->mode();
+        char mode = get_mode();
         if (mode == 'A')
             return "Autonomous";
         if (mode == 'D')
@@ -94,9 +94,15 @@ class NMEA_GLL : public NMEA_Base
         if (mode == 'N')
             return "Data not valid";
         return "Unknown";
-    }
-
+    }    
     
+
+    // ----- binary streaming -----
+    // this has to be explicit, because otherwise the compiler will use the base class version
+    static NMEA_GLL from_stream(std::istream& is)
+    {
+        return NMEA_GLL(std::move(NMEA_Base::from_stream(is)),true);
+    }   
 
     // ----- objectprinter -----
     tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
@@ -109,19 +115,20 @@ class NMEA_GLL : public NMEA_Base
 
         printer.register_string(
             "latitude",
-            navtools::latitude_to_string(latitude(), navtools::t_latlon_format::minutes, 2),
+            navtools::latitude_to_string(get_latitude(), navtools::t_latlon_format::minutes, 2),
             "ddd°mm.mm'N/S");
         printer.register_string(
             "longitude",
-            navtools::longitude_to_string(longitude(), navtools::t_latlon_format::minutes, 2),
+            navtools::longitude_to_string(get_longitude(), navtools::t_latlon_format::minutes, 2),
             "ddd°mm.mm'E/W");
 
-        printer.register_value("coordinated_universal_time", coordinated_universal_time(),"HHMMSS.SS");
-        printer.register_value("status", status());        
-        printer.register_value("mode", this->mode(),mode_explained());
+        printer.register_value("utc_time_string", get_utc_time_string(),"HHMMSS.SS");
+        printer.register_value("status", this->get_status());        
+        printer.register_value("mode", get_mode(),get_mode_explained());
 
         return printer;
     }
+
 
     // ----- class helper macros -----
     __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
