@@ -18,6 +18,7 @@ void init_c_nmea_rmc(pybind11::module& m);     // c_nmea_rmc.cpp
 void init_c_nmea_hdt(pybind11::module& m);     // c_nmea_hdt.cpp
 void init_c_nmea_gll(pybind11::module& m);     // c_nmea_gll.cpp
 void init_c_nmea_gga(pybind11::module& m);     // c_nmea_gga.cpp
+void init_c_nmea_gst(pybind11::module& m);     // c_nmea_gst.cpp
 void init_c_nmea_unknown(pybind11::module& m); // c_nmea_unknown.cpp
 
 void init_m_nmea_0183(pybind11::module& m)
@@ -37,6 +38,7 @@ void init_m_nmea_0183(pybind11::module& m)
     init_c_nmea_hdt(m_nmea);
     init_c_nmea_gll(m_nmea);
     init_c_nmea_gga(m_nmea);
+    init_c_nmea_gst(m_nmea);
     init_c_nmea_unknown(m_nmea);
 
     m_nmea.def(

@@ -31,6 +31,7 @@ sources = [
     'nmea_0183/c_nmea_hdt.cpp',
     'nmea_0183/c_nmea_gll.cpp',
     'nmea_0183/c_nmea_gga.cpp',
+    'nmea_0183/c_nmea_gst.cpp',
     'nmea_0183/c_nmea_unknown.cpp'
 ]
 

@@ -37,6 +37,7 @@ headers = [
   'nmea_0183/nmea_hdt.hpp',
   'nmea_0183/nmea_gll.hpp',
   'nmea_0183/nmea_gga.hpp',
+  'nmea_0183/nmea_gst.hpp',
   'nmea_0183/nmea_unknown.hpp'
 ]
 

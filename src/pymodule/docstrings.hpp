@@ -1404,6 +1404,41 @@ static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_ge
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GLL_printer = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST =
+R"doc(The NMEA GST datagram contains Position error statistics. Typically
+received from a global navigation satellite system (GNSS device).)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_NMEA_GST =
+R"doc(Construct a new nmea GST object from an existing NMEA_Base datagram
+
+Parameter ``base``:
+    Underlying NMEA_Base datagram
+
+Parameter ``check``:
+    Check if the NMEA string is valid)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_from_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_get_altitude_error_deviation = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_get_latitude_error_deviation = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_get_longitude_error_deviation = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_get_psuedorange_rms = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_get_semimajor_error = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_get_semimajor_error_orientation = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_get_semiminor_error = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_get_utc_time_string = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GST_printer = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_HDT =
 R"doc(The NMEA HDT datagram contains the true vessel heading typically
 received from a compass.)doc";
@@ -1660,6 +1695,8 @@ static const char *__doc_themachinethatgoesping_navigation_nmea_0183_t_NMEA_0183
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_t_NMEA_0183_t_NMEA_GGA = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_t_NMEA_0183_t_NMEA_GLL = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_t_NMEA_0183_t_NMEA_GST = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_t_NMEA_0183_t_NMEA_HDT = R"doc()doc";
 

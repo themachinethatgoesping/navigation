@@ -30,7 +30,7 @@ class NMEA_Unknown : public NMEA_Base
    * @param base Underlying NMEA_Base datagram
    * @param check Check if the NMEA string is valid
    */
-    NMEA_Unknown(NMEA_Base&& base, [[maybe_unused]] bool check = false)
+    NMEA_Unknown(NMEA_Base base, [[maybe_unused]] bool check = false)
     : NMEA_Base(std::move(base))
     {
         // if (check) {

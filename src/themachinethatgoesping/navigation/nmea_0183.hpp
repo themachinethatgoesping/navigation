@@ -18,6 +18,7 @@
 #include "nmea_0183/nmea_vlw.hpp"
 #include "nmea_0183/nmea_vtg.hpp"
 #include "nmea_0183/nmea_zda.hpp"
+#include "nmea_0183/nmea_gst.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -33,7 +34,8 @@ enum class t_NMEA_0183 : int32_t
     t_NMEA_RMC,
     t_NMEA_HDT,
     t_NMEA_GLL,
-    t_NMEA_GGA
+    t_NMEA_GGA,
+    t_NMEA_GST
 };
 
 using NMEA_0183_type = std::variant<NMEA_Unknown,
@@ -44,29 +46,32 @@ using NMEA_0183_type = std::variant<NMEA_Unknown,
                                     NMEA_RMC,
                                     NMEA_HDT,
                                     NMEA_GLL,
-                                    NMEA_GGA>;
+                                    NMEA_GGA,
+                                    NMEA_GST>;
 
 inline NMEA_0183_type decode(NMEA_Base nmea_sentence)
 {
     auto sentence_type = nmea_sentence.get_sentence_type();
 
     if (sentence_type == "ZDA")
-        return NMEA_ZDA(nmea_sentence);
+        return NMEA_0183_type(NMEA_ZDA(std::move(nmea_sentence)));
     if (sentence_type == "VLW")
-        return NMEA_VLW(nmea_sentence);
+        return NMEA_0183_type(NMEA_VLW(std::move(nmea_sentence)));
     if (sentence_type == "VTG")
-        return NMEA_VTG(nmea_sentence);
+        return NMEA_0183_type(NMEA_VTG(std::move(nmea_sentence)));
     if (sentence_type == "VHW")
-        return NMEA_VHW(nmea_sentence);
+        return NMEA_0183_type(NMEA_VHW(std::move(nmea_sentence)));
     if (sentence_type == "RMC")
-        return NMEA_RMC(nmea_sentence);
+        return NMEA_0183_type(NMEA_RMC(std::move(nmea_sentence)));
     if (sentence_type == "HDT")
-        return NMEA_HDT(nmea_sentence);
+        return NMEA_0183_type(NMEA_HDT(std::move(nmea_sentence)));
     if (sentence_type == "GLL")
-        return NMEA_GLL(nmea_sentence);
+        return NMEA_0183_type(NMEA_GLL(std::move(nmea_sentence)));
     if (sentence_type == "GGA")
-        return NMEA_GGA(nmea_sentence);
-    return NMEA_Unknown(nmea_sentence);
+        return NMEA_0183_type(NMEA_GGA(std::move(nmea_sentence)));
+    if (sentence_type == "GST")
+        return NMEA_0183_type(NMEA_GST(std::move(nmea_sentence)));
+    return NMEA_0183_type(NMEA_Unknown(std::move(nmea_sentence)));
 }
 
 inline NMEA_0183_type decode(std::string nmea_sentence)

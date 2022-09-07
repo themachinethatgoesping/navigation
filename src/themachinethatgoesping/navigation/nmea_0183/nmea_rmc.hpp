@@ -34,7 +34,7 @@ class NMEA_RMC : public NMEA_Base
      * @param base Underlying NMEA_Base datagram
      * @param check Check if the NMEA string is valid
      */
-    NMEA_RMC(NMEA_Base&& base, bool check = false)
+    NMEA_RMC(NMEA_Base base, bool check = false)
         : NMEA_Base(std::move(base))
     {
         if (check)

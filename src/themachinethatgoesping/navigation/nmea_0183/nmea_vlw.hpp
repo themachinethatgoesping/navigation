@@ -30,7 +30,7 @@ class NMEA_VLW : public NMEA_Base
    * @param base Underlying NMEA_Base datagram
    * @param check Check if the NMEA string is valid
    */
-    NMEA_VLW(NMEA_Base&& base, bool check = false)
+    NMEA_VLW(NMEA_Base base, bool check = false)
     : NMEA_Base(std::move(base))
     {
         if (check) {
