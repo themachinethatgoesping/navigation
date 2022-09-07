@@ -52,7 +52,7 @@ class NMEA_HDT : public NMEA_Base
     // this has to be explicit, because otherwise the compiler will use the base class version
     static NMEA_HDT from_stream(std::istream& is)
     {
-        return NMEA_HDT(std::move(NMEA_Base::from_stream(is)),true);
+        return NMEA_HDT(NMEA_Base::from_stream(is),true);
     }   
 
     // ----- objectprinter -----

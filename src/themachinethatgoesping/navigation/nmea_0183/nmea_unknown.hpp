@@ -43,7 +43,7 @@ class NMEA_Unknown : public NMEA_Base
     // this has to be explicit, because otherwise the compiler will use the base class version
     static NMEA_Unknown from_stream(std::istream& is)
     {
-        return NMEA_Unknown(std::move(NMEA_Base::from_stream(is)),true);
+        return NMEA_Unknown(NMEA_Base::from_stream(is),true);
     }    
 
     // ----- objectprinter -----

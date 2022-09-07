@@ -42,7 +42,7 @@ class TestNavigationNMEA_ZDA:
         assert zda_empty.get_local_zone_hours() == 0
 
         assert np.isnan(zda_empty.to_timestamp())
-        assert zda_empty.to_date_string() == "+0000__01-01-1970__00:00:00.00"
+        assert zda_empty.to_date_string() == "NaN_time_string"
         
         # test variables
         assert zda.get_sentence() == sentence

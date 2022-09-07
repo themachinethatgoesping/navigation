@@ -123,7 +123,7 @@ class NMEA_GGA : public NMEA_Base
     // this has to be explicit, because otherwise the compiler will use the base class version
     static NMEA_GGA from_stream(std::istream& is)
     {
-        return NMEA_GGA(std::move(NMEA_Base::from_stream(is)),true);
+        return NMEA_GGA(NMEA_Base::from_stream(is),true);
     }       
 
     // ----- objectprinter -----

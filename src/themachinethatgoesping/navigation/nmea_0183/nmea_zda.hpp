@@ -64,8 +64,7 @@ class NMEA_ZDA : public NMEA_Base
 
             std::string time_string = _sentence.substr(7, 23) + _sentence.substr(31, 2);
             // 112619.00,14,12,2017,00,00
-            double timestamp = datestring_to_unixtime(time_string, "%H%M%S,%d,%m,%Y,%z");
-            return timestamp;
+            return datestring_to_unixtime(time_string, "%H%M%S,%d,%m,%Y,%z");
         }
         catch (...)
         {
@@ -91,7 +90,7 @@ class NMEA_ZDA : public NMEA_Base
     // this has to be explicit, because otherwise the compiler will use the base class version
     static NMEA_ZDA from_stream(std::istream& is)
     {
-        return NMEA_ZDA(std::move(NMEA_Base::from_stream(is)), true);
+        return NMEA_ZDA(NMEA_Base::from_stream(is),true);
     }
 
     // ----- objectprinter -----

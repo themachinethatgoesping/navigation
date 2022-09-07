@@ -51,22 +51,22 @@ inline NMEA_0183_type decode(NMEA_Base nmea_sentence)
     auto sentence_type = nmea_sentence.get_sentence_type();
 
     if (sentence_type == "ZDA")
-        return std::move(NMEA_ZDA(std::move(nmea_sentence)));
+        return NMEA_ZDA(nmea_sentence);
     if (sentence_type == "VLW")
-        return std::move(NMEA_VLW(std::move(nmea_sentence)));
+        return NMEA_VLW(nmea_sentence);
     if (sentence_type == "VTG")
-        return std::move(NMEA_VTG(std::move(nmea_sentence)));
+        return NMEA_VTG(nmea_sentence);
     if (sentence_type == "VHW")
-        return std::move(NMEA_VHW(std::move(nmea_sentence)));
+        return NMEA_VHW(nmea_sentence);
     if (sentence_type == "RMC")
-        return std::move(NMEA_RMC(std::move(nmea_sentence)));
+        return NMEA_RMC(nmea_sentence);
     if (sentence_type == "HDT")
-        return std::move(NMEA_HDT(std::move(nmea_sentence)));
+        return NMEA_HDT(nmea_sentence);
     if (sentence_type == "GLL")
-        return std::move(NMEA_GLL(std::move(nmea_sentence)));
+        return NMEA_GLL(nmea_sentence);
     if (sentence_type == "GGA")
-        return std::move(NMEA_GGA(std::move(nmea_sentence)));
-    return NMEA_Unknown(std::move(std::move(nmea_sentence)));
+        return NMEA_GGA(nmea_sentence);
+    return NMEA_Unknown(nmea_sentence);
 }
 
 inline NMEA_0183_type decode(std::string nmea_sentence)
@@ -76,7 +76,7 @@ inline NMEA_0183_type decode(std::string nmea_sentence)
 
 inline NMEA_0183_type from_stream(std::istream& is, size_t length)
 {
-    return decode(std::move(NMEA_Base::from_stream(is, length)));
+    return decode(NMEA_Base::from_stream(is, length));
 }
 
 } // of nmea_0183::

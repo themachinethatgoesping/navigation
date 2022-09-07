@@ -46,7 +46,7 @@ class TestNavigationNMEA_RMC:
         assert rmc_empty.get_mode_explained() == "Unknown"
 
         assert np.isnan(rmc_empty.to_timestamp())
-        assert rmc_empty.to_date_string() == "+0000__01-01-1970__00:00:00.00"
+        assert rmc_empty.to_date_string() == "NaN_time_string"
 
         # test variables
         assert rmc.get_sentence() == sentence
