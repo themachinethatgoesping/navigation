@@ -1332,6 +1332,8 @@ static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_s
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_to_stream = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_to_stream_dont_write_size = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_GGA =
 R"doc(The NMEA GGA datagram contains time, position, and fix. Typically
 received from a global navigation satellite system (GNSS device).)doc";

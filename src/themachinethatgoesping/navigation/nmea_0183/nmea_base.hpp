@@ -65,6 +65,11 @@ class NMEA_Base
         os.write(this->_sentence.data(), this->_sentence.size());
     }
 
+    void to_stream_dont_write_size(std::ostream& os) const
+    {
+        os.write(this->_sentence.data(), this->_sentence.size());
+    }
+
     // operators
     bool   operator==(const NMEA_Base& other) const { return _sentence == other._sentence; }
     bool   operator!=(const NMEA_Base& other) const { return _sentence != other._sentence; }
