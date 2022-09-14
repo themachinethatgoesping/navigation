@@ -14,6 +14,7 @@
 
 namespace py = pybind11;
 using namespace themachinethatgoesping::navigation::navtools;
+using namespace themachinethatgoesping;
 
 void init_m_navtools(py::module& m)
 {
@@ -21,19 +22,17 @@ void init_m_navtools(py::module& m)
     auto m_navtools =
         m.def_submodule("navtools", "Convenient functions for converting latlon and utm strings.");
 
-    py::enum_<t_latlon_format>(m_navtools,
+    auto pyenum_latlon = py::enum_<t_latlon_format>(m_navtools,
                                "t_latlon_format",
                                DOC(themachinethatgoesping, navigation, navtools, t_latlon_format))
         .value("degrees", t_latlon_format::degrees)
         .value("minutes", t_latlon_format::minutes)
         .value("seconds", t_latlon_format::seconds)
         .export_values()
-        // pybind enum helpers
-        __PYENUM_FROM_STRING__(t_latlon_format)
         //
         ;
 
-    py::implicitly_convertible<std::string, t_latlon_format>();
+    tools::pybind_helpers::add_string_to_enum_conversion<t_latlon_format>(pyenum_latlon);
 
     //----- latitude_to_string -----
     m_navtools.def("latitude_to_string",
