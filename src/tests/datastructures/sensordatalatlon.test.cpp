@@ -21,10 +21,10 @@ TEST_CASE("SensorDataLatLon should support common functions", TESTTAG)
 
     data.latitude  = 1;
     data.longitude = 2;
-    data.depth         = 3;
+    data.depth     = 3;
 
     data.heading = 10;
-    data.heave = 1;
+    data.heave   = 1;
 
     data.pitch = 20;
     data.roll  = 30;

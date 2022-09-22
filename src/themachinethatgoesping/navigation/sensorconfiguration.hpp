@@ -27,9 +27,9 @@ namespace themachinethatgoesping {
 namespace navigation {
 
 /**
- * @brief A coordinate system that allows for specifying sensor offsets (e.g. gps antenna and attitude
- * sensor) and target offsets (e.g. MBES). Call the class and specify target_id and current sensor
- * data to derive the geolocation and attitude of the specified targets
+ * @brief A coordinate system that allows for specifying sensor offsets (e.g. gps antenna and
+ * attitude sensor) and target offsets (e.g. MBES). Call the class and specify target_id and current
+ * sensor data to derive the geolocation and attitude of the specified targets
  *
  */
 class SensorConfiguration
@@ -38,7 +38,8 @@ class SensorConfiguration
         _target_offsets; ///< TargetId (position in vector) for each registered target_id
 
     datastructures::PositionalOffsets
-        _offsets_attitude_source; ///< Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor
+        _offsets_attitude_source; ///< Static Roll,Pitch,Yaw (installation) offsets of the attitude
+                                  ///< sensor
     datastructures::PositionalOffsets
         _offsets_heading_source; ///< Static Yaw (installation) Offsets of CompassOffsets
     datastructures::PositionalOffsets
@@ -67,8 +68,9 @@ class SensorConfiguration
      * @return datastructures::GeoLocationLatLon  / this structure includes latitude and longitude
      * information
      */
-    datastructures::GeoLocationLatLon compute_target_position(const std::string&               target_id,
-                                          const datastructures::SensorDataLatLon& sensor_data) const;
+    datastructures::GeoLocationLatLon compute_target_position(
+        const std::string&                      target_id,
+        const datastructures::SensorDataLatLon& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -76,11 +78,12 @@ class SensorConfiguration
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorDataUTM / this structure includes northing/easting and utm zone or
      * hemisphere information
-     * @return datastructures::GeoLocationUTM  / this structure includes northing/easting and utm zone or
-     * hemisphere information
+     * @return datastructures::GeoLocationUTM  / this structure includes northing/easting and utm
+     * zone or hemisphere information
      */
-    datastructures::GeoLocationUTM compute_target_position(const std::string&            target_id,
-                                       const datastructures::SensorDataUTM& sensor_data) const;
+    datastructures::GeoLocationUTM compute_target_position(
+        const std::string&                   target_id,
+        const datastructures::SensorDataUTM& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -88,22 +91,24 @@ class SensorConfiguration
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorDataLocal / this structure includes northing/easting but no zone or
      * hemisphere information
-     * @return datastructures::GeoLocationLocal  / this structure includes northing/easting but no zone or
-     * hemisphere information
+     * @return datastructures::GeoLocationLocal  / this structure includes northing/easting but no
+     * zone or hemisphere information
      */
-    datastructures::GeoLocationLocal compute_target_position(const std::string&              target_id,
-                                         const datastructures::SensorDataLocal& sensor_data) const;
+    datastructures::GeoLocationLocal compute_target_position(
+        const std::string&                     target_id,
+        const datastructures::SensorDataLocal& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data SensorData / this structure includes no coordinate information
-     * @return datastructures::GeoLocationLocal  / this structure includes northing and east, which are set
-     * relative to the sensor coordinate system center
+     * @return datastructures::GeoLocationLocal  / this structure includes northing and east, which
+     * are set relative to the sensor coordinate system center
      */
-    datastructures::GeoLocationLocal compute_target_position(const std::string&         target_id,
-                                         const datastructures::SensorData& sensor_data) const;
+    datastructures::GeoLocationLocal compute_target_position(
+        const std::string&                target_id,
+        const datastructures::SensorData& sensor_data) const;
 
     // ----- get/set target offsets -----
     /**
@@ -114,18 +119,18 @@ class SensorConfiguration
      * @param y y-offset of the target (in meters, positive starboard)
      * @param z z-offset of the target (in meters, positive down)
      * @param yaw yaw offset of the target (right-handed around the z-axis) (in degrees, 90° = east)
-     * @param pitch pitch offset of the target (right-handed around the y-axis) (in degrees, positive
-     * = bow up)
-     * @param roll roll offset of the target (right-handed around the x-axis) (in degrees, positive =
-     * port up)
+     * @param pitch pitch offset of the target (right-handed around the y-axis) (in degrees,
+     * positive = bow up)
+     * @param roll roll offset of the target (right-handed around the x-axis) (in degrees, positive
+     * = port up)
      */
     void add_target(const std::string& target_id,
-                         double             x,
-                         double             y,
-                         double             z,
-                         double             yaw,
-                         double             pitch,
-                         double             roll);
+                    double             x,
+                    double             y,
+                    double             z,
+                    double             yaw,
+                    double             pitch,
+                    double             roll);
 
     /**
      * @brief add a target (e.g. MBES) with offsets to the sensor position system
@@ -133,8 +138,8 @@ class SensorConfiguration
      * @param target_id name of the target for reference
      * @param target_offsets mounting offsets of the target
      */
-    void add_target(const std::string&                target_id,
-                         const datastructures::PositionalOffsets& target_offsets);
+    void add_target(const std::string&                       target_id,
+                    const datastructures::PositionalOffsets& target_offsets);
 
     /**
      * @brief Get stored target offsets of a specified target
@@ -155,10 +160,10 @@ class SensorConfiguration
     /**
      * @brief Set the attitude sensor offsets
      *
-     * @param yaw yaw offset of the attitude sensor (right-handed around the z-axis) (in degrees, 90° =
-     * east)
-     * @param pitch pitch offset of the attitude sensor (right-handed around the y-axis) (in degrees,
-     * positive = bow up)
+     * @param yaw yaw offset of the attitude sensor (right-handed around the z-axis) (in degrees,
+     * 90° = east)
+     * @param pitch pitch offset of the attitude sensor (right-handed around the y-axis) (in
+     * degrees, positive = bow up)
      * @param roll roll offset of the attitude sensor (right-handed around the x-axis) (in degrees,
      * positive = port up)
      */
@@ -174,7 +179,8 @@ class SensorConfiguration
     /**
      * @brief Set the compass offsets
      *
-     * @param yaw yaw offset of the compass (right-handed around the z-axis) (in degrees, 90° = east)
+     * @param yaw yaw offset of the compass (right-handed around the z-axis) (in degrees, 90° =
+     * east)
      */
     void set_offsets_heading_source(double yaw);
 

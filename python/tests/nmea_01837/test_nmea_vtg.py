@@ -19,7 +19,6 @@ import themachinethatgoesping.navigation.nmea_0183 as nmea
 class TestNavigationNMEA_VTG:
     """class for grouping (test sections)"""
 
-
     def test_nmea_vtg_common_functions(self):
         """test common, simple functions"""
         sentence = "$GPVTG,38.0,T,,M,1.80,N,3.33,K,D "
@@ -39,9 +38,9 @@ class TestNavigationNMEA_VTG:
         assert np.isnan(vtg_empty.get_course_over_ground_degrees_magnetic())
         assert np.isnan(vtg_empty.get_speed_over_ground_knots())
         assert np.isnan(vtg_empty.get_speed_over_ground_kmh())
-        assert vtg_empty.get_mode() == '\x00'
+        assert vtg_empty.get_mode() == "\x00"
         assert vtg_empty.get_mode_explained() == "Unknown"
-        
+
         # test variables
         assert vtg.get_sentence() == sentence
         assert vtg.get_sentence_type() == "VTG"
@@ -51,11 +50,8 @@ class TestNavigationNMEA_VTG:
         assert np.isnan(vtg.get_course_over_ground_degrees_magnetic())
         assert vtg.get_speed_over_ground_knots() == approx(1.80)
         assert vtg.get_speed_over_ground_kmh() == approx(3.33)
-        assert vtg.get_mode() == 'D'
-        assert vtg.get_mode_explained() == 'Differential'
-
+        assert vtg.get_mode() == "D"
+        assert vtg.get_mode_explained() == "Differential"
 
         # test common functions
         nmea_common_tests(vtg, empty_sentence)
-
-

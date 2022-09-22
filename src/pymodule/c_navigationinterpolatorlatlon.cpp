@@ -120,10 +120,7 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
                                const std::vector<double>&,
                                const std::vector<double>&>(
                  &NavigationInterpolatorLatLon::set_data_attitude),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 I_NavigationInterpolator,
-                 set_data_attitude),
+             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_attitude),
              py::arg("timestamp"),
              py::arg("pitch"),
              py::arg("roll"))

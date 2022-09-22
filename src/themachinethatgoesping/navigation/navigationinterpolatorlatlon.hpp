@@ -82,8 +82,8 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @param longitude longitude in °
      */
     void set_data_position(const std::vector<double>& timestamp,
-                                  const std::vector<double>& latitude,
-                                  const std::vector<double>& longitude)
+                           const std::vector<double>& latitude,
+                           const std::vector<double>& longitude)
     {
         _interpolator_latitude.set_data_XY(timestamp, latitude);
         _interpolator_longitude.set_data_XY(timestamp, longitude);
@@ -116,7 +116,8 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param timestamp timestamp in seconds since epoch
-     * @return data structure that contains the position of the target in the world coordinate system
+     * @return data structure that contains the position of the target in the world coordinate
+     * system
      */
     datastructures::GeoLocationLatLon operator()(const std::string& target_id, double timestamp)
     {
@@ -129,7 +130,8 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param timestamp timestamp in seconds since epoch
-     * @return data structure that contains the position of the target in the world coordinate system
+     * @return data structure that contains the position of the target in the world coordinate
+     * system
      */
     datastructures::GeoLocationLatLon compute_target_position(const std::string& target_id,
                                                               double             timestamp)
@@ -159,8 +161,8 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
 
         if (!_interpolator_attitude.empty()) // default is 0.0. 0.0
         {
-            auto ypr              = _interpolator_attitude.ypr(timestamp);
-            //sensor_data.imu_yaw   = ypr[0];
+            auto ypr = _interpolator_attitude.ypr(timestamp);
+            // sensor_data.imu_yaw   = ypr[0];
             sensor_data.pitch = ypr[1];
             sensor_data.roll  = ypr[2];
         }

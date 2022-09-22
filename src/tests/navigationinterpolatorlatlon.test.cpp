@@ -60,7 +60,12 @@ TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTA
     // compute a target position
     datastructures::GeoLocationLatLon expected_position(
         //-10.7631, -1.16473, -7.3232973266, 11.0909090909, 0.7830655476, -6.1148918992);
-        -10.7631, -1.16473, -7.3232528, 11.0909091, 0.7822953, -6.11409181148918992);
+        -10.7631,
+        -1.16473,
+        -7.3232528,
+        11.0909091,
+        0.7822953,
+        -6.11409181148918992);
     auto target_position_mbes = navint.compute_target_position("mbes", 1.1);
     auto target_position_sbes = navint.compute_target_position("sbes", 1.1);
 

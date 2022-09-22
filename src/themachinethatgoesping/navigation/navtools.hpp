@@ -11,11 +11,11 @@
  */
 
 #include <stdexcept>
-#include <vector>
 #include <tuple>
+#include <vector>
 
-#include <fmt/core.h>
 #include <GeographicLib/UTMUPS.hpp>
+#include <fmt/core.h>
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -100,7 +100,7 @@ inline std::string longitude_to_string(double          longitude,
 
 /**
  * @brief Convert utm coordinates to latitude longitude using Geographic lib
- * 
+ *
  * @param northing northing in meters
  * @param easting easting in meters
  * @param zone utm zone number (1-60)
@@ -135,7 +135,7 @@ inline std::pair<std::vector<double>, std::vector<double>> utm_to_latlon(
 
 /**
  * @brief Convert utm coordinates to latitude longitude using Geographic lib
- * 
+ *
  * @param northing northing in meters
  * @param easting easting in meters
  * @param zone utm zone number (1-60)
@@ -171,20 +171,20 @@ inline std::pair<std::vector<double>, std::vector<double>> utm_to_latlon(
 
 /**
  * @brief Convert latitudes and longitudes to utm coordinates using GeographicLib
- * 
+ *
  * @param lat list of latitudes
  * @param lon list of longitudes
- * @param setzone utm output zone number (1-60), default (-1) determines zone using mean latitude and longitude
- * @return std::tuple<std::vector<double>, std::vector<double>, int, bool> 
+ * @param setzone utm output zone number (1-60), default (-1) determines zone using mean latitude
+ * and longitude
+ * @return std::tuple<std::vector<double>, std::vector<double>, int, bool>
  */
-inline std::tuple<std::vector<double>, std::vector<double>, int, bool> latlon_to_utm(
-    const std::vector<double>& lat,
-    const std::vector<double>& lon,
-    int setzone = -1)
+inline std::tuple<std::vector<double>, std::vector<double>, int, bool>
+latlon_to_utm(const std::vector<double>& lat, const std::vector<double>& lon, int setzone = -1)
 {
     // check if vector sizes are the same
     if (lat.size() != lon.size())
-        throw std::runtime_error("ERROR[latlon_to_utm]: lat and lon vector sizes are not the same!");
+        throw std::runtime_error(
+            "ERROR[latlon_to_utm]: lat and lon vector sizes are not the same!");
 
     // determine setzone using mean of latitudes and longitudes
     if (setzone == -1)
@@ -200,19 +200,19 @@ inline std::tuple<std::vector<double>, std::vector<double>, int, bool> latlon_to
         mean_lon /= double(lat.size());
         setzone = GeographicLib::UTMUPS::StandardZone(mean_lat, mean_lon);
     }
-    
+
     // initialize output data
     std::vector<double> northing, easting;
     northing.resize(lat.size());
     easting.resize(lat.size());
-    int zone;
+    int  zone;
     bool northern_hemisphere;
 
     // loop through data and convert using GeographicLib
     for (size_t i = 0; i < lat.size(); i++)
     {
-        GeographicLib::UTMUPS::Forward(lat[i], lon[i], zone, northern_hemisphere, easting[i],
-                                       northing[i], setzone);
+        GeographicLib::UTMUPS::Forward(
+            lat[i], lon[i], zone, northern_hemisphere, easting[i], northing[i], setzone);
     }
     return std::make_tuple(northing, easting, zone, northern_hemisphere);
 }

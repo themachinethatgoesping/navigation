@@ -21,10 +21,10 @@ TEST_CASE("SensorDataLocal should support common functions", TESTTAG)
 
     data.northing = 5652759.000;
     data.easting  = 549841.192;
-    data.depth        = 3;
+    data.depth    = 3;
 
     data.heading = 10;
-    data.heave = 1;
+    data.heave   = 1;
 
     data.pitch = 20;
     data.roll  = 30;
@@ -49,15 +49,15 @@ TEST_CASE("SensorDataLocal should support common utm/local conversions", TESTTAG
     // initialize data
     auto data = SensorDataLocal();
 
-    data.northing        = 5652759.000;
-    data.easting         = 549841.192;
+    data.northing            = 5652759.000;
+    data.easting             = 549841.192;
     data.depth               = 3;
     int  zone                = 31;
     bool northern_hemisphere = true;
 
     data.heading = 10;
-    data.heave = 1;
-    
+    data.heave   = 1;
+
     data.pitch = 20;
     data.roll  = 30;
 

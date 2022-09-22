@@ -19,7 +19,6 @@ import themachinethatgoesping.navigation.nmea_0183 as nmea
 class TestNavigationNMEA_VLW:
     """class for grouping (test sections)"""
 
-
     def test_nmea_vlw_common_functions(self):
         """test common, simple functions"""
         sentence = "$SDVLW,42.372,N,42.371,N"
@@ -39,7 +38,7 @@ class TestNavigationNMEA_VLW:
         assert np.isnan(vlw_empty.get_trip_water_distance_nautical_miles())
         assert np.isnan(vlw_empty.get_total_ground_distance_nautical_miles())
         assert np.isnan(vlw_empty.get_trip_ground_distance_nautical_miles())
-        
+
         # test variables
         assert vlw.get_sentence() == sentence
         assert vlw.get_sentence_type() == "VLW"
@@ -50,10 +49,5 @@ class TestNavigationNMEA_VLW:
         assert np.isnan(vlw_empty.get_total_ground_distance_nautical_miles())
         assert np.isnan(vlw_empty.get_trip_ground_distance_nautical_miles())
 
-   
-
-
         # test common functions
         nmea_common_tests(vlw, empty_sentence)
-
-

@@ -104,7 +104,7 @@ class I_NavigationInterpolator
     {
         _interpolator_heave.set_data_XY(timestamp, heave);
     }
-    
+
     /**
      * @brief Set the attitude data (no yaw, ythis is set in set_data_heading)
      *
@@ -113,8 +113,8 @@ class I_NavigationInterpolator
      * @param roll in °, positive is port up
      */
     void set_data_attitude(const std::vector<double>& timestamp,
-                                  const std::vector<double>& pitch,
-                                  const std::vector<double>& roll)
+                           const std::vector<double>& pitch,
+                           const std::vector<double>& roll)
     {
         std::vector<double> yaw(timestamp.size(), 0.0);
         _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);

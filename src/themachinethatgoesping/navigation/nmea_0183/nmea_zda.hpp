@@ -90,7 +90,7 @@ class NMEA_ZDA : public NMEA_Base
     // this has to be explicit, because otherwise the compiler will use the base class version
     static NMEA_ZDA from_stream(std::istream& is)
     {
-        return NMEA_ZDA(NMEA_Base::from_stream(is),true);
+        return NMEA_ZDA(NMEA_Base::from_stream(is), true);
     }
 
     // ----- objectprinter -----

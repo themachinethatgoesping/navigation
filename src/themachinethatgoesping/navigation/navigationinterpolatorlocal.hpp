@@ -81,8 +81,8 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param easting easting in meters
      */
     void set_data_position(const std::vector<double>& timestamp,
-                                  const std::vector<double>& northing,
-                                  const std::vector<double>& easting)
+                           const std::vector<double>& northing,
+                           const std::vector<double>& easting)
     {
         _interpolator_northing.set_data_XY(timestamp, northing);
         _interpolator_easting.set_data_XY(timestamp, easting);
@@ -100,11 +100,11 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param offset_z in m, positive down
      */
     void set_data_position(const std::vector<double>& timestamp,
-                                  const std::vector<double>& northing,
-                                  const std::vector<double>& easting,
-                                  double                     offset_x,
-                                  double                     offset_y,
-                                  double                     offset_z)
+                           const std::vector<double>& northing,
+                           const std::vector<double>& easting,
+                           double                     offset_x,
+                           double                     offset_y,
+                           double                     offset_z)
     {
         _sensor_configuration.set_offsets_position_source(offset_x, offset_y, offset_z);
         set_data_position(timestamp, northing, easting);
@@ -120,9 +120,9 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param sensor_offsets structure containing the offsets of the position system
      */
     void set_data_position(const std::vector<double>&               timestamp,
-                                  const std::vector<double>&               northing,
-                                  const std::vector<double>&               easting,
-                                  const datastructures::PositionalOffsets& sensor_offsets)
+                           const std::vector<double>&               northing,
+                           const std::vector<double>&               easting,
+                           const datastructures::PositionalOffsets& sensor_offsets)
     {
         _sensor_configuration.set_offsets_position_source(sensor_offsets);
         set_data_position(timestamp, northing, easting);
@@ -155,7 +155,8 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param timestamp timestamp in seconds since epoch
-     * @return data structure that contains the position of the target in the world coordinate system
+     * @return data structure that contains the position of the target in the world coordinate
+     * system
      */
     datastructures::GeoLocationLocal compute_target_position(const std::string& target_id,
                                                              double             timestamp)
@@ -185,8 +186,8 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
 
         if (!_interpolator_attitude.empty()) // default is 0.0. 0.0
         {
-            auto ypr              = _interpolator_attitude.ypr(timestamp);
-            //sensor_data.imu_yaw   = ypr[0];
+            auto ypr = _interpolator_attitude.ypr(timestamp);
+            // sensor_data.imu_yaw   = ypr[0];
             sensor_data.pitch = ypr[1];
             sensor_data.roll  = ypr[2];
         }

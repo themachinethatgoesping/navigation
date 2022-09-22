@@ -127,10 +127,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
     {
         // initialize sensor data
         datastructures::SensorDataLocal sensor_data;
-        sensor_data.depth        = 5;
-        sensor_data.heading      = 0;
-        sensor_data.pitch        = 0;
-        sensor_data.roll         = 0;
+        sensor_data.depth    = 5;
+        sensor_data.heading  = 0;
+        sensor_data.pitch    = 0;
+        sensor_data.roll     = 0;
         sensor_data.northing = 10;
         sensor_data.easting  = 20;
 
@@ -167,10 +167,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 0.2
         // initialize sensor data
-        sensor_data.depth        = 5;
-        sensor_data.heading      = 180;
-        sensor_data.pitch        = 0;
-        sensor_data.roll         = 0;
+        sensor_data.depth    = 5;
+        sensor_data.heading  = 180;
+        sensor_data.pitch    = 0;
+        sensor_data.roll     = 0;
         sensor_data.northing = 10;
         sensor_data.easting  = 20;
 
@@ -207,10 +207,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 0.3
         // initialize sensor data
-        sensor_data.depth        = 5;
-        sensor_data.heading      = 90;
-        sensor_data.pitch        = 0;
-        sensor_data.roll         = 0;
+        sensor_data.depth    = 5;
+        sensor_data.heading  = 90;
+        sensor_data.pitch    = 0;
+        sensor_data.roll     = 0;
         sensor_data.northing = 10;
         sensor_data.easting  = 20;
 
@@ -250,10 +250,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
     {
         datastructures::SensorDataLocal sensor_data;
         // scenario 1
-        sensor_data.depth        = 5;
-        sensor_data.heading      = 25;
-        sensor_data.pitch        = 20;
-        sensor_data.roll         = 10;
+        sensor_data.depth    = 5;
+        sensor_data.heading  = 25;
+        sensor_data.pitch    = 20;
+        sensor_data.roll     = 10;
         sensor_data.northing = 10;
         sensor_data.easting  = 20;
 
@@ -289,10 +289,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Approx(31.4141895033));
 
         // scenario 2
-        sensor_data.depth        = -5;
-        sensor_data.heading      = -35;
-        sensor_data.pitch        = -5;
-        sensor_data.roll         = -15;
+        sensor_data.depth    = -5;
+        sensor_data.heading  = -35;
+        sensor_data.pitch    = -5;
+        sensor_data.roll     = -15;
         sensor_data.northing = -23;
         sensor_data.easting  = -20;
 
@@ -327,10 +327,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Approx(-4.429576033));
 
         // scenario 3
-        sensor_data.depth        = 3;
-        sensor_data.heading      = 30;
-        sensor_data.pitch        = -5;
-        sensor_data.roll         = -15;
+        sensor_data.depth    = 3;
+        sensor_data.heading  = 30;
+        sensor_data.pitch    = -5;
+        sensor_data.roll     = -15;
         sensor_data.northing = 100;
         sensor_data.easting  = -20;
 
@@ -365,10 +365,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Approx(-4.429576033));
 
         // scenario 4
-        sensor_data.depth        = -2000;
-        sensor_data.heading      = -470;
-        sensor_data.pitch        = -59;
-        sensor_data.roll         = 1;
+        sensor_data.depth    = -2000;
+        sensor_data.heading  = -470;
+        sensor_data.pitch    = -59;
+        sensor_data.roll     = 1;
         sensor_data.northing = 23;
         sensor_data.easting  = -1000;
 
@@ -408,10 +408,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         datastructures::SensorDataLatLon sensor_data;
 
         // scenario 5 (latlon)
-        sensor_data.depth         = 2000;
-        sensor_data.heading       = 470;
-        sensor_data.pitch         = -59;
-        sensor_data.roll          = 1;
+        sensor_data.depth     = 2000;
+        sensor_data.heading   = 470;
+        sensor_data.pitch     = -59;
+        sensor_data.roll      = 1;
         sensor_data.latitude  = 54.123;
         sensor_data.longitude = -10.123;
 
@@ -446,10 +446,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes_utm == position_sbes);
 
         // scenario 6 (latlon)
-        sensor_data.depth         = 1000;
-        sensor_data.heading       = 360;
-        sensor_data.pitch         = 9;
-        sensor_data.roll          = -1;
+        sensor_data.depth     = 1000;
+        sensor_data.heading   = 360;
+        sensor_data.pitch     = 9;
+        sensor_data.roll      = -1;
         sensor_data.latitude  = -74.123;
         sensor_data.longitude = 1.123;
 

@@ -115,7 +115,7 @@ class NMEA_RMC : public NMEA_Base
             if (field_time.size() < 6 || field_date.size() < 6)
                 return std::numeric_limits<double>::quiet_NaN();
 
-            auto date_time = get_utc_time_string() + "-" + get_utc_date_string()+'-' + "0000";
+            auto   date_time = get_utc_time_string() + "-" + get_utc_date_string() + '-' + "0000";
             double timestamp = datestring_to_unixtime(date_time, "%H%M%S-%d%m%y-%z");
             return timestamp;
         }
@@ -143,7 +143,7 @@ class NMEA_RMC : public NMEA_Base
     // this has to be explicit, because otherwise the compiler will use the base class version
     static NMEA_RMC from_stream(std::istream& is)
     {
-        return NMEA_RMC(NMEA_Base::from_stream(is),true);
+        return NMEA_RMC(NMEA_Base::from_stream(is), true);
     }
 
     // ----- objectprinter -----

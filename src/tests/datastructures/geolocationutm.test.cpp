@@ -66,8 +66,8 @@ TEST_CASE("GeoLocationUTM should support common utm/latlon conversions", TESTTAG
     location_south.northern_hemisphere = false;
 
     // test utm/lat lon conversion
-    GeoLocationLatLon    location_latlon(location);
-    GeoLocationUTM location_utm(location_latlon);
+    GeoLocationLatLon location_latlon(location);
+    GeoLocationUTM    location_utm(location_latlon);
 
     location_latlon.print(std::cerr);
     location.print(std::cerr);
@@ -96,5 +96,4 @@ TEST_CASE("GeoLocationUTM should support common utm/latlon conversions", TESTTAG
     // test precomputed conversion (north)
     REQUIRE(GeoLocationLatLon(location_south).latitude == Approx(-41.280330));
     REQUIRE(GeoLocationLatLon(location_south).longitude == Approx(174.780011));
-
 }

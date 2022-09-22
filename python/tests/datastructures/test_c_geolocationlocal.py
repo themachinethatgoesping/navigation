@@ -5,10 +5,10 @@
 from themachinethatgoesping.navigation.datastructures import (
     GeoLocationLocal,
     GeoLocationUTM,
-    #GeoLocationLatLon,
+    # GeoLocationLatLon,
 )
 
-from pytest import raises#, approx
+from pytest import raises  # , approx
 
 
 # define class for grouping (test sections)
@@ -48,7 +48,7 @@ class Test_navigation_GeoLocationLocal:
 
         # this does not work because local coordinates are not comparable to utm coordinates unless the zone and hemisphere are known
         with raises(TypeError):
-            location_utm == location # pylint: disable=pointless-statement
+            location_utm == location  # pylint: disable=pointless-statement
 
         assert GeoLocationLocal(location_utm) == location
         assert location_utm == (

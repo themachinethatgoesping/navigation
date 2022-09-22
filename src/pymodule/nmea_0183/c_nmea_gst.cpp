@@ -30,27 +30,43 @@ void init_c_nmea_gst(py::module& m)
              &NMEA_GST::get_utc_time_string,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_utc_time_string))
         .def("get_psuedorange_rms",
-                &NMEA_GST::get_psuedorange_rms,
-                DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_psuedorange_rms))
+             &NMEA_GST::get_psuedorange_rms,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_psuedorange_rms))
         .def("get_semimajor_error",
-                &NMEA_GST::get_semimajor_error,
-                DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_semimajor_error))
+             &NMEA_GST::get_semimajor_error,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_semimajor_error))
         .def("get_semiminor_error",
-                &NMEA_GST::get_semiminor_error,
-                DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_semiminor_error))
+             &NMEA_GST::get_semiminor_error,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_semiminor_error))
         .def("get_semimajor_error_orientation",
-                &NMEA_GST::get_semimajor_error_orientation,
-                DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_semimajor_error_orientation))
+             &NMEA_GST::get_semimajor_error_orientation,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 nmea_0183,
+                 NMEA_GST,
+                 get_semimajor_error_orientation))
         .def("get_latitude_error_deviation",
-                &NMEA_GST::get_latitude_error_deviation,
-                DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_latitude_error_deviation))
+             &NMEA_GST::get_latitude_error_deviation,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 nmea_0183,
+                 NMEA_GST,
+                 get_latitude_error_deviation))
         .def("get_longitude_error_deviation",
-                &NMEA_GST::get_longitude_error_deviation,
-                DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_longitude_error_deviation))
+             &NMEA_GST::get_longitude_error_deviation,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 nmea_0183,
+                 NMEA_GST,
+                 get_longitude_error_deviation))
         .def("get_altitude_error_deviation",
-                &NMEA_GST::get_altitude_error_deviation,
-                DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GST, get_altitude_error_deviation))
-                
+             &NMEA_GST::get_altitude_error_deviation,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 nmea_0183,
+                 NMEA_GST,
+                 get_altitude_error_deviation))
+
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_GST)
         // default binary functions

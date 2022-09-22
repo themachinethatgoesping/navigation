@@ -19,7 +19,6 @@ import themachinethatgoesping.navigation.nmea_0183 as nmea
 class TestNavigationNMEA_Unknown:
     """class for grouping (test sections)"""
 
-
     def test_nmea_Unknown_common_functions(self):
         """test common, simple functions"""
         sentence = "$SDABC,42.372,N,42.371,N"
@@ -40,7 +39,7 @@ class TestNavigationNMEA_Unknown:
         assert Unknown_empty.get_field(2) == ""
         assert Unknown_empty.get_field(3) == ""
         assert Unknown_empty.get_field(13) == ""
-        
+
         # test variables
         assert Unknown.get_sentence() == sentence
         assert Unknown.get_sentence_type() == "ABC"
@@ -57,5 +56,3 @@ class TestNavigationNMEA_Unknown:
 
         # test common functions
         nmea_common_tests(Unknown, empty_sentence)
-
-

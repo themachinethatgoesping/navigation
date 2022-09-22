@@ -85,18 +85,16 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
              DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, add_target_2),
              py::arg("target_id"),
              py::arg("target_offsets"))
-        .def("set_data_position",
-             py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&>(
-                 &NavigationInterpolatorLocal::set_data_position),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 NavigationInterpolatorLocal,
-                 set_data_position),
-             py::arg("timestamp"),
-             py::arg("northing"),
-             py::arg("easting"))
+        .def(
+            "set_data_position",
+            py::overload_cast<const std::vector<double>&,
+                              const std::vector<double>&,
+                              const std::vector<double>&>(
+                &NavigationInterpolatorLocal::set_data_position),
+            DOC(themachinethatgoesping, navigation, NavigationInterpolatorLocal, set_data_position),
+            py::arg("timestamp"),
+            py::arg("northing"),
+            py::arg("easting"))
 
         // set heave data
         .def("set_data_heave",
@@ -120,10 +118,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
                                const std::vector<double>&,
                                const std::vector<double>&>(
                  &NavigationInterpolatorLocal::set_data_attitude),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 I_NavigationInterpolator,
-                 set_data_attitude),
+             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_attitude),
              py::arg("timestamp"),
              py::arg("pitch"),
              py::arg("roll"))

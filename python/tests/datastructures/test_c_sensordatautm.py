@@ -48,7 +48,7 @@ class Test_navigation_SensorDataUTM:
         data_latlon = SensorDataLatLon(data)
 
         # SensorDataUTM is implicitly convertible and therefore also comparable to SensorDataLatLon
-        assert data == data #pylint: disable=comparison-with-itself
+        assert data == data  # pylint: disable=comparison-with-itself
         assert data == data_latlon
         assert SensorDataUTM.from_sensordata(data_latlon) == data_latlon
 

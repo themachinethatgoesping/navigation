@@ -21,15 +21,10 @@ void init_c_nmea_unknown(py::module& m)
     py::class_<NMEA_Unknown, NMEA_Base>(
         m, "NMEA_Unknown", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Unknown))
         .def(py::init<NMEA_Base, bool>(),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 nmea_0183,
-                 NMEA_Unknown,
-                 NMEA_Unknown),
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Unknown, NMEA_Unknown),
              py::arg("nmea_base"),
              py::arg("check") = true)
 
-        
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_Unknown)
         // default binary functions

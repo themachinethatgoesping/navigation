@@ -18,7 +18,7 @@ PYBIND11_MODULE(MODULE_NAME, m)
 {
     pybind11::add_ostream_redirect(m, "ostream_redirect");
 
-    m.doc() = "Python module to store, interpolate and transform navigation data";
+    m.doc()               = "Python module to store, interpolate and transform navigation data";
     m.attr("__version__") = MODULE_VERSION;
 
     init_m_navtools(m);

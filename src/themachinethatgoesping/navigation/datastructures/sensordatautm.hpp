@@ -106,13 +106,7 @@ struct SensorDataUTM : public SensorDataLocal
                   double heading,
                   double pitch,
                   double roll)
-        : SensorDataLocal(northing,
-                          easting,
-                          depth,
-                          heave,
-                          heading,
-                          pitch,
-                          roll)
+        : SensorDataLocal(northing, easting, depth, heave, heading, pitch, roll)
         , utm_zone(utm_zone)
         , utm_northern_hemisphere(utm_northern_hemisphere)
     {
@@ -143,13 +137,8 @@ struct SensorDataUTM : public SensorDataLocal
      */
     static SensorDataLatLon to_sensordata(const SensorDataUTM& data_utm)
     {
-        SensorDataLatLon data(0,
-                              0,
-                              data_utm.depth,
-                              data_utm.heave,
-                              data_utm.heading,
-                              data_utm.pitch,
-                              data_utm.roll);
+        SensorDataLatLon data(
+            0, 0, data_utm.depth, data_utm.heave, data_utm.heading, data_utm.pitch, data_utm.roll);
 
         GeographicLib::UTMUPS::Reverse(data_utm.utm_zone,
                                        data_utm.utm_northern_hemisphere,
@@ -171,15 +160,8 @@ struct SensorDataUTM : public SensorDataLocal
      */
     static SensorDataUTM from_sensordata(const SensorDataLatLon& data, int setzone = -1)
     {
-        SensorDataUTM data_utm(0,
-                               0,
-                               0,
-                               0,
-                               data.depth,
-                               data.heave,
-                               data.heading,
-                               data.pitch,
-                               data.roll);
+        SensorDataUTM data_utm(
+            0, 0, 0, 0, data.depth, data.heave, data.heading, data.pitch, data.roll);
 
         GeographicLib::UTMUPS::Forward(data.latitude,
                                        data.longitude,

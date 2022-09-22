@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <string>
 #include <charconv>
+#include <string>
 
 #include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
 #include <themachinethatgoesping/tools/timeconv.hpp>
@@ -19,41 +19,39 @@ namespace nmea_0183 {
 
 /**
  * @brief The NMEA HDT datagram contains the true vessel heading typically received from a compass.
- * 
+ *
  */
 class NMEA_HDT : public NMEA_Base
 {
 
   public:
-  /**
-   * @brief Construct a new nmea hdt object from an existing NMEA_Base datagram
-   * 
-   * @param base Underlying NMEA_Base datagram
-   * @param check Check if the NMEA string is valid
-   */
+    /**
+     * @brief Construct a new nmea hdt object from an existing NMEA_Base datagram
+     *
+     * @param base Underlying NMEA_Base datagram
+     * @param check Check if the NMEA string is valid
+     */
     NMEA_HDT(NMEA_Base base, bool check = false)
-    : NMEA_Base(std::move(base))
+        : NMEA_Base(std::move(base))
     {
-        if (check) {
-            if(get_sentence_type() != "HDT")
-                throw std::runtime_error(fmt::format("NMEA_HDT: wrong sentence type [{}]", get_sentence_type()));
+        if (check)
+        {
+            if (get_sentence_type() != "HDT")
+                throw std::runtime_error(
+                    fmt::format("NMEA_HDT: wrong sentence type [{}]", get_sentence_type()));
         }
         parse_fields();
     }
 
     // ----- NMEA HDT attributes -----
-    double get_heading_degrees_true() const
-    {
-        return get_field_as_double(0);
-    }    
-    
+    double get_heading_degrees_true() const { return get_field_as_double(0); }
 
     // ----- binary streaming -----
     // this has to be explicit, because otherwise the compiler will use the base class version
     static NMEA_HDT from_stream(std::istream& is)
     {
-        return NMEA_HDT(NMEA_Base::from_stream(is),true);
-    }   
+        return NMEA_HDT(NMEA_Base::from_stream(is), true);
+    }
 
     // ----- objectprinter -----
     tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const

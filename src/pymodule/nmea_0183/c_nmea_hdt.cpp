@@ -21,23 +21,15 @@ void init_c_nmea_hdt(py::module& m)
     py::class_<NMEA_HDT, NMEA_Base>(
         m, "NMEA_HDT", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_HDT))
         .def(py::init<NMEA_Base, bool>(),
-             DOC(themachinethatgoesping,
-                 navigation,
-                 nmea_0183,
-                 NMEA_HDT,
-                 NMEA_HDT),
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_HDT, NMEA_HDT),
              py::arg("nmea_base"),
              py::arg("check") = true)
 
         // HDT attributes
         .def("get_heading_degrees_true",
-                &NMEA_HDT::get_heading_degrees_true,
-                DOC(themachinethatgoesping,
-                    navigation,
-                    nmea_0183,
-                    NMEA_HDT,
-                    get_heading_degrees_true))
-        
+             &NMEA_HDT::get_heading_degrees_true,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_HDT, get_heading_degrees_true))
+
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_HDT)
         // default binary functions

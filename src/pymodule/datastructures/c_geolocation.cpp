@@ -39,8 +39,9 @@ void init_c_geolocation(py::module& m)
              &GeoLocation::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, operator_eq),
              py::arg("rhs"))
-        .def_readwrite(
-            "z", &GeoLocation::z, DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, z))
+        .def_readwrite("z",
+                       &GeoLocation::z,
+                       DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, z))
         .def_readwrite("yaw",
                        &GeoLocation::yaw,
                        DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, yaw))

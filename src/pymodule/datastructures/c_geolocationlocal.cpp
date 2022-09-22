@@ -19,17 +19,31 @@ void init_c_geolocationlocal(py::module& m)
 {
 
     py::class_<GeoLocationLocal, GeoLocation>(
-        m, "GeoLocationLocal", DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal))
+        m,
+        "GeoLocationLocal",
+        DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal))
         .def(py::init<const GeoLocationUTM&>(),
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, GeoLocationLocal),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 datastructures,
+                 GeoLocationLocal,
+                 GeoLocationLocal),
              py::arg("geolocationutm"))
         .def(py::init<const GeoLocation&, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, GeoLocationLocal_2),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 datastructures,
+                 GeoLocationLocal,
+                 GeoLocationLocal_2),
              py::arg("geolocation"),
              py::arg("northing"),
              py::arg("easting"))
         .def(py::init<double, double, double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, GeoLocationLocal_3),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 datastructures,
+                 GeoLocationLocal,
+                 GeoLocationLocal_3),
              py::arg("northing") = 0,
              py::arg("easting")  = 0,
              py::arg("z")        = 0,
@@ -40,12 +54,14 @@ void init_c_geolocationlocal(py::module& m)
              &GeoLocationLocal::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, operator_eq),
              py::arg("rhs"))
-        .def_readwrite("northing",
-                       &GeoLocationLocal::northing,
-                       DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, northing))
-        .def_readwrite("easting",
-                       &GeoLocationLocal::easting,
-                       DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, easting))
+        .def_readwrite(
+            "northing",
+            &GeoLocationLocal::northing,
+            DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, northing))
+        .def_readwrite(
+            "easting",
+            &GeoLocationLocal::easting,
+            DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, easting))
 
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(GeoLocationLocal)

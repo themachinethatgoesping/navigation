@@ -22,7 +22,7 @@ void init_m_datastructures(pybind11::module& m)
     pybind11::module m_datastructures = m.def_submodule("datastructures");
 
     m_datastructures.doc() = "Submodule that contains datastructures that store navigation "
-                      "data or navigation sensor input";
+                             "data or navigation sensor input";
 
     init_c_positionaloffsets(m_datastructures);
     init_c_geolocation(m_datastructures);

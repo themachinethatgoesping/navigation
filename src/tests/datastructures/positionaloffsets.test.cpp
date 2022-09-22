@@ -27,17 +27,17 @@ TEST_CASE("PositionalOffsets should support common functions", TESTTAG)
     offsets.pitch = 20;
     offsets.roll  = 30;
 
-    //test copy
+    // test copy
     REQUIRE(offsets == PositionalOffsets(offsets));
 
-    //test binary
+    // test binary
     REQUIRE(offsets == PositionalOffsets(offsets.from_binary(offsets.to_binary())));
 
-    //test stream
+    // test stream
     std::stringstream buffer;
     offsets.to_stream(buffer);
     REQUIRE(offsets == PositionalOffsets(offsets.from_stream(buffer)));
 
-    //test print does not crash
+    // test print does not crash
     REQUIRE(offsets.info_string().size() != 0);
 }

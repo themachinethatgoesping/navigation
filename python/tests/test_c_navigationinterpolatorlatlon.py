@@ -12,6 +12,7 @@ from pytest import approx
 
 import themachinethatgoesping.navigation as nav
 
+
 class TestNavigationNavigationInterpolatorLatLon:
     """class for grouping (test sections)"""
 

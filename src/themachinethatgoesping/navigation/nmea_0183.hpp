@@ -11,6 +11,7 @@
 #include "nmea_0183/nmea_base.hpp"
 #include "nmea_0183/nmea_gga.hpp"
 #include "nmea_0183/nmea_gll.hpp"
+#include "nmea_0183/nmea_gst.hpp"
 #include "nmea_0183/nmea_hdt.hpp"
 #include "nmea_0183/nmea_rmc.hpp"
 #include "nmea_0183/nmea_unknown.hpp"
@@ -18,7 +19,6 @@
 #include "nmea_0183/nmea_vlw.hpp"
 #include "nmea_0183/nmea_vtg.hpp"
 #include "nmea_0183/nmea_zda.hpp"
-#include "nmea_0183/nmea_gst.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {

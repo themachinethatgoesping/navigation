@@ -19,7 +19,6 @@ import themachinethatgoesping.navigation.nmea_0183 as nmea
 class TestNavigationNMEA_ZDA:
     """class for grouping (test sections)"""
 
-
     def test_nmea_zda_common_functions(self):
         """test common, simple functions"""
         sentence = "$GPZDA,112619.00,14,12,2017,00,00"
@@ -43,7 +42,7 @@ class TestNavigationNMEA_ZDA:
 
         assert np.isnan(zda_empty.to_timestamp())
         assert zda_empty.to_date_string() == "NaN_time_string"
-        
+
         # test variables
         assert zda.get_sentence() == sentence
         assert zda.get_sentence_type() == "ZDA"
@@ -62,5 +61,3 @@ class TestNavigationNMEA_ZDA:
 
         # test common functions
         nmea_common_tests(zda, empty_sentence)
-
-

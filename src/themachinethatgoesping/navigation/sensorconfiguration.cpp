@@ -111,12 +111,8 @@ datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
     {
         GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
                                      GeographicLib::Constants::WGS84_f());
-        geod.Direct(sensor_data.latitude,
-                    sensor_data.longitude,
-                    heading,
-                    distance,
-                    target_lat,
-                    target_lon);
+        geod.Direct(
+            sensor_data.latitude, sensor_data.longitude, heading, distance, target_lat, target_lon);
     }
 
     // GeoPositionLocal is implicitly converted to GeoPosition when calling this function

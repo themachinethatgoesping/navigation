@@ -24,8 +24,8 @@ TEST_CASE("SensorData should support common functions", TESTTAG)
     data.heading = 10;
     data.heave   = 1;
 
-    data.pitch   = 20;
-    data.roll    = 30;
+    data.pitch = 20;
+    data.roll  = 30;
 
     // test copy
     REQUIRE(data == SensorData(data));

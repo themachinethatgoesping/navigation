@@ -19,8 +19,8 @@ TEST_CASE("SensorDataUTM should support common functions", TESTTAG)
     // initialize data
     auto data = SensorDataUTM();
 
-    data.northing            = 5652759.000;
-    data.easting             = 549841.192;
+    data.northing                = 5652759.000;
+    data.easting                 = 549841.192;
     data.utm_zone                = 31;
     data.utm_northern_hemisphere = true;
     data.depth                   = 3;
@@ -28,8 +28,8 @@ TEST_CASE("SensorDataUTM should support common functions", TESTTAG)
     data.heading = 10;
     data.heave   = 1;
 
-    data.pitch   = 20;
-    data.roll    = 30;
+    data.pitch = 20;
+    data.roll  = 30;
 
     // test copy
     REQUIRE(data == SensorDataUTM(data));
@@ -51,8 +51,8 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     // initialize data
     auto data = SensorDataUTM();
 
-    data.northing            = 5652759.000;
-    data.easting             = 549841.192;
+    data.northing                = 5652759.000;
+    data.easting                 = 549841.192;
     data.utm_zone                = 31;
     data.utm_northern_hemisphere = true;
     data.depth                   = 3;
@@ -60,12 +60,12 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     data.heading = 10;
     data.heave   = 1;
 
-    data.pitch   = 20;
-    data.roll    = 30;
+    data.pitch = 20;
+    data.roll  = 30;
 
     auto data_south                    = SensorDataUTM(data);
-    data_south.northing            = 5427745.995;
-    data_south.easting             = 314082.699;
+    data_south.northing                = 5427745.995;
+    data_south.easting                 = 314082.699;
     data_south.utm_zone                = 60;
     data_south.utm_northern_hemisphere = false;
 

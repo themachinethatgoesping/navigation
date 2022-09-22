@@ -38,7 +38,7 @@ class TestNavigationNMEA_GGA:
         assert np.isnan(gga_empty.get_latitude())
         assert np.isnan(gga_empty.get_longitude())
         assert gga_empty.get_quality() == False
-        assert gga_empty.get_quality_explained() == 'invalid'
+        assert gga_empty.get_quality_explained() == "invalid"
         assert gga_empty.get_number_of_satellites() == False
         assert np.isnan(gga_empty.get_horizontal_dilution_of_precision())
         assert np.isnan(gga_empty.get_altitude())
@@ -56,7 +56,7 @@ class TestNavigationNMEA_GGA:
         assert gga.get_latitude() == approx(44.180386666666664)
         assert gga.get_longitude() == approx(30.593333333333334)
         assert gga.get_quality() == 2
-        assert gga.get_quality_explained() == 'DGPS fix'
+        assert gga.get_quality_explained() == "DGPS fix"
         assert gga.get_number_of_satellites() == 19
         assert gga.get_horizontal_dilution_of_precision() == approx(0.6)
         assert gga.get_altitude() == approx(65.2)

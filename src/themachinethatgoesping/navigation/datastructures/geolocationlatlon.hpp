@@ -119,7 +119,7 @@ struct GeoLocationLatLon : public GeoLocation
     }
 
   public:
-  // ----- objectprinter -----
+    // ----- objectprinter -----
     tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
     {
         tools::classhelpers::ObjectPrinter printer("GeoLocationLatLon", float_precision);

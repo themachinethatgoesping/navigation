@@ -19,7 +19,9 @@ void init_c_positionaloffsets(py::module& m)
 {
 
     py::class_<PositionalOffsets>(
-        m, "PositionalOffsets", DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets))
+        m,
+        "PositionalOffsets",
+        DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets))
         .def(py::init<double, double, double, double, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
@@ -33,34 +35,41 @@ void init_c_positionaloffsets(py::module& m)
              py::arg("pitch") = 0,
              py::arg("roll")  = 0)
 
-        .def("__eq__",
-             &PositionalOffsets::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, operator_eq),
-             py::arg("other"))
-        .def_readwrite("x",
-                       &PositionalOffsets::x,
-                       DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, x))
-        .def_readwrite("y",
-                       &PositionalOffsets::y,
-                       DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, y))
-        .def_readwrite("z",
-                       &PositionalOffsets::z,
-                       DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, z))
-        .def_readwrite("yaw",
-                       &PositionalOffsets::yaw,
-                       DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, yaw))
-        .def_readwrite("pitch",
-                       &PositionalOffsets::pitch,
-                       DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, pitch))
-        .def_readwrite("roll",
-                       &PositionalOffsets::roll,
-                       DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, roll))
-    // default copy functions
-    __PYCLASS_DEFAULT_COPY__(PositionalOffsets)
-    // default binary functions
-    __PYCLASS_DEFAULT_BINARY__(PositionalOffsets)
-    // default printing functions
-    __PYCLASS_DEFAULT_PRINTING__(PositionalOffsets)
-    // end PositionalOffsets
-    ;
+        .def(
+            "__eq__",
+            &PositionalOffsets::operator==,
+            DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, operator_eq),
+            py::arg("other"))
+        .def_readwrite(
+            "x",
+            &PositionalOffsets::x,
+            DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, x))
+        .def_readwrite(
+            "y",
+            &PositionalOffsets::y,
+            DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, y))
+        .def_readwrite(
+            "z",
+            &PositionalOffsets::z,
+            DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, z))
+        .def_readwrite(
+            "yaw",
+            &PositionalOffsets::yaw,
+            DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, yaw))
+        .def_readwrite(
+            "pitch",
+            &PositionalOffsets::pitch,
+            DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, pitch))
+        .def_readwrite(
+            "roll",
+            &PositionalOffsets::roll,
+            DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, roll))
+        // default copy functions
+        __PYCLASS_DEFAULT_COPY__(PositionalOffsets)
+        // default binary functions
+        __PYCLASS_DEFAULT_BINARY__(PositionalOffsets)
+        // default printing functions
+        __PYCLASS_DEFAULT_PRINTING__(PositionalOffsets)
+        // end PositionalOffsets
+        ;
 }

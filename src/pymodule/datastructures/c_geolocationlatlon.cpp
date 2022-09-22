@@ -19,7 +19,9 @@ void init_c_geolocationlatlon(py::module& m)
 {
 
     py::class_<GeoLocationLatLon, GeoLocation>(
-        m, "GeoLocationLatLon", DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon))
+        m,
+        "GeoLocationLatLon",
+        DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon))
         .def(py::init<const GeoLocation&, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
@@ -48,10 +50,11 @@ void init_c_geolocationlatlon(py::module& m)
              py::arg("yaw")       = 0,
              py::arg("pitch")     = 0,
              py::arg("roll")      = 0)
-        .def("__eq__",
-             &GeoLocationLatLon::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon, operator_eq),
-             py::arg("rhs"))
+        .def(
+            "__eq__",
+            &GeoLocationLatLon::operator==,
+            DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon, operator_eq),
+            py::arg("rhs"))
         .def_readwrite(
             "latitude",
             &GeoLocationLatLon::latitude,

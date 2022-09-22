@@ -64,7 +64,7 @@ class TestNavigationNMEA_RMC:
         assert rmc.get_mode() == "E"
         assert rmc.get_mode_explained() == "Estimated"
 
-        # test conversions        
+        # test conversions
         assert rmc.to_timestamp() == approx(1647518961.23)
         assert rmc.to_date_string() == "+0000__17-03-2022__12:09:21.23"
 
