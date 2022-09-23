@@ -50,7 +50,7 @@ void init_c_sensordatautm(py::module& m)
         .def("__eq__",
              &SensorDataUTM::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, operator_eq),
-             py::arg("rhs"))
+             py::arg("other"))
         .def_readwrite("utm_zone",
                        &SensorDataUTM::utm_zone,
                        DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, utm_zone))

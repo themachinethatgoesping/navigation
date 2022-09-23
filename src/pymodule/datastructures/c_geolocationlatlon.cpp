@@ -54,7 +54,7 @@ void init_c_geolocationlatlon(py::module& m)
             "__eq__",
             &GeoLocationLatLon::operator==,
             DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon, operator_eq),
-            py::arg("rhs"))
+            py::arg("other"))
         .def_readwrite(
             "latitude",
             &GeoLocationLatLon::latitude,

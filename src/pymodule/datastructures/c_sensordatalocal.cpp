@@ -54,7 +54,7 @@ void init_c_sensordatalocal(py::module& m)
         .def("__eq__",
              &SensorDataLocal::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, operator_eq),
-             py::arg("rhs"))
+             py::arg("other"))
         .def_readwrite(
             "northing",
             &SensorDataLocal::northing,

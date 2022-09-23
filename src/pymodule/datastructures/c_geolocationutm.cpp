@@ -56,7 +56,7 @@ void init_c_geolocationutm(py::module& m)
         .def("__eq__",
              &GeoLocationUTM::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, GeoLocationUTM, operator_eq),
-             py::arg("rhs"))
+             py::arg("other"))
         .def_readwrite(
             "zone",
             &GeoLocationUTM::zone,

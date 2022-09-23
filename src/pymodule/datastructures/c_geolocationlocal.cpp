@@ -53,7 +53,7 @@ void init_c_geolocationlocal(py::module& m)
         .def("__eq__",
              &GeoLocationLocal::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLocal, operator_eq),
-             py::arg("rhs"))
+             py::arg("other"))
         .def_readwrite(
             "northing",
             &GeoLocationLocal::northing,
