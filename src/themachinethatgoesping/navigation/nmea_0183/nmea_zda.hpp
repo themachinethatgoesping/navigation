@@ -62,9 +62,27 @@ class NMEA_ZDA : public NMEA_Base
         {
             using themachinethatgoesping::tools::timeconv::datestring_to_unixtime;
 
-            std::string time_string = _sentence.substr(7, 23) + _sentence.substr(31, 2);
-            // 112619.00,14,12,2017,00,00
-            return datestring_to_unixtime(time_string, "%H%M%S,%d,%m,%Y,%z");
+            std::string time_string = _sentence.substr(7, _sentence.size() - 8);
+            double unixtime = datestring_to_unixtime(time_string,"%H%M%S,%d,%m,%Y");
+            auto field_hours = get_field(4);
+            auto field_minutes = get_field(4);
+            if (!field_hours.empty() && field_hours != "00")
+            {
+                // int hours;
+                // std::from_chars(field_hours.data(), field_hours.data() + field_hours.size(), hours);
+                // unixtime += 3600 * hours;
+                unixtime += 3600 * std::stoi(std::string(field_hours));
+            }
+            if (!field_minutes.empty() && field_minutes != "00")
+            {
+                // int minutes;
+                // std::from_chars(field_minutes.data(), field_minutes.data() + field_minutes.size(),
+                //                 minutes);
+                // unixtime += 60 * minutes;
+                unixtime += 60 * std::stoi(std::string(field_minutes));
+            }
+            
+            return unixtime;
         }
         catch (...)
         {
