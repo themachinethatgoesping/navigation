@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include <filesystem>
 
@@ -90,10 +90,10 @@ TEST_CASE("GeoLocationUTM should support common utm/latlon conversions", TESTTAG
     REQUIRE(location_south == GeoLocationLatLon(location_south));
 
     // test precomputed conversion (north)
-    REQUIRE(location_latlon.latitude == Approx(51.024224));
-    REQUIRE(location_latlon.longitude == Approx(3.710670));
+    REQUIRE(location_latlon.latitude ==Catch::Approx(51.024224));
+    REQUIRE(location_latlon.longitude ==Catch::Approx(3.710670));
 
     // test precomputed conversion (north)
-    REQUIRE(GeoLocationLatLon(location_south).latitude == Approx(-41.280330));
-    REQUIRE(GeoLocationLatLon(location_south).longitude == Approx(174.780011));
+    REQUIRE(GeoLocationLatLon(location_south).latitude ==Catch::Approx(-41.280330));
+    REQUIRE(GeoLocationLatLon(location_south).longitude ==Catch::Approx(174.780011));
 }
