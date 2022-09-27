@@ -22,20 +22,20 @@ class TestNavigationNavigationInterpolatorLocal:
 
         # register target
         scs.add_target(
-            "mbes", nav.datastructures.PositionalOffsets(-12, 9, 3, 10, 11, 12)
+            "mbes", nav.datastructures.PositionalOffsets("mbes", -12, 9, 3, 10, 11, 12)
         )
 
         # add offsets
-        scs.set_offsets_heading_source(yaw=9)
-        scs.set_offsets_depth_source(0, 0, 1)
-        scs.set_offsets_position_source(1, 2, 3)
-        scs.set_offsets_attitude_source(10, -10, -30)
+        scs.set_heading_source("sensor", yaw=9)
+        scs.set_depth_source("sensor", 0, 0, 1)
+        scs.set_position_source("sensor", 1, 2, 3)
+        scs.set_attitude_source("sensor", 10, -10, -30)
 
         # initialize interpolator
         navi = nav.NavigationInterpolatorLocal(scs, "extrapolate")
 
         # change some offsets
-        navi.sensor_configuration.set_offsets_position_source(10, 0, 0)
+        navi.sensor_configuration.set_position_source("sensor", 10, 0, 0)
 
         # add some data
         navi.set_data_position([1, 2, 3, 4], [10, 20, 10, 20], [-10, 1, 2, -4])
@@ -65,7 +65,7 @@ class TestNavigationNavigationInterpolatorLocal:
         # copy
         navi2 = navi.copy()
         assert navi2 == navi
-        navi.sensor_configuration.set_offsets_heading_source(yaw=12)
+        navi.sensor_configuration.set_heading_source("sensor", yaw=12)
         assert navi2 != navi
 
         assert navi == nav.NavigationInterpolatorLocal.from_binary(navi.to_binary())

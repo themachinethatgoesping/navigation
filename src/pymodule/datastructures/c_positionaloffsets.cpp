@@ -22,12 +22,13 @@ void init_c_positionaloffsets(py::module& m)
         m,
         "PositionalOffsets",
         DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets))
-        .def(py::init<double, double, double, double, double, double>(),
+        .def(py::init<std::string, double, double, double, double, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
                  PositionalOffsets,
                  PositionalOffsets_2),
+             py::arg("name")  = "",
              py::arg("x")     = 0,
              py::arg("y")     = 0,
              py::arg("z")     = 0,
@@ -40,6 +41,10 @@ void init_c_positionaloffsets(py::module& m)
             &PositionalOffsets::operator==,
             DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, operator_eq),
             py::arg("other"))
+        .def_readwrite(
+            "name",
+            &PositionalOffsets::name,
+            DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, name))
         .def_readwrite(
             "x",
             &PositionalOffsets::x,

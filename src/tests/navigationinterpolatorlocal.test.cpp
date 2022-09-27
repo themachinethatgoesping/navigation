@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-#include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include <filesystem>
 
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
@@ -20,11 +20,11 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
 
     // setup sensor configuration
     SensorConfiguration sensor_configuration;
-    sensor_configuration.set_offsets_depth_source(0, 0, 1);
-    sensor_configuration.set_offsets_attitude_source(1, -2, 3);
-    sensor_configuration.set_offsets_position_source(10, -10, 5);
+    sensor_configuration.set_depth_source("gps", 0, 0, 1);
+    sensor_configuration.set_attitude_source("gps", 1, -2, 3);
+    sensor_configuration.set_position_source("gps", 10, -10, 5);
 
-    datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
+    datastructures::PositionalOffsets targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
     sensor_configuration.add_target("mbes", targetOffsets);
 
     // // initialize coordinate system with one target
@@ -45,7 +45,7 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
     REQUIRE(navint != navint2);
     navint2.add_target("sbes", targetOffsets);
     REQUIRE(navint == navint2);
-    navint.sensor_configuration().set_offsets_position_source(11, 20, 30);
+    navint.sensor_configuration().set_position_source("gps", 11, 20, 30);
     REQUIRE(navint != navint2);
 
     // string conversion

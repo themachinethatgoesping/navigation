@@ -25,14 +25,14 @@ class TestNavigationSensorConfiguration:
 
         # register target
         scs.add_target(
-            "mbes", nav.datastructures.PositionalOffsets(-12, 9, 3, 10, 11, 12)
+            "mbes", nav.datastructures.PositionalOffsets("mbes", -12, 9, 3, 10, 11, 12)
         )
 
         # add offsets
-        scs.set_offsets_heading_source(yaw=9)
-        scs.set_offsets_depth_source(0, 0, 1)
-        scs.set_offsets_position_source(1, 2, 3)
-        scs.set_offsets_attitude_source(10, -10, -30)
+        scs.set_heading_source("sensor", yaw=9)
+        scs.set_depth_source("sensor", 0, 0, 1)
+        scs.set_position_source("sensor", 1, 2, 3)
+        scs.set_attitude_source("sensor", 10, -10, -30)
 
         # get target position
         position = scs.compute_target_position("mbes", data)
@@ -55,7 +55,7 @@ class TestNavigationSensorConfiguration:
         # copy
         scs2 = scs.copy()
         assert scs2 == scs
-        scs.set_offsets_heading_source(yaw=12)
+        scs.set_heading_source("sensor", yaw=12)
         assert scs2 != scs
 
         # binary

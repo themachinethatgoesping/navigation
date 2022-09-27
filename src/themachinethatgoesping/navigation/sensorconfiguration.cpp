@@ -22,7 +22,7 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
         get_system_rotation_as_quat(sensor_data, _offsets_heading_source, _offsets_attitude_source);
 
     // convert target to quaternion
-    auto target_offsets  = get_offsets_target(target_id);
+    auto target_offsets  = get_target(target_id);
     auto target_ypr_quat = tools::rotationfunctions::quaternion_from_ypr(
         target_offsets.yaw, target_offsets.pitch, target_offsets.roll);
 
@@ -120,7 +120,7 @@ datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
 }
 
 // ----- get/set target offsets -----
-const datastructures::PositionalOffsets& SensorConfiguration::get_offsets_target(
+const datastructures::PositionalOffsets& SensorConfiguration::get_target(
     const std::string& target_id) const
 {
     return _target_offsets.at(target_id); // throws std::out_of_range if not found
@@ -140,63 +140,66 @@ void SensorConfiguration::add_target(const std::string& target_id,
                                      double             pitch,
                                      double             roll)
 {
-    add_target(target_id, datastructures::PositionalOffsets(x, y, z, yaw, pitch, roll));
+    add_target(target_id, datastructures::PositionalOffsets(target_id, x, y, z, yaw, pitch, roll));
 }
 
 // ----- get/set sensor offsets -----
-void SensorConfiguration::set_offsets_attitude_source(double yaw, double pitch, double roll)
+void SensorConfiguration::set_attitude_source(std::string_view name,
+                                              double           yaw,
+                                              double           pitch,
+                                              double           roll)
 {
-    _offsets_attitude_source = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, pitch, roll);
+    _offsets_attitude_source =
+        datastructures::PositionalOffsets(name, 0.0, 0.0, 0.0, yaw, pitch, roll);
 }
-void SensorConfiguration::set_offsets_attitude_source(
+void SensorConfiguration::set_attitude_source(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
     _offsets_attitude_source = sensor_offsets;
 }
 
-datastructures::PositionalOffsets SensorConfiguration::get_offsets_attitude_source() const
+datastructures::PositionalOffsets SensorConfiguration::get_attitude_source() const
 {
     return _offsets_attitude_source;
 }
 
-void SensorConfiguration::set_offsets_heading_source(double yaw)
+void SensorConfiguration::set_heading_source(std::string_view name, double yaw)
 {
-    _offsets_heading_source = datastructures::PositionalOffsets(0.0, 0.0, 0.0, yaw, 0.0, 0.0);
+    _offsets_heading_source = datastructures::PositionalOffsets(name, 0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
-void SensorConfiguration::set_offsets_heading_source(
+void SensorConfiguration::set_heading_source(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
     _offsets_heading_source = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_offsets_heading_source() const
+datastructures::PositionalOffsets SensorConfiguration::get_heading_source() const
 {
     return _offsets_heading_source;
 }
 
-void SensorConfiguration::set_offsets_depth_source(double x, double y, double z)
+void SensorConfiguration::set_depth_source(std::string_view name, double x, double y, double z)
 {
-    _offsets_depth_source = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+    _offsets_depth_source = datastructures::PositionalOffsets(name, x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorConfiguration::set_offsets_depth_source(
-    const datastructures::PositionalOffsets& sensor_offsets)
+void SensorConfiguration::set_depth_source(const datastructures::PositionalOffsets& sensor_offsets)
 {
     _offsets_depth_source = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_offsets_depth_source() const
+datastructures::PositionalOffsets SensorConfiguration::get_depth_source() const
 {
     return _offsets_depth_source;
 }
 
-void SensorConfiguration::set_offsets_position_source(double x, double y, double z)
+void SensorConfiguration::set_position_source(std::string_view name, double x, double y, double z)
 {
-    _offsets_position_source = datastructures::PositionalOffsets(x, y, z, 0.0, 0.0, 0.0);
+    _offsets_position_source = datastructures::PositionalOffsets(name, x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorConfiguration::set_offsets_position_source(
+void SensorConfiguration::set_position_source(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
     _offsets_position_source = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_offsets_position_source() const
+datastructures::PositionalOffsets SensorConfiguration::get_position_source() const
 {
     return _offsets_position_source;
 }

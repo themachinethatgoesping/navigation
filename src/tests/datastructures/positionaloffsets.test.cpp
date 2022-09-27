@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-#include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <filesystem>
 
@@ -19,6 +19,8 @@ TEST_CASE("PositionalOffsets should support common functions", TESTTAG)
 {
     // initialize offsets
     auto offsets = PositionalOffsets();
+
+    offsets.name = "test";
 
     offsets.x = 1;
     offsets.y = 2;

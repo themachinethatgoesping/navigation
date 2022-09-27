@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-#include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include <filesystem>
 
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
@@ -19,12 +19,12 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
 {
     // initialize coordinate system with one target
     SensorConfiguration               scs;
-    datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
+    datastructures::PositionalOffsets targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
     scs.add_target("mbes", targetOffsets);
-    scs.set_offsets_position_source(10, 20, 30);
-    scs.set_offsets_heading_source(12);
-    scs.set_offsets_attitude_source(1, -2, 3);
-    scs.set_offsets_depth_source(4, 5, -6);
+    scs.set_position_source("gps", 10, 20, 30);
+    scs.set_heading_source("compass", 12);
+    scs.set_attitude_source("mru", 1, -2, 3);
+    scs.set_depth_source("gps", 4, 5, -6);
 
     // copy constructor
     SensorConfiguration scs2(scs);
@@ -35,7 +35,7 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     REQUIRE(scs != scs2);
     scs2.add_target("sbes", targetOffsets);
     REQUIRE(scs == scs2);
-    scs.set_offsets_position_source(11, 20, 30);
+    scs.set_position_source("gps", 11, 20, 30);
     REQUIRE(scs != scs2);
 
     // string conversion
@@ -52,13 +52,13 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
           TESTTAG)
 {
     // initialize offsets
-    datastructures::PositionalOffsets targetOffsets(1, 2, 3, 0, 0, 0);
+    datastructures::PositionalOffsets targetOffsets("gps", 1, 2, 3, 0, 0, 0);
 
     SECTION("test depth sensor offsets")
     {
         SensorConfiguration scs;
         scs.add_target("mbes", targetOffsets);
-        scs.set_offsets_depth_source(0, 0, 10);
+        scs.set_depth_source("gps", 0, 0, 10);
 
         REQUIRE(scs.compute_target_position("mbes", datastructures::SensorDataLocal()).z == -7);
     }
@@ -75,7 +75,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
 
         // imu yaw offset should not influence the resulting yaw because that is influenced only by
         // the heading but imu yaw offset of 90° should swap pitch and roll
-        scs.set_offsets_attitude_source(90, 0, 0);
+        scs.set_attitude_source("gps", 90, 0, 0);
         auto position = scs.compute_target_position("mbes", sensor_data);
 
         REQUIRE(position.yaw == Catch::Approx(90));
@@ -90,7 +90,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
         CHECK(position.pitch == Catch::Approx(10.0));
         REQUIRE(position.roll == Catch::Approx(0).scale(1.0));
 
-        scs.set_offsets_attitude_source(0, 1, 2);
+        scs.set_attitude_source("gps", 0, 1, 2);
         position = scs.compute_target_position("mbes", sensor_data);
         REQUIRE(position.yaw == Catch::Approx(90));
         CHECK(position.pitch == Catch::Approx(-0.9902670948));
@@ -102,8 +102,8 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 {
     // initialize offsets
     SensorConfiguration               scs;
-    datastructures::PositionalOffsets targetOffsets1(1, 2, 3, 0, 0, 0);
-    datastructures::PositionalOffsets targetOffsets2(1, 2, 3, 45, 5, 10);
+    datastructures::PositionalOffsets targetOffsets1("sensor1", 1, 2, 3, 0, 0, 0);
+    datastructures::PositionalOffsets targetOffsets2("sensor2", 1, 2, 3, 45, 5, 10);
 
     scs.add_target("mbes", targetOffsets1);
     scs.add_target("sbes", targetOffsets2);
@@ -119,8 +119,8 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes == expected_result_mbes);
         REQUIRE(position_sbes == expected_result_sbes);
 
-        REQUIRE(scs.get_offsets_target("mbes") == targetOffsets1);
-        REQUIRE(scs.get_offsets_target("sbes") == targetOffsets2);
+        REQUIRE(scs.get_target("mbes") == targetOffsets1);
+        REQUIRE(scs.get_target("sbes") == targetOffsets2);
     }
 
     SECTION("SENSOR_VALUES no roll/pitch")

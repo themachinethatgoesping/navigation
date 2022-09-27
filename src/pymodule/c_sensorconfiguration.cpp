@@ -66,97 +66,101 @@ void init_c_sensorconfiguration(py::module& m)
              DOC(themachinethatgoesping, navigation, SensorConfiguration, add_target_2),
              py::arg("target_id"),
              py::arg("target_offsets"))
-        .def("get_offsets_target",
-             &SensorConfiguration::get_offsets_target,
-             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_offsets_target),
+        .def("get_target",
+             &SensorConfiguration::get_target,
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_target),
              py::arg("target_id"))
-        .def("set_offsets_attitude_source",
-             py::overload_cast<double, double, double>(
-                 &SensorConfiguration::set_offsets_attitude_source),
+        .def("set_attitude_source",
+             py::overload_cast<std::string_view, double, double, double>(
+                 &SensorConfiguration::set_attitude_source),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_attitude_source),
+                 set_attitude_source),
+             py::arg("name"),
              py::arg("yaw"),
              py::arg("pitch"),
              py::arg("roll"))
-        .def("set_offsets_attitude_source",
+        .def("set_attitude_source",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_offsets_attitude_source),
+                 &SensorConfiguration::set_attitude_source),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_attitude_source_2),
+                 set_attitude_source_2),
              py::arg("sensor_offsets"))
-        .def("get_offsets_attitude_source",
-             &SensorConfiguration::get_offsets_attitude_source,
+        .def("get_attitude_source",
+             &SensorConfiguration::get_attitude_source,
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 get_offsets_attitude_source))
-        .def("set_offsets_heading_source",
-             py::overload_cast<double>(&SensorConfiguration::set_offsets_heading_source),
+                 get_attitude_source))
+        .def("set_heading_source",
+             py::overload_cast<std::string_view, double>(&SensorConfiguration::set_heading_source),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_heading_source),
+                 set_heading_source),
+             py::arg("name"),
              py::arg("yaw"))
-        .def("set_offsets_heading_source",
+        .def("set_heading_source",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_offsets_heading_source),
+                 &SensorConfiguration::set_heading_source),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_heading_source_2),
+                 set_heading_source_2),
              py::arg("sensor_offsets"))
-        .def("get_offsets_heading_source",
-             &SensorConfiguration::get_offsets_heading_source,
+        .def("get_heading_source",
+             &SensorConfiguration::get_heading_source,
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 get_offsets_heading_source))
-        .def("set_offsets_depth_source",
-             py::overload_cast<double, double, double>(
-                 &SensorConfiguration::set_offsets_depth_source),
-             DOC(themachinethatgoesping, navigation, SensorConfiguration, set_offsets_depth_source),
+                 get_heading_source))
+        .def("set_depth_source",
+             py::overload_cast<std::string_view, double, double, double>(
+                 &SensorConfiguration::set_depth_source),
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, set_depth_source),
+             py::arg("name"),
              py::arg("x"),
              py::arg("y"),
              py::arg("z"))
-        .def("set_offsets_depth_source",
+        .def("set_depth_source",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_offsets_depth_source),
+                 &SensorConfiguration::set_depth_source),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_depth_source_2),
+                 set_depth_source_2),
              py::arg("sensor_offsets"))
-        .def("get_offsets_depth_source",
-             &SensorConfiguration::get_offsets_depth_source,
-             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_offsets_depth_source))
-        .def("set_offsets_position_source",
-             py::overload_cast<double, double, double>(
-                 &SensorConfiguration::set_offsets_position_source),
+        .def("get_depth_source",
+             &SensorConfiguration::get_depth_source,
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_depth_source))
+        .def("set_position_source",
+             py::overload_cast<std::string_view, double, double, double>(
+                 &SensorConfiguration::set_position_source),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_position_source),
+                 set_position_source),
+             py::arg("name"),
              py::arg("x"),
              py::arg("y"),
              py::arg("z"))
-        .def("set_offsets_position_source",
+        .def("set_position_source",
              py::overload_cast<const datastructures::PositionalOffsets&>(
-                 &SensorConfiguration::set_offsets_position_source),
+                 &SensorConfiguration::set_position_source),
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 set_offsets_position_source_2),
+                 set_position_source_2),
              py::arg("sensor_offsets"))
-        .def("get_offsets_position_source",
-             &SensorConfiguration::get_offsets_position_source,
+        .def("get_position_source",
+             &SensorConfiguration::get_position_source,
              DOC(themachinethatgoesping,
                  navigation,
                  SensorConfiguration,
-                 get_offsets_position_source))
+                 get_position_source))
         .def("__eq__",
              &SensorConfiguration::operator==,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, operator_eq),

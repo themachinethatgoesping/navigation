@@ -95,6 +95,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param timestamp in seconds since epoch
      * @param northing in meters
      * @param easting in meters
+     * @param name of the position system
      * @param offset_x in m, positive forward
      * @param offset_y in m, positive starboard
      * @param offset_z in m, positive down
@@ -102,11 +103,12 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     void set_data_position(const std::vector<double>& timestamp,
                            const std::vector<double>& northing,
                            const std::vector<double>& easting,
+                           std::string_view           name,
                            double                     offset_x,
                            double                     offset_y,
                            double                     offset_z)
     {
-        _sensor_configuration.set_offsets_position_source(offset_x, offset_y, offset_z);
+        _sensor_configuration.set_position_source(name, offset_x, offset_y, offset_z);
         set_data_position(timestamp, northing, easting);
     }
 
@@ -124,7 +126,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
                            const std::vector<double>&               easting,
                            const datastructures::PositionalOffsets& sensor_offsets)
     {
-        _sensor_configuration.set_offsets_position_source(sensor_offsets);
+        _sensor_configuration.set_position_source(sensor_offsets);
         set_data_position(timestamp, northing, easting);
     }
 

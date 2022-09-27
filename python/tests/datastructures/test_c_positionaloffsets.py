@@ -11,7 +11,7 @@ class Test_navigation_PositionalOffsets:
     # define actual tests (must start with "test_"
     # test case 1
     def test_PositionalOffsets_should_support_common_functions(self):
-        offsets = PositionalOffsets(1, 2, 3, 10, 20, 30)
+        offsets = PositionalOffsets("sensor", 1, 2, 3, 10, 20, 30)
         print(offsets)
 
         # print

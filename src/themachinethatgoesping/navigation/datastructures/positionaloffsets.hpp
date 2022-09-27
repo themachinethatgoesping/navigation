@@ -1,5 +1,6 @@
-// SPDX-FileCopyrightText: 2022 Peter Urban, Sven Schorge GEOMAR Helmholtz Centre for Ocean Research
-// Kiel SPDX-FileCopyrightText: 2022 Peter Urban, Ghent University
+// SPDX-FileCopyrightText: 2022 Peter Urban, Sven Schorge GEOMAR Helmholtz
+// Centre for Ocean Research Kiel SPDX-FileCopyrightText: 2022 Peter Urban,
+// Ghent University
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -15,18 +16,19 @@ namespace navigation {
 namespace datastructures {
 
 /**
- * @brief A structure to store positional offsets (e.g. of a sensor) relative to the vessel
- * coordinate system
+ * @brief A structure to store positional offsets (e.g. of a sensor) relative to
+ * the vessel coordinate system
  *
  */
 struct PositionalOffsets
 {
-    double x     = 0.0; ///< in m, positive forward
-    double y     = 0.0; ///< in m, positive starboard
-    double z     = 0.0; ///< in m, positive downwards
-    double yaw   = 0.0; ///< in °, positive means clockwise rotation
-    double pitch = 0.0; ///< in °, positive means bow up
-    double roll  = 0.0; ///< in °, positive means port up
+    std::string name;        ///< The name of the sensor
+    double      x     = 0.0; ///< in m, positive forward
+    double      y     = 0.0; ///< in m, positive starboard
+    double      z     = 0.0; ///< in m, positive downwards
+    double      yaw   = 0.0; ///< in °, positive means clockwise rotation
+    double      pitch = 0.0; ///< in °, positive means bow up
+    double      roll  = 0.0; ///< in °, positive means port up
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
@@ -37,6 +39,7 @@ struct PositionalOffsets
     /**
      * @brief Construct a new PositionalOffsets object
      *
+     * @param name The name of the sensor
      * @param x in m, positive forward
      * @param y in m, positive starboard
      * @param z in m, positive downwards
@@ -44,8 +47,15 @@ struct PositionalOffsets
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    PositionalOffsets(double x, double y, double z, double yaw, double pitch, double roll)
-        : x(x)
+    PositionalOffsets(std::string_view name,
+                      double           x,
+                      double           y,
+                      double           z,
+                      double           yaw,
+                      double           pitch,
+                      double           roll)
+        : name(std::string(name))
+        , x(x)
         , y(y)
         , z(z)
         , yaw(yaw)
@@ -57,13 +67,14 @@ struct PositionalOffsets
     bool operator!=(const PositionalOffsets& rhs) const { return !(operator==(rhs)); }
     bool operator==(const PositionalOffsets& rhs) const
     {
-        if (tools::helper::approx(x, rhs.x))
-            if (tools::helper::approx(y, rhs.y))
-                if (tools::helper::approx(z, rhs.z))
-                    if (tools::helper::approx(yaw, rhs.yaw))
-                        if (tools::helper::approx(pitch, rhs.pitch))
-                            if (tools::helper::approx(roll, rhs.roll))
-                                return true;
+        if (name == rhs.name)
+            if (tools::helper::approx(x, rhs.x))
+                if (tools::helper::approx(y, rhs.y))
+                    if (tools::helper::approx(z, rhs.z))
+                        if (tools::helper::approx(yaw, rhs.yaw))
+                            if (tools::helper::approx(pitch, rhs.pitch))
+                                if (tools::helper::approx(roll, rhs.roll))
+                                    return true;
 
         return false;
     }
@@ -74,6 +85,7 @@ struct PositionalOffsets
     template<typename S>
     void serialize(S& s)
     {
+        s.container1b(name, 100);
         s.value8b(x);
         s.value8b(y);
         s.value8b(z);
@@ -87,6 +99,7 @@ struct PositionalOffsets
     {
         tools::classhelpers::ObjectPrinter printer("PositionalOffsets", float_precision);
 
+        printer.register_string("name", name, "The name of the sensor");
         printer.register_value("x", x, "positive forwards, m");
         printer.register_value("y", y, "positive starboard, m");
         printer.register_value("z", z, "positive downwards, m");

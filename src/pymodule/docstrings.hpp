@@ -347,6 +347,9 @@ Parameter ``northing``:
 Parameter ``easting``:
     in meters
 
+Parameter ``name``:
+    of the position system
+
 Parameter ``offset_x``:
     in m, positive forward
 
@@ -485,41 +488,32 @@ Returns:
     northing and east, which are set relative to the sensor coordinate
     system center)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_attitude_source =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_attitude_source =
 R"doc(Get the attitude sensor offsets
 
 Returns:
     const datastructures::PositionalOffsets& offsets of the attitude
     sensor)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_depth_source =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_depth_source =
 R"doc(Get the registered depth sensor offsets
 
 Returns:
     const datastructures::PositionalOffsets& offsets of the depth
     sensor)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_heading_source =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_heading_source =
 R"doc(Get the registered compass offsets
 
 Returns:
     const datastructures::PositionalOffsets& offsets of the compass)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_position_source =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_position_source =
 R"doc(Get the registered position system offsets
 
 Returns:
     const datastructures::PositionalOffsets& offsets of the position
     system)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_offsets_target =
-R"doc(Get stored target offsets of a specified target
-
-Parameter ``target_id``:
-    name of the registered target
-
-Returns:
-    const datastructures::PositionalOffsets& offsets of the target)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_system_rotation_as_quat =
 R"doc(Compute the rotation of the sensor coordinate system (relative to the
@@ -544,6 +538,15 @@ Returns:
     Eigen::Quaterniond Rotation of the sensor system compared to the
     world reference system)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_target =
+R"doc(Get stored target offsets of a specified target
+
+Parameter ``target_id``:
+    name of the registered target
+
+Returns:
+    const datastructures::PositionalOffsets& offsets of the target)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_offsets_attitude_source =
 R"doc(< Static Roll,Pitch,Yaw (installation) offsets of the attitude <
 sensor)doc";
@@ -562,13 +565,13 @@ static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_p
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_serialize = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_attitude_source =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_attitude_source =
 R"doc(Set the attitude sensor offsets
 
 Parameter ``sensor_offsets``:
     offsets structure (only yaw, pitch and roll are used))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_attitude_source_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_attitude_source_2 =
 R"doc(Set the attitude sensor offsets
 
 Parameter ``yaw``:
@@ -583,7 +586,7 @@ Parameter ``roll``:
     roll offset of the attitude sensor (right-handed around the
     x-axis) (in degrees, positive = port up))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_depth_source =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_depth_source =
 R"doc(Set the depth sensor offsets
 
 Parameter ``x``:
@@ -595,26 +598,26 @@ Parameter ``y``:
 Parameter ``z``:
     z-offset of the depth sensor (in meters, positive down))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_depth_source_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_depth_source_2 =
 R"doc(Set the depth sensor offsets
 
 Parameter ``sensor_offsets``:
     offsets structure (only x, y and z are used))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_heading_source =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_heading_source =
 R"doc(Set the compass offsets
 
 Parameter ``yaw``:
     yaw offset of the compass (right-handed around the z-axis) (in
     degrees, 90° = east))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_heading_source_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_heading_source_2 =
 R"doc(Set the compass offsets
 
 Parameter ``sensor_offsets``:
     offsets structure (only yaw is used))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_position_source =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_position_source =
 R"doc(Set the position system offsets
 
 Parameter ``x``:
@@ -626,7 +629,7 @@ Parameter ``y``:
 Parameter ``z``:
     z-offset of the depth sensor (in meters, positive down))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_offsets_position_source_2 =
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_position_source_2 =
 R"doc(Set the position system offsets
 
 Parameter ``sensor_offsets``:
@@ -907,6 +910,9 @@ static const char *__doc_themachinethatgoesping_navigation_datastructures_Positi
 static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_PositionalOffsets_2 =
 R"doc(Construct a new PositionalOffsets object
 
+Parameter ``name``:
+    The name of the sensor
+
 Parameter ``x``:
     in m, positive forward
 
@@ -924,6 +930,8 @@ Parameter ``pitch``:
 
 Parameter ``roll``:
     in °, positive means port up)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_name = R"doc(< The name of the sensor)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_operator_eq = R"doc()doc";
 

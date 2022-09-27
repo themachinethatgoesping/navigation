@@ -147,7 +147,7 @@ class SensorConfiguration
      * @param target_id name of the registered target
      * @return const datastructures::PositionalOffsets& offsets of the target
      */
-    const datastructures::PositionalOffsets& get_offsets_target(const std::string& target_id) const;
+    const datastructures::PositionalOffsets& get_target(const std::string& target_id) const;
 
     // ----- get/set sensor offsets -----
     /**
@@ -155,7 +155,7 @@ class SensorConfiguration
      *
      * @param sensor_offsets offsets structure (only yaw, pitch and roll are used)
      */
-    void set_offsets_attitude_source(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_attitude_source(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Set the attitude sensor offsets
@@ -167,14 +167,14 @@ class SensorConfiguration
      * @param roll roll offset of the attitude sensor (right-handed around the x-axis) (in degrees,
      * positive = port up)
      */
-    void set_offsets_attitude_source(double yaw, double pitch, double roll);
+    void set_attitude_source(std::string_view name, double yaw, double pitch, double roll);
 
     /**
      * @brief Get the attitude sensor offsets
      *
      * @return const datastructures::PositionalOffsets& offsets of the attitude sensor
      */
-    datastructures::PositionalOffsets get_offsets_attitude_source() const;
+    datastructures::PositionalOffsets get_attitude_source() const;
 
     /**
      * @brief Set the compass offsets
@@ -182,21 +182,21 @@ class SensorConfiguration
      * @param yaw yaw offset of the compass (right-handed around the z-axis) (in degrees, 90° =
      * east)
      */
-    void set_offsets_heading_source(double yaw);
+    void set_heading_source(std::string_view name, double yaw);
 
     /**
      * @brief Set the compass offsets
      *
      * @param sensor_offsets offsets structure (only yaw is used)
      */
-    void set_offsets_heading_source(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_heading_source(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered compass offsets
      *
      * @return const datastructures::PositionalOffsets& offsets of the compass
      */
-    datastructures::PositionalOffsets get_offsets_heading_source() const;
+    datastructures::PositionalOffsets get_heading_source() const;
 
     /**
      * @brief Set the depth sensor offsets
@@ -205,21 +205,21 @@ class SensorConfiguration
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
      */
-    void set_offsets_depth_source(double x, double y, double z);
+    void set_depth_source(std::string_view name, double x, double y, double z);
 
     /**
      * @brief Set the depth sensor offsets
      *
      * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_offsets_depth_source(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_depth_source(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered depth sensor offsets
      *
      * @return const datastructures::PositionalOffsets& offsets of the depth sensor
      */
-    datastructures::PositionalOffsets get_offsets_depth_source() const;
+    datastructures::PositionalOffsets get_depth_source() const;
 
     /**
      * @brief Set the position system offsets
@@ -228,21 +228,21 @@ class SensorConfiguration
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
      */
-    void set_offsets_position_source(double x, double y, double z);
+    void set_position_source(std::string_view name, double x, double y, double z);
 
     /**
      * @brief Set the position system offsets
      *
      * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_offsets_position_source(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_position_source(const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief Get the registered position system offsets
      *
      * @return const datastructures::PositionalOffsets& offsets of the position system
      */
-    datastructures::PositionalOffsets get_offsets_position_source() const;
+    datastructures::PositionalOffsets get_position_source() const;
 
   private:
     // ----- helper functions -----
