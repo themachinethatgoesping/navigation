@@ -70,6 +70,9 @@ void init_c_sensorconfiguration(py::module& m)
              &SensorConfiguration::get_target,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, get_target),
              py::arg("target_id"))
+        .def("get_target_ids",
+             &SensorConfiguration::get_target_ids,
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_target_ids))
         .def("set_attitude_source",
              py::overload_cast<std::string_view, double, double, double>(
                  &SensorConfiguration::set_attitude_source),

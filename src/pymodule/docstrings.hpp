@@ -547,6 +547,12 @@ Parameter ``target_id``:
 Returns:
     const datastructures::PositionalOffsets& offsets of the target)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_target_ids =
+R"doc(Get the ids of the registered targets
+
+Returns:
+    std::vector<std::string_view>)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_offsets_attitude_source =
 R"doc(< Static Roll,Pitch,Yaw (installation) offsets of the attitude <
 sensor)doc";

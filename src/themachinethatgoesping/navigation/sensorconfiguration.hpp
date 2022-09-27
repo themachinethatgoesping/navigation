@@ -244,6 +244,21 @@ class SensorConfiguration
      */
     datastructures::PositionalOffsets get_position_source() const;
 
+    /**
+     * @brief Get the ids of the registered targets
+     * 
+     * @return std::vector<std::string_view> 
+     */
+    std::vector<std::string_view> get_target_ids() const
+    {
+        std::vector<std::string_view> target_ids;
+        for (const auto& target : _target_offsets)
+        {
+            target_ids.push_back(target.first);
+        }
+        return target_ids;
+    }
+
   private:
     // ----- helper functions -----
     /**

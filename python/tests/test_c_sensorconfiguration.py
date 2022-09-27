@@ -64,3 +64,6 @@ class TestNavigationSensorConfiguration:
         # print
         print(scs)
         assert len(scs.info_string()) != 0
+
+        # more
+        assert scs.get_target_ids() == ["mbes"]
