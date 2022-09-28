@@ -31,19 +31,10 @@ endif
 boost_dep = dependency('boost', static: true)
 
 # eigen 3
-eigen3_dep = dependency('eigen3', required: false)
-
-if not eigen3_dep.found()
-    eigen3_project = subproject('eigen')
-    eigen3_dep = eigen3_project.get_variable('eigen_dep')
-endif
+eigen3_dep = dependency('eigen3')
 
 # geographiclib
-geographiclib_dep = dependency('geographiclib', required: false)
-
-if not geographiclib_dep.found()
-    geographiclib_dep = subproject('geographiclib').get_variable('geographiclib_dep')
-endif
+geographiclib_dep = dependency('geographiclib', static: true)
 
 # themachinethatgoesping
 # tools
