@@ -229,7 +229,7 @@ jobs:
         key: ci-mac  # name for the cache
         
     - run: brew install libomp boost llvm
-    - run: brew upgrade libomp llvm
+    - run: brew upgrade libomp llvm boost
     
     - run: pip install meson ninja pytest
     
