@@ -36,10 +36,6 @@ on:
     #  - "**.c"
     #  - "**.h"
 
-# env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  #BUILD_TYPE: Release
-  
 
 # make sure that multiple jobs don't run for the same action (new commits cancel old jobs when they are still running)
 # Souce Ralf Gommers (commit to meson-python)
@@ -47,6 +43,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+# env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  #BUILD_TYPE: Release
+  
 jobs:
   linux:
     name: Build and install with meson on ${{matrix.container}}
@@ -216,7 +216,7 @@ jobs:
     - uses: actions/setup-python@v3
       with:
         python-version: '3.x'
-
+        
     - name: checkout main repository
       uses: actions/checkout@v3
       with:
@@ -230,15 +230,13 @@ jobs:
         
     # install clang 14
     - run: brew install llvm@14
+        
     - run: brew install libomp boost
-    - run: brew upgrade libomp boost
     
     - run: pip install meson ninja pytest
     
     - name: configure meson
       run: meson setup builddir/; meson configure builddir -Dpython.install_env=auto
-      env: 
-        CXX: /usr/local/opt/llvm/bin/clang++
 
     - name: compile project
       run: meson compile -C builddir/
