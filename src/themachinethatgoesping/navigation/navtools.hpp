@@ -44,12 +44,12 @@ inline std::string dms_to_string(double          dms_value,
         case t_latlon_format::degrees:
             return fmt::format("{:.{}f}°{}", dms_value, precision, sign);
         case t_latlon_format::minutes: {
-            int    degrees = dms_value;
+            int    degrees = int(dms_value);
             double minutes = (dms_value - double(degrees)) * 60;
             return fmt::format("{}°{:.{}f}'{}", degrees, minutes, precision, sign);
         }
         case t_latlon_format::seconds: {
-            int    degrees = dms_value;
+            int    degrees = int(dms_value);
             double minutes = (dms_value - double(degrees)) * 60;
             double seconds = (minutes - double(int(minutes))) * 60;
             return fmt::format(

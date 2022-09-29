@@ -71,7 +71,7 @@ class NMEA_GLL : public NMEA_Base
         {
             return get_field(6)[0];
         }
-        catch (std::out_of_range& e)
+        catch ([[maybe_unused]] std::out_of_range& e)
         {
             return '\x00';
         }
