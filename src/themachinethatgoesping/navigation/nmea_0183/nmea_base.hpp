@@ -80,7 +80,7 @@ class NMEA_Base
         _fields.clear();
         // find all ','
         int i = 0;
-        for (; i < _sentence.size(); i++)
+        for (; i < int(_sentence.size()); i++)
         {
             if (_sentence[i] == ',')
                 _fields.push_back(i);
