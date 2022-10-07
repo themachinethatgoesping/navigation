@@ -8,7 +8,7 @@
 namespace themachinethatgoesping {
 namespace navigation {
 
-// ----- compute_target_position -----Compile failed: command 'msvc-14.3' failed: No such file or
+// ----- compute_target_position -----Compile failed: command 'msvc-14.32' failed: No such file or
 // directory
 
 datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
