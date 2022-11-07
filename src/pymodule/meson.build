@@ -40,6 +40,7 @@ py_navigation = pymod.extension_module(
     module_name,
     sources: sources,
     dependencies : [
+        tools_pybind_dep,
         navigation_dep,
         pybind11_dep,
         python3_dep],
