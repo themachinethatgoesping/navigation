@@ -23,6 +23,7 @@ xsimd*
 fast_float*
 nlohman*
 indicators*
+xtensor-python*
 
 #inherited repos
 tools-*
