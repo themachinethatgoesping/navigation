@@ -30,9 +30,6 @@ endif
 # boost
 boost_dep = dependency('boost', static: true)
 
-# eigen 3
-eigen3_dep = dependency('eigen3')
-
 # geographiclib
 geographiclib_dep = dependency('geographiclib', static: true)
 
