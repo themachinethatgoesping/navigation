@@ -7,7 +7,7 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/navtools.hpp"
-#include <themachinethatgoesping/tools/pybind11_helpers/enumhelpers.hpp>
+#include <themachinethatgoesping/tools_pybind/enumhelpers.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>

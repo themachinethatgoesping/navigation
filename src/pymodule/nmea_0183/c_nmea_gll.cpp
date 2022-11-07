@@ -7,7 +7,7 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
-#include <themachinethatgoesping/tools/pybind11_helpers/classhelpers.hpp>
+#include <themachinethatgoesping/tools_pybind/classhelpers.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>

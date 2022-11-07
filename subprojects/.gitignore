@@ -2,25 +2,29 @@
 #
 # SPDX-License-Identifier: CC0-1.0
 
+#wrap folders
 packagecache/*
-date*/*
-eigen*/*
-pybind11*/*
 Catch2*/*
-fmt*/*
-magic_enum*/*
-bitsery*
+date*/*
 geographiclib*
 
 #inherited wrap files
 catch2.wrap
 hinnant-date.wrap
-pybind11.wrap
-eigen.wrap
-fmt.wrap
-magic_enum.wrap
-bitsery.wrap
+
+#inherited wrap and folders
+pybind11*
+eigen*
+fmt*
+magic_enum*
+bitsery*
+xtensor*
+xsimd*
+fast_float*
+nlohman*
+indicators*
 
 #inherited repos
-tools-main*
-meta-main*
+tools-*
+meta-*
+
