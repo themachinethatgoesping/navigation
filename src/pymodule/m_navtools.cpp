@@ -7,7 +7,7 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/navtools.hpp"
-#include <themachinethatgoesping/tools_pybind/enumhelpers.hpp>
+#include <themachinethatgoesping/tools_pybind/enumhelper.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>
@@ -33,7 +33,7 @@ void init_m_navtools(py::module& m)
         //
         ;
 
-    tools::pybind_helpers::add_string_to_enum_conversion<t_latlon_format>(pyenum_latlon);
+    tools::pybind_helper::add_string_to_enum_conversion<t_latlon_format>(pyenum_latlon);
 
     //----- latitude_to_string -----
     m_navtools.def("latitude_to_string",

@@ -8,8 +8,8 @@
 #include <charconv>
 #include <string>
 
-#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
-#include <themachinethatgoesping/tools/classhelpers/stream.hpp>
+#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 
 #include <themachinethatgoesping/tools/helper.hpp>
 
@@ -164,9 +164,9 @@ class NMEA_Base
     std::string_view get_sentence() const { return std::string_view(_sentence); }
 
     // ----- objectprinter -----
-    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("NMEA sentence", float_precision);
+        tools::classhelper::ObjectPrinter printer("NMEA sentence", float_precision);
 
         printer.register_value("Sender", get_sender_id(), "");
         printer.register_value("Type", get_sentence_type(), "");
@@ -176,7 +176,7 @@ class NMEA_Base
     }
 
     // ----- class helper macros -----
-    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
+    __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__
     __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NMEA_Base)
 };
 

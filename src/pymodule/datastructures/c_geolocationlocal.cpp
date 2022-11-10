@@ -7,7 +7,7 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelpers.hpp>
+#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>

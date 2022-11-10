@@ -7,8 +7,8 @@
 
 #include <bitsery/ext/inheritance.h>
 
-#include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
-#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
 #include "datastructures.hpp"
@@ -175,10 +175,10 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
 
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
-    // __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__ macro below)
-    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
+    // __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__ macro below)
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("NavigationInterpolatorLatLon", float_precision);
+        tools::classhelper::ObjectPrinter printer("NavigationInterpolatorLatLon", float_precision);
 
         printer.append(I_NavigationInterpolator::__printer__(float_precision));
 
@@ -213,7 +213,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     // define to_binary and from_binary functions (needs the serialize function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NavigationInterpolatorLatLon)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
+    __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace navigation

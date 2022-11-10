@@ -8,8 +8,8 @@
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 
-#include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
-#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -92,9 +92,9 @@ struct SensorData
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorData", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensorData", float_precision);
 
         printer.register_value("depth", depth, "positive downwards, m");
         printer.register_value("heave", heave, "positive upwards, m");
@@ -110,7 +110,7 @@ struct SensorData
     // define to_binary and from_binary functions (needs the serialization function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorData)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
+    __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace datastructures

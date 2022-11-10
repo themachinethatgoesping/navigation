@@ -8,8 +8,8 @@
 
 #include <GeographicLib/UTMUPS.hpp>
 
-#include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
-#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -186,9 +186,9 @@ struct SensorDataUTM : public SensorDataLocal
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("SensorDataUTM", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensorDataUTM", float_precision);
 
         auto base_printer = SensorDataLocal::__printer__(float_precision);
         base_printer.remove_sections();
@@ -204,7 +204,7 @@ struct SensorDataUTM : public SensorDataLocal
     // define to_binary and from_binary functions (needs the serialization function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataUTM)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
+    __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 // backwards conversion

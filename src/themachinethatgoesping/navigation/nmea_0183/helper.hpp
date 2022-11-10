@@ -8,7 +8,7 @@
 #include <charconv>
 #include <string>
 
-#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/timeconv.hpp>
 

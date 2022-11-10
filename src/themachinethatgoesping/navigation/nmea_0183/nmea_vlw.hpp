@@ -8,7 +8,7 @@
 #include <charconv>
 #include <string>
 
-#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
 #include "nmea_base.hpp"
 
@@ -66,9 +66,9 @@ class NMEA_VLW : public NMEA_Base
     }
 
     // ----- objectprinter -----
-    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("NMEA VLW Datagram", float_precision);
+        tools::classhelper::ObjectPrinter printer("NMEA VLW Datagram", float_precision);
 
         printer.append(NMEA_Base::__printer__(float_precision));
 
@@ -87,7 +87,7 @@ class NMEA_VLW : public NMEA_Base
     }
 
     // ----- class helper macros -----
-    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
+    __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__
     __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NMEA_VLW)
 };
 

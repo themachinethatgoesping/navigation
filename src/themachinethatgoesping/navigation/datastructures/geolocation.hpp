@@ -8,8 +8,8 @@
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 
-#include <themachinethatgoesping/tools/classhelpers/bitsery.hpp>
-#include <themachinethatgoesping/tools/classhelpers/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -91,9 +91,9 @@ struct GeoLocation
     }
 
   public:
-    tools::classhelpers::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelpers::ObjectPrinter printer("GeoLocation", float_precision);
+        tools::classhelper::ObjectPrinter printer("GeoLocation", float_precision);
 
         printer.register_value("z", z, "positive downwards, m");
         printer.register_value("yaw", yaw, "90 ° at east");
@@ -108,7 +108,7 @@ struct GeoLocation
     // define to_binary and from_binary functions (needs the serialize function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocation)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASSHELPERS_DEFAULT_PRINTING_FUNCTIONS__
+    __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace datastructures
