@@ -217,7 +217,7 @@ class I_NavigationInterpolator
 
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
-    // __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__ macro below)
+    // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
         tools::classhelper::ObjectPrinter printer("I_NavigationInterpolator", float_precision);
@@ -262,7 +262,7 @@ class I_NavigationInterpolator
     // define to_binary and from_binary functions (needs the serialize function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(I_NavigationInterpolator)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__
+    __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace navigation

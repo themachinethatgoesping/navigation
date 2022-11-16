@@ -143,7 +143,7 @@ struct GeoLocationLatLon : public GeoLocation
     // define to_binary and from_binary functions (needs the serialize function)
     __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationLatLon)
     // define info_string and print functions (needs the __printer__ function)
-    __CLASShelper_DEFAULT_PRINTING_FUNCTIONS__
+    __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
 } // namespace datastructures
