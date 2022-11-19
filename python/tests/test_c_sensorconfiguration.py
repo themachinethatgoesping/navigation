@@ -67,3 +67,10 @@ class TestNavigationSensorConfiguration:
 
         # more
         assert scs.get_target_ids() == ["mbes"]
+
+        # remove target
+        assert scs.get_target_ids() == ["mbes"]
+        assert scs.without_targets().get_target_ids() == []
+
+        scs.remove_target("mbes")
+        assert scs.get_target_ids() == []

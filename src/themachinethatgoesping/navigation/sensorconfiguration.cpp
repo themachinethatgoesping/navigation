@@ -126,6 +126,22 @@ const datastructures::PositionalOffsets& SensorConfiguration::get_target(
     return _target_offsets.at(target_id); // throws std::out_of_range if not found
 }
 
+const std::unordered_map<std::string, datastructures::PositionalOffsets>&
+SensorConfiguration::get_targets() const
+{
+    return _target_offsets;
+}
+
+void SensorConfiguration::remove_target(const std::string& target_id)
+{
+    _target_offsets.erase(target_id);
+}
+
+void SensorConfiguration::remove_targets()
+{
+    _target_offsets.clear();
+}
+
 void SensorConfiguration::add_target(const std::string&                       target_id,
                                      const datastructures::PositionalOffsets& target_offsets)
 {

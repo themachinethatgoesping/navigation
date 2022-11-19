@@ -58,6 +58,18 @@ class SensorConfiguration
      */
     SensorConfiguration() = default;
 
+    /**
+     * @brief Return the SensorConfiguration object without registered targets
+     * 
+     * @return SensorConfiguration 
+     */
+    SensorConfiguration without_targets() const
+    {
+        SensorConfiguration result(*this);
+        result.remove_targets();
+        return result;
+    }
+
     // ----- compute_target_position -----
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -148,6 +160,26 @@ class SensorConfiguration
      * @return const datastructures::PositionalOffsets& offsets of the target
      */
     const datastructures::PositionalOffsets& get_target(const std::string& target_id) const;
+
+    /**
+     * @brief Get the map of stored target offsets objects
+     * 
+     * @return const std::unordered_map<std::string, datastructures::PositionalOffsets>& 
+     */
+    const std::unordered_map<std::string, datastructures::PositionalOffsets>& get_targets() const;
+
+    /**
+     * @brief Remove the target with the specified target_id
+     * 
+     * @param target_id name of the registered target
+     */
+    void remove_target(const std::string& target_id);
+
+    /**
+     * @brief Remove all stored targets
+     * 
+     */
+    void remove_targets();
 
     // ----- get/set sensor offsets -----
     /**

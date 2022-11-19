@@ -553,6 +553,13 @@ R"doc(Get the ids of the registered targets
 Returns:
     std::vector<std::string_view>)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_targets =
+R"doc(Get the map of stored target offsets objects
+
+Returns:
+    const std::unordered_map<std::string,
+    datastructures::PositionalOffsets>&)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_offsets_attitude_source =
 R"doc(< Static Roll,Pitch,Yaw (installation) offsets of the attitude <
 sensor)doc";
@@ -568,6 +575,14 @@ static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_o
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_operator_ne = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_printer = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_remove_target =
+R"doc(Remove the target with the specified target_id
+
+Parameter ``target_id``:
+    name of the registered target)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_remove_targets = R"doc(Remove all stored targets)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_serialize = R"doc()doc";
 
@@ -642,6 +657,12 @@ Parameter ``sensor_offsets``:
     offsets structure (only x, y and z are used))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_target_offsets = R"doc(< TargetId (position in vector) for each registered target_id)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_without_targets =
+R"doc(Return the SensorConfiguration object without registered targets
+
+Returns:
+    SensorConfiguration)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
