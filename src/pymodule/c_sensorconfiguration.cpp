@@ -25,6 +25,10 @@ void init_c_sensorconfiguration(py::module& m)
         .def("without_targets",
              &SensorConfiguration::without_targets,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, without_targets))
+        .def("can_merge_targets_with",
+             &SensorConfiguration::can_merge_targets_with,
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, can_merge_targets_with),
+             py::arg("other"))
         .def("compute_target_position",
              py::overload_cast<const std::string&, const datastructures::SensorDataLatLon&>(
                  &SensorConfiguration::compute_target_position, py::const_),
@@ -69,6 +73,10 @@ void init_c_sensorconfiguration(py::module& m)
              DOC(themachinethatgoesping, navigation, SensorConfiguration, add_target_2),
              py::arg("target_id"),
              py::arg("target_offsets"))
+        .def("add_targets",
+             &SensorConfiguration::add_targets,
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, add_targets),
+             py::arg("targets"))
         .def("get_target",
              &SensorConfiguration::get_target,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, get_target),

@@ -70,6 +70,23 @@ class SensorConfiguration
         return result;
     }
 
+    /** 
+     * @brief Check if the given SensorConfiguration includes a target (offsets) that is incompatible with the given SensorConfiguration targets
+     * 
+     * @return false if the same target_id is registered with different offsets, true otherwise
+    */
+    bool can_merge_targets_with(const SensorConfiguration& other) const
+    {
+        for (const auto& [target_id, offsets] : _target_offsets) {
+            if (other._target_offsets.find(target_id) != other._target_offsets.end()) {
+                if (offsets != other._target_offsets.at(target_id)) 
+                    return false;                
+            }
+        }
+
+        return true;
+    }
+
     // ----- compute_target_position -----
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
@@ -152,6 +169,13 @@ class SensorConfiguration
      */
     void add_target(const std::string&                       target_id,
                     const datastructures::PositionalOffsets& target_offsets);
+                    
+    /**
+     * @brief add targets (e.g. MBES) with given target_ids and offsets to the sensor position system
+     *
+     * @param targets map<target_id, target_offsets> of target offsets
+     */
+    void add_targets(const std::unordered_map<std::string, datastructures::PositionalOffsets>& targets);
 
     /**
      * @brief Get stored target offsets of a specified target

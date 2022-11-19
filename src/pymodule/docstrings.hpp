@@ -428,6 +428,21 @@ Parameter ``target_id``:
 Parameter ``target_offsets``:
     mounting offsets of the target)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_add_targets =
+R"doc(add targets (e.g. MBES) with given target_ids and offsets to the
+sensor position system
+
+Parameter ``targets``:
+    map<target_id, target_offsets> of target offsets)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_can_merge_targets_with =
+R"doc(Check if the given SensorConfiguration includes a target (offsets)
+that is incompatible with the given SensorConfiguration targets
+
+Returns:
+    false if the same target_id is registered with different offsets,
+    true otherwise)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor
 data "sensor_data"
