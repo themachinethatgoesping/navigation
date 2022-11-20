@@ -159,8 +159,8 @@ void SensorConfiguration::add_target(const std::string& target_id,
     add_target(target_id, datastructures::PositionalOffsets(target_id, x, y, z, yaw, pitch, roll));
 }
 
-
-void SensorConfiguration::add_targets(const std::unordered_map<std::string, datastructures::PositionalOffsets>& targets)
+void SensorConfiguration::add_targets(
+    const std::unordered_map<std::string, datastructures::PositionalOffsets>& targets)
 {
     for (const auto& target : targets)
         add_target(target.first, target.second);
