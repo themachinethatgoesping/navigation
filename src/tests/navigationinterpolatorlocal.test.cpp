@@ -45,7 +45,9 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
     REQUIRE(navint != navint2);
     navint2.add_target("sbes", targetOffsets);
     REQUIRE(navint == navint2);
-    navint.sensor_configuration().set_position_source("gps", 11, 20, 30);
+    auto sc = navint.get_sensor_configuration();
+    sc.set_position_source("gps", 11, 20, 30);
+    navint.set_sensor_configuration(sc);
     REQUIRE(navint != navint2);
 
     // string conversion

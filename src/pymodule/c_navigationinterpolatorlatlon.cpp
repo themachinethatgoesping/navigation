@@ -61,13 +61,19 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
              py::overload_cast<double>(&NavigationInterpolatorLatLon::get_sensor_data),
              DOC(themachinethatgoesping, navigation, NavigationInterpolatorLatLon, get_sensor_data),
              py::arg("timestamp"))
-        .def_property(
-            "sensor_configuration",
-            &NavigationInterpolatorLatLon::sensor_configuration,
-            [](NavigationInterpolatorLatLon& self, const SensorConfiguration& arg) {
-                self.sensor_configuration() = arg;
-            },
-            DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, sensor_configuration))
+        .def("get_sensor_configuration",
+             &NavigationInterpolatorLatLon::get_sensor_configuration,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 I_NavigationInterpolator,
+                 get_sensor_configuration))
+        .def("set_sensor_configuration",
+             &NavigationInterpolatorLatLon::set_sensor_configuration,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 I_NavigationInterpolator,
+                 set_sensor_configuration),
+             py::arg("sensor_configuration"))
         .def("add_target",
              py::overload_cast<const std::string&, double, double, double, double, double, double>(
                  &NavigationInterpolatorLatLon::add_target),

@@ -213,7 +213,11 @@ class I_NavigationInterpolator
      *
      * @return SensorConfiguration&
      */
-    SensorConfiguration& sensor_configuration() { return _sensor_configuration; }
+    const SensorConfiguration& get_sensor_configuration() { return _sensor_configuration; }
+    void                       set_sensor_configuration(SensorConfiguration sensor_configuration)
+    {
+        _sensor_configuration = std::move(sensor_configuration);
+    }
 
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by

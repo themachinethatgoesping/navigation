@@ -35,7 +35,9 @@ class TestNavigationNavigationInterpolatorLocal:
         navi = nav.NavigationInterpolatorLocal(scs, "extrapolate")
 
         # change some offsets
-        navi.sensor_configuration.set_position_source("sensor", 10, 0, 0)
+        sc = navi.get_sensor_configuration()
+        sc.set_position_source("sensor", 10, 0, 0)
+        navi.set_sensor_configuration(sc)
 
         # add some data
         navi.set_data_position([1, 2, 3, 4], [10, 20, 10, 20], [-10, 1, 2, -4])
@@ -65,7 +67,9 @@ class TestNavigationNavigationInterpolatorLocal:
         # copy
         navi2 = navi.copy()
         assert navi2 == navi
-        navi.sensor_configuration.set_heading_source("sensor", yaw=12)
+        sc = navi.get_sensor_configuration()
+        sc.set_heading_source("sensor", yaw=12)
+        navi.set_sensor_configuration(sc)
         assert navi2 != navi
 
         assert navi == nav.NavigationInterpolatorLocal.from_binary(navi.to_binary())
