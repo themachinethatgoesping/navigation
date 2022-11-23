@@ -39,7 +39,8 @@ class I_NavigationInterpolator
     tools::vectorinterpolators::AkimaInterpolator
         _interpolator_heave; ///< interpolator that stores heave data (relative change in depth,
                              ///< positive upwards) [m]
-    tools::vectorinterpolators::AkimaInterpolator
+    // tools::vectorinterpolators::AkimaInterpolator // bad results for noisy data
+    tools::vectorinterpolators::LinearInterpolator
         _interpolator_depth; ///< interpolator that stores depth data (depth, positive downwards)
                              ///< [m]
 
@@ -173,7 +174,7 @@ class I_NavigationInterpolator
      *
      * @return interpolator_depth&
      */
-    tools::vectorinterpolators::AkimaInterpolator& interpolator_depth()
+    tools::vectorinterpolators::LinearInterpolator& interpolator_depth()
     {
         return _interpolator_depth;
     }

@@ -61,13 +61,8 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
 
     // compute a target position
     datastructures::GeoLocationLocal expected_position(
-        //-16.9134943, -23.5392578, -7.3232973266, 11.0909090909, 0.7830655476, -6.1148918992);
-        -16.9132381,
-        -23.5388528,
-        -7.3232528,
-        11.0909091,
-        0.7822953,
-        -6.1140918);
+        -16.9132381, -23.5388528, -6.6602486, 11.0909091, 0.7822953, -6.1140918);
+
     auto target_position_mbes = navint.compute_target_position("mbes", 1.1);
     auto target_position_sbes = navint.compute_target_position("sbes", 1.1);
 

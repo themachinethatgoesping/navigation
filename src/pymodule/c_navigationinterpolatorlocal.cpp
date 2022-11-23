@@ -172,7 +172,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             "interpolator_depth",
             &NavigationInterpolatorLocal::interpolator_depth,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator&
                    interpolator) { self.interpolator_depth() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_depth))
         .def_property(
