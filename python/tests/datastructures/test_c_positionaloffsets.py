@@ -7,6 +7,8 @@ from themachinethatgoesping.navigation.datastructures import PositionalOffsets
 # import pytest
 
 # define class for grouping (test sections)
+
+
 class Test_navigation_PositionalOffsets:
     # define actual tests (must start with "test_"
     # test case 1

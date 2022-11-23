@@ -22,7 +22,11 @@ namespace navigation {
  */
 class I_NavigationInterpolator
 {
+    std::string_view _name;
+
   protected:
+    std::string_view get_name() const { return _name; }
+
     SensorConfiguration _sensor_configuration; ///< sensor configuration that stores the offsets
 
     // SlerpInterpolator that stores timestamp, roll, pitch, yaw -> Attitude of Vessel on the Water
@@ -47,13 +51,45 @@ class I_NavigationInterpolator
      */
     I_NavigationInterpolator(const SensorConfiguration&              sensor_configuration,
                              tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                 tools::vectorinterpolators::t_extr_mode::extrapolate)
-        : _sensor_configuration(sensor_configuration)
+                                 tools::vectorinterpolators::t_extr_mode::extrapolate,
+                             std::string_view name = "I_NavigationInterpolator")
+        : _name(name)
+        , _sensor_configuration(sensor_configuration)
     {
         set_extrapolation_mode(extrapolation_mode);
     }
 
     virtual ~I_NavigationInterpolator() = default;
+
+    // ----- merge data from another interpolator
+    /**
+     * @brief Merge data from another interpolator. Only works of the SensorConfiguration is
+     * compatible.
+     *
+     * @param other
+     */
+    void merge(const I_NavigationInterpolator& other)
+    {
+        // check if sensor configuration can be merged
+        if (!_sensor_configuration.can_merge_targets_with(other.get_sensor_configuration()))
+        {
+            throw std::runtime_error(
+                fmt::format("ERROR[{}]: Incompatible sensor configurations!", this->get_name()));
+        }
+
+        // merge sensor configuration by adding targets
+        _sensor_configuration.add_targets(other.get_sensor_configuration().get_targets());
+
+        // merge data
+        _interpolator_attitude.insert(other._interpolator_attitude.get_data_X(),
+                                      other._interpolator_attitude.get_data_Y());
+        _interpolator_heading.insert(other._interpolator_heading.get_data_X(),
+                                     other._interpolator_heading.get_data_Y());
+        _interpolator_heave.insert(other._interpolator_heave.get_data_X(),
+                                   other._interpolator_heave.get_data_Y());
+        _interpolator_depth.insert(other._interpolator_depth.get_data_X(),
+                                   other._interpolator_depth.get_data_Y());
+    }
 
     // ----- set extrapolation mode -----
     /**
@@ -213,7 +249,7 @@ class I_NavigationInterpolator
      *
      * @return SensorConfiguration&
      */
-    const SensorConfiguration& get_sensor_configuration() { return _sensor_configuration; }
+    const SensorConfiguration& get_sensor_configuration() const { return _sensor_configuration; }
     void                       set_sensor_configuration(SensorConfiguration sensor_configuration)
     {
         _sensor_configuration = std::move(sensor_configuration);
@@ -224,7 +260,7 @@ class I_NavigationInterpolator
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("I_NavigationInterpolator", float_precision);
+        tools::classhelper::ObjectPrinter printer(this->get_name(), float_precision);
 
         printer.register_section("Sensor offset configuration", '*');
         printer.append(_sensor_configuration.__printer__(float_precision));

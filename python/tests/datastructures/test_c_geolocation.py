@@ -5,6 +5,8 @@
 from themachinethatgoesping.navigation.datastructures import GeoLocation
 
 # define class for grouping (test sections)
+
+
 class Test_navigation_GeoLocation:
     # define actual tests (must start with "test_"
     # test case 1

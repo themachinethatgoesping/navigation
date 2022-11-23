@@ -78,6 +78,13 @@ class SensorConfiguration
      */
     bool can_merge_targets_with(const SensorConfiguration& other) const
     {
+        /* compare sensor operations, without targets */
+        if (this->without_targets() != other.without_targets())
+        {
+            return false;
+        }
+
+        /* check for incompatible targets */
         for (const auto& [target_id, offsets] : _target_offsets)
         {
             if (other._target_offsets.find(target_id) != other._target_offsets.end())
@@ -360,8 +367,19 @@ class SensorConfiguration
     }
 
   public:
+    /**
+     * @brief Compare two SensorConfiguration objects for equality
+     *
+     * @param other SensorConfiguration object to compare to
+     * @return true
+     * @return false
+     */
     bool operator==(const SensorConfiguration& other) const
     {
+        if (_target_offsets.size() != other._target_offsets.size())
+        {
+            return false;
+        }
 
         for (const auto& [target_id, target_offsets] : _target_offsets)
         {
@@ -380,6 +398,13 @@ class SensorConfiguration
                _offsets_position_source == other._offsets_position_source &&
                _offsets_depth_source == other._offsets_depth_source;
     }
+    /**
+     * @brief Compare two SensorConfiguration objects for inequality
+     *
+     * @param other SensorConfiguration object to compare to
+     * @return true
+     * @return false
+     */
     bool operator!=(const SensorConfiguration& other) const { return !(*this == other); }
 
     // __printer__ function is necessary to support print() info_string() etc (defined by

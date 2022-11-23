@@ -194,6 +194,10 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
                const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator&
                    interpolator) { self.interpolator_heading() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heading))
+        .def("merge",
+             &NavigationInterpolatorLatLon::merge,
+             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, merge),
+             py::arg("other"))
 
         .def("__eq__",
              &NavigationInterpolatorLatLon::operator==,

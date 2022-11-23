@@ -56,7 +56,9 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     NavigationInterpolatorLocal(const SensorConfiguration&              sensor_configuration,
                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
-        : I_NavigationInterpolator(sensor_configuration)
+        : I_NavigationInterpolator(sensor_configuration,
+                                   extrapolation_mode,
+                                   "NavigationInterpolatorLocal")
     {
         set_extrapolation_mode(extrapolation_mode);
     }
@@ -149,6 +151,20 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     {
         return _interpolator_easting;
     }
+    //----- merge interpolators -----
+    /**
+     * @brief see documentation of I_NavigationInterpolator::merge
+     */
+    void merge(const NavigationInterpolatorLocal& other)
+    {
+        I_NavigationInterpolator::merge(other);
+
+        // merge data
+        _interpolator_northing.insert(other._interpolator_northing.get_data_X(),
+                                      other._interpolator_northing.get_data_Y());
+        _interpolator_easting.insert(other._interpolator_easting.get_data_X(),
+                                     other._interpolator_easting.get_data_Y());
+    }
 
     //----- compute the position of the target sensors -----
     /**
@@ -205,7 +221,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("NavigationInterpolatorLocal", float_precision);
+        tools::classhelper::ObjectPrinter printer(this->get_name(), float_precision);
 
         printer.append(I_NavigationInterpolator::__printer__(float_precision));
 

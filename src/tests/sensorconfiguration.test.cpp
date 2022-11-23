@@ -39,7 +39,7 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     REQUIRE(scs != scs2);
 
     // string conversion
-    scs.print(std::cerr);
+    // scs.print(std::cerr);
     REQUIRE(scs.info_string().size() > 0);
 
     // serialization
@@ -95,6 +95,44 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
         REQUIRE(position.yaw == Catch::Approx(90));
         CHECK(position.pitch == Catch::Approx(-0.9902670948));
         REQUIRE(position.roll == Catch::Approx(8.001202844));
+    }
+}
+
+TEST_CASE("sensorconfiguration merging operations", TESTTAG)
+{
+    // initialize offsets
+    SensorConfiguration               scs;
+    datastructures::PositionalOffsets targetOffsets1("sensor1", 1, 2, 3, 0, 0, 0);
+    datastructures::PositionalOffsets targetOffsets2("sensor2", 1, 2, 3, 45, 5, 10);
+
+    scs.set_attitude_source(targetOffsets1);
+    scs.add_target("mbes", targetOffsets1);
+    scs.add_target("sbes", targetOffsets2);
+
+    SECTION("Correctly determine if sensor configurations can be merges")
+    {
+        auto scs2 = scs;
+        REQUIRE(scs.can_merge_targets_with(scs2));
+
+        // should still be mergeable if an additional target is present
+        scs2.add_target("sbes2", targetOffsets2);
+        REQUIRE(scs != scs2);
+        REQUIRE(scs.can_merge_targets_with(scs2));
+
+        // should be mergeable if a target is missing
+        scs2.remove_target("sbes");
+        REQUIRE(scs != scs2);
+        REQUIRE(scs.can_merge_targets_with(scs2));
+
+        // should not be mergeable if a duplicate target with different offsets is present
+        scs2.add_target("sbes", targetOffsets1);
+        REQUIRE(scs.can_merge_targets_with(scs2) == false);
+
+        // should not be mergeable if the sensor offsets are not same
+        scs2 = scs;
+        REQUIRE(scs.can_merge_targets_with(scs2));
+        scs.set_depth_source(targetOffsets1);
+        REQUIRE(scs.can_merge_targets_with(scs2) == false);
     }
 }
 
