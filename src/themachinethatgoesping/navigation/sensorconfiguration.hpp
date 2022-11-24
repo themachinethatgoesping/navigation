@@ -78,12 +78,6 @@ class SensorConfiguration
      */
     bool can_merge_targets_with(const SensorConfiguration& other) const
     {
-        /* compare sensor operations, without targets */
-        if (this->without_targets() != other.without_targets())
-        {
-            return false;
-        }
-
         /* check for incompatible targets */
         for (const auto& [target_id, offsets] : _target_offsets)
         {

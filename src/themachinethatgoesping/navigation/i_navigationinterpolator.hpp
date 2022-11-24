@@ -71,11 +71,19 @@ class I_NavigationInterpolator
      */
     void merge(const I_NavigationInterpolator& other)
     {
+        
+        /* compare sensor operations, without targets */
+        if (this->_sensor_configuration != other._sensor_configuration)
+        {
+            throw std::runtime_error(
+                fmt::format("ERROR[{}]: Incompatible sensor configurations!", this->get_name()));
+        }
+
         // check if sensor configuration can be merged
         if (!_sensor_configuration.can_merge_targets_with(other.get_sensor_configuration()))
         {
             throw std::runtime_error(
-                fmt::format("ERROR[{}]: Incompatible sensor configurations!", this->get_name()));
+                fmt::format("ERROR[{}]: Incompatible target offsets!", this->get_name()));
         }
 
         // merge sensor configuration by adding targets

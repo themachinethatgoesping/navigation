@@ -129,10 +129,11 @@ TEST_CASE("sensorconfiguration merging operations", TESTTAG)
         REQUIRE(scs.can_merge_targets_with(scs2) == false);
 
         // should not be mergeable if the sensor offsets are not same
-        scs2 = scs;
-        REQUIRE(scs.can_merge_targets_with(scs2));
-        scs.set_depth_source(targetOffsets1);
-        REQUIRE(scs.can_merge_targets_with(scs2) == false);
+        // this check is not part of can_merge_targets_with anymore
+        // scs2 = scs;
+        // REQUIRE(scs.can_merge_targets_with(scs2));
+        // scs.set_depth_source(targetOffsets1);
+        // REQUIRE(scs.can_merge_targets_with(scs2) == false);
     }
 }
 
