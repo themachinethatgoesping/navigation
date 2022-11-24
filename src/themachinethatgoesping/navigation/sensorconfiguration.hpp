@@ -56,7 +56,13 @@ class SensorConfiguration
      * Then compute target positions for sensor data
      *
      */
-    SensorConfiguration() = default;
+    SensorConfiguration(std::string_view default_sensor_name = "default")
+    {
+        _offsets_attitude_source.set_name(default_sensor_name);
+        _offsets_heading_source.set_name(default_sensor_name);
+        _offsets_position_source.set_name(default_sensor_name);
+        _offsets_depth_source.set_name(default_sensor_name);
+    }
 
     /**
      * @brief Return the SensorConfiguration object without registered targets
