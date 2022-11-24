@@ -20,8 +20,9 @@ void init_c_sensorconfiguration(py::module& m)
 {
     py::class_<SensorConfiguration>(
         m, "SensorConfiguration", DOC(themachinethatgoesping, navigation, SensorConfiguration))
-        .def(py::init<>(),
-             DOC(themachinethatgoesping, navigation, SensorConfiguration, SensorConfiguration))
+        .def(py::init<std::string_view>(),
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, SensorConfiguration),
+             py::arg("default_sensor_name") = "zero-referenced")
         .def("without_targets",
              &SensorConfiguration::without_targets,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, without_targets))
