@@ -73,7 +73,7 @@ class I_NavigationInterpolator
     {
         
         /* compare sensor operations, without targets */
-        if (this->_sensor_configuration != other._sensor_configuration)
+        if (this->_sensor_configuration.without_targets() != other._sensor_configuration.without_targets())
         {
             throw std::runtime_error(
                 fmt::format("ERROR[{}]: Incompatible sensor configurations!", this->get_name()));
