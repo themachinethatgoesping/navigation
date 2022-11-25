@@ -5,9 +5,7 @@
 
 #pragma once
 
-#include <bitsery/ext/inheritance.h>
-
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
@@ -47,22 +45,36 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
         _interpolator_longitude.set_extrapolation_mode(extrapolation_mode);
     }
 
+
   public:
     /**
      * @brief Construct a new i navigationinterpolator interface
      *
+     * @param sensor_configuration sensor configuration used for this navigation interpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
 
-    NavigationInterpolatorLatLon(const SensorConfiguration&              sensor_configuration,
+    NavigationInterpolatorLatLon(SensorConfiguration              sensor_configuration,
                                  tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                      tools::vectorinterpolators::t_extr_mode::extrapolate)
-        : I_NavigationInterpolator(sensor_configuration,
+        : I_NavigationInterpolator(std::move(sensor_configuration),
                                    extrapolation_mode,
                                    "NavigationInterpolatorLatLon")
     {
         set_extrapolation_mode(extrapolation_mode);
     }
+
+    /**
+     * @brief Construct a new Navigation Interpolator Lat Lon object from a base Interpolator
+     * 
+     * @param base Base I_NavigationInterpolator object
+     */
+    explicit NavigationInterpolatorLatLon(I_NavigationInterpolator base)
+        : I_NavigationInterpolator(std::move(base))
+    {
+        set_extrapolation_mode(base.interpolator_depth().get_extrapolation_mode());
+    }
+    
     virtual ~NavigationInterpolatorLatLon() = default;
 
     //----- operators -----
@@ -208,27 +220,29 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
         return printer;
     }
 
-  private:
-    // serialization support using bitsery
-    friend class bitsery::Access;
-
-    NavigationInterpolatorLatLon() = default; // bitsery needs a default constructor
-
-    template<typename S>
-    void serialize(S& s)
+    // ----- file I/O -----
+    static NavigationInterpolatorLatLon from_stream(std::istream& is)
     {
-        // serialize base class
-        s.ext(*this, bitsery::ext::BaseClass<I_NavigationInterpolator>{});
+        NavigationInterpolatorLatLon interpolator(I_NavigationInterpolator::from_stream(is));
 
-        // data
-        s.object(_interpolator_latitude);
-        s.object(_interpolator_longitude);
+        interpolator._interpolator_latitude = interpolator._interpolator_latitude.from_stream(is);
+        interpolator._interpolator_longitude = interpolator._interpolator_longitude.from_stream(is);
+
+        return interpolator;
+    }
+
+    void to_stream(std::ostream& os) const
+    {        
+        I_NavigationInterpolator::to_stream(os);
+
+        _interpolator_latitude.to_stream(os);
+        _interpolator_longitude.to_stream(os);
     }
 
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NavigationInterpolatorLatLon)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NavigationInterpolatorLatLon)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

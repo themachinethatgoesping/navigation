@@ -5,9 +5,7 @@
 
 #pragma once
 
-#include <bitsery/ext/inheritance.h>
-
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
@@ -53,15 +51,27 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      *
      * @param extrapolation_mode extrapolate, fail or nearest
      */
-    NavigationInterpolatorLocal(const SensorConfiguration&              sensor_configuration,
+    NavigationInterpolatorLocal(SensorConfiguration              sensor_configuration,
                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
-        : I_NavigationInterpolator(sensor_configuration,
+        : I_NavigationInterpolator(std::move(sensor_configuration),
                                    extrapolation_mode,
                                    "NavigationInterpolatorLocal")
     {
         set_extrapolation_mode(extrapolation_mode);
     }
+    
+    /**
+     * @brief Construct a new Navigation Interpolator Lat Lon object from a base Interpolator
+     * 
+     * @param base Base I_NavigationInterpolator object
+     */
+    explicit NavigationInterpolatorLocal(I_NavigationInterpolator base)
+        : I_NavigationInterpolator(std::move(base))
+    {
+        set_extrapolation_mode(base.interpolator_depth().get_extrapolation_mode());
+    }
+
     virtual ~NavigationInterpolatorLocal() = default;
 
     //----- operators -----
@@ -234,27 +244,29 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
         return printer;
     }
 
-  private:
-    // serialization support using bitsery
-    friend class bitsery::Access;
-
-    NavigationInterpolatorLocal() = default; // bitsery needs a default constructor
-
-    template<typename S>
-    void serialize(S& s)
+       // ----- file I/O -----
+    static NavigationInterpolatorLocal from_stream(std::istream& is)
     {
-        // data
-        s.object(_interpolator_northing);
-        s.object(_interpolator_easting);
+        NavigationInterpolatorLocal interpolator(I_NavigationInterpolator::from_stream(is));
 
-        // serialize base class
-        s.ext(*this, bitsery::ext::BaseClass<I_NavigationInterpolator>{});
+        interpolator._interpolator_northing = interpolator._interpolator_northing.from_stream(is);
+        interpolator._interpolator_easting = interpolator._interpolator_easting.from_stream(is);
+
+        return interpolator;
+    }
+
+    void to_stream(std::ostream& os) const
+    {        
+        I_NavigationInterpolator::to_stream(os);
+
+        _interpolator_northing.to_stream(os);
+        _interpolator_easting.to_stream(os);
     }
 
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NavigationInterpolatorLocal)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NavigationInterpolatorLocal)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

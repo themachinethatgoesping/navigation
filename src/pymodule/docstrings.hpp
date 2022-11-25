@@ -39,8 +39,6 @@ R"doc(Construct a new i navigationinterpolator interface
 Parameter ``extrapolation_mode``:
     extrapolate, fail or nearest)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_I_NavigationInterpolator_2 = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_add_target =
 R"doc(add a target sensor with positional offsets
 
@@ -73,6 +71,8 @@ Parameter ``target_id``:
 
 Parameter ``sensor_offsets``:
     structure that contains the sensor position)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_from_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_get_name = R"doc()doc";
 
@@ -134,8 +134,6 @@ static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpola
 
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_sensor_configuration = R"doc(< sensor configuration that stores the offsets)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_serialize = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_attitude =
 R"doc(Set the attitude data (no yaw, ythis is set in set_data_heading)
 
@@ -184,6 +182,8 @@ Parameter ``extrapolation_mode``:
 
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_sensor_configuration = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_to_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon =
 R"doc(The NavInterpolator class: Interpolate navigation (lat/lon) values and
 attitude information and transform the values using the offsets
@@ -192,10 +192,18 @@ specified in the sensor configuration class)doc";
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_NavigationInterpolatorLatLon =
 R"doc(Construct a new i navigationinterpolator interface
 
+Parameter ``sensor_configuration``:
+    sensor configuration used for this navigation interpolator
+
 Parameter ``extrapolation_mode``:
     extrapolate, fail or nearest)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_NavigationInterpolatorLatLon_2 = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_NavigationInterpolatorLatLon_2 =
+R"doc(Construct a new Navigation Interpolator Lat Lon object from a base
+Interpolator
+
+Parameter ``base``:
+    Base I_NavigationInterpolator object)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor
@@ -210,6 +218,8 @@ Parameter ``timestamp``:
 Returns:
     data structure that contains the position of the target in the
     world coordinate system)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_from_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_get_sensor_data =
 R"doc(Interpolate the saved sensor data for a specified timestamp stamp
@@ -259,8 +269,6 @@ static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolato
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_serialize = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_set_data_position =
 R"doc(Set the data of the position system (latitude, longitude)
 
@@ -279,6 +287,8 @@ R"doc(Set the extrapolation mode for all interpolators
 Parameter ``extrapolation_mode``:
     extrapolate, fail or nearest)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_to_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal =
 R"doc(The NavInterpolator class: Interpolate navigation (northing/easting no
 zone specified) values and attitude information and transform the
@@ -290,7 +300,12 @@ R"doc(Construct a new i navigationinterpolator interface
 Parameter ``extrapolation_mode``:
     extrapolate, fail or nearest)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_NavigationInterpolatorLocal_2 = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_NavigationInterpolatorLocal_2 =
+R"doc(Construct a new Navigation Interpolator Lat Lon object from a base
+Interpolator
+
+Parameter ``base``:
+    Base I_NavigationInterpolator object)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor
@@ -305,6 +320,8 @@ Parameter ``timestamp``:
 Returns:
     data structure that contains the position of the target in the
     world coordinate system)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_from_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_get_sensor_data =
 R"doc(Interpolate the saved sensor data for a specified timestamp stamp
@@ -339,8 +356,6 @@ static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolato
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_operator_ne = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_set_data_position =
 R"doc(Set the data of the position system (northing, easting)
@@ -400,6 +415,8 @@ R"doc(Set the extrapolation mode for all interpolators
 
 Parameter ``extrapolation_mode``:
     extrapolate, fail or nearest)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_to_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration =
 R"doc(A coordinate system that allows for specifying sensor offsets (e.g.

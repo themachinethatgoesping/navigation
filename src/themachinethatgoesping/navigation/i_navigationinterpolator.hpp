@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
@@ -50,12 +50,12 @@ class I_NavigationInterpolator
      *
      * @param extrapolation_mode extrapolate, fail or nearest
      */
-    I_NavigationInterpolator(const SensorConfiguration&              sensor_configuration,
+    I_NavigationInterpolator(SensorConfiguration              sensor_configuration,
                              tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                  tools::vectorinterpolators::t_extr_mode::extrapolate,
                              std::string_view name = "I_NavigationInterpolator")
         : _name(name)
-        , _sensor_configuration(sensor_configuration)
+        , _sensor_configuration(std::move(sensor_configuration))
     {
         set_extrapolation_mode(extrapolation_mode);
     }
@@ -289,27 +289,32 @@ class I_NavigationInterpolator
         return printer;
     }
 
-  protected:
-    // serialization support using bitsery
-    friend class bitsery::Access;
-
-    I_NavigationInterpolator() = default; // bitsery needs a default constructor
-
-    template<typename S>
-    void serialize(S& s)
+    // ----- file I/O -----
+    static I_NavigationInterpolator from_stream(std::istream& is)
     {
-        // // data
-        s.object(_sensor_configuration);
-        s.object(_interpolator_attitude);
-        s.object(_interpolator_heading);
-        s.object(_interpolator_heave);
-        s.object(_interpolator_depth);
+        I_NavigationInterpolator interpolator(interpolator._sensor_configuration.from_stream(is));
+
+        interpolator._interpolator_attitude = interpolator._interpolator_attitude.from_stream(is);
+        interpolator._interpolator_heading = interpolator._interpolator_heading.from_stream(is);
+        interpolator._interpolator_heave = interpolator._interpolator_heave.from_stream(is);
+        interpolator._interpolator_depth = interpolator._interpolator_depth.from_stream(is);
+
+        return interpolator;
+    }
+
+    void to_stream(std::ostream& os) const
+    {        
+        _sensor_configuration.to_stream(os);
+        _interpolator_attitude.to_stream(os);
+        _interpolator_heading.to_stream(os);
+        _interpolator_heave.to_stream(os);
+        _interpolator_depth.to_stream(os);
     }
 
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(I_NavigationInterpolator)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(I_NavigationInterpolator)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
