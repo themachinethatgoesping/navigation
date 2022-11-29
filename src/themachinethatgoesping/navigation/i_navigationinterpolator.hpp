@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
 #include "datastructures.hpp"
@@ -50,7 +50,7 @@ class I_NavigationInterpolator
      *
      * @param extrapolation_mode extrapolate, fail or nearest
      */
-    I_NavigationInterpolator(SensorConfiguration              sensor_configuration,
+    I_NavigationInterpolator(SensorConfiguration                     sensor_configuration,
                              tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                  tools::vectorinterpolators::t_extr_mode::extrapolate,
                              std::string_view name = "I_NavigationInterpolator")
@@ -71,9 +71,10 @@ class I_NavigationInterpolator
      */
     void merge(const I_NavigationInterpolator& other)
     {
-        
+
         /* compare sensor operations, without targets */
-        if (this->_sensor_configuration.without_targets() != other._sensor_configuration.without_targets())
+        if (this->_sensor_configuration.without_targets() !=
+            other._sensor_configuration.without_targets())
         {
             throw std::runtime_error(
                 fmt::format("ERROR[{}]: Incompatible sensor configurations!", this->get_name()));
@@ -91,13 +92,15 @@ class I_NavigationInterpolator
 
         // merge data
         _interpolator_attitude.insert(other._interpolator_attitude.get_data_X(),
-                                      other._interpolator_attitude.get_data_Y());
+                                      other._interpolator_attitude.get_data_Y(),
+                                      true);
         _interpolator_heading.insert(other._interpolator_heading.get_data_X(),
-                                     other._interpolator_heading.get_data_Y());
-        _interpolator_heave.insert(other._interpolator_heave.get_data_X(),
-                                   other._interpolator_heave.get_data_Y());
-        _interpolator_depth.insert(other._interpolator_depth.get_data_X(),
-                                   other._interpolator_depth.get_data_Y());
+                                     other._interpolator_heading.get_data_Y(),
+                                     true);
+        _interpolator_heave.insert(
+            other._interpolator_heave.get_data_X(), other._interpolator_heave.get_data_Y(), true);
+        _interpolator_depth.insert(
+            other._interpolator_depth.get_data_X(), other._interpolator_depth.get_data_Y(), true);
     }
 
     // ----- set extrapolation mode -----
@@ -295,15 +298,15 @@ class I_NavigationInterpolator
         I_NavigationInterpolator interpolator(interpolator._sensor_configuration.from_stream(is));
 
         interpolator._interpolator_attitude = interpolator._interpolator_attitude.from_stream(is);
-        interpolator._interpolator_heading = interpolator._interpolator_heading.from_stream(is);
-        interpolator._interpolator_heave = interpolator._interpolator_heave.from_stream(is);
-        interpolator._interpolator_depth = interpolator._interpolator_depth.from_stream(is);
+        interpolator._interpolator_heading  = interpolator._interpolator_heading.from_stream(is);
+        interpolator._interpolator_heave    = interpolator._interpolator_heave.from_stream(is);
+        interpolator._interpolator_depth    = interpolator._interpolator_depth.from_stream(is);
 
         return interpolator;
     }
 
     void to_stream(std::ostream& os) const
-    {        
+    {
         _sensor_configuration.to_stream(os);
         _interpolator_attitude.to_stream(os);
         _interpolator_heading.to_stream(os);

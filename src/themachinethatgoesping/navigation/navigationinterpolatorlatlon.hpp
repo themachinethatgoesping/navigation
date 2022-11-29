@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
 #include "datastructures.hpp"
@@ -45,7 +45,6 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
         _interpolator_longitude.set_extrapolation_mode(extrapolation_mode);
     }
 
-
   public:
     /**
      * @brief Construct a new i navigationinterpolator interface
@@ -54,7 +53,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
 
-    NavigationInterpolatorLatLon(SensorConfiguration              sensor_configuration,
+    NavigationInterpolatorLatLon(SensorConfiguration                     sensor_configuration,
                                  tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                      tools::vectorinterpolators::t_extr_mode::extrapolate)
         : I_NavigationInterpolator(std::move(sensor_configuration),
@@ -66,7 +65,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
 
     /**
      * @brief Construct a new Navigation Interpolator Lat Lon object from a base Interpolator
-     * 
+     *
      * @param base Base I_NavigationInterpolator object
      */
     explicit NavigationInterpolatorLatLon(I_NavigationInterpolator base)
@@ -74,7 +73,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     {
         set_extrapolation_mode(base.interpolator_depth().get_extrapolation_mode());
     }
-    
+
     virtual ~NavigationInterpolatorLatLon() = default;
 
     //----- operators -----
@@ -133,9 +132,11 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
 
         // merge data
         _interpolator_latitude.insert(other._interpolator_latitude.get_data_X(),
-                                      other._interpolator_latitude.get_data_Y());
+                                      other._interpolator_latitude.get_data_Y(),
+                                      true);
         _interpolator_longitude.insert(other._interpolator_longitude.get_data_X(),
-                                       other._interpolator_longitude.get_data_Y());
+                                       other._interpolator_longitude.get_data_Y(),
+                                       true);
     }
 
     //----- compute the position of the target sensors -----
@@ -225,14 +226,14 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     {
         NavigationInterpolatorLatLon interpolator(I_NavigationInterpolator::from_stream(is));
 
-        interpolator._interpolator_latitude = interpolator._interpolator_latitude.from_stream(is);
+        interpolator._interpolator_latitude  = interpolator._interpolator_latitude.from_stream(is);
         interpolator._interpolator_longitude = interpolator._interpolator_longitude.from_stream(is);
 
         return interpolator;
     }
 
     void to_stream(std::ostream& os) const
-    {        
+    {
         I_NavigationInterpolator::to_stream(os);
 
         _interpolator_latitude.to_stream(os);

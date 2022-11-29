@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
 #include "datastructures.hpp"
@@ -51,7 +51,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      *
      * @param extrapolation_mode extrapolate, fail or nearest
      */
-    NavigationInterpolatorLocal(SensorConfiguration              sensor_configuration,
+    NavigationInterpolatorLocal(SensorConfiguration                     sensor_configuration,
                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
         : I_NavigationInterpolator(std::move(sensor_configuration),
@@ -60,10 +60,10 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     {
         set_extrapolation_mode(extrapolation_mode);
     }
-    
+
     /**
      * @brief Construct a new Navigation Interpolator Lat Lon object from a base Interpolator
-     * 
+     *
      * @param base Base I_NavigationInterpolator object
      */
     explicit NavigationInterpolatorLocal(I_NavigationInterpolator base)
@@ -171,9 +171,11 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
 
         // merge data
         _interpolator_northing.insert(other._interpolator_northing.get_data_X(),
-                                      other._interpolator_northing.get_data_Y());
+                                      other._interpolator_northing.get_data_Y(),
+                                      true);
         _interpolator_easting.insert(other._interpolator_easting.get_data_X(),
-                                     other._interpolator_easting.get_data_Y());
+                                     other._interpolator_easting.get_data_Y(),
+                                     true);
     }
 
     //----- compute the position of the target sensors -----
@@ -244,19 +246,19 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
         return printer;
     }
 
-       // ----- file I/O -----
+    // ----- file I/O -----
     static NavigationInterpolatorLocal from_stream(std::istream& is)
     {
         NavigationInterpolatorLocal interpolator(I_NavigationInterpolator::from_stream(is));
 
         interpolator._interpolator_northing = interpolator._interpolator_northing.from_stream(is);
-        interpolator._interpolator_easting = interpolator._interpolator_easting.from_stream(is);
+        interpolator._interpolator_easting  = interpolator._interpolator_easting.from_stream(is);
 
         return interpolator;
     }
 
     void to_stream(std::ostream& os) const
-    {        
+    {
         I_NavigationInterpolator::to_stream(os);
 
         _interpolator_northing.to_stream(os);
