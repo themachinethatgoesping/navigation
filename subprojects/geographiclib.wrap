@@ -4,10 +4,10 @@
 # SPDX-License-Identifier: MIT
 
 [wrap-file]
-directory = geographiclib-2.1
-source_url = https://github.com/geographiclib/geographiclib/archive/refs/tags/v2.1.tar.gz
-source_filename = geographiclib-2.1.tar.gz
-source_hash = 1fac4f8b722d9081b0a0ca491126a7379b0d8e88192dfe03a9fec3b9d2be324b
+directory = geographiclib-2.1.2
+source_url = https://github.com/geographiclib/geographiclib/archive/refs/tags/v2.1.2.tar.gz
+source_filename = geographiclib-2.1.2.tar.gz
+source_hash = 6833c4b33b2aa37b0c4c9fe1b36f958b44afafaafd1b16d7742d80c5e7737777
 patch_directory = geographiclib
 [provide]
 geographiclib = geographiclib_dep
