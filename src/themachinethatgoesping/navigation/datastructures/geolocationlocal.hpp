@@ -11,7 +11,7 @@
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
-//#include "geolocationutm.hpp"
+// #include "geolocationutm.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
