@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/nmea_0183.doc.hpp"
+
 #include <variant>
 
 #include <themachinethatgoesping/tools/helper.hpp>

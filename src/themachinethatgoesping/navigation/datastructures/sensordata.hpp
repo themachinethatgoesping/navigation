@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/sensordata.doc.hpp"
+
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>

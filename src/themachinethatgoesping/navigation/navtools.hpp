@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/navtools.doc.hpp"
+
 /**
  * @brief Some navigation helper functions that allow converting different lat/lon formats (decimal,
  * minute / decimal degrees etc) and utm coordinates to lat/lon decimal degrees and back

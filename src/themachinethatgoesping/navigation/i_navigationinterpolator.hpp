@@ -5,6 +5,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/i_navigationinterpolator.doc.hpp"
+
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>

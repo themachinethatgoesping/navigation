@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/sensordatalatlon.doc.hpp"
+
 #include <bitsery/ext/inheritance.h>
 
 #include <GeographicLib/Geocentric.hpp>
@@ -22,6 +25,7 @@ namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
+// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM
 // forward declarations for location conversions
 struct SensorDataUTM; // defined in sensordatautm.hpp
 

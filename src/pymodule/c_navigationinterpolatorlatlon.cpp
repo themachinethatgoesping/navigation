@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 // -- module header
-#include "docstrings.hpp" //automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
+// automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>

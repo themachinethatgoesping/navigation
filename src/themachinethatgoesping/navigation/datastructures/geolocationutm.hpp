@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/geolocationutm.doc.hpp"
+
 #include <GeographicLib/UTMUPS.hpp>
 
 #include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
@@ -179,6 +182,7 @@ struct GeoLocationUTM : public GeoLocationLocal
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
+// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon
 // backwards conversion
 inline GeoLocationLatLon::GeoLocationLatLon(const GeoLocationUTM& location_utm)
     : GeoLocationLatLon(GeoLocationUTM::to_geolocation_latlon(location_utm))

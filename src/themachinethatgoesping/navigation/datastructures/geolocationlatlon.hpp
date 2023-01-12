@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/geolocationlatlon.doc.hpp"
+
 #include <bitsery/ext/inheritance.h>
 
 #include <GeographicLib/Geocentric.hpp>
@@ -23,6 +26,7 @@ namespace navigation {
 namespace datastructures {
 
 // forward declarations for location conversions
+// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM
 struct GeoLocationUTM; // defined in geolocationutm.hpp
 
 /**

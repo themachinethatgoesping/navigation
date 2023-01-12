@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/sensordatalocal.doc.hpp"
+
 #include <bitsery/ext/inheritance.h>
 
 #include <GeographicLib/UTMUPS.hpp>

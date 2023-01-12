@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/sensordatautm.doc.hpp"
+
 #include <bitsery/ext/inheritance.h>
 
 #include <GeographicLib/UTMUPS.hpp>
@@ -207,6 +210,7 @@ struct SensorDataUTM : public SensorDataLocal
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
+// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon
 // backwards conversion
 inline SensorDataLatLon::SensorDataLatLon(const SensorDataUTM& data_utm)
     : SensorDataLatLon(SensorDataUTM::to_sensordata(data_utm))

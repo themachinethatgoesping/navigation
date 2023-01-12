@@ -7,6 +7,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/nmea_vhw.doc.hpp"
+
 #include <charconv>
 #include <string>
 

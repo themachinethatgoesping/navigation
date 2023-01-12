@@ -5,6 +5,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/nmea_hdt.doc.hpp"
+
 #include <charconv>
 #include <string>
 

@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/datastructures.doc.hpp"
+
 #include "datastructures/geolocation.hpp"
 #include "datastructures/geolocationlatlon.hpp"
 #include "datastructures/geolocationlocal.hpp"

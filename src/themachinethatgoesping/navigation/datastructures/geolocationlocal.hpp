@@ -4,6 +4,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/geolocationlocal.doc.hpp"
+
 #include <GeographicLib/UTMUPS.hpp>
 
 #include <themachinethatgoesping/tools/classhelper/bitsery.hpp>

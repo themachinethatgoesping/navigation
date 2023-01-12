@@ -6,6 +6,9 @@
 
 #pragma once
 
+/* generated doc strings */
+#include ".docstrings/positionaloffsets.doc.hpp"
+
 #include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
