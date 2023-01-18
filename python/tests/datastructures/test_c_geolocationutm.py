@@ -38,9 +38,8 @@ class Test_navigation_GeoLocationUTM:
         # create a new GeoLocationLatLon object by explicit conversion
         location_latlon = GeoLocationLatLon(location)
 
-        # GeoLocationUTM is implicitly convertible and therefore also comparable to GeoLocationLatLon
-        assert location == location_latlon
-        assert GeoLocationUTM(location_latlon) == location_latlon
+        # GeoLocationUTM is explicitly convertible and therefore also comparable to GeoLocationLatLon
+        assert location == GeoLocationUTM(location_latlon)
 
         assert location_latlon.latitude == approx(-41.280330)
         assert location_latlon.longitude == approx(174.780011)

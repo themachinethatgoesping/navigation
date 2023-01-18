@@ -89,9 +89,8 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     REQUIRE(SensorDataLatLon(data_south) ==
             SensorDataLatLon(SensorDataUTM(SensorDataLatLon(data_south))));
 
-    // test the same as above but using implicit conversion
-    REQUIRE(data == data_latlon);
-    REQUIRE(data_south == SensorDataLatLon(data_south));
+    // test simple explicit conversion
+    REQUIRE(data == SensorDataUTM(data_latlon));
 
     // test precomputed conversion (north)
     REQUIRE(data_latlon.latitude == Catch::Approx(51.024224));

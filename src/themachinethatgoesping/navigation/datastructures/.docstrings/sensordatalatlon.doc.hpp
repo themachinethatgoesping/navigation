@@ -1,4 +1,4 @@
-//sourcehash: 2f4a4a8a0a2cbb0dc9b0c4cff379747b5da70e6315a30c9e222571cafc39d7ad
+//sourcehash: d95d0026d205d34f0a582a73f72d306706aeb3f8609cd0d1e101b5497a4c2505
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -58,7 +58,7 @@ Parameter ``longitude``:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_SensorDataLatLon_3 =
 R"doc(Construct an SensorDataLatLon object from an existing SensorDataUTM
-object (this allows for implicit conversion from SensorDataUTM class))doc";
+object (this allows for explicit conversion from SensorDataUTM class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_SensorDataLatLon_4 =
 R"doc(Construct a new SensorDataLatLon object

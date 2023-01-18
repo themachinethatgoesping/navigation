@@ -60,10 +60,10 @@ struct GeoLocationLatLon : public GeoLocation
 
     /**
      * @brief Construct an GeoLocationLatLon object from an existing GeoLocationUTM object (this
-     * allows for implicit conversion from GeoLocationUTM class)
+     * allows for explicit conversion from GeoLocationUTM class)
      *
      */
-    GeoLocationLatLon(const GeoLocationUTM& location_utm); // defined in geolocationutm.hpp
+    explicit GeoLocationLatLon(const GeoLocationUTM& location_utm); // defined in geolocationutm.hpp
 
     /**
      * @brief Construct a new GeoLocationLatLon object

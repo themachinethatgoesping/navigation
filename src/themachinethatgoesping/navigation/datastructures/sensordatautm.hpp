@@ -79,10 +79,10 @@ struct SensorDataUTM : public SensorDataLocal
 
     /**
      * @brief Construct an SensorDataUTM object from an existing SensorDataLatLon object (this
-     * allows for implicit conversion from SensorDataLatLon class)
+     * allows for explicit conversion from SensorDataLatLon class)
      *
      */
-    SensorDataUTM(const SensorDataLatLon& data, int setzone = -1)
+    explicit SensorDataUTM(const SensorDataLatLon& data, int setzone = -1)
         : SensorDataUTM(from_sensordata(data, setzone))
     {
     }

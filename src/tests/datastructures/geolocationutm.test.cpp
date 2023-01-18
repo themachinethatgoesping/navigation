@@ -86,9 +86,8 @@ TEST_CASE("GeoLocationUTM should support common utm/latlon conversions", TESTTAG
     REQUIRE(GeoLocationLatLon(location_south) ==
             GeoLocationLatLon(GeoLocationUTM(GeoLocationLatLon(location_south))));
 
-    // test the same as above but using implicit conversion
-    REQUIRE(location == location_latlon);
-    REQUIRE(location_south == GeoLocationLatLon(location_south));
+    // test simple explicit conversion
+    REQUIRE(location == GeoLocationUTM(location_latlon));
 
     // test precomputed conversion (north)
     REQUIRE(location_latlon.latitude == Catch::Approx(51.024224));

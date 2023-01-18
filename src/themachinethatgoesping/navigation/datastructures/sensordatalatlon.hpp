@@ -61,10 +61,10 @@ struct SensorDataLatLon : public SensorData
 
     /**
      * @brief Construct an SensorDataLatLon object from an existing SensorDataUTM object (this
-     * allows for implicit conversion from SensorDataUTM class)
+     * allows for explicit conversion from SensorDataUTM class)
      *
      */
-    SensorDataLatLon(const SensorDataUTM& data_utm); // defined in sensordatautm.hpp
+    explicit SensorDataLatLon(const SensorDataUTM& data_utm); // defined in sensordatautm.hpp
 
     /**
      * @brief Construct a new SensorDataLatLon object

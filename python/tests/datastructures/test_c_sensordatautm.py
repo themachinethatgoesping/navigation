@@ -47,10 +47,10 @@ class Test_navigation_SensorDataUTM:
         # create a new SensorDataLatLon object by explicit conversion
         data_latlon = SensorDataLatLon(data)
 
-        # SensorDataUTM is implicitly convertible and therefore also comparable to SensorDataLatLon
+        # SensorDataUTM is explicitly convertible and therefore also comparable to SensorDataLatLon
         assert data == data  # pylint: disable=comparison-with-itself
-        assert data == data_latlon
-        assert SensorDataUTM.from_sensordata(data_latlon) == data_latlon
+        assert data == SensorDataUTM(data_latlon)
+        assert SensorDataUTM.from_sensordata(data_latlon) == SensorDataUTM(data_latlon)
 
         assert data_latlon.latitude == approx(-41.280330)
         assert data_latlon.longitude == approx(174.780011)

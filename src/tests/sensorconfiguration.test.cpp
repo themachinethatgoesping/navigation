@@ -481,8 +481,8 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
             scs.compute_target_position("mbes", datastructures::SensorDataUTM(sensor_data));
         datastructures::GeoLocationUTM position_sbes_utm =
             scs.compute_target_position("sbes", datastructures::SensorDataUTM(sensor_data));
-        CHECK(position_mbes_utm == position_mbes);
-        CHECK(position_sbes_utm == position_sbes);
+        CHECK(position_mbes_utm == datastructures::GeoLocationUTM(position_mbes));
+        CHECK(position_sbes_utm == datastructures::GeoLocationUTM(position_sbes));
 
         // scenario 6 (latlon)
         sensor_data.depth     = 1000;
@@ -520,7 +520,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
             scs.compute_target_position("mbes", datastructures::SensorDataUTM(sensor_data));
         position_sbes_utm =
             scs.compute_target_position("sbes", datastructures::SensorDataUTM(sensor_data));
-        CHECK(position_mbes_utm == position_mbes);
-        CHECK(position_sbes_utm == position_sbes);
+        CHECK(position_mbes_utm == datastructures::GeoLocationUTM(position_mbes));
+        CHECK(position_sbes_utm == datastructures::GeoLocationUTM(position_sbes));
     }
 }

@@ -1,4 +1,4 @@
-//sourcehash: ffd8943ccae6a05d8739985b1ad0b3212a6f137be0386a9184e39dc861ae20fb
+//sourcehash: ca1b41d0ef450a97c5738c823c47cba71cb4d91909980f08ee5d0c9828f8351e
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -60,7 +60,7 @@ Parameter ``northern_hemisphere``:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_GeoLocationUTM_3 =
 R"doc(Construct an GeoLocationUTM object from an existing GeoLocationLatLon
-object (this allows for implicit conversion from GeoLocationLatLon
+object (this allows for explicit conversion from GeoLocationLatLon
 class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_GeoLocationUTM_4 =

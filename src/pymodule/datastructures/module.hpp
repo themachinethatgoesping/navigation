@@ -36,15 +36,15 @@ void init_m_datastructures(pybind11::module& m)
 
     using namespace themachinethatgoesping::navigation::datastructures;
 
-    pybind11::implicitly_convertible<GeoLocationUTM, GeoLocationLatLon>();
-    pybind11::implicitly_convertible<GeoLocationLatLon, GeoLocationUTM>();
+    // pybind11::implicitly_convertible<GeoLocationUTM, GeoLocationLatLon>();
+    // pybind11::implicitly_convertible<GeoLocationLatLon, GeoLocationUTM>();
     pybind11::implicitly_convertible<GeoLocationUTM, GeoLocationLocal>();
     pybind11::implicitly_convertible<GeoLocationLatLon, GeoLocation>();
     pybind11::implicitly_convertible<GeoLocationLocal, GeoLocation>();
     pybind11::implicitly_convertible<GeoLocationUTM, GeoLocation>();
 
-    pybind11::implicitly_convertible<SensorDataUTM, SensorDataLatLon>();
-    pybind11::implicitly_convertible<SensorDataLatLon, SensorDataUTM>();
+    // pybind11::implicitly_convertible<SensorDataUTM, SensorDataLatLon>();
+    // pybind11::implicitly_convertible<SensorDataLatLon, SensorDataUTM>();
     pybind11::implicitly_convertible<SensorDataUTM,
                                      SensorDataLocal>(); // this does not work anymore since
                                                          // SensorData is derived from

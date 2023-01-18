@@ -1,4 +1,4 @@
-//sourcehash: 4abc55036d937a95ce33d930ac1aa6c3b4985268fe88b506f5bfa99e807bf628
+//sourcehash: a9ab399d4bca595db4a746e9290fde0353237a0f62cb4d0cbd2ccd673e2d7347
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -78,7 +78,7 @@ Parameter ``utm_northern_hemisphere``:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_4 =
 R"doc(Construct an SensorDataUTM object from an existing SensorDataLatLon
-object (this allows for implicit conversion from SensorDataLatLon
+object (this allows for explicit conversion from SensorDataLatLon
 class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_5 =

@@ -53,10 +53,10 @@ struct GeoLocationUTM : public GeoLocationLocal
 
     /**
      * @brief Construct an GeoLocationUTM object from an existing GeoLocationLatLon object (this
-     * allows for implicit conversion from GeoLocationLatLon class)
+     * allows for explicit conversion from GeoLocationLatLon class)
      *
      */
-    GeoLocationUTM(const GeoLocationLatLon& location, int setzone = -1)
+    explicit GeoLocationUTM(const GeoLocationLatLon& location, int setzone = -1)
         : GeoLocationUTM(from_geolocation_latlon(location, setzone))
     {
     }

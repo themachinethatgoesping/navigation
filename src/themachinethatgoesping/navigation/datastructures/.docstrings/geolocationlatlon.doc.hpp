@@ -1,4 +1,4 @@
-//sourcehash: 500be826d428f9e690614b5dd13973b0dcdc712b99922e8aa2561ae248f091fb
+//sourcehash: 4a79f415732e47916351448b19acc48a219d8cc7620ad305f127f52f3287a84b
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -59,7 +59,7 @@ Parameter ``longitude``:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_GeoLocationLatLon_3 =
 R"doc(Construct an GeoLocationLatLon object from an existing GeoLocationUTM
-object (this allows for implicit conversion from GeoLocationUTM class))doc";
+object (this allows for explicit conversion from GeoLocationUTM class))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_GeoLocationLatLon_4 =
 R"doc(Construct a new GeoLocationLatLon object
