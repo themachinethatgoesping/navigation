@@ -38,7 +38,7 @@ geographiclib_dep = dependency('geographiclib', static: true)
 tools_dep = dependency('themachinethatgoesping_tools', required: false)
 
 if not tools_dep.found()
-    tools_dep = subproject('tools').get_variable('tools_dep')
+    tools_dep = subproject('tools', default_options: ['cpp_std=' + get_option('cpp_std')]).get_variable('tools_dep')
 endif
 
 # -- python modules --
