@@ -13,14 +13,12 @@
 #include <math.h>
 #include <string>
 
-#include <bitsery/ext/std_map.h>
-
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
@@ -351,25 +349,65 @@ class SensorConfiguration
         const datastructures::PositionalOffsets& offsets_heading_source,
         const datastructures::PositionalOffsets& offsets_attitude_source);
 
-    // serialization support using bitsery
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    /**
+     * @brief Write the sensor configuration to a stream.
+     * Warning: there is no error checking!
+     *
+     * @param os
+     */
+    void to_stream(std::ostream& os) const
     {
-        // serialize map of PositionOffsets
-        s.ext(_target_offsets,
-              bitsery::ext::StdMap{ 100 },
-              [](S& s, std::string& key, datastructures::PositionalOffsets& value) {
-                  s.container1b(key, 100);
-                  s.object(value);
-              });
-        s.object(_offsets_attitude_source);
-        s.object(_offsets_heading_source);
-        s.object(_offsets_position_source);
-        s.object(_offsets_depth_source);
+        using tools::classhelper::stream::container_to_stream;
+
+        // iterate over _target_offsets to write them to the stream
+        unsigned int num_targets = _target_offsets.size();
+        os.write(reinterpret_cast<const char*>(&num_targets), sizeof(num_targets));
+
+        for (const auto& target : _target_offsets)
+        {
+            container_to_stream(os, target.first);
+            target.second.to_stream(os);
+        }
+
+        _offsets_attitude_source.to_stream(os);
+        _offsets_heading_source.to_stream(os);
+        _offsets_position_source.to_stream(os);
+        _offsets_depth_source.to_stream(os);
     }
 
-  public:
+    /**
+     * @brief Read the sensor configuration from a stream.
+     * Warning: there is no error checking!
+     *
+     * @param is
+     * @return SensorConfiguration
+     */
+    static SensorConfiguration from_stream(std::istream& is)
+    {
+        using datastructures::PositionalOffsets;
+        using tools::classhelper::stream::container_from_stream;
+
+        SensorConfiguration obj;
+
+        unsigned int num_targets;
+        is.read(reinterpret_cast<char*>(&num_targets), sizeof(num_targets));
+        while (num_targets--)
+        {
+            std::string       target_id               = container_from_stream<std::string>(is);
+            PositionalOffsets target_offsets          = PositionalOffsets::from_stream(is);
+            obj._target_offsets[std::move(target_id)] = std::move(target_offsets);
+        }
+
+        obj._offsets_attitude_source = PositionalOffsets::from_stream(is);
+        obj._offsets_heading_source  = PositionalOffsets::from_stream(is);
+        obj._offsets_position_source = PositionalOffsets::from_stream(is);
+        obj._offsets_depth_source    = PositionalOffsets::from_stream(is);
+
+        return obj;
+    }
+
     /**
      * @brief Compare two SensorConfiguration objects for equality
      *
@@ -440,7 +478,7 @@ class SensorConfiguration
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorConfiguration)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorConfiguration)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

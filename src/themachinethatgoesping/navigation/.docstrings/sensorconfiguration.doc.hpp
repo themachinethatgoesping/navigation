@@ -1,4 +1,4 @@
-//sourcehash: 680eb3e26d625cafeef995c1939343f9493a55630b78ad46bbc6685cb8260512
+//sourcehash: 72da2f7f3b6a52123def1b263b2530cecffef7c786b7ed6a1c1c1286df1ab066
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -164,6 +164,15 @@ Returns:
     northing and east, which are set relative to the sensor coordinate
     system center)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_from_stream =
+R"doc(Read the sensor configuration from a stream. Warning: there is no
+error checking!
+
+Parameter ``is``:
+    $Returns:
+
+SensorConfiguration)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_attitude_source =
 R"doc(Get the attitude sensor offsets
 
@@ -280,8 +289,6 @@ Parameter ``target_id``:
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_remove_targets = R"doc(Remove all stored targets)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_serialize = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_attitude_source =
 R"doc(Set the attitude sensor offsets
 
@@ -353,6 +360,12 @@ Parameter ``sensor_offsets``:
     offsets structure (only x, y and z are used))doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_target_offsets = R"doc(< TargetId (position in vector) for each registered target_id)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_to_stream =
+R"doc(Write the sensor configuration to a stream. Warning: there is no error
+checking!
+
+Parameter ``os``:)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_without_targets =
 R"doc(Return the SensorConfiguration object without registered targets
