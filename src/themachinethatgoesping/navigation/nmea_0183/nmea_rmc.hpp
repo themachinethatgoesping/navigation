@@ -68,10 +68,10 @@ class NMEA_RMC : public NMEA_Base
             return -nmea_longitude_field_to_double(get_field(4));
     }
 
-    double      get_speed_over_ground_knots() const { return get_field_as_double(6); }
-    double      get_course_over_ground_degrees_true() const { return get_field_as_double(7); }
+    double      get_speed_over_ground_knots() const { return get_field_as_floattype<double>(6); }
+    double      get_course_over_ground_degrees_true() const { return get_field_as_floattype<double>(7); }
     std::string get_utc_date_string() const { return std::string(get_field(8)); }
-    double      get_magnetic_variation() const { return get_field_as_double(9); }
+    double      get_magnetic_variation() const { return get_field_as_floattype<double>(9); }
     char        get_mode() const
     {
         try

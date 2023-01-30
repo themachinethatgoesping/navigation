@@ -49,10 +49,10 @@ class NMEA_VHW : public NMEA_Base
     }
 
     // ----- NMEA VHW attributes -----
-    double get_vessel_heading_true() const { return get_field_as_double(0); }
-    double get_vessel_heading_magnetic() const { return get_field_as_double(2); }
-    double get_speed_over_water_knots() const { return get_field_as_double(4); }
-    double get_speed_over_water_kmh() const { return get_field_as_double(6); }
+    double get_vessel_heading_true() const { return get_field_as_floattype<double>(0); }
+    double get_vessel_heading_magnetic() const { return get_field_as_floattype<double>(2); }
+    double get_speed_over_water_knots() const { return get_field_as_floattype<double>(4); }
+    double get_speed_over_water_kmh() const { return get_field_as_floattype<double>(6); }
 
     // ----- binary streaming -----
     // this has to be explicit, because otherwise the compiler will use the base class version

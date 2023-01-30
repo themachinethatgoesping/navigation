@@ -30,15 +30,15 @@ namespace nmea_0183 {
  */
 inline double nmea_latitude_field_to_double(std::string_view field)
 {
-    using themachinethatgoesping::tools::helper::string_to_double;
+    using themachinethatgoesping::tools::helper::string_to_floattype;
 
     if (field.size() < 4)
     {
         return std::numeric_limits<double>::quiet_NaN();
     }
 
-    double degrees = string_to_double(field.substr(0, 2));
-    double minutes = string_to_double(field.substr(2, field.size() - 2));
+    double degrees = string_to_floattype<double>(field.substr(0, 2));
+    double minutes = string_to_floattype<double>(field.substr(2, field.size() - 2));
 
     return degrees + minutes / 60;
 }
@@ -52,15 +52,15 @@ inline double nmea_latitude_field_to_double(std::string_view field)
  */
 inline double nmea_longitude_field_to_double(std::string_view field)
 {
-    using themachinethatgoesping::tools::helper::string_to_double;
+    using themachinethatgoesping::tools::helper::string_to_floattype;
 
     if (field.size() < 5)
     {
         return std::numeric_limits<double>::quiet_NaN();
     }
 
-    double degrees = string_to_double(field.substr(0, 3));
-    double minutes = string_to_double(field.substr(3, field.size() - 3));
+    double degrees = string_to_floattype<double>(field.substr(0, 3));
+    double minutes = string_to_floattype<double>(field.substr(3, field.size() - 3));
 
     return degrees + minutes / 60;
 }

@@ -46,19 +46,19 @@ class NMEA_VLW : public NMEA_Base
     }
 
     // ----- NMEA VLW attributes -----
-    double get_total_water_distance_nautical_miles() const { return get_field_as_double(0); }
-    double get_trip_water_distance_nautical_miles() const { return get_field_as_double(2); }
+    double get_total_water_distance_nautical_miles() const { return get_field_as_floattype<double>(0); }
+    double get_trip_water_distance_nautical_miles() const { return get_field_as_floattype<double>(2); }
     double get_total_ground_distance_nautical_miles() const
     {
         if (_fields.size() < 5)
             return 0.0;
-        return get_field_as_double(4);
+        return get_field_as_floattype<double>(4);
     }
     double get_trip_ground_distance_nautical_miles() const
     {
         if (_fields.size() < 7)
             return 0.0;
-        return get_field_as_double(6);
+        return get_field_as_floattype<double>(6);
     }
 
     // ----- binary streaming -----

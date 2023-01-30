@@ -50,9 +50,9 @@ void init_c_nmea_base(py::module& m)
              &NMEA_Base::get_field_as_int,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_int),
              py::arg("index"))
-        .def("get_field_as_double",
-             &NMEA_Base::get_field_as_double,
-             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_double),
+        .def("get_field_as_floattype",
+             &NMEA_Base::get_field_as_floattype<double>,
+             DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_floattype),
              py::arg("index"))
 
         // default copy functions

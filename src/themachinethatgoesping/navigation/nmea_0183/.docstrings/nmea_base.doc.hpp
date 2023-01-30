@@ -1,4 +1,4 @@
-//sourcehash: f81b590403c089211fea56dbc4519a1943c99eac9ee772031c01cca2c7a7ba5b
+//sourcehash: a0c7495296ad05d5dd4b72364d21c749bd41bc9c136f8acc6df2fcdba60d308a
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -54,7 +54,7 @@ static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_f
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_field = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_field_as_double = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_field_as_floattype = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_nmea_0183_NMEA_Base_get_field_as_int = R"doc()doc";
 

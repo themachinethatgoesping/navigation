@@ -46,10 +46,10 @@ class NMEA_VTG : public NMEA_Base
     }
 
     // ----- NMEA VTG attributes -----
-    double get_course_over_ground_degrees_true() const { return get_field_as_double(0); }
-    double get_course_over_ground_degrees_magnetic() const { return get_field_as_double(2); }
-    double get_speed_over_ground_knots() const { return get_field_as_double(4); }
-    double get_speed_over_ground_kmh() const { return get_field_as_double(6); }
+    double get_course_over_ground_degrees_true() const { return get_field_as_floattype<double>(0); }
+    double get_course_over_ground_degrees_magnetic() const { return get_field_as_floattype<double>(2); }
+    double get_speed_over_ground_knots() const { return get_field_as_floattype<double>(4); }
+    double get_speed_over_ground_kmh() const { return get_field_as_floattype<double>(6); }
 
     char get_mode() const
     {

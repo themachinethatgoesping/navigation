@@ -47,7 +47,7 @@ class NMEA_HDT : public NMEA_Base
     }
 
     // ----- NMEA HDT attributes -----
-    double get_heading_degrees_true() const { return get_field_as_double(0); }
+    double get_heading_degrees_true() const { return get_field_as_floattype<double>(0); }
 
     // ----- binary streaming -----
     // this has to be explicit, because otherwise the compiler will use the base class version

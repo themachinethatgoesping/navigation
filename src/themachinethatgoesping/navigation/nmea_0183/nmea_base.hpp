@@ -102,9 +102,10 @@ class NMEA_Base
         return "";
     }
 
-    double get_field_as_double(size_t index) const
+    template <typename t_float>
+    t_float get_field_as_floattype(size_t index) const
     {
-        return themachinethatgoesping::tools::helper::string_to_double(get_field(index));
+        return themachinethatgoesping::tools::helper::string_to_floattype<t_float>(get_field(index));
     }
 
     int get_field_as_int(size_t index) const

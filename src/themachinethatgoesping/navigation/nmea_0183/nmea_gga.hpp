@@ -94,10 +94,13 @@ class NMEA_GGA : public NMEA_Base
         }
     }
     int    get_number_of_satellites() const { return get_field_as_int(6); }
-    double get_horizontal_dilution_of_precision() const { return get_field_as_double(7); }
-    double get_altitude() const { return get_field_as_double(8); }
-    double get_geoidal_separation() const { return get_field_as_double(10); }
-    double get_age_of_differential_gps_data() const { return get_field_as_double(12); }
+    double get_horizontal_dilution_of_precision() const
+    {
+        return get_field_as_floattype<double>(7);
+    }
+    double get_altitude() const { return get_field_as_floattype<double>(8); }
+    double get_geoidal_separation() const { return get_field_as_floattype<double>(10); }
+    double get_age_of_differential_gps_data() const { return get_field_as_floattype<double>(12); }
     int    get_differential_reference_station_id() const { return get_field_as_int(13); }
 
     // ----- binary streaming -----
