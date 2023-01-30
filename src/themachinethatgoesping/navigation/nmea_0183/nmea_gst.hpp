@@ -52,10 +52,10 @@ class NMEA_GST : public NMEA_Base
     double      get_psuedorange_rms() const { return get_field_as_floattype<double>(1); }
     double      get_semimajor_error() const { return get_field_as_floattype<double>(2); }
     double      get_semiminor_error() const { return get_field_as_floattype<double>(3); }
-    double      get_semimajor_error_orientation() const { return get_field_as_floattype<double>(4); }
-    double      get_latitude_error_deviation() const { return get_field_as_floattype<double>(5); }
-    double      get_longitude_error_deviation() const { return get_field_as_floattype<double>(6); }
-    double      get_altitude_error_deviation() const { return get_field_as_floattype<double>(7); }
+    double get_semimajor_error_orientation() const { return get_field_as_floattype<double>(4); }
+    double get_latitude_error_deviation() const { return get_field_as_floattype<double>(5); }
+    double get_longitude_error_deviation() const { return get_field_as_floattype<double>(6); }
+    double get_altitude_error_deviation() const { return get_field_as_floattype<double>(7); }
 
     // ----- binary streaming -----
     // this has to be explicit, because otherwise the compiler will use the base class version
