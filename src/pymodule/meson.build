@@ -50,7 +50,7 @@ py_navigation = pymod.extension_module(
     ],
     cpp_args : ['-DMODULE_NAME='+module_name, '-DMODULE_VERSION=' + '"' + meson.project_version() + '"'],
     install : true,
-    install_dir : pythoninstallpath,
+    subdir : projectnamespace,
     install_tag : 'python-runtime'
 )
 
