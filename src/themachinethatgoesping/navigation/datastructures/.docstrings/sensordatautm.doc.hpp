@@ -1,4 +1,4 @@
-//sourcehash: a9ab399d4bca595db4a746e9290fde0353237a0f62cb4d0cbd2ccd673e2d7347
+//sourcehash: 260e905db2a4287ac2e05e426647feee74a7fa184c2c4c4ad71607ab164ab3e3
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -124,6 +124,8 @@ Parameter ``setzone``:
 Returns:
     SensorDataUTM)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_from_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_operator_eq =
 R"doc(Check if two SensorDataUTM objects are equal
 
@@ -139,8 +141,6 @@ static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensor
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_serialize = R"doc()doc";
-
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_to_sensordata =
 R"doc(Convert a utm sensordatalatlon to an unprojected data
 
@@ -148,6 +148,8 @@ Parameter ``data_utm``:
     $Returns:
 
 SensorDataLatLon)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_to_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_utm_northern_hemisphere = R"doc()doc";
 

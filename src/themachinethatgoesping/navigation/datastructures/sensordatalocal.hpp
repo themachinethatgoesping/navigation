@@ -7,12 +7,10 @@
 /* generated doc strings */
 #include ".docstrings/sensordatalocal.doc.hpp"
 
-#include <bitsery/ext/inheritance.h>
-
 #include <GeographicLib/UTMUPS.hpp>
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -47,8 +45,8 @@ struct SensorDataLocal : public SensorData
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
      */
-    SensorDataLocal(const SensorData& data, double northing, double easting)
-        : SensorData(data)
+    SensorDataLocal(SensorData data, double northing, double easting)
+        : SensorData(std::move(data))
         , northing(northing)
         , easting(easting)
     {
@@ -96,15 +94,21 @@ struct SensorDataLocal : public SensorData
         return false;
     }
 
-  private:
-    // serialization support using bitsery
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    static SensorDataLocal from_stream(std::istream& is)
     {
-        s.ext(*this, bitsery::ext::BaseClass<SensorData>{});
-        s.value8b(northing);
-        s.value8b(easting);
+        SensorDataLocal data(SensorData::from_stream(is), 0., 0.);
+
+        is.read(reinterpret_cast<char*>(&data.northing), 2 * sizeof(double));
+
+        return data;
+    }
+
+    void to_stream(std::ostream& os) const
+    {
+        SensorData::to_stream(os);
+        os.write(reinterpret_cast<const char*>(&northing), 2 * sizeof(double));
     }
 
   public:
@@ -123,7 +127,7 @@ struct SensorDataLocal : public SensorData
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialization function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataLocal)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataLocal)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

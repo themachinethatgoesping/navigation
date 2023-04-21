@@ -7,14 +7,12 @@
 /* generated doc strings */
 #include ".docstrings/sensordatalatlon.doc.hpp"
 
-#include <bitsery/ext/inheritance.h>
-
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -52,8 +50,8 @@ struct SensorDataLatLon : public SensorData
      * @param latitude in °, positive northwards
      * @param longitude in °, positive eastwards
      */
-    SensorDataLatLon(const SensorData& data, double latitude, double longitude)
-        : SensorData(data)
+    SensorDataLatLon(SensorData data, double latitude, double longitude)
+        : SensorData(std::move(data))
         , latitude(latitude)
         , longitude(longitude)
     {
@@ -108,15 +106,21 @@ struct SensorDataLatLon : public SensorData
         return false;
     }
 
-  private:
-    // serialization support using bitsery
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    static SensorDataLatLon from_stream(std::istream& is)
     {
-        s.ext(*this, bitsery::ext::BaseClass<SensorData>{});
-        s.value8b(latitude);
-        s.value8b(longitude);
+        SensorDataLatLon data(SensorData::from_stream(is), 0., 0.);
+
+        is.read(reinterpret_cast<char*>(&data.latitude), 2 * sizeof(double));
+
+        return data;
+    }
+
+    void to_stream(std::ostream& os) const
+    {
+        SensorData::to_stream(os);
+        os.write(reinterpret_cast<const char*>(&latitude), 2 * sizeof(double));
     }
 
   public:
@@ -141,7 +145,7 @@ struct SensorDataLatLon : public SensorData
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialization function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataLatLon)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataLatLon)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

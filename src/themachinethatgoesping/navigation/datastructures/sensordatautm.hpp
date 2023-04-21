@@ -7,12 +7,10 @@
 /* generated doc strings */
 #include ".docstrings/sensordatautm.doc.hpp"
 
-#include <bitsery/ext/inheritance.h>
-
 #include <GeographicLib/UTMUPS.hpp>
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -51,12 +49,12 @@ struct SensorDataUTM : public SensorDataLocal
      * @param utm_zone UTM/UPS zone number
      * @param utm_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    SensorDataUTM(const SensorData& data,
-                  double            northing,
-                  double            easting,
-                  int               utm_zone,
-                  bool              utm_northern_hemisphere)
-        : SensorDataLocal(data, northing, easting)
+    SensorDataUTM(SensorData data,
+                  double     northing,
+                  double     easting,
+                  int        utm_zone,
+                  bool       utm_northern_hemisphere)
+        : SensorDataLocal(std::move(data), northing, easting)
         , utm_zone(utm_zone)
         , utm_northern_hemisphere(utm_northern_hemisphere)
     {
@@ -70,8 +68,8 @@ struct SensorDataUTM : public SensorDataLocal
      * @param utm_zone UTM/UPS zone number
      * @param utm_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    SensorDataUTM(const SensorDataLocal& data_local, int utm_zone, bool utm_northern_hemisphere)
-        : SensorDataLocal(data_local)
+    SensorDataUTM(SensorDataLocal data_local, int utm_zone, bool utm_northern_hemisphere)
+        : SensorDataLocal(std::move(data_local))
         , utm_zone(utm_zone)
         , utm_northern_hemisphere(utm_northern_hemisphere)
     {
@@ -177,15 +175,24 @@ struct SensorDataUTM : public SensorDataLocal
         return data_utm;
     }
 
-  private:
-    // serialization support using bitsery
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    static SensorDataUTM from_stream(std::istream& is)
     {
-        s.ext(*this, bitsery::ext::BaseClass<SensorDataLocal>{});
-        s.value4b(utm_zone);
-        s.value1b(utm_northern_hemisphere);
+        SensorDataUTM data(SensorDataLocal::from_stream(is), 0, 0);
+
+        is.read(reinterpret_cast<char*>(&data.utm_zone), sizeof(int));
+        is.read(reinterpret_cast<char*>(&data.utm_northern_hemisphere), sizeof(bool));
+
+        return data;
+    }
+
+    void to_stream(std::ostream& os) const
+    {
+        SensorDataLocal::to_stream(os);
+
+        os.write(reinterpret_cast<const char*>(&utm_zone), sizeof(int));
+        os.write(reinterpret_cast<const char*>(&utm_northern_hemisphere), sizeof(bool));
     }
 
   public:
@@ -205,7 +212,7 @@ struct SensorDataUTM : public SensorDataLocal
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialization function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataUTM)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataUTM)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

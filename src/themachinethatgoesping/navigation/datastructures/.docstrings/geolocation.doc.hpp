@@ -1,4 +1,4 @@
-//sourcehash: c29f84b6474a5ec3d8e6da7f5cb3524aa8592db70cdfc31d22edf8e90bd832b4
+//sourcehash: 0e03aee48b381961b5fb6706acf2e0fd24799160f471dfdc6b6096965b116c21
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -60,6 +60,8 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_from_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_operator_eq =
 R"doc(Check if two GeoLocation objects are equal
 
@@ -84,7 +86,7 @@ static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLoc
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_roll = R"doc(< in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_serialize = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_to_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
 

@@ -20,11 +20,11 @@ TEST_CASE("GeoLocationUTM should support common functions", TESTTAG)
     // initialize location
     auto location = GeoLocationUTM();
 
-    location.northing            = 5652759.000;
-    location.easting             = 549841.192;
-    location.zone                = 31;
-    location.northern_hemisphere = true;
-    location.z                   = 3;
+    location.northing                = 5652759.000;
+    location.easting                 = 549841.192;
+    location.utm_zone                = 31;
+    location.utm_northern_hemisphere = true;
+    location.z                       = 3;
 
     location.yaw   = 10;
     location.pitch = 20;
@@ -50,21 +50,21 @@ TEST_CASE("GeoLocationUTM should support common utm/latlon conversions", TESTTAG
     // initialize location
     auto location = GeoLocationUTM();
 
-    location.northing            = 5652759.000;
-    location.easting             = 549841.192;
-    location.zone                = 31;
-    location.northern_hemisphere = true;
-    location.z                   = 3;
+    location.northing                = 5652759.000;
+    location.easting                 = 549841.192;
+    location.utm_zone                = 31;
+    location.utm_northern_hemisphere = true;
+    location.z                       = 3;
 
     location.yaw   = 10;
     location.pitch = 20;
     location.roll  = 30;
 
-    auto location_south                = GeoLocationUTM(location);
-    location_south.northing            = 5427745.995;
-    location_south.easting             = 314082.699;
-    location_south.zone                = 60;
-    location_south.northern_hemisphere = false;
+    auto location_south                    = GeoLocationUTM(location);
+    location_south.northing                = 5427745.995;
+    location_south.easting                 = 314082.699;
+    location_south.utm_zone                = 60;
+    location_south.utm_northern_hemisphere = false;
 
     // test utm/lat lon conversion
     GeoLocationLatLon location_latlon(location);

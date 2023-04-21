@@ -1,4 +1,4 @@
-//sourcehash: ca1b41d0ef450a97c5738c823c47cba71cb4d91909980f08ee5d0c9828f8351e
+//sourcehash: a9b0c36ab82e31045cef9c26804e5834739f972b9db073a32d072a02511d708f
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -51,11 +51,11 @@ R"doc(Construct an GeoLocationUTM object from an existing GeoLocationLocal
 object (using a known zone and hemisphere)
 
 Parameter ``location_local``:
-    $Parameter ``zone``:
+    $Parameter ``utm_zone``:
 
 UTM/UPS zone number
 
-Parameter ``northern_hemisphere``:
+Parameter ``utm_northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_GeoLocationUTM_3 =
@@ -72,10 +72,10 @@ Parameter ``northing``:
 Parameter ``easting``:
     in m, positive eastwards
 
-Parameter ``zone``:
+Parameter ``utm_zone``:
     UTM/UPS zone number
 
-Parameter ``northern_hemisphere``:
+Parameter ``utm_northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere
 
 Parameter ``z``:
@@ -103,15 +103,13 @@ Parameter ``setzone``:
 Returns:
     GeoLocationUTM)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_northern_hemisphere = R"doc(< if true: northern hemisphere, else: southern hemisphere)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_from_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_operator_eq = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_operator_ne = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_printer = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_serialize = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_to_geolocation_latlon =
 R"doc(Convert a utm geolocationlatlon to an unprojected location
@@ -121,7 +119,11 @@ Parameter ``location_utm``:
 
 GeoLocationLatLon)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_zone = R"doc(< UTM/UPS zone number)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_to_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_utm_northern_hemisphere = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

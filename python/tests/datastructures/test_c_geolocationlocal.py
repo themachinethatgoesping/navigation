@@ -35,12 +35,12 @@ class Test_navigation_GeoLocationLocal:
         location = GeoLocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
         print(location)
 
-        zone = 60
-        northern_hemisphere = False
+        utm_zone = 60
+        utm_northern_hemisphere = False
 
         # create a new GeoLocation object by explicit conversion
         location_utm = GeoLocationUTM(
-            location, zone=zone, northern_hemisphere=northern_hemisphere
+            location, utm_zone=utm_zone, utm_northern_hemisphere=utm_northern_hemisphere
         )
 
         # GeoLocationLocal is implicitly convertible and therefore also comparable to GeoLocation UTM
@@ -52,5 +52,9 @@ class Test_navigation_GeoLocationLocal:
 
         assert GeoLocationLocal(location_utm) == location
         assert location_utm == (
-            GeoLocationUTM(location, zone=zone, northern_hemisphere=northern_hemisphere)
+            GeoLocationUTM(
+                location,
+                utm_zone=utm_zone,
+                utm_northern_hemisphere=utm_northern_hemisphere,
+            )
         )

@@ -11,8 +11,8 @@
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -81,16 +81,20 @@ struct GeoLocation
         return false;
     }
 
-  private:
-    // serialization support using bitsery
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    static GeoLocation from_stream(std::istream& is)
     {
-        s.value8b(z);
-        s.value8b(yaw);
-        s.value8b(pitch);
-        s.value8b(roll);
+        GeoLocation data;
+
+        is.read(reinterpret_cast<char*>(&data.z), 4 * sizeof(double));
+
+        return data;
+    }
+
+    void to_stream(std::ostream& os) const
+    {
+        os.write(reinterpret_cast<const char*>(&z), 4 * sizeof(double));
     }
 
   public:
@@ -109,7 +113,7 @@ struct GeoLocation
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocation)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocation)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

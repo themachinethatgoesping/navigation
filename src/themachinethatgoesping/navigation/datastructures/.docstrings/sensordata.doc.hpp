@@ -1,4 +1,4 @@
-//sourcehash: 44f37d664001aafe34cdc458e0e29e62c0e0d01cc0bc6c6ac6171f539509f4d3
+//sourcehash: ea9a247bc6d540693f190d4f529bf73802884a81ba1c38b4fb3c9eecdfb1a737
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -65,6 +65,8 @@ Parameter ``roll``:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_depth = R"doc(< in m, positive downwards)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_from_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_heading = R"doc(< from heading source in °, 0° is north, 90° is east)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_heave = R"doc(< from heave source, will be added to depth in m, positive upwards)doc";
@@ -88,7 +90,7 @@ static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensor
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_roll = R"doc(< from attitude source, in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_serialize = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_to_stream = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

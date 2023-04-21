@@ -11,8 +11,8 @@
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -81,17 +81,20 @@ struct SensorData
         return false;
     }
 
-  private:
-    // serialization support using bitsery
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    static SensorData from_stream(std::istream& is)
     {
-        s.value8b(depth);
-        s.value8b(heave);
-        s.value8b(heading);
-        s.value8b(pitch);
-        s.value8b(roll);
+        SensorData data;
+
+        is.read(reinterpret_cast<char*>(&data.depth), 5 * sizeof(double));
+
+        return data;
+    }
+
+    void to_stream(std::ostream& os) const
+    {
+        os.write(reinterpret_cast<const char*>(&depth), 5 * sizeof(double));
     }
 
   public:
@@ -111,7 +114,7 @@ struct SensorData
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialization function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorData)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorData)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

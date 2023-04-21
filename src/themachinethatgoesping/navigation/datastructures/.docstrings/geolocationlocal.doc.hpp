@@ -1,4 +1,4 @@
-//sourcehash: e771c2baff3e40f11fa97c60648371cf649600927a74af722a7e43ce4b42fa11
+//sourcehash: 3e971423169144da8849dea140cd78f6456a93da7a4a4fa905d76790beb7198b
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -80,6 +80,8 @@ Parameter ``roll``:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_easting = R"doc(< in m, positive eastwards)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_from_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_northing = R"doc(< in m, positive northwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_operator_eq = R"doc()doc";
@@ -88,7 +90,7 @@ static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLoc
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_serialize = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_to_stream = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

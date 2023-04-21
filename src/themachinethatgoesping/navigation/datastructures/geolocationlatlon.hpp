@@ -7,14 +7,12 @@
 /* generated doc strings */
 #include ".docstrings/geolocationlatlon.doc.hpp"
 
-#include <bitsery/ext/inheritance.h>
-
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -51,8 +49,8 @@ struct GeoLocationLatLon : public GeoLocation
      * @param latitude in °, positive northwards
      * @param longitude in °, positive eastwards
      */
-    GeoLocationLatLon(const GeoLocation& location, double latitude, double longitude)
-        : GeoLocation(location)
+    GeoLocationLatLon(GeoLocation location, double latitude, double longitude)
+        : GeoLocation(std::move(location))
         , latitude(latitude)
         , longitude(longitude)
     {
@@ -111,15 +109,21 @@ struct GeoLocationLatLon : public GeoLocation
         return false;
     }
 
-  private:
-    // ----- bitsery -----
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    static GeoLocationLatLon from_stream(std::istream& is)
     {
-        s.ext(*this, bitsery::ext::BaseClass<GeoLocation>{});
-        s.value8b(latitude);
-        s.value8b(longitude);
+        GeoLocationLatLon data(GeoLocation::from_stream(is), 0., 0.);
+
+        is.read(reinterpret_cast<char*>(&data.latitude), 2 * sizeof(double));
+
+        return data;
+    }
+
+    void to_stream(std::ostream& os) const
+    {
+        GeoLocation::to_stream(os);
+        os.write(reinterpret_cast<const char*>(&latitude), 2 * sizeof(double));
     }
 
   public:
@@ -145,7 +149,7 @@ struct GeoLocationLatLon : public GeoLocation
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationLatLon)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationLatLon)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

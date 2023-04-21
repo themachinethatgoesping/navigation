@@ -1,4 +1,4 @@
-//sourcehash: 4a79f415732e47916351448b19acc48a219d8cc7620ad305f127f52f3287a84b
+//sourcehash: 2c016b3d3831dfab1833f6922f56257926f62eb2ce13eb95aef88a46180f3b13
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -82,6 +82,8 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_from_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_latitude = R"doc(< in °, positive northwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_longitude = R"doc(< in °, positive eastwards)doc";
@@ -106,7 +108,7 @@ Parameter ``str``:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_serialize = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_to_stream = R"doc()doc";
 
 
 #if defined(__GNUG__)

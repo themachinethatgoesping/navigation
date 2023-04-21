@@ -9,8 +9,8 @@
 
 #include <GeographicLib/UTMUPS.hpp>
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -27,8 +27,9 @@ namespace datastructures {
  */
 struct GeoLocationUTM : public GeoLocationLocal
 {
-    int  zone                = 0;    ///< UTM/UPS zone number
-    bool northern_hemisphere = true; ///< if true: northern hemisphere, else: southern hemisphere
+    int  utm_zone = 0; ///< UTM/UPS zone number
+    bool utm_northern_hemisphere =
+        true; ///< if true: northern hemisphere, else: southern hemisphere
 
     /**
      * @brief Construct a new Sensor Position object
@@ -41,13 +42,15 @@ struct GeoLocationUTM : public GeoLocationLocal
      * known zone and hemisphere)
      *
      * @param location_local
-     * @param zone UTM/UPS zone number
-     * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
+     * @param utm_zone UTM/UPS zone number
+     * @param utm_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    GeoLocationUTM(const GeoLocationLocal& location_local, int zone, bool northern_hemisphere)
+    GeoLocationUTM(const GeoLocationLocal& location_local,
+                   int                     utm_zone,
+                   bool                    utm_northern_hemisphere)
         : GeoLocationLocal(location_local)
-        , zone(zone)
-        , northern_hemisphere(northern_hemisphere)
+        , utm_zone(utm_zone)
+        , utm_northern_hemisphere(utm_northern_hemisphere)
     {
     }
 
@@ -66,8 +69,8 @@ struct GeoLocationUTM : public GeoLocationLocal
      *
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
-     * @param zone UTM/UPS zone number
-     * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
+     * @param utm_zone UTM/UPS zone number
+     * @param utm_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      * @param z in m, positive downwards
      * @param yaw in °, 0° is north, 90° is east
      * @param pitch in °, positive means bow up
@@ -75,15 +78,15 @@ struct GeoLocationUTM : public GeoLocationLocal
      */
     GeoLocationUTM(double northing,
                    double easting,
-                   int    zone,
-                   bool   northern_hemisphere,
+                   int    utm_zone,
+                   bool   utm_northern_hemisphere,
                    double z,
                    double yaw,
                    double pitch,
                    double roll)
         : GeoLocationLocal(northing, easting, z, yaw, pitch, roll)
-        , zone(zone)
-        , northern_hemisphere(northern_hemisphere)
+        , utm_zone(utm_zone)
+        , utm_northern_hemisphere(utm_northern_hemisphere)
     {
     }
 
@@ -91,8 +94,8 @@ struct GeoLocationUTM : public GeoLocationLocal
     bool operator==(const GeoLocationUTM& rhs) const
     {
         if (GeoLocationLocal::operator==(rhs))
-            if (zone == rhs.zone)
-                if (northern_hemisphere == rhs.northern_hemisphere)
+            if (utm_zone == rhs.utm_zone)
+                if (utm_northern_hemisphere == rhs.utm_northern_hemisphere)
                     return true;
 
         return false;
@@ -109,8 +112,8 @@ struct GeoLocationUTM : public GeoLocationLocal
         GeoLocationLatLon location(
             0, 0, location_utm.z, location_utm.yaw, location_utm.pitch, location_utm.roll);
 
-        GeographicLib::UTMUPS::Reverse(location_utm.zone,
-                                       location_utm.northern_hemisphere,
+        GeographicLib::UTMUPS::Reverse(location_utm.utm_zone,
+                                       location_utm.utm_northern_hemisphere,
                                        location_utm.easting,
                                        location_utm.northing,
                                        location.latitude,
@@ -135,8 +138,8 @@ struct GeoLocationUTM : public GeoLocationLocal
 
         GeographicLib::UTMUPS::Forward(location.latitude,
                                        location.longitude,
-                                       location_utm.zone,
-                                       location_utm.northern_hemisphere,
+                                       location_utm.utm_zone,
+                                       location_utm.utm_northern_hemisphere,
                                        location_utm.easting,
                                        location_utm.northing,
                                        setzone);
@@ -144,20 +147,24 @@ struct GeoLocationUTM : public GeoLocationLocal
         return location_utm;
     }
 
-  private:
-    // serialization support using bitsery
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    static GeoLocationUTM from_stream(std::istream& is)
     {
-        s.value8b(northing);
-        s.value8b(easting);
-        s.value4b(zone);
-        s.value1b(northern_hemisphere);
-        s.value8b(z);
-        s.value8b(yaw);
-        s.value8b(pitch);
-        s.value8b(roll);
+        GeoLocationUTM data(GeoLocationLocal::from_stream(is), 0, 0);
+
+        is.read(reinterpret_cast<char*>(&data.utm_zone), sizeof(int));
+        is.read(reinterpret_cast<char*>(&data.utm_northern_hemisphere), sizeof(bool));
+
+        return data;
+    }
+
+    void to_stream(std::ostream& os) const
+    {
+        GeoLocationLocal::to_stream(os);
+
+        os.write(reinterpret_cast<const char*>(&utm_zone), sizeof(int));
+        os.write(reinterpret_cast<const char*>(&utm_northern_hemisphere), sizeof(bool));
     }
 
   public:
@@ -168,8 +175,8 @@ struct GeoLocationUTM : public GeoLocationLocal
         auto base_printer = GeoLocationLocal::__printer__(float_precision);
         base_printer.remove_sections();
         printer.append(base_printer);
-        printer.register_value("zone", zone, "", 2);
-        printer.register_value("northern_hemisphere", northern_hemisphere, "", 3);
+        printer.register_value("utm_zone", utm_zone, "", 2);
+        printer.register_value("utm_northern_hemisphere", utm_northern_hemisphere, "", 3);
 
         return printer;
     }
@@ -177,7 +184,7 @@ struct GeoLocationUTM : public GeoLocationLocal
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationUTM)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationUTM)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

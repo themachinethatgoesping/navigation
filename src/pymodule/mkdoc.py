@@ -19,14 +19,14 @@ def get_hash(file_name):
 
 
 # does not work because pybind11_mkdoc only provides a module script
-#from pybind11_mkdoc import mkdoc
+# from pybind11_mkdoc import mkdoc
 ignore_files = [
     # 'classhelper.hpp'
 ]
 
 # read modified headers
 new_header = ""
-with open("new_doc_header.hpp", 'r') as ifi:
+with open("new_doc_header.hpp", "r") as ifi:
     new_header = ifi.read()
 
 
@@ -40,7 +40,7 @@ def modify_doc(doc):
 
     start = False
     ignore = False
-    for line in doc.split('\n'):
+    for line in doc.split("\n"):
         if not start:
             if "#define DOC(...)" in line:
                 start = True
@@ -68,7 +68,7 @@ def add_doc_line(header, doc_path):
     # chech if dockline exists
     file = ""
     found_pragma = False
-    with open(header, 'r') as ifi:
+    with open(header, "r") as ifi:
         for line in ifi:
             if include_string in line:
                 return
@@ -81,7 +81,7 @@ def add_doc_line(header, doc_path):
     if not found_pragma:
         print(f"WARNING: did not find #pragma once in {header}")
 
-    with open(header, 'w') as ofi:
+    with open(header, "w") as ofi:
         ofi.write(file)
 
 
@@ -89,7 +89,7 @@ def get_ignore_doc(header):
 
     # chech if dockline exists
     ignore_doc = []
-    with open(header, 'r') as ifi:
+    with open(header, "r") as ifi:
         for line in ifi:
             if "IGNORE_DOC:" in line:
                 ignore_doc.append(line.split("IGNORE_DOC:")[-1].strip() + " ")
@@ -98,18 +98,18 @@ def get_ignore_doc(header):
 
 
 headers = []
-for r, d, f in os.walk('../themachinethatgoesping/'):
+for r, d, f in os.walk("../themachinethatgoesping/"):
     for file in f:
         if file.endswith(".doc.hpp"):
             continue
 
-        if file.endswith('.hpp'):
+        if file.endswith(".hpp"):
             if file not in ignore_files:
-                headers.append(r + '/' + file)
+                headers.append(r + "/" + file)
 headers.sort()
 
 
-with open('mkdoc_log.log', 'w') as ofi_log:
+with open("mkdoc_log.log", "w") as ofi_log:
     prg = tqdm(headers)
     for header in prg:
         if len(header) > 53:
@@ -118,12 +118,15 @@ with open('mkdoc_log.log', 'w') as ofi_log:
             prg.set_postfix_str(header)
 
         filename = header.split("/")[-1]
-        output_path = "/".join(header.split("/")[:-1]) + "/.docstrings/" + \
-            filename.replace(filename.split('.')[-1], "doc.hpp")
+        output_path = (
+            "/".join(header.split("/")[:-1])
+            + "/.docstrings/"
+            + filename.replace(filename.split(".")[-1], "doc.hpp")
+        )
 
         if False:
-            shutil.rmtree("/".join(output_path.split('/')[:-1]))
-        os.makedirs("/".join(output_path.split('/')[:-1]), exist_ok=True)
+            shutil.rmtree("/".join(output_path.split("/")[:-1]))
+        os.makedirs("/".join(output_path.split("/")[:-1]), exist_ok=True)
 
         add_doc_line(header, output_path)
 
@@ -134,7 +137,7 @@ with open('mkdoc_log.log', 'w') as ofi_log:
             # check old hash (written into doc file)
             if os.path.exists(output_path):
                 hash_old = "INVALID"
-                with open(output_path, 'r') as ifi:
+                with open(output_path, "r") as ifi:
                     line = ifi.readline()
                     if "//sourcehash:" in line:
                         hash_old = line.split("//sourcehash:")[1].strip()
@@ -143,14 +146,15 @@ with open('mkdoc_log.log', 'w') as ofi_log:
                 if hash_new == hash_old:
                     continue
 
-        #print(p,doc_paths, output_path)
+        # print(p,doc_paths, output_path)
 
         docstrings = subprocess.check_output(
-            [sys.executable, '-m', 'pybind11_mkdoc', header], stderr=ofi_log).decode('utf8')
+            [sys.executable, "-m", "pybind11_mkdoc", header], stderr=ofi_log
+        ).decode("utf8")
         new_doc = modify_doc(docstrings)
 
-        with open(output_path, 'w') as ofi:
-            #prg.set_postfix_str(f"HASH ...{header[-50:]}")
+        with open(output_path, "w") as ofi:
+            # prg.set_postfix_str(f"HASH ...{header[-50:]}")
             ofi.write(f"//sourcehash: {hash_new}\n\n")
             ofi.write(new_doc)
             print("updated:", output_path)

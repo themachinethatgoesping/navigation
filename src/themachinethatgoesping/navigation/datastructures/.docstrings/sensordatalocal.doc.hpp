@@ -1,4 +1,4 @@
-//sourcehash: a31b80b90b51d3b2e53a9b3e300fb2a3d165c55932ef93c88b6d912489d80689
+//sourcehash: eefafd339b6e6a2508ae472f6f520ad5324bb6e906c1fd519f0eb55606a9fd65
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -83,6 +83,8 @@ Parameter ``roll``:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_easting = R"doc(< in m, positive eastwards)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_from_stream = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_northing = R"doc(< in m, positive northwards)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_operator_eq =
@@ -100,7 +102,7 @@ static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensor
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_serialize = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_to_stream = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop
