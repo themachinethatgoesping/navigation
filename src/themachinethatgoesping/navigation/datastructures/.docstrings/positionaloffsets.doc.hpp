@@ -1,4 +1,4 @@
-//sourcehash: 9e559ace8c7831e23304271ea7432f60ac0aae47dda1a01770799c60ecc2280e
+//sourcehash: 285854f2f6b6dae166a283970dc44fe45afe2594833e682af5b90417bb9cbc79
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -68,6 +68,24 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_from_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_from_txrx =
+R"doc(Construct a new PositionalOffsets object from a transmitter and
+receiver unit
+
+Parameter ``tx``:
+    Multibeam transmitter offsets
+
+Parameter ``rx``:
+    Multibeam receiver offsets
+
+Parameter ``name``:
+    Name of the newly constructed transceiver offsets
+
+Returns:
+    Transceiver PositionalOffsets)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_name = R"doc(< The name of the sensor)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_operator_eq = R"doc()doc";
@@ -80,7 +98,7 @@ static const char *__doc_themachinethatgoesping_navigation_datastructures_Positi
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_roll = R"doc(< in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_serialize = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_to_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_x = R"doc(< in m, positive forward)doc";
 

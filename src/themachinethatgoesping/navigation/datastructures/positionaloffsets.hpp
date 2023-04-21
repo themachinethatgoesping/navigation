@@ -9,8 +9,8 @@
 /* generated doc strings */
 #include ".docstrings/positionaloffsets.doc.hpp"
 
-#include <themachinethatgoesping/tools/classhelper/bitsery.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/helper.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
@@ -67,6 +67,35 @@ struct PositionalOffsets
     {
     }
 
+    /**
+     * @brief Construct a new PositionalOffsets object from a transmitter and receiver unit
+     *
+     * @param tx Multibeam transmitter offsets
+     * @param rx Multibeam receiver offsets
+     * @param name Name of the newly constructed transceiver offsets
+     * @return Transceiver PositionalOffsets
+     */
+    static PositionalOffsets from_txrx(const PositionalOffsets& tx,
+                                       const PositionalOffsets& rx,
+                                       std::string              name)
+    {
+        PositionalOffsets trx;
+
+        trx.name = std::move(name);
+
+        /* x,y,z are the average of tx and rx */
+        trx.x = (tx.x + rx.x) * 0.5;
+        trx.y = (tx.y + rx.y) * 0.5;
+        trx.z = (tx.z + rx.z) * 0.5;
+
+        /* take pitch and yaw from tx and roll from rx*/
+        trx.pitch = tx.pitch;
+        trx.yaw   = tx.yaw; // not sure about this one ...
+        trx.roll  = rx.roll;
+
+        return trx;
+    }
+
     bool operator!=(const PositionalOffsets& rhs) const { return !(operator==(rhs)); }
     bool operator==(const PositionalOffsets& rhs) const
     {
@@ -82,19 +111,24 @@ struct PositionalOffsets
         return false;
     }
 
-  private:
-    // serialization support using bitsery
-    friend bitsery::Access;
-    template<typename S>
-    void serialize(S& s)
+  public:
+    // ----- file I/O -----
+    static PositionalOffsets from_stream(std::istream& is)
     {
-        s.container1b(name, 100);
-        s.value8b(x);
-        s.value8b(y);
-        s.value8b(z);
-        s.value8b(yaw);
-        s.value8b(pitch);
-        s.value8b(roll);
+        PositionalOffsets data;
+
+        data.name = tools::classhelper::stream::container_from_stream<std::string>(is);
+
+        is.read(reinterpret_cast<char*>(&data.x), 6 * sizeof(double));
+
+        return data;
+    }
+
+    void to_stream(std::ostream& os) const
+    {
+        tools::classhelper::stream::container_to_stream(os, name);
+
+        os.write(reinterpret_cast<const char*>(&x), 6 * sizeof(double));
     }
 
   public:
@@ -116,7 +150,7 @@ struct PositionalOffsets
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __BITSERY_DEFAULT_TOFROM_BINARY_FUNCTIONS__(PositionalOffsets)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(PositionalOffsets)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
