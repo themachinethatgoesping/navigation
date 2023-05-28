@@ -157,7 +157,7 @@ class I_NavigationInterpolator
     }
 
     /**
-     * @brief Set the attitude data (no yaw, ythis is set in set_data_heading)
+     * @brief Set the attitude data (no yaw, this is set in set_data_heading)
      *
      * @param timestamp in seconds since epoch
      * @param pitch in °, positive is bow up

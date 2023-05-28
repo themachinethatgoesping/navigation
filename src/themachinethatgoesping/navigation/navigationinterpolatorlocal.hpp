@@ -52,6 +52,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     /**
      * @brief Construct a new i navigationinterpolator interface
      *
+     * @param sensor_configuration sensor configuration used for this navigation interpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
     NavigationInterpolatorLocal(SensorConfiguration                     sensor_configuration,

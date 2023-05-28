@@ -1,4 +1,4 @@
-//sourcehash: 25d671e9386dd01e71ba6ea951e654826845e9a74d44edd715552485dfd2c0c3
+//sourcehash: ad0d5c75d3ce6a8aab1cae270cf40aef029b72deb98c16c442bd09047fe1d114
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -45,6 +45,9 @@ values using the offsets specified in the sensor configuration class)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_NavigationInterpolatorLocal =
 R"doc(Construct a new i navigationinterpolator interface
+
+Parameter ``sensor_configuration``:
+    sensor configuration used for this navigation interpolator
 
 Parameter ``extrapolation_mode``:
     extrapolate, fail or nearest)doc";

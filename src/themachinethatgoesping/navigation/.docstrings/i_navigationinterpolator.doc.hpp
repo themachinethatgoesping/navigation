@@ -1,4 +1,4 @@
-//sourcehash: 166032a4785a3fc4c36a4ec5dd28dc38b440ded3e4d8de286876604bf95505d2
+//sourcehash: 57f42460cd8820b64a164578269a0017c4bf05c8e3855b4cb50decb627044e9d
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -146,7 +146,7 @@ static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpola
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_sensor_configuration = R"doc(< sensor configuration that stores the offsets)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_data_attitude =
-R"doc(Set the attitude data (no yaw, ythis is set in set_data_heading)
+R"doc(Set the attitude data (no yaw, this is set in set_data_heading)
 
 Parameter ``timestamp``:
     in seconds since epoch
