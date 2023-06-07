@@ -28,7 +28,7 @@ else
 endif
 
 # boost
-boost_dep = dependency('boost', static: true)
+boost_dep = dependency('boost', static: get_option('dynamic_boost').disabled())
 
 # geographiclib
 geographiclib_dep = dependency('geographiclib', static: true)
