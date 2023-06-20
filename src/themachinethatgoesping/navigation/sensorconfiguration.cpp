@@ -123,7 +123,31 @@ datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
 const datastructures::PositionalOffsets& SensorConfiguration::get_target(
     const std::string& target_id) const
 {
-    return _target_offsets.at(target_id); // throws std::out_of_range if not found
+    // more specific error message
+    try
+    {
+        return _target_offsets.at(target_id); // throws std::out_of_range if not found
+    }
+    catch (std::out_of_range& e)
+    {
+        // more specific error message
+        std::string tmp = "[";
+
+        if (!_target_offsets.empty())
+        {
+            for (const auto& kv : _target_offsets)
+                tmp += kv.first + ",";
+            tmp.back() = ']';
+        }
+        else
+            tmp += "]";
+
+        throw(std::out_of_range(
+            fmt::format("ERROR[SensorConfiguration::get_target]: Could not find target "
+                        "offsets for id {}. The following target ids are registered: {}",
+                        target_id,
+                        tmp)));
+    }
 }
 
 const std::unordered_map<std::string, datastructures::PositionalOffsets>&
