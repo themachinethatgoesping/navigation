@@ -9,9 +9,9 @@ project(
   'cpp',
   license: 'MPL-2.0',
 
-  version: '0.10.3',
-  default_options: ['warning_level=2', 'buildtype=release', 'cpp_std=c++17'],
-  meson_version: '>=1.0' #last meson version that was tested
+  version: '0.10.4',
+  default_options: ['warning_level=2', 'buildtype=release', 'cpp_std=c++20'],
+  meson_version: '>=1.1' #first version to support c++20 on macos
 )
 
 projectnamespace = 'themachinethatgoesping'
