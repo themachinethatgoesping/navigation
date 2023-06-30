@@ -179,6 +179,9 @@ jobs:
         key: super-ci-win       # name for the cache
         variant: sccache  # supports windows
 
+    
+    - name: install dependencies (meson & python)
+      run: pip install meson meson-python ninja pytest numpy
 
     - name: Cache Boost
       id: cache-boost
@@ -232,9 +235,6 @@ jobs:
         cd ..
 
     # same as for linux
-
-    - name: install dependencies (meson & python)
-      run: pip install meson meson-python ninja pytest numpy
 
     - name: configure meson
       run: |
