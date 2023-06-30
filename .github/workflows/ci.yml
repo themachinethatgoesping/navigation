@@ -223,7 +223,7 @@ jobs:
         cd .\proj\
         mkdir build
         cd build
-        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE3_LIBRARY="C:\lib\libsqlite3.a" -DSQLITE3_INCLUDE_DIR="C:\include -DENABLE_TIFF=OFF"
+        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE3_LIBRARY="C:\lib\libsqlite3.a" -DSQLITE3_INCLUDE_DIR="C:\include -DENABLE_TIFF=OFF -DENABLE_CURL=OFF"
         cmake --build .
         cmake --build . --target install
         cd ..
