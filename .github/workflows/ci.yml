@@ -228,7 +228,7 @@ jobs:
         cd .\proj\
         mkdir build
         cd build
-        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE_LIBRARY="C:\lib\libsqlite3.a" -DSQLITE_INCLUDE_DIR="C:\include"
+        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE3_LIBRARY="C:\lib\libsqlite3.a" -DSQLITE3_INCLUDE_DIR="C:\include"
         cmake --build .
         cmake --build . --target install
         cd ..
@@ -284,7 +284,7 @@ jobs:
     # install clang 14
     - run: brew install llvm@14
         
-    - run: brew install libomp boost proj
+    - run: brew install libomp boost proj sqlite3
     
     - run: pip install meson meson-python ninja pytest numpy
     

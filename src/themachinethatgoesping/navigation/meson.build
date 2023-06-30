@@ -48,6 +48,7 @@ if build_machine.system() != 'linux'
                         dependencies : [
                           boost_dep, 
                           omp_dep,
+                          proj_dep,
                           geographiclib_dep,
                           tools_dep
                           ],
@@ -62,6 +63,7 @@ else
                         dependencies : [
                           boost_dep, 
                           omp_dep,
+                          proj_dep,
                           geographiclib_dep,
                           tools_dep
                           ],
