@@ -199,6 +199,24 @@ jobs:
         cd ..
         #rm -rv boost*
 
+    - name: Install sqlite3 on windows
+      #if: steps.cache-boost.outputs.cache-hit != 'true'
+      run: |
+        Invoke-WebRequest -Uri https://www.sqlite.org/2023/sqlite-amalgamation-3420000.zip -outfile sqlite.zip
+        Expand-Archive sqlite.zip -DestinationPath sqlite
+        cd .\sqlite\
+        Invoke-WebRequest -Uri https://wrapdb.mesonbuild.com/v2/sqlite3_3.42.0-1/get_patch -outfile patch.zip
+        Expand-Archive patch.zip -DestinationPath patch
+        cp .\patch\sqlite-amalgamation-3420000\meson.build .\sqlite-amalgamation-3420000\meson.build
+        cd .\sqlite-amalgamation-3420000
+        meson setup builddir -Ddefault_library=static
+        cd builddir
+        meson compile
+        meson install
+        cd ..
+        cd ..
+        cd ..
+
     - name: Install proj on windows
       #if: steps.cache-boost.outputs.cache-hit != 'true'
       run: |
@@ -207,12 +225,11 @@ jobs:
         cd .\proj\
         mkdir build
         cd build
-        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release
+        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE_LIBRARY="C:\lib\sqlite3.lib" -DSQLITE_INCLUDE_DIR="C:\include"
         cmake --build .
         cmake --build . --target install
         cd ..
         cd ..
-        #rm -rv boost*
 
     # same as for linux
 
