@@ -185,6 +185,26 @@ jobs:
         path: c:\Boost
         #key: windows-msvc-14.32-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}
         key: windows-${{matrix.toolset}}-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}
+
+    - name: Install proj dependencies on windows
+      #if: steps.cache-boost.outputs.cache-hit != 'true'
+      run: |
+        vcpkg integrate install
+        vcpkg install sqlite3[core,tool] tiff curl --triplet=x64-windows-static
+        
+    - name: Install proj on windows
+      #if: steps.cache-boost.outputs.cache-hit != 'true'
+      run: |
+        Invoke-WebRequest -Uri https://github.com/OSGeo/PROJ/releases/download/${{matrix.proj-version}}/proj-${{matrix.proj-version}}.zip -outfile proj.zip
+        Expand-Archive proj.zip -DestinationPath proj
+        cd .\proj\
+        mkdir build
+        cd build
+        cmake -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ../proj-${{matrix.proj-version}}  -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DBUILD_APPS=OFF -DBUILD_TESTING=OFF
+        cmake --build .
+        cmake --build . --target install
+        cd ..
+        cd ..
   
     - name: Install boost on windows
       if: steps.cache-boost.outputs.cache-hit != 'true'
@@ -196,29 +216,6 @@ jobs:
         .\b2.exe install --variant=release --threading=multi --link=static ${{matrix.boost-modules}}
         cd ..
         #rm -rv boost*
-
-    - name: Install proj dependencies on windows
-      #if: steps.cache-boost.outputs.cache-hit != 'true'
-      run: |
-        git clone https://github.com/Microsoft/vcpkg.git
-        cd vcpkg
-        .\bootstrap-vcpkg.bat
-        .\vcpkg.exe install sqlite3[core,tool] tiff curl --triplet=x64-windows-static
-        cd ..
-
-    - name: Install proj on windows
-      #if: steps.cache-boost.outputs.cache-hit != 'true'
-      run: |
-        Invoke-WebRequest -Uri https://github.com/OSGeo/PROJ/releases/download/${{matrix.proj-version}}/proj-${{matrix.proj-version}}.zip -outfile proj.zip
-        Expand-Archive proj.zip -DestinationPath proj
-        cd .\proj\
-        mkdir build
-        cd build
-        cmake ../proj-${{matrix.proj-version}} -DCMAKE_TOOLCHAIN_FILE=../../vcpkg/scripts/buildsystems/vcpkg.cmake -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE3_LIBRARY="C:\lib\libsqlite3.a" -DSQLITE3_INCLUDE_DIR="C:\include -DENABLE_TIFF=OFF -DENABLE_CURL=OFF"
-        cmake --build .
-        cmake --build . --target install
-        cd ..
-        cd ..
 
     # same as for linux
     - name: configure meson
