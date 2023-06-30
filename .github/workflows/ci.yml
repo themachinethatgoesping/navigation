@@ -228,7 +228,7 @@ jobs:
         cd .\proj\
         mkdir build
         cd build
-        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE_LIBRARY="C:\lib\sqlite3.lib" -DSQLITE_INCLUDE_DIR="C:\include"
+        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE_LIBRARY="C:\lib\libsqlite3.a" -DSQLITE_INCLUDE_DIR="C:\include"
         cmake --build .
         cmake --build . --target install
         cd ..
