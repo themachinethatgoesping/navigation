@@ -197,22 +197,13 @@ jobs:
         cd ..
         #rm -rv boost*
 
-    - name: Install sqlite3 on windows
+    - name: Install proj dependencies on windows
       #if: steps.cache-boost.outputs.cache-hit != 'true'
       run: |
-        Invoke-WebRequest -Uri https://www.sqlite.org/2023/sqlite-amalgamation-3420000.zip -outfile sqlite.zip
-        Expand-Archive sqlite.zip -DestinationPath sqlite
-        cd .\sqlite\
-        Invoke-WebRequest -Uri https://wrapdb.mesonbuild.com/v2/sqlite3_3.42.0-1/get_patch -outfile patch.zip
-        Expand-Archive patch.zip -DestinationPath patch
-        cp .\patch\sqlite-amalgamation-3420000\meson.build .\sqlite-amalgamation-3420000\meson.build
-        cd .\sqlite-amalgamation-3420000
-        meson setup builddir -Ddefault_library=static
-        cd builddir
-        meson compile
-        meson install
-        cd ..
-        cd ..
+        git clone https://github.com/Microsoft/vcpkg.git
+        cd vcpkg
+        .\bootstrap-vcpkg.bat
+        .\vcpkg.exe install sqlite3[core,tool] tiff curl --triplet=x64-windows-static
         cd ..
 
     - name: Install proj on windows
@@ -223,7 +214,7 @@ jobs:
         cd .\proj\
         mkdir build
         cd build
-        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE3_LIBRARY="C:\lib\libsqlite3.a" -DSQLITE3_INCLUDE_DIR="C:\include -DENABLE_TIFF=OFF -DENABLE_CURL=OFF"
+        cmake ../proj-${{matrix.proj-version}} -DCMAKE_TOOLCHAIN_FILE=../../vcpkg/scripts/buildsystems/vcpkg.cmake -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DSQLITE3_LIBRARY="C:\lib\libsqlite3.a" -DSQLITE3_INCLUDE_DIR="C:\include -DENABLE_TIFF=OFF -DENABLE_CURL=OFF"
         cmake --build .
         cmake --build . --target install
         cd ..
