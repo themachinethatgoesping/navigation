@@ -207,7 +207,7 @@ jobs:
         cd .\proj\
         mkdir build
         cd build
-        cmake ../proj-${{matrix.proj-version}} -G "Visual Studio 16 2019" -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release
+        cmake ../proj-${{matrix.proj-version}} -A x64 -DCMAKE_INSTALL_PREFIX="C:\Program Files\PROJ" -DCMAKE_BUILD_TYPE=Release
         cmake --build .
         cmake --build . --target install
         cd ..
