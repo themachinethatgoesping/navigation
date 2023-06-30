@@ -34,7 +34,7 @@ boost_dep = dependency('boost', static: get_option('dynamic_boost').disabled())
 geographiclib_dep = dependency('geographiclib', static: true)
 
 # proj
-#geographiclib_dep = dependency('proj', static: true)
+proj_dep = dependency('proj', static: true)
 
 # themachinethatgoesping
 # tools

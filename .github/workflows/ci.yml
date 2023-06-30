@@ -178,8 +178,8 @@ jobs:
       with:
         key: super-ci-win       # name for the cache
         variant: sccache  # supports windows
-
     
+    # install meson here already because it is needed for the sqlite install
     - name: install dependencies (meson & python)
       run: pip install meson meson-python ninja pytest numpy
 
@@ -235,7 +235,6 @@ jobs:
         cd ..
 
     # same as for linux
-
     - name: configure meson
       run: |
         meson setup builddir/ -D"python.install_env=auto" -Ddefault_library=static -D"python.install_env=auto" -Dcpp_std=${{matrix.cpp_std}}
@@ -285,7 +284,7 @@ jobs:
     # install clang 14
     - run: brew install llvm@14
         
-    - run: brew install libomp boost
+    - run: brew install libomp boost proj
     
     - run: pip install meson meson-python ninja pytest numpy
     
