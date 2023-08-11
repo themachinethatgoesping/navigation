@@ -80,10 +80,10 @@ struct GeoLocationUTM : public GeoLocationLocal
                    double easting,
                    int    utm_zone,
                    bool   utm_northern_hemisphere,
-                   double z,
-                   double yaw,
-                   double pitch,
-                   double roll)
+                   float z,
+                   float yaw,
+                   float pitch,
+                   float roll)
         : GeoLocationLocal(northing, easting, z, yaw, pitch, roll)
         , utm_zone(utm_zone)
         , utm_northern_hemisphere(utm_northern_hemisphere)

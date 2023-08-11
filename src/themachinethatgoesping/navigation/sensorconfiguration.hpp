@@ -165,12 +165,12 @@ class SensorConfiguration
      * = port up)
      */
     void add_target(const std::string& target_id,
-                    double             x,
-                    double             y,
-                    double             z,
-                    double             yaw,
-                    double             pitch,
-                    double             roll);
+                    float              x,
+                    float              y,
+                    float              z,
+                    float              yaw,
+                    float              pitch,
+                    float              roll);
 
     /**
      * @brief add a target (e.g. MBES) with offsets to the sensor position system
@@ -236,7 +236,7 @@ class SensorConfiguration
      * @param roll roll offset of the attitude sensor (right-handed around the x-axis) (in degrees,
      * positive = port up)
      */
-    void set_attitude_source(std::string_view name, double yaw, double pitch, double roll);
+    void set_attitude_source(std::string_view name, float yaw, float pitch, float roll);
 
     /**
      * @brief Get the attitude sensor offsets
@@ -251,7 +251,7 @@ class SensorConfiguration
      * @param yaw yaw offset of the compass (right-handed around the z-axis) (in degrees, 90° =
      * east)
      */
-    void set_heading_source(std::string_view name, double yaw);
+    void set_heading_source(std::string_view name, float yaw);
 
     /**
      * @brief Set the compass offsets
@@ -274,7 +274,7 @@ class SensorConfiguration
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
      */
-    void set_depth_source(std::string_view name, double x, double y, double z);
+    void set_depth_source(std::string_view name, float x, float y, float z);
 
     /**
      * @brief Set the depth sensor offsets
@@ -297,7 +297,7 @@ class SensorConfiguration
      * @param y y-offset of the depth sensor (in meters, positive starboard)
      * @param z z-offset of the depth sensor (in meters, positive down)
      */
-    void set_position_source(std::string_view name, double x, double y, double z);
+    void set_position_source(std::string_view name, float x, float y, float z);
 
     /**
      * @brief Set the position system offsets
@@ -341,10 +341,10 @@ class SensorConfiguration
      * @param offsets_heading_source Offsets of the compass (used is only yaw offset)
      * @param offsets_attitude_source Offsets of the IMU (used are yaw, pitch and roll), if
      * heading is used, yaw is used to correct pitch, and roll but not added to the heading
-     * @return Eigen::Quaterniond Rotation of the sensor system compared to the world reference
-     * system
+     * @return Eigen::Quaternion<float> Rotation of the sensor system compared to the world
+     * reference system
      */
-    static Eigen::Quaterniond get_system_rotation_as_quat(
+    static Eigen::Quaternion<float> get_system_rotation_as_quat(
         const datastructures::SensorData&        sensor_data,
         const datastructures::PositionalOffsets& offsets_heading_source,
         const datastructures::PositionalOffsets& offsets_attitude_source);

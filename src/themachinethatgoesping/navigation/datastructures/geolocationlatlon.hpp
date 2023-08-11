@@ -75,10 +75,10 @@ struct GeoLocationLatLon : public GeoLocation
      */
     GeoLocationLatLon(double latitude,
                       double longitude,
-                      double z,
-                      double yaw,
-                      double pitch,
-                      double roll)
+                      float  z,
+                      float  yaw,
+                      float  pitch,
+                      float  roll)
         : GeoLocation(z, yaw, pitch, roll)
         , latitude(latitude)
         , longitude(longitude)

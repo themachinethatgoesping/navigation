@@ -8,8 +8,7 @@
 namespace themachinethatgoesping {
 namespace navigation {
 
-// ----- compute_target_position -----Compile failed: command 'msvc-14.32' failed: No such file or
-// directory
+// ----- compute_target_position -----
 
 datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
     const std::string&                target_id,
@@ -18,7 +17,7 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
     datastructures::GeoLocationLocal location;
 
     // first get the current rotation of the vessel
-    auto vessel_quat =
+    Eigen::Quaternion<float> vessel_quat =
         get_system_rotation_as_quat(sensor_data, _offsets_heading_source, _offsets_attitude_source);
 
     // convert target to quaternion
@@ -27,7 +26,7 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
         target_offsets.yaw, target_offsets.pitch, target_offsets.roll);
 
     // get rotated positions
-    auto target_xyz = tools::rotationfunctions::rotateXYZ(
+    auto target_xyz = tools::rotationfunctions::rotateXYZ<float>(
         vessel_quat, target_offsets.x, target_offsets.y, target_offsets.z);
     auto depth_source_xyz = tools::rotationfunctions::rotateXYZ(
         vessel_quat, _offsets_depth_source.x, _offsets_depth_source.y, _offsets_depth_source.z);
@@ -87,9 +86,9 @@ datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
     // distance and azimuth if target towards the gps antenna
     auto position = compute_target_position(target_id, datastructures::SensorData(sensor_data));
 
-    double distance =
+    auto distance =
         std::sqrt(position.northing * position.northing + position.easting * position.easting);
-    double heading = tools::rotationfunctions::compute_heading(position.northing, position.easting);
+    auto heading = tools::rotationfunctions::compute_heading(position.northing, position.easting);
 
     double target_lat, target_lon;
     if (std::isnan(heading))
@@ -173,12 +172,12 @@ void SensorConfiguration::add_target(const std::string&                       ta
 }
 
 void SensorConfiguration::add_target(const std::string& target_id,
-                                     double             x,
-                                     double             y,
-                                     double             z,
-                                     double             yaw,
-                                     double             pitch,
-                                     double             roll)
+                                     float              x,
+                                     float              y,
+                                     float              z,
+                                     float              yaw,
+                                     float              pitch,
+                                     float              roll)
 {
     add_target(target_id, datastructures::PositionalOffsets(target_id, x, y, z, yaw, pitch, roll));
 }
@@ -192,9 +191,9 @@ void SensorConfiguration::add_targets(
 
 // ----- get/set sensor offsets -----
 void SensorConfiguration::set_attitude_source(std::string_view name,
-                                              double           yaw,
-                                              double           pitch,
-                                              double           roll)
+                                              float            yaw,
+                                              float            pitch,
+                                              float            roll)
 {
     _offsets_attitude_source =
         datastructures::PositionalOffsets(name, 0.0, 0.0, 0.0, yaw, pitch, roll);
@@ -210,7 +209,7 @@ datastructures::PositionalOffsets SensorConfiguration::get_attitude_source() con
     return _offsets_attitude_source;
 }
 
-void SensorConfiguration::set_heading_source(std::string_view name, double yaw)
+void SensorConfiguration::set_heading_source(std::string_view name, float yaw)
 {
     _offsets_heading_source = datastructures::PositionalOffsets(name, 0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
@@ -224,7 +223,7 @@ datastructures::PositionalOffsets SensorConfiguration::get_heading_source() cons
     return _offsets_heading_source;
 }
 
-void SensorConfiguration::set_depth_source(std::string_view name, double x, double y, double z)
+void SensorConfiguration::set_depth_source(std::string_view name, float x, float y, float z)
 {
     _offsets_depth_source = datastructures::PositionalOffsets(name, x, y, z, 0.0, 0.0, 0.0);
 }
@@ -237,7 +236,7 @@ datastructures::PositionalOffsets SensorConfiguration::get_depth_source() const
     return _offsets_depth_source;
 }
 
-void SensorConfiguration::set_position_source(std::string_view name, double x, double y, double z)
+void SensorConfiguration::set_position_source(std::string_view name, float x, float y, float z)
 {
     _offsets_position_source = datastructures::PositionalOffsets(name, x, y, z, 0.0, 0.0, 0.0);
 }
@@ -252,13 +251,13 @@ datastructures::PositionalOffsets SensorConfiguration::get_position_source() con
 }
 
 // ----- helper functions -----
-Eigen::Quaterniond SensorConfiguration::get_system_rotation_as_quat(
+Eigen::Quaternion<float> SensorConfiguration::get_system_rotation_as_quat(
     const datastructures::SensorData&        sensor_data,
     const datastructures::PositionalOffsets& offsets_heading_source,
     const datastructures::PositionalOffsets& offsets_attitude_source)
 {
     // convert offset to quaternion
-    Eigen::Quaternion<double> imu_offset_quat =
+    Eigen::Quaternion<float> imu_offset_quat =
         tools::rotationfunctions::quaternion_from_ypr(offsets_attitude_source.yaw,
                                                       offsets_attitude_source.pitch,
                                                       offsets_attitude_source.roll,
@@ -266,7 +265,7 @@ Eigen::Quaterniond SensorConfiguration::get_system_rotation_as_quat(
 
     // convert sensor pitch,roll to quaternion (ignore reported yaw)
     auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
-        0.0, sensor_data.pitch, sensor_data.roll, true);
+        0.0f, sensor_data.pitch, sensor_data.roll, true);
 
     // compute roll and pitch using the imu_offsets (including yaw offset)
     // TODO: check if the order is correct
@@ -275,11 +274,11 @@ Eigen::Quaterniond SensorConfiguration::get_system_rotation_as_quat(
 
     // compute sensor quat using the correct pitch and roll (ignore yaw)
     auto ypr         = tools::rotationfunctions::ypr_from_quaternion(pr_quat, false);
-    auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(0., ypr[1], ypr[2], false);
+    auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(0.f, ypr[1], ypr[2], false);
 
     // rotate sensor quat using heading
-    double heading      = sensor_data.heading - offsets_heading_source.yaw;
-    auto   compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0, 0.0, true);
+    float heading      = sensor_data.heading - offsets_heading_source.yaw;
+    auto  compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0f, 0.0f, true);
 
     auto vessel_quat = compass_quat * sensor_quat;
     vessel_quat.normalize();

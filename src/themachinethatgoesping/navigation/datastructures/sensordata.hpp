@@ -31,11 +31,11 @@ namespace datastructures {
  */
 struct SensorData
 {
-    double depth   = 0.0; ///< in m, positive downwards
-    double heave   = 0.0; ///< from heave source, will be added to depth in m, positive upwards
-    double heading = 0.0; ///< from heading source in °, 0° is north, 90° is east
-    double pitch   = 0.0; ///< from attitude source, in °, positive means bow up
-    double roll    = 0.0; ///< from attitude source, in °, positive means port up
+    float depth   = 0.0; ///< in m, positive downwards
+    float heave   = 0.0; ///< from heave source, will be added to depth in m, positive upwards
+    float heading = 0.0; ///< from heading source in °, 0° is north, 90° is east
+    float pitch   = 0.0; ///< from attitude source, in °, positive means bow up
+    float roll    = 0.0; ///< from attitude source, in °, positive means port up
 
     /**
      * @brief Construct a new SensorData object
@@ -52,7 +52,7 @@ struct SensorData
      * @param pitch from attitude source, in °, positive means bow up
      * @param roll from attitude source, in °, positive means port up
      */
-    SensorData(double depth, double heave, double heading, double pitch, double roll)
+    SensorData(float depth, float heave, float heading, float pitch, float roll)
         : depth(depth)
         , heave(heave)
         , heading(heading)
@@ -87,14 +87,14 @@ struct SensorData
     {
         SensorData data;
 
-        is.read(reinterpret_cast<char*>(&data.depth), 5 * sizeof(double));
+        is.read(reinterpret_cast<char*>(&data.depth), 5 * sizeof(float));
 
         return data;
     }
 
     void to_stream(std::ostream& os) const
     {
-        os.write(reinterpret_cast<const char*>(&depth), 5 * sizeof(double));
+        os.write(reinterpret_cast<const char*>(&depth), 5 * sizeof(float));
     }
 
   public:

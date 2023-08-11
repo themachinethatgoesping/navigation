@@ -29,10 +29,10 @@ namespace datastructures {
  */
 struct GeoLocation
 {
-    double z     = 0;   ///< in m, positive downwards
-    double yaw   = 0.0; ///< in °, 0° is north, 90° is east
-    double pitch = 0.0; ///< in °, positive means bow up
-    double roll  = 0.0; ///< in °, positive means port up
+    float z     = 0;   ///< in m, positive downwards
+    float yaw   = 0.0; ///< in °, 0° is north, 90° is east
+    float pitch = 0.0; ///< in °, positive means bow up
+    float roll  = 0.0; ///< in °, positive means port up
 
     /**
      * @brief Construct a new Position object
@@ -48,7 +48,7 @@ struct GeoLocation
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    GeoLocation(double z, double yaw, double pitch, double roll)
+    GeoLocation(float z, float yaw, float pitch, float roll)
         : z(z)
         , yaw(yaw)
         , pitch(pitch)
@@ -87,14 +87,14 @@ struct GeoLocation
     {
         GeoLocation data;
 
-        is.read(reinterpret_cast<char*>(&data.z), 4 * sizeof(double));
+        is.read(reinterpret_cast<char*>(&data.z), 4 * sizeof(float));
 
         return data;
     }
 
     void to_stream(std::ostream& os) const
     {
-        os.write(reinterpret_cast<const char*>(&z), 4 * sizeof(double));
+        os.write(reinterpret_cast<const char*>(&z), 4 * sizeof(float));
     }
 
   public:

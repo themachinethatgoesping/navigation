@@ -63,10 +63,10 @@ struct GeoLocationLocal : public GeoLocation
      */
     GeoLocationLocal(double northing,
                      double easting,
-                     double z,
-                     double yaw,
-                     double pitch,
-                     double roll)
+                     float z,
+                     float yaw,
+                     float pitch,
+                     float roll)
         : GeoLocation(z, yaw, pitch, roll)
         , northing(northing)
         , easting(easting)

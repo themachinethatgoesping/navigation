@@ -77,11 +77,11 @@ struct SensorDataLatLon : public SensorData
      */
     SensorDataLatLon(double latitude,
                      double longitude,
-                     double depth,
-                     double heave,
-                     double heading,
-                     double pitch,
-                     double roll)
+                     float depth,
+                     float heave,
+                     float heading,
+                     float pitch,
+                     float roll)
         : SensorData(depth, heave, heading, pitch, roll)
         , latitude(latitude)
         , longitude(longitude)

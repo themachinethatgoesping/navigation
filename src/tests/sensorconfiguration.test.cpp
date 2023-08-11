@@ -4,6 +4,7 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include <filesystem>
 
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
@@ -502,18 +503,18 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         relative_position_sbes =
             scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
-        CHECK(position_mbes.z == Catch::Approx(1002.7717041909));
+        CHECK(position_mbes.z == Catch::Approx(1002.7717041909f));
         REQUIRE(position_mbes.z == position_sbes.z);
 
         CHECK(position_mbes.latitude == Catch::Approx(-74.1229869952));
         CHECK(position_mbes.longitude == Catch::Approx(1.123067173));
 
-        CHECK(position_mbes.yaw == Catch::Approx(0.0));
-        CHECK(position_mbes.pitch == Catch::Approx(9.0));
-        CHECK(position_mbes.roll == Catch::Approx(-1.0));
-        CHECK(position_sbes.yaw == Catch::Approx(45.9361957025));
-        CHECK(position_sbes.pitch == Catch::Approx(12.0290113349));
-        CHECK(position_sbes.roll == Catch::Approx(15.7758445678));
+        REQUIRE_THAT(position_mbes.yaw, Catch::Matchers::WithinAbs(0, 0.001f));
+        REQUIRE_THAT(position_mbes.pitch, Catch::Matchers::WithinAbs(9.f, 0.001f));
+        REQUIRE_THAT(position_mbes.roll, Catch::Matchers::WithinAbs(-1.f, 0.001f));
+        REQUIRE_THAT(position_sbes.yaw, Catch::Matchers::WithinAbs(45.936f, 0.001f));
+        REQUIRE_THAT(position_sbes.pitch, Catch::Matchers::WithinAbs(12.029f, 0.001f));
+        REQUIRE_THAT(position_sbes.roll, Catch::Matchers::WithinAbs(15.775f, 0.001f));
 
         // check if results with UTM are the same as with latlon
         position_mbes_utm =

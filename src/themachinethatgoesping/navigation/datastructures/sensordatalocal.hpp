@@ -65,11 +65,11 @@ struct SensorDataLocal : public SensorData
      */
     SensorDataLocal(double northing,
                     double easting,
-                    double depth,
-                    double heave,
-                    double heading,
-                    double pitch,
-                    double roll)
+                    float depth,
+                    float heave,
+                    float heading,
+                    float pitch,
+                    float roll)
         : SensorData(depth, heave, heading, pitch, roll)
         , northing(northing)
         , easting(easting)

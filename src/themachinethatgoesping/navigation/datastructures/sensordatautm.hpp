@@ -102,11 +102,11 @@ struct SensorDataUTM : public SensorDataLocal
                   double easting,
                   int    utm_zone,
                   bool   utm_northern_hemisphere,
-                  double depth,
-                  double heave,
-                  double heading,
-                  double pitch,
-                  double roll)
+                  float  depth,
+                  float  heave,
+                  float  heading,
+                  float  pitch,
+                  float  roll)
         : SensorDataLocal(northing, easting, depth, heave, heading, pitch, roll)
         , utm_zone(utm_zone)
         , utm_northern_hemisphere(utm_northern_hemisphere)

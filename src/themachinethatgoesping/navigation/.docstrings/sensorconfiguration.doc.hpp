@@ -1,4 +1,4 @@
-//sourcehash: 72da2f7f3b6a52123def1b263b2530cecffef7c786b7ed6a1c1c1286df1ab066
+//sourcehash: 0496ca772c3a37332d9e33f4521785e3d9785283ff8421f51d8c61356d0c76f0
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -220,8 +220,8 @@ Parameter ``offsets_attitude_source``:
     heading
 
 Returns:
-    Eigen::Quaterniond Rotation of the sensor system compared to the
-    world reference system)doc";
+    Eigen::Quaternion<float> Rotation of the sensor system compared to
+    the world reference system)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_target =
 R"doc(Get stored target offsets of a specified target

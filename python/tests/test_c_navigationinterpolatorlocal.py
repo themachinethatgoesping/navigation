@@ -51,14 +51,14 @@ class TestNavigationNavigationInterpolatorLocal:
         assert pos.northing == approx(-1.63846513)
         assert pos.easting == approx(9.05693207)
         assert pos.z == approx(-1.44404485)
-        assert pos.yaw == approx(1.28465417)
+        assert pos.yaw == approx(1.284651756286621)
         assert pos.pitch == approx(26.16455736)
-        assert pos.roll == approx(11.66764810)
+        assert pos.roll == approx(11.667630195617676)
 
         pos = navi("mbes", 0)
 
-        assert pos.northing == approx(-4.23049751)
-        assert pos.easting == approx(-0.40614279)
+        assert pos.northing == approx(-4.2304908943175406)
+        assert pos.easting == approx(-0.4061448302925328)
         assert pos.z == approx(-3.76324394)
         assert pos.yaw == approx(293.62666611)
         assert pos.pitch == approx(11.01290459)

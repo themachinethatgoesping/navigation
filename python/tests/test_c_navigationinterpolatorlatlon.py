@@ -51,9 +51,9 @@ class TestNavigationNavigationInterpolatorLatLon:
         assert pos.latitude == approx(17.291495620156894)
         assert pos.longitude == approx(-3.1997763750783226)
         assert pos.z == approx(-1.44404485)
-        assert pos.yaw == approx(1.28465417)
+        assert pos.yaw == approx(1.284651756286621)
         assert pos.pitch == approx(26.16455736)
-        assert pos.roll == approx(11.66764810)
+        assert pos.roll == approx(11.667630195617676)
 
         pos = navi("mbes", 0)
 

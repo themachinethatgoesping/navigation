@@ -58,7 +58,7 @@ void init_c_sensorconfiguration(py::module& m)
             py::arg("target_id"),
             py::arg("sensor_data"))
         .def("add_target",
-             py::overload_cast<const std::string&, double, double, double, double, double, double>(
+             py::overload_cast<const std::string&, float, float, float, float, float, float>(
                  &SensorConfiguration::add_target),
              DOC(themachinethatgoesping, navigation, SensorConfiguration, add_target),
              py::arg("target_id"),
@@ -96,7 +96,7 @@ void init_c_sensorconfiguration(py::module& m)
              &SensorConfiguration::get_target_ids,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, get_target_ids))
         .def("set_attitude_source",
-             py::overload_cast<std::string_view, double, double, double>(
+             py::overload_cast<std::string_view, float, float, float>(
                  &SensorConfiguration::set_attitude_source),
              DOC(themachinethatgoesping, navigation, SensorConfiguration, set_attitude_source),
              py::arg("name"),
@@ -112,7 +112,7 @@ void init_c_sensorconfiguration(py::module& m)
              &SensorConfiguration::get_attitude_source,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, get_attitude_source))
         .def("set_heading_source",
-             py::overload_cast<std::string_view, double>(&SensorConfiguration::set_heading_source),
+             py::overload_cast<std::string_view, float>(&SensorConfiguration::set_heading_source),
              DOC(themachinethatgoesping, navigation, SensorConfiguration, set_heading_source),
              py::arg("name"),
              py::arg("yaw"))
@@ -125,7 +125,7 @@ void init_c_sensorconfiguration(py::module& m)
              &SensorConfiguration::get_heading_source,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, get_heading_source))
         .def("set_depth_source",
-             py::overload_cast<std::string_view, double, double, double>(
+             py::overload_cast<std::string_view, float, float, float>(
                  &SensorConfiguration::set_depth_source),
              DOC(themachinethatgoesping, navigation, SensorConfiguration, set_depth_source),
              py::arg("name"),
@@ -141,7 +141,7 @@ void init_c_sensorconfiguration(py::module& m)
              &SensorConfiguration::get_depth_source,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, get_depth_source))
         .def("set_position_source",
-             py::overload_cast<std::string_view, double, double, double>(
+             py::overload_cast<std::string_view, float, float, float>(
                  &SensorConfiguration::set_position_source),
              DOC(themachinethatgoesping, navigation, SensorConfiguration, set_position_source),
              py::arg("name"),

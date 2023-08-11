@@ -26,12 +26,12 @@ namespace datastructures {
 struct PositionalOffsets
 {
     std::string name;        ///< The name of the sensor
-    double      x     = 0.0; ///< in m, positive forward
-    double      y     = 0.0; ///< in m, positive starboard
-    double      z     = 0.0; ///< in m, positive downwards
-    double      yaw   = 0.0; ///< in °, positive means clockwise rotation
-    double      pitch = 0.0; ///< in °, positive means bow up
-    double      roll  = 0.0; ///< in °, positive means port up
+    float       x     = 0.0; ///< in m, positive forward
+    float       y     = 0.0; ///< in m, positive starboard
+    float       z     = 0.0; ///< in m, positive downwards
+    float       yaw   = 0.0; ///< in °, positive means clockwise rotation
+    float       pitch = 0.0; ///< in °, positive means bow up
+    float       roll  = 0.0; ///< in °, positive means port up
 
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
@@ -51,12 +51,12 @@ struct PositionalOffsets
      * @param roll in °, positive means port up
      */
     PositionalOffsets(std::string_view name,
-                      double           x,
-                      double           y,
-                      double           z,
-                      double           yaw,
-                      double           pitch,
-                      double           roll)
+                      float            x,
+                      float            y,
+                      float            z,
+                      float            yaw,
+                      float            pitch,
+                      float            roll)
         : name(std::string(name))
         , x(x)
         , y(y)
@@ -119,7 +119,7 @@ struct PositionalOffsets
 
         data.name = tools::classhelper::stream::container_from_stream<std::string>(is);
 
-        is.read(reinterpret_cast<char*>(&data.x), 6 * sizeof(double));
+        is.read(reinterpret_cast<char*>(&data.x), 6 * sizeof(float));
 
         return data;
     }
@@ -128,7 +128,7 @@ struct PositionalOffsets
     {
         tools::classhelper::stream::container_to_stream(os, name);
 
-        os.write(reinterpret_cast<const char*>(&x), 6 * sizeof(double));
+        os.write(reinterpret_cast<const char*>(&x), 6 * sizeof(float));
     }
 
   public:
