@@ -79,23 +79,23 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
         scs.set_attitude_source("gps", 90, 0, 0);
         auto position = scs.compute_target_position("mbes", sensor_data);
 
-        REQUIRE(position.yaw == Catch::Approx(90));
-        CHECK(position.pitch == Catch::Approx(0.0).scale(1.0));
-        REQUIRE(position.roll == Catch::Approx(-20));
+        REQUIRE_THAT(position.yaw, Catch::Matchers::WithinAbs(90.f, 0.001f));
+        REQUIRE_THAT(position.pitch, Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position.roll, Catch::Matchers::WithinAbs(-20.f, 0.001f));
 
         sensor_data.roll  = 10;
         sensor_data.pitch = 0;
 
         position = scs.compute_target_position("mbes", sensor_data);
-        REQUIRE(position.yaw == Catch::Approx(90));
-        CHECK(position.pitch == Catch::Approx(10.0));
-        REQUIRE(position.roll == Catch::Approx(0).scale(1.0));
+        REQUIRE_THAT(position.yaw, Catch::Matchers::WithinAbs(90.f, 0.001f));
+        REQUIRE_THAT(position.pitch, Catch::Matchers::WithinAbs(10.f, 0.001f));
+        REQUIRE_THAT(position.roll, Catch::Matchers::WithinAbs(0.f, 0.001f));
 
         scs.set_attitude_source("gps", 0, 1, 2);
         position = scs.compute_target_position("mbes", sensor_data);
-        REQUIRE(position.yaw == Catch::Approx(90));
-        CHECK(position.pitch == Catch::Approx(-0.9902670948));
-        REQUIRE(position.roll == Catch::Approx(8.001202844));
+        REQUIRE_THAT(position.yaw, Catch::Matchers::WithinAbs(90.f, 0.001f));
+        REQUIRE_THAT(position.pitch, Catch::Matchers::WithinAbs(-0.9902670948f, 0.001f));
+        REQUIRE_THAT(position.roll, Catch::Matchers::WithinAbs(8.001202844f, 0.001f));
     }
 }
 
@@ -238,12 +238,12 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(position_mbes.yaw == Catch::Approx(180.0));
-        CHECK(position_mbes.pitch == Catch::Approx(0.0));
-        CHECK(position_mbes.roll == Catch::Approx(0.0));
-        CHECK(position_sbes.yaw == Catch::Approx(225));
-        CHECK(position_sbes.pitch == Catch::Approx(5));
-        REQUIRE(position_sbes.roll == Catch::Approx(10));
+        REQUIRE_THAT(position_mbes.yaw, Catch::Matchers::WithinAbs(180.f, 0.001f));
+        REQUIRE_THAT(position_mbes.pitch, Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position_mbes.roll, Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position_sbes.yaw, Catch::Matchers::WithinAbs(225.f, 0.001f));
+        REQUIRE_THAT(position_sbes.pitch, Catch::Matchers::WithinAbs(5.f, 0.001f));
+        REQUIRE_THAT(position_sbes.roll, Catch::Matchers::WithinAbs(10.f, 0.001f));
 
         // scenario 0.3
         // initialize sensor data
@@ -265,25 +265,25 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
             scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
 
         // check results
-        REQUIRE(position_mbes.z == Catch::Approx(8.0));
+        REQUIRE_THAT(position_mbes.z, Catch::Matchers::WithinAbs(8.f, 0.001f));
         REQUIRE(position_mbes.z == position_sbes.z);
 
-        CHECK(relative_position_mbes.northing == Catch::Approx(-2.0));
-        CHECK(relative_position_mbes.easting == Catch::Approx(1.0));
-        CHECK(position_mbes.northing == Catch::Approx(8));
-        REQUIRE(position_mbes.easting == Catch::Approx(21));
+        REQUIRE_THAT(relative_position_mbes.northing, Catch::Matchers::WithinAbs(-2.f, 0.001f));
+        REQUIRE_THAT(relative_position_mbes.easting, Catch::Matchers::WithinAbs(1.f, 0.001f));
+        REQUIRE_THAT(position_mbes.northing, Catch::Matchers::WithinAbs(8.f, 0.001f));
+        REQUIRE_THAT(position_mbes.easting, Catch::Matchers::WithinAbs(21.f, 0.001f));
 
         REQUIRE(relative_position_mbes.northing == relative_position_sbes.northing);
         REQUIRE(relative_position_mbes.easting == relative_position_sbes.easting);
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(position_mbes.yaw == Catch::Approx(90.0));
-        CHECK(position_mbes.pitch == Catch::Approx(0.0));
-        CHECK(position_mbes.roll == Catch::Approx(0.0));
-        CHECK(position_sbes.yaw == Catch::Approx(135));
-        CHECK(position_sbes.pitch == Catch::Approx(5));
-        CHECK(position_sbes.roll == Catch::Approx(10));
+        REQUIRE_THAT(position_mbes.yaw, Catch::Matchers::WithinAbs(90.f, 0.001f));
+        REQUIRE_THAT(position_mbes.pitch, Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position_mbes.roll, Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position_sbes.yaw, Catch::Matchers::WithinAbs(135.f, 0.001f));
+        REQUIRE_THAT(position_sbes.pitch, Catch::Matchers::WithinAbs(5.f, 0.001f));
+        REQUIRE_THAT(position_sbes.roll, Catch::Matchers::WithinAbs(10.f, 0.001f));
     }
 
     SECTION("SENSOR_VALUES XY coordinates")
