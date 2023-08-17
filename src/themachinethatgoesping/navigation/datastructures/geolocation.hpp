@@ -72,10 +72,12 @@ struct GeoLocation
      */
     bool operator==(const GeoLocation& rhs) const
     {
-        if (tools::helper::approx(z, rhs.z))
-            if (tools::helper::approx(yaw, rhs.yaw))
-                if (tools::helper::approx(pitch, rhs.pitch))
-                    if (tools::helper::approx(roll, rhs.roll))
+        using tools::helper::approx;
+
+        if (approx(z, rhs.z))
+            if (approx(yaw, rhs.yaw))
+                if (approx(pitch, rhs.pitch))
+                    if (approx(roll, rhs.roll))
                         return true;
 
         return false;
