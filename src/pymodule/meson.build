@@ -45,6 +45,7 @@ py_navigation = pymod.extension_module(
         pybind11_dep,
         python3_dep],
     link_language : 'cpp',
+    cpp_pch : 'pch/pch.hpp',
     override_options: [
         #'cpp_rtti=true',
     ],
