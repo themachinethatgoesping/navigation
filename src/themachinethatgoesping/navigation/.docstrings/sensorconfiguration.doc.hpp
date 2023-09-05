@@ -1,4 +1,4 @@
-//sourcehash: 0e512466b36b0524875808d2b763858b95f2bbdd93469771315c6f0b871d11c7
+//sourcehash: 1735e2afb37ac43ebd0ddc2f5f714123ba98b29fff2708e45e99b97952d927fe
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -245,6 +245,13 @@ Returns:
     const std::unordered_map<std::string,
     datastructures::PositionalOffsets>&)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_get_waterline_offset =
+R"doc(Get the waterline offset Negative waterline offset means that z=0 is
+below the waterline
+
+Returns:
+    waterline_offset)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_offsets_attitude_source =
 R"doc(< Static Roll,Pitch,Yaw (installation) offsets of the attitude <
 sensor)doc";
@@ -359,6 +366,12 @@ R"doc(Set the position system offsets
 Parameter ``sensor_offsets``:
     offsets structure (only x, y and z are used))doc";
 
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_set_waterline_offset =
+R"doc(Set the waterline offset Negative waterline offset means that z=0 is
+below the waterline
+
+Parameter ``waterline_offset``:)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_target_offsets = R"doc(< TargetId (position in vector) for each registered target_id)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_to_stream =
@@ -366,6 +379,8 @@ R"doc(Write the sensor configuration to a stream. Warning: there is no error
 checking!
 
 Parameter ``os``:)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_waterline_offset = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_without_targets =
 R"doc(Return the SensorConfiguration object without registered targets

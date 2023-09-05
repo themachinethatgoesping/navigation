@@ -33,13 +33,14 @@ class TestNavigationSensorConfiguration:
         scs.set_depth_source("sensor", 0, 0, 1)
         scs.set_position_source("sensor", 1, 2, 3)
         scs.set_attitude_source("sensor", 10, -10, -30)
+        scs.set_waterline_offset(0.5)
 
         # get target position
         position = scs.compute_target_position("mbes", data)
         position2 = nav.datastructures.GeoLocationLatLon(
             52.99993263333143,
             10.000048544339503,
-            13.006073137528947,
+            12.50607681274414,
             17.60506545110071,
             29.188285228706675,
             80.77436580631132,

@@ -2,10 +2,7 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-
 // automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
-
-
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
@@ -126,6 +123,13 @@ void init_c_sensorconfiguration(py::module& m)
         .def("get_heading_source",
              &SensorConfiguration::get_heading_source,
              DOC(themachinethatgoesping, navigation, SensorConfiguration, get_heading_source))
+        .def("set_waterline_offset",
+             py::overload_cast<float>(&SensorConfiguration::set_waterline_offset),
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, set_waterline_offset),
+             py::arg("z"))
+        .def("get_waterline_offset",
+             &SensorConfiguration::get_waterline_offset,
+             DOC(themachinethatgoesping, navigation, SensorConfiguration, get_waterline_offset))
         .def("set_depth_source",
              py::overload_cast<std::string_view, float, float, float>(
                  &SensorConfiguration::set_depth_source),

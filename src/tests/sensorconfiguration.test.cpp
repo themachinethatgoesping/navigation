@@ -27,6 +27,8 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     scs.set_attitude_source("mru", 1, -2, 3);
     scs.set_depth_source("gps", 4, 5, -6);
 
+    scs.set_waterline_offset(-0.5);
+
     // copy constructor
     SensorConfiguration scs2(scs);
 

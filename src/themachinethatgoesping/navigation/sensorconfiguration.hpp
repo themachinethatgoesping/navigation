@@ -47,8 +47,11 @@ class SensorConfiguration
         _offsets_position_source; ///< Static x,y,z (installation) Offsets of the PositionSystem
     datastructures::PositionalOffsets
         _offsets_depth_source; ///< Static xy,z (installation) Offsets of the depth sensor
-                               // Static Position of Heave Sensor
-                               // Offsets _HeaveSensorOffsets;
+    // Static Position of Heave Sensor
+    // Offsets _HeaveSensorOffsets;
+
+    float _waterline_offset =
+        0.0; ///< Waterline offset (negative waterline offset means that z=0 is below the waterline
 
   public:
     /**
@@ -270,6 +273,22 @@ class SensorConfiguration
     datastructures::PositionalOffsets get_heading_source() const;
 
     /**
+     * @brief Set the waterline offset
+     * Negative waterline offset means that z=0 is below the waterline
+     *
+     * @param waterline_offset
+     */
+    void set_waterline_offset(float waterline_offset);
+
+    /**
+     * @brief Get the waterline offset
+     * Negative waterline offset means that z=0 is below the waterline
+     *
+     * @return waterline_offset
+     */
+    float get_waterline_offset() const;
+
+    /**
      * @brief Set the depth sensor offsets
      *
      * @param x x-offset of the depth sensor (in meters, positive forward)
@@ -377,6 +396,7 @@ class SensorConfiguration
         _offsets_heading_source.to_stream(os);
         _offsets_position_source.to_stream(os);
         _offsets_depth_source.to_stream(os);
+        os.write(reinterpret_cast<const char*>(&_waterline_offset), sizeof(_waterline_offset));
     }
 
     /**
@@ -406,6 +426,7 @@ class SensorConfiguration
         obj._offsets_heading_source  = PositionalOffsets::from_stream(is);
         obj._offsets_position_source = PositionalOffsets::from_stream(is);
         obj._offsets_depth_source    = PositionalOffsets::from_stream(is);
+        is.read(reinterpret_cast<char*>(&obj._waterline_offset), sizeof(obj._waterline_offset));
 
         return obj;
     }
@@ -439,7 +460,8 @@ class SensorConfiguration
         return _offsets_attitude_source == other._offsets_attitude_source &&
                _offsets_heading_source == other._offsets_heading_source &&
                _offsets_position_source == other._offsets_position_source &&
-               _offsets_depth_source == other._offsets_depth_source;
+               _offsets_depth_source == other._offsets_depth_source &&
+               _waterline_offset == other._waterline_offset;
     }
     /**
      * @brief Compare two SensorConfiguration objects for inequality
