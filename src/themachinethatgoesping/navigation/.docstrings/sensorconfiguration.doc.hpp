@@ -1,4 +1,4 @@
-//sourcehash: 0496ca772c3a37332d9e33f4521785e3d9785283ff8421f51d8c61356d0c76f0
+//sourcehash: 0e512466b36b0524875808d2b763858b95f2bbdd93469771315c6f0b871d11c7
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -372,6 +372,15 @@ R"doc(Return the SensorConfiguration object without registered targets
 
 Returns:
     SensorConfiguration)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_hash_value =
+R"doc(Boost hash function
+
+Parameter ``object``:
+    object to hash
+
+Returns:
+    std::size_t)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

@@ -163,6 +163,7 @@ void SensorConfiguration::remove_target(const std::string& target_id)
 void SensorConfiguration::remove_targets()
 {
     _target_offsets.clear();
+    add_target("0", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
 void SensorConfiguration::add_target(const std::string&                       target_id,

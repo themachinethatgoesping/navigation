@@ -63,6 +63,8 @@ class SensorConfiguration
         _offsets_heading_source.name  = default_sensor_name;
         _offsets_position_source.name = default_sensor_name;
         _offsets_depth_source.name    = default_sensor_name;
+
+        add_target("0", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     }
 
     /**
@@ -482,6 +484,17 @@ class SensorConfiguration
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
+
+/**
+ * @brief Boost hash function
+ *
+ * @param object object to hash
+ * @return std::size_t
+ */
+inline std::size_t hash_value(const themachinethatgoesping::navigation::SensorConfiguration& object)
+{
+    return object.slow_hash();
+}
 
 } // namespace navigation
 } // namespace themachinethatgoesping
