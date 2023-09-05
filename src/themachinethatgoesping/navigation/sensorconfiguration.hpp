@@ -496,6 +496,9 @@ class SensorConfiguration
         printer.register_section("Depth sensor offsets");
         printer.append(_offsets_depth_source.__printer__(float_precision));
 
+        printer.register_section("waterline offsets");
+        printer.register_value("Waterline offset", _waterline_offset,"m");
+
         return printer;
     }
 
