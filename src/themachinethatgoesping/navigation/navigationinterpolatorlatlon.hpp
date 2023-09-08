@@ -56,7 +56,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
 
-    NavigationInterpolatorLatLon(SensorConfiguration                     sensor_configuration,
+    NavigationInterpolatorLatLon(SensorConfiguration sensor_configuration = SensorConfiguration(),
                                  tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                      tools::vectorinterpolators::t_extr_mode::extrapolate)
         : I_NavigationInterpolator(std::move(sensor_configuration),
