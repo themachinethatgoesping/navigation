@@ -339,9 +339,9 @@ class SensorConfiguration
      *
      * @return std::vector<std::string_view>
      */
-    std::vector<std::string_view> get_target_ids() const
+    std::vector<std::string> get_target_ids() const
     {
-        std::vector<std::string_view> target_ids;
+        std::vector<std::string> target_ids;
         for (const auto& target : _target_offsets)
         {
             target_ids.push_back(target.first);
@@ -497,7 +497,7 @@ class SensorConfiguration
         printer.append(_offsets_depth_source.__printer__(float_precision));
 
         printer.register_section("waterline offsets");
-        printer.register_value("Waterline offset", _waterline_offset,"m");
+        printer.register_value("Waterline offset", _waterline_offset, "m");
 
         return printer;
     }
