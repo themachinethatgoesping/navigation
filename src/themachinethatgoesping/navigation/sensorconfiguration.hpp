@@ -518,7 +518,7 @@ class SensorConfiguration
  */
 inline std::size_t hash_value(const themachinethatgoesping::navigation::SensorConfiguration& object)
 {
-    return object.slow_hash();
+    return object.binary_hash();
 }
 
 } // namespace navigation
@@ -530,6 +530,6 @@ struct std::hash<themachinethatgoesping::navigation::SensorConfiguration>
     std::size_t operator()(
         const themachinethatgoesping::navigation::SensorConfiguration& object) const
     {
-        return object.slow_hash();
+        return object.binary_hash();
     }
 };
