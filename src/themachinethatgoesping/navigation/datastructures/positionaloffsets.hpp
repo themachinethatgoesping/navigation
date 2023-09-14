@@ -84,9 +84,13 @@ struct PositionalOffsets
         trx.name = std::move(name);
 
         /* x,y,z are the average of tx and rx */
-        trx.x = (tx.x + rx.x) * 0.5;
-        trx.y = (tx.y + rx.y) * 0.5;
+        //trx.x = (tx.x + rx.x) * 0.5;
+        //trx.y = (tx.y + rx.y) * 0.5;
         trx.z = (tx.z + rx.z) * 0.5;
+
+        /* x and y are the transducer receiver values*/
+        trx.y = rx.y;
+        trx.x = tx.y;
 
         /* take pitch and yaw from tx and roll from rx*/
         trx.pitch = tx.pitch;
