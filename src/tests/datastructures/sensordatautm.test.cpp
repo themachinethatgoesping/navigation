@@ -22,7 +22,7 @@ TEST_CASE("SensorDataUTM should support common functions", TESTTAG)
     data.northing                = 5652759.000;
     data.easting                 = 549841.192;
     data.utm_zone                = 31;
-    data.utm_northern_hemisphere = true;
+    data.northern_hemisphere = true;
     data.depth                   = 3;
 
     data.heading = 10;
@@ -54,7 +54,7 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     data.northing                = 5652759.000;
     data.easting                 = 549841.192;
     data.utm_zone                = 31;
-    data.utm_northern_hemisphere = true;
+    data.northern_hemisphere = true;
     data.depth                   = 3;
 
     data.heading = 10;
@@ -67,7 +67,7 @@ TEST_CASE("SensorDataUTM should support common utm/latlon conversions", TESTTAG)
     data_south.northing                = 5427745.995;
     data_south.easting                 = 314082.699;
     data_south.utm_zone                = 60;
-    data_south.utm_northern_hemisphere = false;
+    data_south.northern_hemisphere = false;
 
     // test utm/lat lon conversion
     SensorDataLatLon data_latlon(data);

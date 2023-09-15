@@ -74,7 +74,7 @@ datastructures::GeoLocationUTM SensorConfiguration::compute_target_position(
         compute_target_position(target_id, datastructures::SensorDataLocal(sensor_data));
 
     return datastructures::GeoLocationUTM(
-        position, sensor_data.utm_zone, sensor_data.utm_northern_hemisphere);
+        position, sensor_data.utm_zone, sensor_data.northern_hemisphere);
 }
 
 datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(

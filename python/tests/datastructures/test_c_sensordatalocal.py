@@ -44,7 +44,7 @@ class Test_navigation_SensorDataLocal:
 
         # create a new SensorData object by explicit conversion
         data_utm = SensorDataUTM(
-            data, utm_zone=zone, utm_northern_hemisphere=northern_hemisphere
+            data, utm_zone=zone, northern_hemisphere=northern_hemisphere
         )
 
         # SensorDataLocal is implicitly convertible and therefore also comparable to SensorData

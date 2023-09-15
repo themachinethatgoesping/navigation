@@ -1,4 +1,4 @@
-//sourcehash: 875935e919ecbc293a54520ce9040584b774548bbbe3f38394421734c380bab5
+//sourcehash: f1084d16239211ae44e03cce729b3578aa9fdd8e1191d7603774fc061be577b4
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -61,7 +61,7 @@ Parameter ``easting``:
 Parameter ``utm_zone``:
     UTM/UPS zone number
 
-Parameter ``utm_northern_hemisphere``:
+Parameter ``northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_3 =
@@ -73,7 +73,7 @@ Parameter ``data_local``:
 
 UTM/UPS zone number
 
-Parameter ``utm_northern_hemisphere``:
+Parameter ``northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_4 =
@@ -93,7 +93,7 @@ Parameter ``easting``:
 Parameter ``utm_zone``:
     UTM/UPS zone number
 
-Parameter ``utm_northern_hemisphere``:
+Parameter ``northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere
 
 Parameter ``depth``:
@@ -126,6 +126,8 @@ Returns:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_from_stream = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_northern_hemisphere = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_operator_eq =
 R"doc(Check if two SensorDataUTM objects are equal
 
@@ -150,8 +152,6 @@ Parameter ``data_utm``:
 SensorDataLatLon)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_to_stream = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_utm_northern_hemisphere = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
 

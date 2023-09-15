@@ -27,13 +27,13 @@ void init_c_sensordatautm(py::module& m)
             py::arg("northing"),
             py::arg("easting"),
             py::arg("utm_zone"),
-            py::arg("utm_northern_hemisphere"))
+            py::arg("northern_hemisphere"))
         .def(
             py::init<const SensorDataLocal&, int, bool>(),
             DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_3),
             py::arg("sensordata_local"),
             py::arg("utm_zone"),
-            py::arg("utm_northern_hemisphere"))
+            py::arg("northern_hemisphere"))
         .def(
             py::init<const SensorDataLatLon&, int>(),
             DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, SensorDataUTM_4),
@@ -45,7 +45,7 @@ void init_c_sensordatautm(py::module& m)
             py::arg("northing")                = 0,
             py::arg("easting")                 = 0,
             py::arg("utm_zone")                = 0,
-            py::arg("utm_northern_hemisphere") = true,
+            py::arg("northern_hemisphere") = true,
             py::arg("depth")                   = 0,
             py::arg("heave")                   = 0,
             py::arg("heading")                 = 0,
@@ -59,13 +59,13 @@ void init_c_sensordatautm(py::module& m)
             "utm_zone",
             &SensorDataUTM::utm_zone,
             DOC(themachinethatgoesping, navigation, datastructures, SensorDataUTM, utm_zone))
-        .def_readwrite("utm_northern_hemisphere",
-                       &SensorDataUTM::utm_northern_hemisphere,
+        .def_readwrite("northern_hemisphere",
+                       &SensorDataUTM::northern_hemisphere,
                        DOC(themachinethatgoesping,
                            navigation,
                            datastructures,
                            SensorDataUTM,
-                           utm_northern_hemisphere))
+                           northern_hemisphere))
         // static functions
         .def_static(
             "to_sensordata",

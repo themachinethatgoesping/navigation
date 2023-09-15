@@ -28,7 +28,7 @@ void init_c_geolocationutm(py::module& m)
              DOC_GeoLocationUTM(GeoLocationUTM_2),
              py::arg("geolocationlatlon"),
              py::arg("utm_zone"),
-             py::arg("utm_northern_hemisphere"))
+             py::arg("northern_hemisphere"))
         .def(py::init<const GeoLocationLatLon&, int>(),
              DOC_GeoLocationUTM(GeoLocationUTM_3),
              py::arg("geolocationlatlon"),
@@ -38,7 +38,7 @@ void init_c_geolocationutm(py::module& m)
              py::arg("northing")                = 0,
              py::arg("easting")                 = 0,
              py::arg("utm_zone")                = 0,
-             py::arg("utm_northern_hemisphere") = true,
+             py::arg("northern_hemisphere") = true,
              py::arg("z")                       = 0,
              py::arg("yaw")                     = 0,
              py::arg("pitch")                   = 0,
@@ -48,9 +48,9 @@ void init_c_geolocationutm(py::module& m)
              DOC_GeoLocationUTM(operator_eq),
              py::arg("other"))
         .def_readwrite("utm_zone", &GeoLocationUTM::utm_zone, DOC_GeoLocationUTM(utm_zone))
-        .def_readwrite("utm_northern_hemisphere",
-                       &GeoLocationUTM::utm_northern_hemisphere,
-                       DOC_GeoLocationUTM(utm_northern_hemisphere))
+        .def_readwrite("northern_hemisphere",
+                       &GeoLocationUTM::northern_hemisphere,
+                       DOC_GeoLocationUTM(northern_hemisphere))
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(GeoLocationUTM)
         // default binary functions

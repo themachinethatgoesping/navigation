@@ -1,4 +1,4 @@
-//sourcehash: b11838b64732df11a52fb5645b08a1fcb0f0fe89341912ddd2f78daae807777a
+//sourcehash: b16156904122cc704731c82b60d69d4ced0863be6b5309edf57763b796c7ce3c
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -55,7 +55,7 @@ Parameter ``location_local``:
 
 UTM/UPS zone number
 
-Parameter ``utm_northern_hemisphere``:
+Parameter ``northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_GeoLocationUTM_3 =
@@ -75,7 +75,7 @@ Parameter ``easting``:
 Parameter ``utm_zone``:
     UTM/UPS zone number
 
-Parameter ``utm_northern_hemisphere``:
+Parameter ``northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere
 
 Parameter ``z``:
@@ -105,6 +105,8 @@ Returns:
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_from_stream = R"doc()doc";
 
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_northern_hemisphere = R"doc()doc";
+
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_operator_eq = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_operator_ne = R"doc()doc";
@@ -120,8 +122,6 @@ Parameter ``location_utm``:
 GeoLocationLatLon)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_to_stream = R"doc()doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_utm_northern_hemisphere = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
 

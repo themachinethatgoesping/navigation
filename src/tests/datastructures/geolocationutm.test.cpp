@@ -23,7 +23,7 @@ TEST_CASE("GeoLocationUTM should support common functions", TESTTAG)
     location.northing                = 5652759.000;
     location.easting                 = 549841.192;
     location.utm_zone                = 31;
-    location.utm_northern_hemisphere = true;
+    location.northern_hemisphere = true;
     location.z                       = 3;
 
     location.yaw   = 10;
@@ -53,7 +53,7 @@ TEST_CASE("GeoLocationUTM should support common utm/latlon conversions", TESTTAG
     location.northing                = 5652759.000;
     location.easting                 = 549841.192;
     location.utm_zone                = 31;
-    location.utm_northern_hemisphere = true;
+    location.northern_hemisphere = true;
     location.z                       = 3;
 
     location.yaw   = 10;
@@ -64,7 +64,7 @@ TEST_CASE("GeoLocationUTM should support common utm/latlon conversions", TESTTAG
     location_south.northing                = 5427745.995;
     location_south.easting                 = 314082.699;
     location_south.utm_zone                = 60;
-    location_south.utm_northern_hemisphere = false;
+    location_south.northern_hemisphere = false;
 
     // test utm/lat lon conversion
     GeoLocationLatLon location_latlon(location);

@@ -31,7 +31,7 @@ namespace datastructures {
 struct SensorDataUTM : public SensorDataLocal
 {
     int  utm_zone = 0; ///< UTM/UPS zone number
-    bool utm_northern_hemisphere =
+    bool northern_hemisphere =
         true; ///< if true: northern hemisphere, else: southern hemisphere
 
     /**
@@ -47,16 +47,16 @@ struct SensorDataUTM : public SensorDataLocal
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
      * @param utm_zone UTM/UPS zone number
-     * @param utm_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
+     * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
     SensorDataUTM(SensorData data,
                   double     northing,
                   double     easting,
                   int        utm_zone,
-                  bool       utm_northern_hemisphere)
+                  bool       northern_hemisphere)
         : SensorDataLocal(std::move(data), northing, easting)
         , utm_zone(utm_zone)
-        , utm_northern_hemisphere(utm_northern_hemisphere)
+        , northern_hemisphere(northern_hemisphere)
     {
     }
 
@@ -66,12 +66,12 @@ struct SensorDataUTM : public SensorDataLocal
      *
      * @param data_local
      * @param utm_zone UTM/UPS zone number
-     * @param utm_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
+     * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    SensorDataUTM(SensorDataLocal data_local, int utm_zone, bool utm_northern_hemisphere)
+    SensorDataUTM(SensorDataLocal data_local, int utm_zone, bool northern_hemisphere)
         : SensorDataLocal(std::move(data_local))
         , utm_zone(utm_zone)
-        , utm_northern_hemisphere(utm_northern_hemisphere)
+        , northern_hemisphere(northern_hemisphere)
     {
     }
 
@@ -91,7 +91,7 @@ struct SensorDataUTM : public SensorDataLocal
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
      * @param utm_zone UTM/UPS zone number
-     * @param utm_northern_hemisphere if true: northern hemisphere, else: southern hemisphere
+     * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      * @param depth in m, positive downwards
      * @param heave is added to depth in m, positive upwards
      * @param heading in °, 0° is north, 90° is east
@@ -101,7 +101,7 @@ struct SensorDataUTM : public SensorDataLocal
     SensorDataUTM(double northing,
                   double easting,
                   int    utm_zone,
-                  bool   utm_northern_hemisphere,
+                  bool   northern_hemisphere,
                   float  depth,
                   float  heave,
                   float  heading,
@@ -109,7 +109,7 @@ struct SensorDataUTM : public SensorDataLocal
                   float  roll)
         : SensorDataLocal(northing, easting, depth, heave, heading, pitch, roll)
         , utm_zone(utm_zone)
-        , utm_northern_hemisphere(utm_northern_hemisphere)
+        , northern_hemisphere(northern_hemisphere)
     {
     }
 
@@ -125,7 +125,7 @@ struct SensorDataUTM : public SensorDataLocal
     {
         if (SensorDataLocal::operator==(rhs))
             if (utm_zone == rhs.utm_zone)
-                if (utm_northern_hemisphere == rhs.utm_northern_hemisphere)
+                if (northern_hemisphere == rhs.northern_hemisphere)
                     return true;
 
         return false;
@@ -142,7 +142,7 @@ struct SensorDataUTM : public SensorDataLocal
             0, 0, data_utm.depth, data_utm.heave, data_utm.heading, data_utm.pitch, data_utm.roll);
 
         GeographicLib::UTMUPS::Reverse(data_utm.utm_zone,
-                                       data_utm.utm_northern_hemisphere,
+                                       data_utm.northern_hemisphere,
                                        data_utm.easting,
                                        data_utm.northing,
                                        data.latitude,
@@ -167,7 +167,7 @@ struct SensorDataUTM : public SensorDataLocal
         GeographicLib::UTMUPS::Forward(data.latitude,
                                        data.longitude,
                                        data_utm.utm_zone,
-                                       data_utm.utm_northern_hemisphere,
+                                       data_utm.northern_hemisphere,
                                        data_utm.easting,
                                        data_utm.northing,
                                        setzone);
@@ -182,7 +182,7 @@ struct SensorDataUTM : public SensorDataLocal
         SensorDataUTM data(SensorDataLocal::from_stream(is), 0, 0);
 
         is.read(reinterpret_cast<char*>(&data.utm_zone), sizeof(int));
-        is.read(reinterpret_cast<char*>(&data.utm_northern_hemisphere), sizeof(bool));
+        is.read(reinterpret_cast<char*>(&data.northern_hemisphere), sizeof(bool));
 
         return data;
     }
@@ -192,7 +192,7 @@ struct SensorDataUTM : public SensorDataLocal
         SensorDataLocal::to_stream(os);
 
         os.write(reinterpret_cast<const char*>(&utm_zone), sizeof(int));
-        os.write(reinterpret_cast<const char*>(&utm_northern_hemisphere), sizeof(bool));
+        os.write(reinterpret_cast<const char*>(&northern_hemisphere), sizeof(bool));
     }
 
   public:
@@ -204,7 +204,7 @@ struct SensorDataUTM : public SensorDataLocal
         base_printer.remove_sections();
         printer.append(base_printer);
         printer.register_value("utm_zone", utm_zone, "", 2);
-        printer.register_value("utm_northern_hemisphere", utm_northern_hemisphere, "", 3);
+        printer.register_value("northern_hemisphere", northern_hemisphere, "", 3);
 
         return printer;
     }
