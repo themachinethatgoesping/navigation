@@ -26,7 +26,7 @@ void init_c_geolocationutm(py::module& m)
         DOC(themachinethatgoesping, navigation, datastructures, GeoLocationUTM))
         .def(py::init<const GeoLocationLocal&, int, bool>(),
              DOC_GeoLocationUTM(GeoLocationUTM_2),
-             py::arg("geolocationlatlon"),
+             py::arg("geolocationlocal"),
              py::arg("utm_zone"),
              py::arg("northern_hemisphere"))
         .def(py::init<const GeoLocationLatLon&, int>(),
