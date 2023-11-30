@@ -211,7 +211,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer(this->get_name(), float_precision);
+        tools::classhelper::ObjectPrinter printer(this->class_name(), float_precision);
 
         printer.append(I_NavigationInterpolator::__printer__(float_precision));
 

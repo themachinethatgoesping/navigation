@@ -28,7 +28,7 @@ class I_NavigationInterpolator
     std::string_view _name;
 
   protected:
-    std::string_view get_name() const { return _name; }
+    std::string_view class_name() const { return _name; }
 
     SensorConfiguration _sensor_configuration; ///< sensor configuration that stores the offsets
 
@@ -80,14 +80,14 @@ class I_NavigationInterpolator
             other._sensor_configuration.without_targets())
         {
             throw std::runtime_error(
-                fmt::format("ERROR[{}]: Incompatible sensor configurations!", this->get_name()));
+                fmt::format("ERROR[{}]: Incompatible sensor configurations!", this->class_name()));
         }
 
         // check if sensor configuration can be merged
         if (!_sensor_configuration.can_merge_targets_with(other.get_sensor_configuration()))
         {
             throw std::runtime_error(
-                fmt::format("ERROR[{}]: Incompatible target offsets!", this->get_name()));
+                fmt::format("ERROR[{}]: Incompatible target offsets!", this->class_name()));
         }
 
         // merge sensor configuration by adding targets
@@ -275,7 +275,7 @@ class I_NavigationInterpolator
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer(this->get_name(), float_precision);
+        tools::classhelper::ObjectPrinter printer(this->class_name(), float_precision);
 
         printer.register_section("Sensor offset configuration", '*');
         printer.append(_sensor_configuration.__printer__(float_precision));

@@ -1,4 +1,4 @@
-//sourcehash: 57f42460cd8820b64a164578269a0017c4bf05c8e3855b4cb50decb627044e9d
+//sourcehash: a334b1ea050776b1bd6fc347b5ba1d80179af9ac5c78e83a079587fe00ccb879
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -83,9 +83,9 @@ Parameter ``target_id``:
 Parameter ``sensor_offsets``:
     structure that contains the sensor position)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_class_name = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_get_name = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_from_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_get_sensor_configuration =
 R"doc(direct reference to the sensor configuration
