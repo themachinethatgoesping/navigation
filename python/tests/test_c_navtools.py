@@ -5,6 +5,7 @@
 from themachinethatgoesping.navigation import navtools
 
 from pytest import approx
+import numpy as np
 
 
 # define class for grouping (test sections)
@@ -85,3 +86,37 @@ class Test_navigation_navtools:
         lat, lon = navtools.utm_to_latlon(northing, easting, zone, north)
         assert lat == approx(latitudes)
         assert lon == approx(longitudes)
+
+    def test_latlon_distances(self):
+        lat1 = 51.5074 # London
+        lon1 = -0.1278
+        lat2 = 48.8566 # Paris
+        lon2 = 2.3522
+        lat3 = 37.7749 # San Francisco
+        lon3 = -122.4194
+        lat4 = 34.0522 # Los Angeles
+        lon4 = -118.2437
+
+        expectedDistance1 = 343923.1200909893 # in meters
+        expectedDistance2 = 559042.3365035714 # in meters
+        expectedDistance3 = 8976175.5461306088 # in meters
+
+        distance1 = navtools.compute_distance(lat1, lon1, lat2, lon2)
+        distance2 = navtools.compute_distance(lat3, lon3, lat4, lon4)
+
+        assert distance1 == approx(expectedDistance1)
+        assert distance2 == approx(expectedDistance2)
+
+        # test vectorized calls
+        distances1 = navtools.compute_distances([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])
+        assert len(distances1) == 3
+        assert type(distances1) == type(np.array([]))
+        assert distances1 == approx([expectedDistance1, expectedDistance3, expectedDistance2])
+
+        # test cumulative distance
+        distances2 = navtools.cumulative_distances([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])
+        assert len(distances2) == 4
+        assert type(distances2) == type(np.array([]))
+        assert distances2 == approx([0,expectedDistance1, expectedDistance1+expectedDistance3, expectedDistance1+expectedDistance3+expectedDistance2])
+
+    

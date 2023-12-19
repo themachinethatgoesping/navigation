@@ -17,8 +17,11 @@
 #include <tuple>
 #include <vector>
 
+#include "GeographicLib/Geodesic.hpp"
 #include <GeographicLib/UTMUPS.hpp>
 #include <fmt/core.h>
+
+#include <xtensor/xcontainer.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -220,6 +223,113 @@ latlon_to_utm(const std::vector<double>& lat, const std::vector<double>& lon, in
     return std::make_tuple(northing, easting, zone, northern_hemisphere);
 }
 
+/**
+ * @brief Calculate the distance between two points on the Earth's surface using the Haversine
+ * formula
+ *
+ * @tparam T_float floating-point type for latitude and longitude values
+ * @param lat1 latitude of the first point
+ * @param lon1 longitude of the first point
+ * @param lat2 latitude of the second point
+ * @param lon2 longitude of the second point
+ * @return distance between the two points in meters
+ */
+template<typename T_float>
+T_float compute_distance(T_float lat1, T_float lon1, T_float lat2, T_float lon2)
+{
+    GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
+                                 GeographicLib::Constants::WGS84_f());
+    T_float                 s12;
+    geod.Inverse(lat1, lon1, lat2, lon2, s12);
+    return s12;
 }
+
+/**
+ * @brief Calculate the distances between consecutive points in the given latitude and longitude
+ * vectors
+ *
+ * @tparam T_float floating-point type for latitude and longitude values
+ * @param latitudes vector of latitudes
+ * @param longitudes vector of longitudes
+ * @return vector of distances between consecutive points
+ */
+template<typename T_float_container>
+T_float_container compute_distances(const T_float_container& latitudes,
+                                    T_float_container&       longitudes)
+{
+    if (latitudes.size() != longitudes.size())
+        throw std::runtime_error(
+            "ERROR[distance]: latitudes and longitudes vector sizes are not the same!");
+
+    if (latitudes.size() < 2)
+        throw std::runtime_error(
+            "ERROR[distance]: latitudes and longitudes vector sizes are too small!");
+
+    T_float_container distances;
+
+    // if the container is an xtensor container, we need to resize it using a tuple
+    // else we assume it is a std::vector
+    if constexpr (std::is_base_of<xt::xcontainer<T_float_container>, T_float_container>::value)
+        distances = T_float_container::from_shape({ int64_t(latitudes.size() - 1) });
+    else
+        distances.resize(latitudes.size() - 1);
+
+    GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
+                                 GeographicLib::Constants::WGS84_f());
+
+    for (size_t i = 0; i < latitudes.size() - 1; i++)
+    {
+        geod.Inverse(
+            latitudes[i], longitudes[i], latitudes[i + 1], longitudes[i + 1], distances[i]);
+    }
+
+    return distances;
 }
+
+/**
+ * @brief Calculate the cumulative distances between consecutive points in the given latitude and
+ * longitude vectors
+ *
+ * @tparam T_float floating-point type for latitude and longitude values
+ * @param latitudes vector of latitudes
+ * @param longitudes vector of longitudes
+ * @return vector of cumulative distances
+ */
+template<typename T_float_container>
+T_float_container cumulative_distances(const T_float_container& latitudes,
+                                       const T_float_container& longitudes)
+{
+    if (latitudes.size() != longitudes.size())
+        throw std::runtime_error(
+            "ERROR[cumulative_distances]: latitudes and longitudes vector sizes are not the same!");
+
+    if (latitudes.size() < 2)
+        throw std::runtime_error(
+            "ERROR[cumulative_distances]: latitudes and longitudes vector sizes are too small!");
+
+    T_float_container distances;
+    // if the container is an xtensor container, we need to resize it using a tuple
+    // else we assume it is a std::vector
+    if constexpr (std::is_base_of<xt::xcontainer<T_float_container>, T_float_container>::value)
+        distances = T_float_container::from_shape({ int64_t(latitudes.size()) });
+    else
+        distances.resize(latitudes.size());
+
+    GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
+                                 GeographicLib::Constants::WGS84_f());
+
+    distances[0] = 0;
+    for (size_t i = 1; i < latitudes.size(); i++)
+    {
+        geod.Inverse(
+            latitudes[i - 1], longitudes[i - 1], latitudes[i], longitudes[i], distances[i]);
+
+        distances[i] += distances[i - 1];
+    }
+
+    return distances;
 }
+
+} // namespace navtools
+} // namespace navigation
+} // namespace themachinethatgoesping

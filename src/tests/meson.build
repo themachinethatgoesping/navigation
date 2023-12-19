@@ -17,6 +17,7 @@ sources = [
     'datastructures/sensordatautm.test.cpp',
     'datastructures/sensordatalocal.test.cpp',
     'sensorconfiguration.test.cpp',
+    'navtools.test.cpp',
     'navigationinterpolatorlocal.test.cpp',
     'navigationinterpolatorlatlon.test.cpp'
 ]

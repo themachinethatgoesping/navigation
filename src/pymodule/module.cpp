@@ -2,8 +2,13 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
+#define FORCE_IMPORT_ARRAY
+
 #include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
+#include <xtensor-python/pytensor.hpp>
+#include <xtensor-python/pyarray.hpp> // Numpy bindings
+
 
 #include "datastructures/module.hpp"
 #include "nmea_0183/module.hpp"
@@ -16,6 +21,8 @@ void init_c_NavigationInterpolatorLatLon(pybind11::module& m); // c_navigationin
 
 PYBIND11_MODULE(MODULE_NAME, m)
 {
+    xt::import_numpy();
+    
     pybind11::add_ostream_redirect(m, "ostream_redirect");
 
     m.doc()               = "Python module to store, interpolate and transform navigation data";

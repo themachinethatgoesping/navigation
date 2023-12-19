@@ -1,4 +1,4 @@
-//sourcehash: d0a500585a9f0be4389c7d1fe780b597d4ce55d27b1d575f44c7174338ebc8fe
+//sourcehash: 7146277d3ded2a5baff1a44d90239f7522e0393bfe3a89d90b50b1025625ef4e
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -37,6 +37,60 @@
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #endif
 
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_compute_distance =
+R"doc(Calculate the distance between two points on the Earth's surface using
+the Haversine formula
+
+Template parameter ``T_float``:
+    floating-point type for latitude and longitude values
+
+Parameter ``lat1``:
+    latitude of the first point
+
+Parameter ``lon1``:
+    longitude of the first point
+
+Parameter ``lat2``:
+    latitude of the second point
+
+Parameter ``lon2``:
+    longitude of the second point
+
+Returns:
+    distance between the two points in meters)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_compute_distances =
+R"doc(Calculate the distances between consecutive points in the given
+latitude and longitude vectors
+
+Template parameter ``T_float``:
+    floating-point type for latitude and longitude values
+
+Parameter ``latitudes``:
+    vector of latitudes
+
+Parameter ``longitudes``:
+    vector of longitudes
+
+Returns:
+    vector of distances between consecutive points)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_cumulative_distances =
+R"doc(Calculate the cumulative distances between consecutive points in the
+given latitude and longitude vectors
+
+Template parameter ``T_float``:
+    floating-point type for latitude and longitude values
+
+Parameter ``latitudes``:
+    vector of latitudes
+
+Parameter ``longitudes``:
+    vector of longitudes
+
+Returns:
+    vector of cumulative distances)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_dms_to_string = R"doc()doc";
 

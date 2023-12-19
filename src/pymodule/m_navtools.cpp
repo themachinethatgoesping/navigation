@@ -2,10 +2,7 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-
 // automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
-
-
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/navtools.hpp"
@@ -13,6 +10,8 @@
 
 // -- include pybind11 headers
 #include <pybind11/stl.h>
+#include "xtensor-python/pyarray.hpp"
+#include <xtensor-python/pytensor.hpp>
 
 namespace py = pybind11;
 using namespace themachinethatgoesping::navigation::navtools;
@@ -116,4 +115,24 @@ void init_m_navtools(py::module& m)
                    py::arg("latitude"),
                    py::arg("longitude"),
                    py::arg("setzone"));
+
+    m_navtools.def("compute_distance",
+                   &compute_distance<double>,
+                   DOC(themachinethatgoesping, navigation, navtools, compute_distance),
+                   py::arg("lat1"),
+                   py::arg("lon1"),
+                   py::arg("lat2"),
+                   py::arg("lon2"));
+
+    m_navtools.def("compute_distances",
+                   &compute_distances<xt::pytensor<double, 1>>,
+                   DOC(themachinethatgoesping, navigation, navtools, compute_distances),
+                   py::arg("latitudes"),
+                   py::arg("longitudes"));
+
+    m_navtools.def("cumulative_distances",
+                   &cumulative_distances<xt::pytensor<double, 1>>,
+                   DOC(themachinethatgoesping, navigation, navtools, cumulative_distances),
+                   py::arg("latitudes"),
+                   py::arg("longitudes"));
 }
