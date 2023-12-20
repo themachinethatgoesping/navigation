@@ -1,4 +1,4 @@
-//sourcehash: 6ec2fedc8de87fc9b9a8f25ef0be6f54d0c3259ed8942c914d607de843664bab
+//sourcehash: d76134780b18c432eacda39889f0653714244804e534707f2e4b03f79a3634e4
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -39,100 +39,134 @@
 
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distance_m =
-R"doc(Calculate the distance between two points on the Earth's surface using
-geographiclib
+R"doc(Compute the distance in meters between two latitude-longitude
+coordinates using the WGS84 ellipsoid.
 
 Template parameter ``T_float``:
-    floating-point type for latitude and longitude values
+    Floating-point type for latitude and longitude values.
 
 Parameter ``lat1``:
-    latitude of the first point
+    Latitude of the first coordinate.
 
 Parameter ``lon1``:
-    longitude of the first point
+    Longitude of the first coordinate.
 
 Parameter ``lat2``:
-    latitude of the second point
+    Latitude of the second coordinate.
 
 Parameter ``lon2``:
-    longitude of the second point
+    Longitude of the second coordinate.
 
 Returns:
-    distance between the two points in meters)doc";
+    Distance between the two coordinates in meters.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distance_m_2 =
-R"doc(Compute the 2D distance between two points using latitude and
-longitude values in meters
+R"doc(Compute the distance in meters between two latitude-longitude
+coordinates using the WGS84 ellipsoid.
 
 Template parameter ``T_latlon_holder``:
-    type of the latitude and longitude holder
+    Type that holds latitude and longitude values.
 
 Parameter ``geolocation_latlon_1``:
-    first latitude and longitude holder
+    First latitude-longitude coordinate.
 
 Parameter ``geolocation_latlon_2``:
-    second latitude and longitude holder
+    Second latitude-longitude coordinate.
 
 Returns:
-    distance between the two points in meters)doc";
+    Distance between the two coordinates in meters.)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distance_m_3 =
+R"doc(Compute the distance in meters between two latitude-longitude
+coordinates using the WGS84 ellipsoid.
+
+Template parameter ``T_latlon_holder``:
+    Type that holds latitude and longitude values as a pair of floats.
+
+Parameter ``geolocation_latlon_1``:
+    First latitude-longitude coordinate.
+
+Parameter ``geolocation_latlon_2``:
+    Second latitude-longitude coordinate.
+
+Returns:
+    Distance between the two coordinates in meters.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distances_m =
-R"doc(Calculate the distances between consecutive points in the given
-latitude and longitude vectors in meters
+R"doc(Compute the distances in meters between consecutive latitude-longitude
+coordinates using the WGS84 ellipsoid.
 
-Template parameter ``T_float``:
-    floating-point type for latitude and longitude values
+Template parameter ``T_return_container``:
+    Type of container to store the distances.
+
+Template parameter ``T_float_container``:
+    Type of container that holds latitude and longitude values as
+    floats.
 
 Parameter ``latitudes``:
-    vector of latitudes
+    Vector of latitude values.
 
 Parameter ``longitudes``:
-    vector of longitudes
+    Vector of longitude values.
 
 Returns:
-    vector of distances between consecutive points)doc";
+    Vector of distances between consecutive coordinates in meters.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distances_m_2 =
-R"doc(Compute the 2D distances between consecutive points in the given
-latitude and longitude holder container in meters
+R"doc(Compute the distances in meters between consecutive latitude-longitude
+coordinates using the WGS84 ellipsoid.
 
-Template parameter ``T_latlon_holder_container``:
-    type of the latitude and longitude holder container
+Template parameter ``T_return_container``:
+    Type of container to store the distances.
 
-Parameter ``geolocations_latlon``:
-    container of latitude and longitude holders
+Template parameter ``T_container``:
+    Type of container that holds latitude and longitude values as a
+    latlon holder type.
+
+Parameter ``geo_locations_latlon``:
+    Vector of latitude-longitude coordinates.
 
 Returns:
-    vector of distances between consecutive points)doc";
+    Vector of distances between consecutive coordinates in meters.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_cumulative_latlon_distances_m =
-R"doc(Calculate the cumulative distances between consecutive points in the
-given latitude and longitude vectors in meters
+R"doc(Compute the cumulative distances in meters between consecutive
+latitude-longitude coordinates using the WGS84 ellipsoid.
 
-Template parameter ``T_float``:
-    floating-point type for latitude and longitude values
+Template parameter ``T_return_container``:
+    Type of container to store the distances.
+
+Template parameter ``T_float_container``:
+    Type of container that holds latitude and longitude values as
+    floats.
 
 Parameter ``latitudes``:
-    vector of latitudes
+    Vector of latitude values.
 
 Parameter ``longitudes``:
-    vector of longitudes
+    Vector of longitude values.
 
 Returns:
-    vector of cumulative distances)doc";
+    Vector of cumulative distances between consecutive coordinates in
+    meters.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_cumulative_latlon_distances_m_2 =
-R"doc(Compute the cumulative distances between consecutive points in the
-given latitude and longitude holder container
+R"doc(Compute the cumulative distances in meters between consecutive
+latitude-longitude coordinates using the WGS84 ellipsoid.
 
-Template parameter ``T_latlon_holder_container``:
-    type of the latitude and longitude holder container
+Template parameter ``T_return_container``:
+    Type of container to store the distances.
 
-Parameter ``geolocations_latlon``:
-    container of latitude and longitude holders
+Template parameter ``T_container``:
+    Type of container that holds latitude and longitude values as a
+    latlon holder type.
+
+Parameter ``geo_locations_latlon``:
+    Vector of latitude-longitude coordinates.
 
 Returns:
-    vector of cumulative distances)doc";
+    Vector of cumulative distances between consecutive coordinates in
+    meters.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_dms_to_string = R"doc()doc";
 

@@ -40,7 +40,8 @@ TEST_CASE("Test distance calculation", TESTTAG)
     double              expectedDistance3 = 8976175.5461306088; // in meters
     std::vector<double> latitudes         = { lat1, lat2, lat3, lat4 };
     std::vector<double> longitudes        = { lon1, lon2, lon3, lon4 };
-    auto                distances = navtools::compute_latlon_distances_m(latitudes, longitudes);
+    auto                distances =
+        navtools::compute_latlon_distances_m<std::vector<double>>(latitudes, longitudes);
     CHECK(distances.size() == 3);
     CHECK(distances[0] == Approx(expectedDistance1));
     CHECK(distances[1] == Approx(expectedDistance3));
@@ -48,7 +49,7 @@ TEST_CASE("Test distance calculation", TESTTAG)
 
     // Test case 4: cumulative_latlon_distances_m
     auto cumulative_latlon_distances_m =
-        navtools::cumulative_latlon_distances_m(latitudes, longitudes);
+        navtools::cumulative_latlon_distances_m<std::vector<double>>(latitudes, longitudes);
     CHECK(cumulative_latlon_distances_m.size() == 4);
     CHECK(cumulative_latlon_distances_m[0] == Approx(0));
     CHECK(cumulative_latlon_distances_m[1] == Approx(expectedDistance1));
@@ -56,45 +57,72 @@ TEST_CASE("Test distance calculation", TESTTAG)
     CHECK(cumulative_latlon_distances_m[3] ==
           Approx(expectedDistance1 + expectedDistance3 + expectedDistance2));
 
-    // Test case 4 test above with datastructures::GeolocationLatLon
-    std::vector<datastructures::GeolocationLatLon> loc_latlon;
-    std::vector<datastructures::SensordataLatLon>  sens_latlon;
-    for (size_t i = 0; i < latitudes.size(); ++i)
+    // Test case 5 test above with datastructures::GeolocationLatLon
+    SECTION("TEST CASE 5 (GeolocationLatLon and SensordataLatLon and std::pair)")
     {
-        loc_latlon.push_back({ {}, latitudes[i], longitudes[i] });
-        sens_latlon.push_back({ {}, latitudes[i], longitudes[i] });
+        std::vector<datastructures::GeolocationLatLon> loc_latlon;
+        std::vector<datastructures::SensordataLatLon>  sens_latlon;
+        std::vector<std::pair<double, double>>         pair_latlon;
+        for (size_t i = 0; i < latitudes.size(); ++i)
+        {
+            loc_latlon.push_back({ {}, latitudes[i], longitudes[i] });
+            sens_latlon.push_back({ {}, latitudes[i], longitudes[i] });
+            pair_latlon.push_back({ latitudes[i], longitudes[i] });
+        }
+
+        // individual distances
+        CHECK(navtools::compute_latlon_distance_m(loc_latlon[0], loc_latlon[1]) ==
+              Approx(distance1));
+        CHECK(navtools::compute_latlon_distance_m(sens_latlon[0], sens_latlon[1]) ==
+              Approx(distance1));
+        CHECK(navtools::compute_latlon_distance_m(pair_latlon[0], pair_latlon[1]) ==
+              Approx(distance1));
+
+        // vector distances
+        auto distances_loc_latlon =
+            navtools::compute_latlon_distances_m<std::vector<double>>(loc_latlon);
+        auto distances_sens_latlon =
+            navtools::compute_latlon_distances_m<std::vector<double>>(sens_latlon);
+        auto distances_pair_latlon =
+            navtools::compute_latlon_distances_m<std::vector<double>>(pair_latlon);
+
+        CHECK(distances_loc_latlon.size() == distances.size());
+        CHECK(distances_sens_latlon.size() == distances.size());
+        CHECK(distances_pair_latlon.size() == distances.size());
+
+        for (size_t i = 0; i < distances_loc_latlon.size(); ++i)
+            CHECK(distances_loc_latlon[i] == Approx(distances[i]));
+
+        for (size_t i = 0; i < distances_sens_latlon.size(); ++i)
+            CHECK(distances_sens_latlon[i] == Approx(distances[i]));
+
+        for (size_t i = 0; i < distances_pair_latlon.size(); ++i)
+            CHECK(distances_pair_latlon[i] == Approx(distances[i]));
+
+        // cumulative distances
+        auto cumulative_latlon_distances_loc_latlon =
+            navtools::cumulative_latlon_distances_m<std::vector<double>>(loc_latlon);
+        auto cumulative_latlon_distances_sens_latlon =
+            navtools::cumulative_latlon_distances_m<std::vector<double>>(sens_latlon);
+        auto cumulative_latlon_distances_pair_latlon =
+            navtools::cumulative_latlon_distances_m<std::vector<double>>(pair_latlon);
+        CHECK(cumulative_latlon_distances_loc_latlon.size() ==
+              cumulative_latlon_distances_m.size());
+        CHECK(cumulative_latlon_distances_sens_latlon.size() ==
+              cumulative_latlon_distances_m.size());
+        CHECK(cumulative_latlon_distances_pair_latlon.size() ==
+              cumulative_latlon_distances_m.size());
+
+        for (size_t i = 0; i < cumulative_latlon_distances_loc_latlon.size(); ++i)
+            CHECK(cumulative_latlon_distances_loc_latlon[i] ==
+                  Approx(cumulative_latlon_distances_m[i]));
+
+        for (size_t i = 0; i < cumulative_latlon_distances_sens_latlon.size(); ++i)
+            CHECK(cumulative_latlon_distances_sens_latlon[i] ==
+                  Approx(cumulative_latlon_distances_m[i]));
+
+        for (size_t i = 0; i < cumulative_latlon_distances_pair_latlon.size(); ++i)
+            CHECK(cumulative_latlon_distances_pair_latlon[i] ==
+                  Approx(cumulative_latlon_distances_m[i]));
     }
-
-    // individual distances
-    CHECK(navtools::compute_latlon_distance_m(loc_latlon[0], loc_latlon[1]) == Approx(distance1));
-    CHECK(navtools::compute_latlon_distance_m(sens_latlon[0], sens_latlon[1]) == Approx(distance1));
-
-    // vector distances
-    auto distances_loc_latlon  = navtools::compute_latlon_distances_m(loc_latlon);
-    auto distances_sens_latlon = navtools::compute_latlon_distances_m(sens_latlon);
-
-    CHECK(distances_loc_latlon.size() == distances.size());
-    CHECK(distances_sens_latlon.size() == distances.size());
-
-    for (size_t i = 0; i < distances_loc_latlon.size(); ++i)
-        CHECK(distances_loc_latlon[i] == Approx(distances[i]));
-
-    for (size_t i = 0; i < distances_sens_latlon.size(); ++i)
-        CHECK(distances_sens_latlon[i] == Approx(distances[i]));
-
-    // cumulative distances
-    auto cumulative_latlon_distances_loc_latlon =
-        navtools::cumulative_latlon_distances_m(loc_latlon);
-    auto cumulative_latlon_distances_sens_latlon =
-        navtools::cumulative_latlon_distances_m(sens_latlon);
-    CHECK(cumulative_latlon_distances_loc_latlon.size() == cumulative_latlon_distances_m.size());
-    CHECK(cumulative_latlon_distances_sens_latlon.size() == cumulative_latlon_distances_m.size());
-
-    for (size_t i = 0; i < cumulative_latlon_distances_loc_latlon.size(); ++i)
-        CHECK(cumulative_latlon_distances_loc_latlon[i] ==
-              Approx(cumulative_latlon_distances_m[i]));
-
-    for (size_t i = 0; i < cumulative_latlon_distances_sens_latlon.size(); ++i)
-        CHECK(cumulative_latlon_distances_sens_latlon[i] ==
-              Approx(cumulative_latlon_distances_m[i]));
 }

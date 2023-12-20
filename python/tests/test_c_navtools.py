@@ -124,26 +124,27 @@ class Test_navigation_navtools:
         # Test case 4 test above with datastructures::GeolocationLatLon
         loc_latlon = [datastructures.GeolocationLatLon(datastructures.Geolocation(), lat, lon) for lat, lon in zip([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])]
         sens_latlon = [datastructures.SensordataLatLon(datastructures.Sensordata(), lat, lon) for lat, lon in zip([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])]
+        pair_latlon = [(lat, lon) for lat, lon in zip([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])]
 
         # individual distances
         assert navtools.compute_latlon_distance_m(loc_latlon[0], loc_latlon[1]) == approx(distance1)
         assert navtools.compute_latlon_distance_m(sens_latlon[0], sens_latlon[1]) == approx(distance1)
+        assert navtools.compute_latlon_distance_m(pair_latlon[0], pair_latlon[1]) == approx(distance1)
 
         # vector distances
         distances_loc_latlon = navtools.compute_latlon_distances_m(loc_latlon)
         distances_sens_latlon = navtools.compute_latlon_distances_m(sens_latlon)
-
-        assert len(distances_loc_latlon) == len(distances1)
-        assert len(distances_sens_latlon) == len(distances1)
+        distances_pair_latlon = navtools.compute_latlon_distances_m(pair_latlon)
 
         assert distances_loc_latlon == approx(distances1)
         assert distances_sens_latlon == approx(distances1)
+        assert distances_pair_latlon == approx(distances1)
 
         # cumulative distances
         cumulative_latlon_distances_loc_latlon = navtools.cumulative_latlon_distances_m(loc_latlon)
         cumulative_latlon_distances_sens_latlon = navtools.cumulative_latlon_distances_m(sens_latlon)
-        assert len(cumulative_latlon_distances_loc_latlon) == len(distances2)
-        assert len(cumulative_latlon_distances_sens_latlon) == len(distances2)
+        cumulative_latlon_distances_pair_latlon = navtools.cumulative_latlon_distances_m(pair_latlon)
 
         assert cumulative_latlon_distances_loc_latlon == approx(distances2)
         assert cumulative_latlon_distances_sens_latlon == approx(distances2)
+        assert cumulative_latlon_distances_pair_latlon == approx(distances2)

@@ -32,19 +32,20 @@ void create_distance_functions(py::module& m_navtools)
                    py::arg("lon2"));
 
     m_navtools.def("compute_latlon_distances_m",
-                   &compute_latlon_distances_m<xt::pytensor<T_float, 1>>,
+                   &compute_latlon_distances_m<xt::pytensor<double, 1>, xt::pytensor<T_float, 1>>,
                    DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
                    py::arg("latitudes"),
                    py::arg("longitudes"));
 
-    m_navtools.def("cumulative_latlon_distances_m",
-                   &cumulative_latlon_distances_m<xt::pytensor<T_float, 1>>,
-                   DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
-                   py::arg("latitudes"),
-                   py::arg("longitudes"));
+    m_navtools.def(
+        "cumulative_latlon_distances_m",
+        &cumulative_latlon_distances_m<xt::pytensor<double, 1>, xt::pytensor<T_float, 1>>,
+        DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
+        py::arg("latitudes"),
+        py::arg("longitudes"));
 }
 
-template<HasLatitudeLongitude T_LLHolder>
+template<typename T_LLHolder>
 void create_distance_functions(py::module& m_navtools)
 {
     m_navtools.def("compute_latlon_distance_m",
@@ -54,12 +55,12 @@ void create_distance_functions(py::module& m_navtools)
                    py::arg("geolocation_latlon_2"));
 
     m_navtools.def("compute_latlon_distances_m",
-                   &compute_latlon_distances_m<std::vector<T_LLHolder>>,
+                   &compute_latlon_distances_m<xt::pytensor<double, 1>, std::vector<T_LLHolder>>,
                    DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
                    py::arg("geolocations_latlon"));
 
     m_navtools.def("cumulative_latlon_distances_m",
-                   &cumulative_latlon_distances_m<std::vector<T_LLHolder>>,
+                   &cumulative_latlon_distances_m<xt::pytensor<double, 1>, std::vector<T_LLHolder>>,
                    DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
                    py::arg("geolocations_latlon"));
 }
@@ -163,8 +164,10 @@ void init_m_navtools(py::module& m)
                    py::arg("longitude"),
                    py::arg("setzone"));
 
-    // create_distance_functions<float>(m_navtools);
+    create_distance_functions<float>(m_navtools);
     create_distance_functions<double>(m_navtools);
     create_distance_functions<datastructures::GeolocationLatLon>(m_navtools);
     create_distance_functions<datastructures::SensordataLatLon>(m_navtools);
+    create_distance_functions<std::pair<double, double>>(m_navtools);
+    create_distance_functions<std::pair<float, float>>(m_navtools);
 }
