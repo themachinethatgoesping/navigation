@@ -18,46 +18,46 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_sensordata(py::module& m)
 {
 
-    py::class_<SensorData>(
-        m, "SensorData", DOC(themachinethatgoesping, navigation, datastructures, SensorData))
-        .def(py::init<SensorDataLatLon>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData))
-        .def(py::init<SensorDataLocal>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData))
-        .def(py::init<SensorDataUTM>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData))
+    py::class_<Sensordata>(
+        m, "Sensordata", DOC(themachinethatgoesping, navigation, datastructures, Sensordata))
+        .def(py::init<SensordataLatLon>(),
+             DOC(themachinethatgoesping, navigation, datastructures, Sensordata, Sensordata))
+        .def(py::init<SensordataLocal>(),
+             DOC(themachinethatgoesping, navigation, datastructures, Sensordata, Sensordata))
+        .def(py::init<SensordataUTM>(),
+             DOC(themachinethatgoesping, navigation, datastructures, Sensordata, Sensordata))
         .def(py::init<double, double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, SensorData, SensorData_2),
+             DOC(themachinethatgoesping, navigation, datastructures, Sensordata, Sensordata_2),
              py::arg("depth")   = 0,
              py::arg("heave")   = 0,
              py::arg("heading") = 0,
              py::arg("pitch")   = 0,
              py::arg("roll")    = 0)
         .def("__eq__",
-             &SensorData::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, SensorData, operator_eq),
+             &Sensordata::operator==,
+             DOC(themachinethatgoesping, navigation, datastructures, Sensordata, operator_eq),
              py::arg("other"))
         .def_readwrite("depth",
-                       &SensorData::depth,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, depth))
+                       &Sensordata::depth,
+                       DOC(themachinethatgoesping, navigation, datastructures, Sensordata, depth))
         .def_readwrite("heave",
-                       &SensorData::heave,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, heave))
+                       &Sensordata::heave,
+                       DOC(themachinethatgoesping, navigation, datastructures, Sensordata, heave))
         .def_readwrite("heading",
-                       &SensorData::heading,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, heading))
+                       &Sensordata::heading,
+                       DOC(themachinethatgoesping, navigation, datastructures, Sensordata, heading))
         .def_readwrite("pitch",
-                       &SensorData::pitch,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, pitch))
+                       &Sensordata::pitch,
+                       DOC(themachinethatgoesping, navigation, datastructures, Sensordata, pitch))
         .def_readwrite("roll",
-                       &SensorData::roll,
-                       DOC(themachinethatgoesping, navigation, datastructures, SensorData, roll))
+                       &Sensordata::roll,
+                       DOC(themachinethatgoesping, navigation, datastructures, Sensordata, roll))
         // default copy functions
-        __PYCLASS_DEFAULT_COPY__(SensorData)
+        __PYCLASS_DEFAULT_COPY__(Sensordata)
         // default binary functions
-        __PYCLASS_DEFAULT_BINARY__(SensorData)
+        __PYCLASS_DEFAULT_BINARY__(Sensordata)
         // default printing functions
-        __PYCLASS_DEFAULT_PRINTING__(SensorData)
-        // end SensorData
+        __PYCLASS_DEFAULT_PRINTING__(Sensordata)
+        // end Sensordata
         ;
 }

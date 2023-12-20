@@ -14,10 +14,10 @@ using namespace themachinethatgoesping::navigation::datastructures;
 
 #define TESTTAG "[data]"
 
-TEST_CASE("SensorDataLocal should support common functions", TESTTAG)
+TEST_CASE("SensordataLocal should support common functions", TESTTAG)
 {
     // initialize data
-    auto data = SensorDataLocal();
+    auto data = SensordataLocal();
 
     data.northing = 5652759.000;
     data.easting  = 549841.192;
@@ -30,24 +30,24 @@ TEST_CASE("SensorDataLocal should support common functions", TESTTAG)
     data.roll  = 30;
 
     // test copy
-    REQUIRE(data == SensorDataLocal(data));
+    REQUIRE(data == SensordataLocal(data));
 
     // test binary
-    REQUIRE(data == SensorDataLocal(data.from_binary(data.to_binary())));
+    REQUIRE(data == SensordataLocal(data.from_binary(data.to_binary())));
 
     // test stream
     std::stringstream buffer;
     data.to_stream(buffer);
-    REQUIRE(data == SensorDataLocal(data.from_stream(buffer)));
+    REQUIRE(data == SensordataLocal(data.from_stream(buffer)));
 
     // test print does not crash
     REQUIRE(data.info_string().size() != 0);
 }
 
-TEST_CASE("SensorDataLocal should support common utm/local conversions", TESTTAG)
+TEST_CASE("SensordataLocal should support common utm/local conversions", TESTTAG)
 {
     // initialize data
-    auto data = SensorDataLocal();
+    auto data = SensordataLocal();
 
     data.northing            = 5652759.000;
     data.easting             = 549841.192;
@@ -62,7 +62,7 @@ TEST_CASE("SensorDataLocal should support common utm/local conversions", TESTTAG
     data.roll  = 30;
 
     // test utm/lat lon conversion
-    SensorDataUTM data_utm(data, zone, northern_hemisphere);
+    SensordataUTM data_utm(data, zone, northern_hemisphere);
 
     data.print(std::cerr);
     data_utm.print(std::cerr);

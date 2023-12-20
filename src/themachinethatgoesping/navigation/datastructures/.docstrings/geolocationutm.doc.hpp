@@ -1,4 +1,4 @@
-//sourcehash: b16156904122cc704731c82b60d69d4ced0863be6b5309edf57763b796c7ce3c
+//sourcehash: 3c1442da039515cc2d5838906fc8556cc7794f3b80e836b147978b3857a207bc
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -39,15 +39,15 @@
 
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
-sensor) unlike the default GeoLocation structure, this object stores
+sensor) unlike the default Geolocation structure, this object stores
 utm coordinates)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_GeoLocationUTM = R"doc(Construct a new Sensor Position object)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM = R"doc(Construct a new Sensor Position object)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_GeoLocationUTM_2 =
-R"doc(Construct an GeoLocationUTM object from an existing GeoLocationLocal
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_2 =
+R"doc(Construct an GeolocationUTM object from an existing GeolocationLocal
 object (using a known zone and hemisphere)
 
 Parameter ``location_local``:
@@ -58,13 +58,13 @@ UTM/UPS zone number
 Parameter ``northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_GeoLocationUTM_3 =
-R"doc(Construct an GeoLocationUTM object from an existing GeoLocationLatLon
-object (this allows for explicit conversion from GeoLocationLatLon
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_3 =
+R"doc(Construct an GeolocationUTM object from an existing GeolocationLatLon
+object (this allows for explicit conversion from GeolocationLatLon
 class))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_GeoLocationUTM_4 =
-R"doc(Construct a new GeoLocationUTM object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_4 =
+R"doc(Construct a new GeolocationUTM object
 
 Parameter ``northing``:
     in m, positive northwards
@@ -90,40 +90,40 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_from_geolocation_latlon =
-R"doc(Construct convert a GeoLocationLatLon Object to UTM
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_from_geolocation_latlon =
+R"doc(Construct convert a GeolocationLatLon Object to UTM
 
 Parameter ``location``:
-    valid GeoLocationLatLon object
+    valid GeolocationLatLon object
 
 Parameter ``setzone``:
     set a preferred UTM zone negative means automatic, zero means UPS,
     positive means a particular UTM zone
 
 Returns:
-    GeoLocationUTM)doc";
+    GeolocationUTM)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_northern_hemisphere = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_northern_hemisphere = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_operator_eq = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_operator_eq = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_operator_ne = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_operator_ne = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_to_geolocation_latlon =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_to_geolocation_latlon =
 R"doc(Convert a utm geolocationlatlon to an unprojected location
 
 Parameter ``location_utm``:
     $Returns:
 
-GeoLocationLatLon)doc";
+GeolocationLatLon)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_to_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_to_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

@@ -18,32 +18,32 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_sensordatalatlon(py::module& m)
 {
 
-    py::class_<SensorDataLatLon, SensorData>(
+    py::class_<SensordataLatLon, Sensordata>(
         m,
-        "SensorDataLatLon",
-        DOC(themachinethatgoesping, navigation, datastructures, SensorDataLatLon))
-        .def(py::init<const SensorData&, double, double>(),
+        "SensordataLatLon",
+        DOC(themachinethatgoesping, navigation, datastructures, SensordataLatLon))
+        .def(py::init<const Sensordata&, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 SensorDataLatLon,
-                 SensorDataLatLon_2),
+                 SensordataLatLon,
+                 SensordataLatLon_2),
              py::arg("sensordata"),
              py::arg("latitude"),
              py::arg("longitude"))
-        .def(py::init<const SensorDataUTM&>(),
+        .def(py::init<const SensordataUTM&>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 SensorDataLatLon,
-                 SensorDataLatLon_3),
+                 SensordataLatLon,
+                 SensordataLatLon_3),
              py::arg("sensordata_utm"))
         .def(py::init<double, double, double, double, double, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 SensorDataLatLon,
-                 SensorDataLatLon_4),
+                 SensordataLatLon,
+                 SensordataLatLon_4),
              py::arg("latitude")  = 0,
              py::arg("longitude") = 0,
              py::arg("depth")     = 0,
@@ -52,17 +52,17 @@ void init_c_sensordatalatlon(py::module& m)
              py::arg("pitch")     = 0,
              py::arg("roll")      = 0)
         .def("__eq__",
-             &SensorDataLatLon::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataLatLon, operator_eq),
+             &SensordataLatLon::operator==,
+             DOC(themachinethatgoesping, navigation, datastructures, SensordataLatLon, operator_eq),
              py::arg("other"))
-        .def_readwrite("latitude", &SensorDataLatLon::latitude)
-        .def_readwrite("longitude", &SensorDataLatLon::longitude)
+        .def_readwrite("latitude", &SensordataLatLon::latitude)
+        .def_readwrite("longitude", &SensordataLatLon::longitude)
         // default copy functions
-        __PYCLASS_DEFAULT_COPY__(SensorDataLatLon)
+        __PYCLASS_DEFAULT_COPY__(SensordataLatLon)
         // default binary functions
-        __PYCLASS_DEFAULT_BINARY__(SensorDataLatLon)
+        __PYCLASS_DEFAULT_BINARY__(SensordataLatLon)
         // default printing functions
-        __PYCLASS_DEFAULT_PRINTING__(SensorDataLatLon)
-        // end SensorDataLatLon
+        __PYCLASS_DEFAULT_PRINTING__(SensordataLatLon)
+        // end SensordataLatLon
         ;
 }

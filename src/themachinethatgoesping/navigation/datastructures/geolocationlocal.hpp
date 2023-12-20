@@ -22,11 +22,11 @@ namespace datastructures {
 
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
- * unlike the default GeoLocation structure, this object stores local northing and easting
+ * unlike the default Geolocation structure, this object stores local northing and easting
  * coordinates. These coordinates can be converted to UTM coordinates if the zone and hemisphere are
  * known.
  */
-struct GeoLocationLocal : public GeoLocation
+struct GeolocationLocal : public Geolocation
 {
     double northing = 0.0; ///< in m, positive northwards
     double easting  = 0.0; ///< in m, positive eastwards
@@ -35,24 +35,24 @@ struct GeoLocationLocal : public GeoLocation
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
      */
-    GeoLocationLocal() = default;
+    GeolocationLocal() = default;
 
     /**
-     * @brief Construct a new GeoLocationLocal object
+     * @brief Construct a new GeolocationLocal object
      *
      * @param location
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
      */
-    GeoLocationLocal(GeoLocation location, double northing, double easting)
-        : GeoLocation(std::move(location))
+    GeolocationLocal(Geolocation location, double northing, double easting)
+        : Geolocation(std::move(location))
         , northing(northing)
         , easting(easting)
     {
     }
 
     /**
-     * @brief Construct a new GeoLocationLocal object
+     * @brief Construct a new GeolocationLocal object
      *
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
@@ -61,22 +61,22 @@ struct GeoLocationLocal : public GeoLocation
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    GeoLocationLocal(double northing,
+    GeolocationLocal(double northing,
                      double easting,
                      float z,
                      float yaw,
                      float pitch,
                      float roll)
-        : GeoLocation(z, yaw, pitch, roll)
+        : Geolocation(z, yaw, pitch, roll)
         , northing(northing)
         , easting(easting)
     {
     }
 
-    bool operator!=(const GeoLocationLocal& rhs) const { return !(operator==(rhs)); }
-    bool operator==(const GeoLocationLocal& rhs) const
+    bool operator!=(const GeolocationLocal& rhs) const { return !(operator==(rhs)); }
+    bool operator==(const GeolocationLocal& rhs) const
     {
-        if (GeoLocation::operator==(rhs))
+        if (Geolocation::operator==(rhs))
             if (tools::helper::approx(northing, rhs.northing))
                 if (tools::helper::approx(easting, rhs.easting))
                     return true;
@@ -86,9 +86,9 @@ struct GeoLocationLocal : public GeoLocation
 
   public:
     // ----- file I/O -----
-    static GeoLocationLocal from_stream(std::istream& is)
+    static GeolocationLocal from_stream(std::istream& is)
     {
-        GeoLocationLocal data(GeoLocation::from_stream(is), 0., 0.);
+        GeolocationLocal data(Geolocation::from_stream(is), 0., 0.);
 
         is.read(reinterpret_cast<char*>(&data.northing), 2 * sizeof(double));
 
@@ -97,19 +97,19 @@ struct GeoLocationLocal : public GeoLocation
 
     void to_stream(std::ostream& os) const
     {
-        GeoLocation::to_stream(os);
+        Geolocation::to_stream(os);
         os.write(reinterpret_cast<const char*>(&northing), 2 * sizeof(double));
     }
 
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("GeoLocationLocal", float_precision);
+        tools::classhelper::ObjectPrinter printer("GeolocationLocal", float_precision);
 
         printer.register_value("northing", northing, "positive northwards, m");
         printer.register_value("easting", easting, "positive eastwards, m");
 
-        printer.append(GeoLocation::__printer__(float_precision));
+        printer.append(Geolocation::__printer__(float_precision));
 
         return printer;
     }
@@ -117,7 +117,7 @@ struct GeoLocationLocal : public GeoLocation
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationLocal)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeolocationLocal)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

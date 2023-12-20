@@ -18,45 +18,45 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_geolocation(py::module& m)
 {
 
-    py::class_<GeoLocation>(
-        m, "GeoLocation", DOC(themachinethatgoesping, navigation, datastructures, GeoLocation))
-        .def(py::init<GeoLocationLatLon>(),
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, GeoLocation),
+    py::class_<Geolocation>(
+        m, "Geolocation", DOC(themachinethatgoesping, navigation, datastructures, Geolocation))
+        .def(py::init<GeolocationLatLon>(),
+             DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
              py::arg("geolocation_latlon"))
-        .def(py::init<GeoLocationLocal>(),
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, GeoLocation),
+        .def(py::init<GeolocationLocal>(),
+             DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
              py::arg("geolocation_local"))
-        .def(py::init<GeoLocationUTM>(),
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, GeoLocation),
+        .def(py::init<GeolocationUTM>(),
+             DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
              py::arg("geolocation_utm"))
         .def(py::init<double, double, double, double>(),
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, GeoLocation_2),
+             DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation_2),
              py::arg("z")     = 0,
              py::arg("yaw")   = 0,
              py::arg("pitch") = 0,
              py::arg("roll")  = 0)
         .def("__eq__",
-             &GeoLocation::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, operator_eq),
+             &Geolocation::operator==,
+             DOC(themachinethatgoesping, navigation, datastructures, Geolocation, operator_eq),
              py::arg("other"))
         .def_readwrite("z",
-                       &GeoLocation::z,
-                       DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, z))
+                       &Geolocation::z,
+                       DOC(themachinethatgoesping, navigation, datastructures, Geolocation, z))
         .def_readwrite("yaw",
-                       &GeoLocation::yaw,
-                       DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, yaw))
+                       &Geolocation::yaw,
+                       DOC(themachinethatgoesping, navigation, datastructures, Geolocation, yaw))
         .def_readwrite("pitch",
-                       &GeoLocation::pitch,
-                       DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, pitch))
+                       &Geolocation::pitch,
+                       DOC(themachinethatgoesping, navigation, datastructures, Geolocation, pitch))
         .def_readwrite("roll",
-                       &GeoLocation::roll,
-                       DOC(themachinethatgoesping, navigation, datastructures, GeoLocation, roll))
+                       &Geolocation::roll,
+                       DOC(themachinethatgoesping, navigation, datastructures, Geolocation, roll))
         // default copy functions
-        __PYCLASS_DEFAULT_COPY__(GeoLocation)
+        __PYCLASS_DEFAULT_COPY__(Geolocation)
         // default binary functions
-        __PYCLASS_DEFAULT_BINARY__(GeoLocation)
+        __PYCLASS_DEFAULT_BINARY__(Geolocation)
         // default printing functions
-        __PYCLASS_DEFAULT_PRINTING__(GeoLocation)
-        // end GeoLocation
+        __PYCLASS_DEFAULT_PRINTING__(Geolocation)
+        // end Geolocation
         ;
 }

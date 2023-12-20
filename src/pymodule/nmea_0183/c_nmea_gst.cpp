@@ -73,6 +73,6 @@ void init_c_nmea_gst(py::module& m)
         __PYCLASS_DEFAULT_BINARY__(NMEA_GST)
         // default printing functions
         __PYCLASS_DEFAULT_PRINTING__(NMEA_GST)
-        // end GeoLocationLatLon
+        // end GeolocationLatLon
         ;
 }

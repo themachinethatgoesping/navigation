@@ -27,7 +27,7 @@ namespace datastructures {
  * This structure does not store any coordinates except the depth (z)
  *
  */
-struct GeoLocation
+struct Geolocation
 {
     float z     = 0;   ///< in m, positive downwards
     float yaw   = 0.0; ///< in °, 0° is north, 90° is east
@@ -38,17 +38,17 @@ struct GeoLocation
      * @brief Construct a new Position object
      *
      */
-    GeoLocation() = default;
+    Geolocation() = default;
 
     /**
-     * @brief Construct a new GeoLocation object
+     * @brief Construct a new Geolocation object
      *
      * @param z in m, positive downwards
      * @param yaw in °, 0° is north, 90° is east
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    GeoLocation(float z, float yaw, float pitch, float roll)
+    Geolocation(float z, float yaw, float pitch, float roll)
         : z(z)
         , yaw(yaw)
         , pitch(pitch)
@@ -57,20 +57,20 @@ struct GeoLocation
     }
 
     /**
-     * @brief Construct a new GeoLocation object from a string
+     * @brief Construct a new Geolocation object from a string
      *
      * @param str string containing the location in the format "latitude,longitude,z,yaw,pitch,roll"
      */
-    bool operator!=(const GeoLocation& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const Geolocation& rhs) const { return !(operator==(rhs)); }
 
     /**
-     * @brief Check if two GeoLocation objects are equal
+     * @brief Check if two Geolocation objects are equal
      *
      * @param rhs
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const GeoLocation& rhs) const
+    bool operator==(const Geolocation& rhs) const
     {
         using tools::helper::approx;
 
@@ -85,9 +85,9 @@ struct GeoLocation
 
   public:
     // ----- file I/O -----
-    static GeoLocation from_stream(std::istream& is)
+    static Geolocation from_stream(std::istream& is)
     {
-        GeoLocation data;
+        Geolocation data;
 
         is.read(reinterpret_cast<char*>(&data.z), 4 * sizeof(float));
 
@@ -102,7 +102,7 @@ struct GeoLocation
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("GeoLocation", float_precision);
+        tools::classhelper::ObjectPrinter printer("Geolocation", float_precision);
 
         printer.register_value("z", z, "positive downwards, m");
         printer.register_value("yaw", yaw, "90 ° at east");
@@ -115,7 +115,7 @@ struct GeoLocation
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocation)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(Geolocation)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

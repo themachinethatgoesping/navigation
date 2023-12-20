@@ -108,52 +108,52 @@ class SensorConfiguration
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
      *
      * @param target_id name of the target (e.g. "MBES")
-     * @param sensor_data SensorDataLatLon / this structure includes latitude and longitude
+     * @param sensor_data SensordataLatLon / this structure includes latitude and longitude
      * information
-     * @return datastructures::GeoLocationLatLon  / this structure includes latitude and longitude
+     * @return datastructures::GeolocationLatLon  / this structure includes latitude and longitude
      * information
      */
-    datastructures::GeoLocationLatLon compute_target_position(
+    datastructures::GeolocationLatLon compute_target_position(
         const std::string&                      target_id,
-        const datastructures::SensorDataLatLon& sensor_data) const;
+        const datastructures::SensordataLatLon& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
      *
      * @param target_id name of the target (e.g. "MBES")
-     * @param sensor_data SensorDataUTM / this structure includes northing/easting and utm zone or
+     * @param sensor_data SensordataUTM / this structure includes northing/easting and utm zone or
      * hemisphere information
-     * @return datastructures::GeoLocationUTM  / this structure includes northing/easting and utm
+     * @return datastructures::GeolocationUTM  / this structure includes northing/easting and utm
      * zone or hemisphere information
      */
-    datastructures::GeoLocationUTM compute_target_position(
+    datastructures::GeolocationUTM compute_target_position(
         const std::string&                   target_id,
-        const datastructures::SensorDataUTM& sensor_data) const;
+        const datastructures::SensordataUTM& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
      *
      * @param target_id name of the target (e.g. "MBES")
-     * @param sensor_data SensorDataLocal / this structure includes northing/easting but no zone or
+     * @param sensor_data SensordataLocal / this structure includes northing/easting but no zone or
      * hemisphere information
-     * @return datastructures::GeoLocationLocal  / this structure includes northing/easting but no
+     * @return datastructures::GeolocationLocal  / this structure includes northing/easting but no
      * zone or hemisphere information
      */
-    datastructures::GeoLocationLocal compute_target_position(
+    datastructures::GeolocationLocal compute_target_position(
         const std::string&                     target_id,
-        const datastructures::SensorDataLocal& sensor_data) const;
+        const datastructures::SensordataLocal& sensor_data) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data "sensor_data"
      *
      * @param target_id name of the target (e.g. "MBES")
-     * @param sensor_data SensorData / this structure includes no coordinate information
-     * @return datastructures::GeoLocationLocal  / this structure includes northing and east, which
+     * @param sensor_data Sensordata / this structure includes no coordinate information
+     * @return datastructures::GeolocationLocal  / this structure includes northing and east, which
      * are set relative to the sensor coordinate system center
      */
-    datastructures::GeoLocationLocal compute_target_position(
+    datastructures::GeolocationLocal compute_target_position(
         const std::string&                target_id,
-        const datastructures::SensorData& sensor_data) const;
+        const datastructures::Sensordata& sensor_data) const;
 
     // ----- get/set target offsets -----
     /**
@@ -366,7 +366,7 @@ class SensorConfiguration
      * reference system
      */
     static Eigen::Quaternion<float> get_system_rotation_as_quat(
-        const datastructures::SensorData&        sensor_data,
+        const datastructures::Sensordata&        sensor_data,
         const datastructures::PositionalOffsets& offsets_heading_source,
         const datastructures::PositionalOffsets& offsets_attitude_source);
 

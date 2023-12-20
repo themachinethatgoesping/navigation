@@ -24,10 +24,10 @@ namespace datastructures {
 /**
  * @brief A structure to store a georeferenced data and attitude data from different sensors
  * (e.g. GPS, IMU, etc.)
- * Unlike SensorDataUTM, this structure stores coordinates without zone and hemisphere information.
+ * Unlike SensordataUTM, this structure stores coordinates without zone and hemisphere information.
  *
  */
-struct SensorDataLocal : public SensorData
+struct SensordataLocal : public Sensordata
 {
     double northing = 0.0; ///< in m, positive northwards
     double easting  = 0.0; ///< in m, positive eastwards
@@ -36,7 +36,7 @@ struct SensorDataLocal : public SensorData
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
      */
-    SensorDataLocal() = default;
+    SensordataLocal() = default;
 
     /**
      * @brief Construct a new Sensor Data Local object using a base sensor data object
@@ -45,15 +45,15 @@ struct SensorDataLocal : public SensorData
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
      */
-    SensorDataLocal(SensorData data, double northing, double easting)
-        : SensorData(std::move(data))
+    SensordataLocal(Sensordata data, double northing, double easting)
+        : Sensordata(std::move(data))
         , northing(northing)
         , easting(easting)
     {
     }
 
     /**
-     * @brief Construct a new SensorDataLocal object
+     * @brief Construct a new SensordataLocal object
      *
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
@@ -63,30 +63,30 @@ struct SensorDataLocal : public SensorData
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    SensorDataLocal(double northing,
+    SensordataLocal(double northing,
                     double easting,
                     float depth,
                     float heave,
                     float heading,
                     float pitch,
                     float roll)
-        : SensorData(depth, heave, heading, pitch, roll)
+        : Sensordata(depth, heave, heading, pitch, roll)
         , northing(northing)
         , easting(easting)
     {
     }
 
-    bool operator!=(const SensorDataLocal& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const SensordataLocal& rhs) const { return !(operator==(rhs)); }
     /**
-     * @brief Check if two SensorDataLocal objects are equal
+     * @brief Check if two SensordataLocal objects are equal
      *
      * @param rhs
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const SensorDataLocal& rhs) const
+    bool operator==(const SensordataLocal& rhs) const
     {
-        if (SensorData::operator==(rhs))
+        if (Sensordata::operator==(rhs))
             if (tools::helper::approx(northing, rhs.northing))
                 if (tools::helper::approx(easting, rhs.easting))
                     return true;
@@ -96,9 +96,9 @@ struct SensorDataLocal : public SensorData
 
   public:
     // ----- file I/O -----
-    static SensorDataLocal from_stream(std::istream& is)
+    static SensordataLocal from_stream(std::istream& is)
     {
-        SensorDataLocal data(SensorData::from_stream(is), 0., 0.);
+        SensordataLocal data(Sensordata::from_stream(is), 0., 0.);
 
         is.read(reinterpret_cast<char*>(&data.northing), 2 * sizeof(double));
 
@@ -107,19 +107,19 @@ struct SensorDataLocal : public SensorData
 
     void to_stream(std::ostream& os) const
     {
-        SensorData::to_stream(os);
+        Sensordata::to_stream(os);
         os.write(reinterpret_cast<const char*>(&northing), 2 * sizeof(double));
     }
 
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("SensorDataLocal", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensordataLocal", float_precision);
 
         printer.register_value("northing", northing, "positive northwards, m");
         printer.register_value("easting", easting, "positive eastwards, m");
 
-        printer.append(SensorData::__printer__(float_precision));
+        printer.append(Sensordata::__printer__(float_precision));
 
         return printer;
     }
@@ -127,7 +127,7 @@ struct SensorDataLocal : public SensorData
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialization function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataLocal)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensordataLocal)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

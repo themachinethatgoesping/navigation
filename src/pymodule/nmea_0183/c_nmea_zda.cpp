@@ -60,6 +60,6 @@ void init_c_nmea_zda(py::module& m)
         __PYCLASS_DEFAULT_BINARY__(NMEA_ZDA)
         // default printing functions
         __PYCLASS_DEFAULT_PRINTING__(NMEA_ZDA)
-        // end GeoLocationLatLon
+        // end GeolocationLatLon
         ;
 }

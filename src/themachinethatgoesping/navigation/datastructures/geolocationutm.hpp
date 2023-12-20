@@ -23,9 +23,9 @@ namespace datastructures {
 
 /**
  * @brief A structure to store a georeferenced location and attitude (e.g. of a sensor)
- * unlike the default GeoLocation structure, this object stores utm coordinates
+ * unlike the default Geolocation structure, this object stores utm coordinates
  */
-struct GeoLocationUTM : public GeoLocationLocal
+struct GeolocationUTM : public GeolocationLocal
 {
     int  utm_zone = 0; ///< UTM/UPS zone number
     bool northern_hemisphere =
@@ -35,37 +35,37 @@ struct GeoLocationUTM : public GeoLocationLocal
      * @brief Construct a new Sensor Position object
      *
      */
-    GeoLocationUTM() = default;
+    GeolocationUTM() = default;
 
     /**
-     * @brief Construct an GeoLocationUTM object from an existing GeoLocationLocal object (using a
+     * @brief Construct an GeolocationUTM object from an existing GeolocationLocal object (using a
      * known zone and hemisphere)
      *
      * @param location_local
      * @param utm_zone UTM/UPS zone number
      * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    GeoLocationUTM(const GeoLocationLocal& location_local,
+    GeolocationUTM(const GeolocationLocal& location_local,
                    int                     utm_zone,
                    bool                    northern_hemisphere)
-        : GeoLocationLocal(location_local)
+        : GeolocationLocal(location_local)
         , utm_zone(utm_zone)
         , northern_hemisphere(northern_hemisphere)
     {
     }
 
     /**
-     * @brief Construct an GeoLocationUTM object from an existing GeoLocationLatLon object (this
-     * allows for explicit conversion from GeoLocationLatLon class)
+     * @brief Construct an GeolocationUTM object from an existing GeolocationLatLon object (this
+     * allows for explicit conversion from GeolocationLatLon class)
      *
      */
-    explicit GeoLocationUTM(const GeoLocationLatLon& location, int setzone = -1)
-        : GeoLocationUTM(from_geolocation_latlon(location, setzone))
+    explicit GeolocationUTM(const GeolocationLatLon& location, int setzone = -1)
+        : GeolocationUTM(from_geolocation_latlon(location, setzone))
     {
     }
 
     /**
-     * @brief Construct a new GeoLocationUTM object
+     * @brief Construct a new GeolocationUTM object
      *
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
@@ -76,7 +76,7 @@ struct GeoLocationUTM : public GeoLocationLocal
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    GeoLocationUTM(double northing,
+    GeolocationUTM(double northing,
                    double easting,
                    int    utm_zone,
                    bool   northern_hemisphere,
@@ -84,16 +84,16 @@ struct GeoLocationUTM : public GeoLocationLocal
                    float yaw,
                    float pitch,
                    float roll)
-        : GeoLocationLocal(northing, easting, z, yaw, pitch, roll)
+        : GeolocationLocal(northing, easting, z, yaw, pitch, roll)
         , utm_zone(utm_zone)
         , northern_hemisphere(northern_hemisphere)
     {
     }
 
-    bool operator!=(const GeoLocationUTM& rhs) const { return !(operator==(rhs)); }
-    bool operator==(const GeoLocationUTM& rhs) const
+    bool operator!=(const GeolocationUTM& rhs) const { return !(operator==(rhs)); }
+    bool operator==(const GeolocationUTM& rhs) const
     {
-        if (GeoLocationLocal::operator==(rhs))
+        if (GeolocationLocal::operator==(rhs))
             if (utm_zone == rhs.utm_zone)
                 if (northern_hemisphere == rhs.northern_hemisphere)
                     return true;
@@ -105,11 +105,11 @@ struct GeoLocationUTM : public GeoLocationLocal
      * @brief Convert a utm geolocationlatlon to an unprojected location
      *
      * @param location_utm
-     * @return GeoLocationLatLon
+     * @return GeolocationLatLon
      */
-    static GeoLocationLatLon to_geolocation_latlon(const GeoLocationUTM& location_utm)
+    static GeolocationLatLon to_geolocation_latlon(const GeolocationUTM& location_utm)
     {
-        GeoLocationLatLon location(
+        GeolocationLatLon location(
             0, 0, location_utm.z, location_utm.yaw, location_utm.pitch, location_utm.roll);
 
         GeographicLib::UTMUPS::Reverse(location_utm.utm_zone,
@@ -123,17 +123,17 @@ struct GeoLocationUTM : public GeoLocationLocal
     }
 
     /**
-     * @brief Construct convert a GeoLocationLatLon Object to UTM
+     * @brief Construct convert a GeolocationLatLon Object to UTM
      *
-     * @param location valid GeoLocationLatLon object
+     * @param location valid GeolocationLatLon object
      * @param setzone set a preferred UTM zone negative means automatic, zero means UPS, positive
      * means a particular UTM zone
-     * @return GeoLocationUTM
+     * @return GeolocationUTM
      */
-    static GeoLocationUTM from_geolocation_latlon(const GeoLocationLatLon& location,
+    static GeolocationUTM from_geolocation_latlon(const GeolocationLatLon& location,
                                                   int                      setzone = -1)
     {
-        GeoLocationUTM location_utm(
+        GeolocationUTM location_utm(
             0, 0, 0, 0, location.z, location.yaw, location.pitch, location.roll);
 
         GeographicLib::UTMUPS::Forward(location.latitude,
@@ -149,9 +149,9 @@ struct GeoLocationUTM : public GeoLocationLocal
 
   public:
     // ----- file I/O -----
-    static GeoLocationUTM from_stream(std::istream& is)
+    static GeolocationUTM from_stream(std::istream& is)
     {
-        GeoLocationUTM data(GeoLocationLocal::from_stream(is), 0, 0);
+        GeolocationUTM data(GeolocationLocal::from_stream(is), 0, 0);
 
         is.read(reinterpret_cast<char*>(&data.utm_zone), sizeof(int));
         is.read(reinterpret_cast<char*>(&data.northern_hemisphere), sizeof(bool));
@@ -161,7 +161,7 @@ struct GeoLocationUTM : public GeoLocationLocal
 
     void to_stream(std::ostream& os) const
     {
-        GeoLocationLocal::to_stream(os);
+        GeolocationLocal::to_stream(os);
 
         os.write(reinterpret_cast<const char*>(&utm_zone), sizeof(int));
         os.write(reinterpret_cast<const char*>(&northern_hemisphere), sizeof(bool));
@@ -170,9 +170,9 @@ struct GeoLocationUTM : public GeoLocationLocal
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("GeoLocationUTM", float_precision);
+        tools::classhelper::ObjectPrinter printer("GeolocationUTM", float_precision);
 
-        auto base_printer = GeoLocationLocal::__printer__(float_precision);
+        auto base_printer = GeolocationLocal::__printer__(float_precision);
         base_printer.remove_sections();
         printer.append(base_printer);
         printer.register_value("utm_zone", utm_zone, "", 2);
@@ -184,15 +184,15 @@ struct GeoLocationUTM : public GeoLocationLocal
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeoLocationUTM)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeolocationUTM)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon
+// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon
 // backwards conversion
-inline GeoLocationLatLon::GeoLocationLatLon(const GeoLocationUTM& location_utm)
-    : GeoLocationLatLon(GeoLocationUTM::to_geolocation_latlon(location_utm))
+inline GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm)
+    : GeolocationLatLon(GeolocationUTM::to_geolocation_latlon(location_utm))
 {
 }
 

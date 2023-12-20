@@ -25,10 +25,10 @@ namespace datastructures {
 /**
  * @brief A structure to store a georeferenced data and attitude data from different sensors
  * (e.g. GPS, IMU, etc.)
- * Unlike SensorDataLatLon, this structure stores UTM coordinates.
+ * Unlike SensordataLatLon, this structure stores UTM coordinates.
  *
  */
-struct SensorDataUTM : public SensorDataLocal
+struct SensordataUTM : public SensordataLocal
 {
     int  utm_zone = 0; ///< UTM/UPS zone number
     bool northern_hemisphere =
@@ -38,7 +38,7 @@ struct SensorDataUTM : public SensorDataLocal
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
      */
-    SensorDataUTM() = default;
+    SensordataUTM() = default;
 
     /**
      * @brief Construct a new Sensor Data Local object using a base sensor data object
@@ -49,44 +49,44 @@ struct SensorDataUTM : public SensorDataLocal
      * @param utm_zone UTM/UPS zone number
      * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    SensorDataUTM(SensorData data,
+    SensordataUTM(Sensordata data,
                   double     northing,
                   double     easting,
                   int        utm_zone,
                   bool       northern_hemisphere)
-        : SensorDataLocal(std::move(data), northing, easting)
+        : SensordataLocal(std::move(data), northing, easting)
         , utm_zone(utm_zone)
         , northern_hemisphere(northern_hemisphere)
     {
     }
 
     /**
-     * @brief Construct an SensorDataUTM object from an existing SensorDataLocal object (using a
+     * @brief Construct an SensordataUTM object from an existing SensordataLocal object (using a
      * known zone and hemisphere)
      *
      * @param data_local
      * @param utm_zone UTM/UPS zone number
      * @param northern_hemisphere if true: northern hemisphere, else: southern hemisphere
      */
-    SensorDataUTM(SensorDataLocal data_local, int utm_zone, bool northern_hemisphere)
-        : SensorDataLocal(std::move(data_local))
+    SensordataUTM(SensordataLocal data_local, int utm_zone, bool northern_hemisphere)
+        : SensordataLocal(std::move(data_local))
         , utm_zone(utm_zone)
         , northern_hemisphere(northern_hemisphere)
     {
     }
 
     /**
-     * @brief Construct an SensorDataUTM object from an existing SensorDataLatLon object (this
-     * allows for explicit conversion from SensorDataLatLon class)
+     * @brief Construct an SensordataUTM object from an existing SensordataLatLon object (this
+     * allows for explicit conversion from SensordataLatLon class)
      *
      */
-    explicit SensorDataUTM(const SensorDataLatLon& data, int setzone = -1)
-        : SensorDataUTM(from_sensordata(data, setzone))
+    explicit SensordataUTM(const SensordataLatLon& data, int setzone = -1)
+        : SensordataUTM(from_sensordata(data, setzone))
     {
     }
 
     /**
-     * @brief Construct a new SensorDataUTM object
+     * @brief Construct a new SensordataUTM object
      *
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
@@ -98,7 +98,7 @@ struct SensorDataUTM : public SensorDataLocal
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    SensorDataUTM(double northing,
+    SensordataUTM(double northing,
                   double easting,
                   int    utm_zone,
                   bool   northern_hemisphere,
@@ -107,23 +107,23 @@ struct SensorDataUTM : public SensorDataLocal
                   float  heading,
                   float  pitch,
                   float  roll)
-        : SensorDataLocal(northing, easting, depth, heave, heading, pitch, roll)
+        : SensordataLocal(northing, easting, depth, heave, heading, pitch, roll)
         , utm_zone(utm_zone)
         , northern_hemisphere(northern_hemisphere)
     {
     }
 
-    bool operator!=(const SensorDataUTM& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const SensordataUTM& rhs) const { return !(operator==(rhs)); }
     /**
-     * @brief Check if two SensorDataUTM objects are equal
+     * @brief Check if two SensordataUTM objects are equal
      *
      * @param rhs
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const SensorDataUTM& rhs) const
+    bool operator==(const SensordataUTM& rhs) const
     {
-        if (SensorDataLocal::operator==(rhs))
+        if (SensordataLocal::operator==(rhs))
             if (utm_zone == rhs.utm_zone)
                 if (northern_hemisphere == rhs.northern_hemisphere)
                     return true;
@@ -134,11 +134,11 @@ struct SensorDataUTM : public SensorDataLocal
      * @brief Convert a utm sensordatalatlon to an unprojected data
      *
      * @param data_utm
-     * @return SensorDataLatLon
+     * @return SensordataLatLon
      */
-    static SensorDataLatLon to_sensordata(const SensorDataUTM& data_utm)
+    static SensordataLatLon to_sensordata(const SensordataUTM& data_utm)
     {
-        SensorDataLatLon data(
+        SensordataLatLon data(
             0, 0, data_utm.depth, data_utm.heave, data_utm.heading, data_utm.pitch, data_utm.roll);
 
         GeographicLib::UTMUPS::Reverse(data_utm.utm_zone,
@@ -152,16 +152,16 @@ struct SensorDataUTM : public SensorDataLocal
     }
 
     /**
-     * @brief Construct convert a SensorDataLatLon Object to UTM
+     * @brief Construct convert a SensordataLatLon Object to UTM
      *
-     * @param data valid SensorDataLatLon object
+     * @param data valid SensordataLatLon object
      * @param setzone set a preferred UTM zone negative means automatic, zero means UPS, positive
      * means a particular UTM zone
-     * @return SensorDataUTM
+     * @return SensordataUTM
      */
-    static SensorDataUTM from_sensordata(const SensorDataLatLon& data, int setzone = -1)
+    static SensordataUTM from_sensordata(const SensordataLatLon& data, int setzone = -1)
     {
-        SensorDataUTM data_utm(
+        SensordataUTM data_utm(
             0, 0, 0, 0, data.depth, data.heave, data.heading, data.pitch, data.roll);
 
         GeographicLib::UTMUPS::Forward(data.latitude,
@@ -177,9 +177,9 @@ struct SensorDataUTM : public SensorDataLocal
 
   public:
     // ----- file I/O -----
-    static SensorDataUTM from_stream(std::istream& is)
+    static SensordataUTM from_stream(std::istream& is)
     {
-        SensorDataUTM data(SensorDataLocal::from_stream(is), 0, 0);
+        SensordataUTM data(SensordataLocal::from_stream(is), 0, 0);
 
         is.read(reinterpret_cast<char*>(&data.utm_zone), sizeof(int));
         is.read(reinterpret_cast<char*>(&data.northern_hemisphere), sizeof(bool));
@@ -189,7 +189,7 @@ struct SensorDataUTM : public SensorDataLocal
 
     void to_stream(std::ostream& os) const
     {
-        SensorDataLocal::to_stream(os);
+        SensordataLocal::to_stream(os);
 
         os.write(reinterpret_cast<const char*>(&utm_zone), sizeof(int));
         os.write(reinterpret_cast<const char*>(&northern_hemisphere), sizeof(bool));
@@ -198,9 +198,9 @@ struct SensorDataUTM : public SensorDataLocal
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("SensorDataUTM", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensordataUTM", float_precision);
 
-        auto base_printer = SensorDataLocal::__printer__(float_precision);
+        auto base_printer = SensordataLocal::__printer__(float_precision);
         base_printer.remove_sections();
         printer.append(base_printer);
         printer.register_value("utm_zone", utm_zone, "", 2);
@@ -212,15 +212,15 @@ struct SensorDataUTM : public SensorDataLocal
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialization function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataUTM)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensordataUTM)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon
+// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon
 // backwards conversion
-inline SensorDataLatLon::SensorDataLatLon(const SensorDataUTM& data_utm)
-    : SensorDataLatLon(SensorDataUTM::to_sensordata(data_utm))
+inline SensordataLatLon::SensordataLatLon(const SensordataUTM& data_utm)
+    : SensordataLatLon(SensordataUTM::to_sensordata(data_utm))
 {
 }
 

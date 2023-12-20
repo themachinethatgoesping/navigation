@@ -10,11 +10,11 @@ namespace navigation {
 
 // ----- compute_target_position -----
 
-datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
+datastructures::GeolocationLocal SensorConfiguration::compute_target_position(
     const std::string&                target_id,
-    const datastructures::SensorData& sensor_data) const
+    const datastructures::Sensordata& sensor_data) const
 {
-    datastructures::GeoLocationLocal location;
+    datastructures::GeolocationLocal location;
 
     // first get the current rotation of the vessel
     Eigen::Quaternion<float> vessel_quat =
@@ -53,11 +53,11 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
     return location;
 }
 
-datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
+datastructures::GeolocationLocal SensorConfiguration::compute_target_position(
     const std::string&                     target_id,
-    const datastructures::SensorDataLocal& sensor_data) const
+    const datastructures::SensordataLocal& sensor_data) const
 {
-    auto position = compute_target_position(target_id, datastructures::SensorData(sensor_data));
+    auto position = compute_target_position(target_id, datastructures::Sensordata(sensor_data));
 
     // compute target xy
     position.northing += sensor_data.northing;
@@ -66,25 +66,25 @@ datastructures::GeoLocationLocal SensorConfiguration::compute_target_position(
     return position;
 }
 
-datastructures::GeoLocationUTM SensorConfiguration::compute_target_position(
+datastructures::GeolocationUTM SensorConfiguration::compute_target_position(
     const std::string&                   target_id,
-    const datastructures::SensorDataUTM& sensor_data) const
+    const datastructures::SensordataUTM& sensor_data) const
 {
     auto position =
-        compute_target_position(target_id, datastructures::SensorDataLocal(sensor_data));
+        compute_target_position(target_id, datastructures::SensordataLocal(sensor_data));
 
-    return datastructures::GeoLocationUTM(
+    return datastructures::GeolocationUTM(
         position, sensor_data.utm_zone, sensor_data.northern_hemisphere);
 }
 
-datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
+datastructures::GeolocationLatLon SensorConfiguration::compute_target_position(
     const std::string&                      target_id,
-    const datastructures::SensorDataLatLon& sensor_data) const
+    const datastructures::SensordataLatLon& sensor_data) const
 {
-    // compute position from SensorData (no x,y or lat,lon coordinates)
+    // compute position from Sensordata (no x,y or lat,lon coordinates)
     // this position is thus referenced to the gps antenna (0,0), which allows to compute
     // distance and azimuth if target towards the gps antenna
-    auto position = compute_target_position(target_id, datastructures::SensorData(sensor_data));
+    auto position = compute_target_position(target_id, datastructures::Sensordata(sensor_data));
 
     auto distance =
         std::sqrt(position.northing * position.northing + position.easting * position.easting);
@@ -115,7 +115,7 @@ datastructures::GeoLocationLatLon SensorConfiguration::compute_target_position(
     }
 
     // GeoPositionLocal is implicitly converted to GeoPosition when calling this function
-    return datastructures::GeoLocationLatLon(position, target_lat, target_lon);
+    return datastructures::GeolocationLatLon(position, target_lat, target_lon);
 }
 
 // ----- get/set target offsets -----
@@ -263,7 +263,7 @@ datastructures::PositionalOffsets SensorConfiguration::get_position_source() con
 
 // ----- helper functions -----
 Eigen::Quaternion<float> SensorConfiguration::get_system_rotation_as_quat(
-    const datastructures::SensorData&        sensor_data,
+    const datastructures::Sensordata&        sensor_data,
     const datastructures::PositionalOffsets& offsets_heading_source,
     const datastructures::PositionalOffsets& offsets_attitude_source)
 {

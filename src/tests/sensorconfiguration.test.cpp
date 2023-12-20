@@ -68,7 +68,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
         scs.add_target("mbes", targetOffsets);
         scs.set_depth_source("gps", 0, 0, 10);
 
-        REQUIRE(scs.compute_target_position("mbes", datastructures::SensorDataLocal()).z == -7);
+        REQUIRE(scs.compute_target_position("mbes", datastructures::SensordataLocal()).z == -7);
     }
 
     SECTION("test imu sensor offsets")
@@ -76,7 +76,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
         SensorConfiguration scs;
         scs.add_target("mbes", targetOffsets);
 
-        datastructures::SensorDataLocal sensor_data;
+        datastructures::SensordataLocal sensor_data;
         sensor_data.heading = 90;
         sensor_data.roll    = 0;
         sensor_data.pitch   = 20;
@@ -157,11 +157,11 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
     SECTION("NO_SENSOR_VALUES")
     {
-        auto position_mbes = scs.compute_target_position("mbes", datastructures::SensorDataLocal());
-        auto position_sbes = scs.compute_target_position("sbes", datastructures::SensorDataLocal());
+        auto position_mbes = scs.compute_target_position("mbes", datastructures::SensordataLocal());
+        auto position_sbes = scs.compute_target_position("sbes", datastructures::SensordataLocal());
 
-        datastructures::GeoLocationLocal expected_result_mbes(1, 2, 3, 0, 0, 0);
-        datastructures::GeoLocationLocal expected_result_sbes(1, 2, 3, 45, 5, 10);
+        datastructures::GeolocationLocal expected_result_mbes(1, 2, 3, 0, 0, 0);
+        datastructures::GeolocationLocal expected_result_sbes(1, 2, 3, 45, 5, 10);
 
         REQUIRE(position_mbes == expected_result_mbes);
         REQUIRE(position_sbes == expected_result_sbes);
@@ -173,7 +173,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
     SECTION("SENSOR_VALUES no roll/pitch")
     {
         // initialize sensor data
-        datastructures::SensorDataLocal sensor_data;
+        datastructures::SensordataLocal sensor_data;
         sensor_data.depth    = 5;
         sensor_data.heading  = 0;
         sensor_data.pitch    = 0;
@@ -186,10 +186,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
         auto relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         auto relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         // check results
         REQUIRE(position_mbes.z == Catch::Approx(8.0));
@@ -226,10 +226,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         position_sbes          = scs.compute_target_position("sbes", sensor_data);
         relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         // check results
         REQUIRE(position_mbes.z == Catch::Approx(8.0));
@@ -266,10 +266,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         position_sbes          = scs.compute_target_position("sbes", sensor_data);
         relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         // check results
         REQUIRE_THAT(position_mbes.z, Catch::Matchers::WithinAbs(8.f, 0.001f));
@@ -295,7 +295,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
     SECTION("SENSOR_VALUES XY coordinates")
     {
-        datastructures::SensorDataLocal sensor_data;
+        datastructures::SensordataLocal sensor_data;
         // scenario 1
         sensor_data.depth    = 5;
         sensor_data.heading  = 25;
@@ -309,10 +309,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
         auto relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         auto relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         // check results
         REQUIRE(position_mbes.z == Catch::Approx(7.7605814142));
@@ -348,10 +348,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         position_sbes          = scs.compute_target_position("sbes", sensor_data);
         relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         CHECK(position_mbes.z == Catch::Approx(-2.5417620175));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -386,10 +386,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         position_sbes          = scs.compute_target_position("sbes", sensor_data);
         relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         CHECK(position_mbes.z == Catch::Approx(5.4582379825));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -424,10 +424,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         position_sbes          = scs.compute_target_position("sbes", sensor_data);
         relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         CHECK(position_mbes.z == Catch::Approx(-1997.5799764953));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -452,7 +452,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
     SECTION("SENSOR_VALUES latitude and longitude")
     {
-        datastructures::SensorDataLatLon sensor_data;
+        datastructures::SensordataLatLon sensor_data;
 
         // scenario 5 (latlon)
         sensor_data.depth     = 2000;
@@ -466,10 +466,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         auto position_sbes          = scs.compute_target_position("sbes", sensor_data);
         auto relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         auto relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         CHECK(position_mbes.z == Catch::Approx(2002.4200235047));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -485,12 +485,12 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_sbes.roll == Catch::Approx(-36.6392731807));
 
         // check if results with UTM are the same as with latlon
-        datastructures::GeoLocationUTM position_mbes_utm =
-            scs.compute_target_position("mbes", datastructures::SensorDataUTM(sensor_data));
-        datastructures::GeoLocationUTM position_sbes_utm =
-            scs.compute_target_position("sbes", datastructures::SensorDataUTM(sensor_data));
-        CHECK(position_mbes_utm == datastructures::GeoLocationUTM(position_mbes));
-        CHECK(position_sbes_utm == datastructures::GeoLocationUTM(position_sbes));
+        datastructures::GeolocationUTM position_mbes_utm =
+            scs.compute_target_position("mbes", datastructures::SensordataUTM(sensor_data));
+        datastructures::GeolocationUTM position_sbes_utm =
+            scs.compute_target_position("sbes", datastructures::SensordataUTM(sensor_data));
+        CHECK(position_mbes_utm == datastructures::GeolocationUTM(position_mbes));
+        CHECK(position_sbes_utm == datastructures::GeolocationUTM(position_sbes));
 
         // scenario 6 (latlon)
         sensor_data.depth     = 1000;
@@ -505,10 +505,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         position_sbes          = scs.compute_target_position("sbes", sensor_data);
         relative_position_mbes = scs.compute_target_position(
             "mbes",
-            datastructures::SensorData(
-                sensor_data)); // convert to SensorData (without xy coordinates)
+            datastructures::Sensordata(
+                sensor_data)); // convert to Sensordata (without xy coordinates)
         relative_position_sbes =
-            scs.compute_target_position("sbes", datastructures::SensorData(sensor_data));
+            scs.compute_target_position("sbes", datastructures::Sensordata(sensor_data));
 
         CHECK(position_mbes.z == Catch::Approx(1002.7717041909f));
         REQUIRE(position_mbes.z == position_sbes.z);
@@ -525,10 +525,10 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // check if results with UTM are the same as with latlon
         position_mbes_utm =
-            scs.compute_target_position("mbes", datastructures::SensorDataUTM(sensor_data));
+            scs.compute_target_position("mbes", datastructures::SensordataUTM(sensor_data));
         position_sbes_utm =
-            scs.compute_target_position("sbes", datastructures::SensorDataUTM(sensor_data));
-        CHECK(position_mbes_utm == datastructures::GeoLocationUTM(position_mbes));
-        CHECK(position_sbes_utm == datastructures::GeoLocationUTM(position_sbes));
+            scs.compute_target_position("sbes", datastructures::SensordataUTM(sensor_data));
+        CHECK(position_mbes_utm == datastructures::GeolocationUTM(position_mbes));
+        CHECK(position_sbes_utm == datastructures::GeolocationUTM(position_sbes));
     }
 }

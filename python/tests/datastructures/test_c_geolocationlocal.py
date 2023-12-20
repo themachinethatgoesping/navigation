@@ -3,20 +3,20 @@
 # SPDX-License-Identifier: MPL-2.0
 
 from themachinethatgoesping.navigation.datastructures import (
-    GeoLocationLocal,
-    GeoLocationUTM,
-    # GeoLocationLatLon,
+    GeolocationLocal,
+    GeolocationUTM,
+    # GeolocationLatLon,
 )
 
 from pytest import raises  # , approx
 
 
 # define class for grouping (test sections)
-class Test_navigation_GeoLocationLocal:
+class Test_navigation_GeolocationLocal:
     # define actual tests (must start with "test_"
     # test case 1
-    def test_GeoLocationLocal_should_support_common_functions(self):
-        location = GeoLocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
+    def test_GeolocationLocal_should_support_common_functions(self):
+        location = GeolocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
         print(location)
 
         # print
@@ -29,30 +29,30 @@ class Test_navigation_GeoLocationLocal:
         assert location != location2
 
         # binary
-        assert location == GeoLocationLocal.from_binary(location.to_binary())
+        assert location == GeolocationLocal.from_binary(location.to_binary())
 
-    def test_GeoLocationLocal_should_support_utm_conversions(self):
-        location = GeoLocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
+    def test_GeolocationLocal_should_support_utm_conversions(self):
+        location = GeolocationLocal(5427745.995, 314082.699, 3, 10, 20, 30)
         print(location)
 
         utm_zone = 60
         northern_hemisphere = False
 
-        # create a new GeoLocation object by explicit conversion
-        location_utm = GeoLocationUTM(
+        # create a new Geolocation object by explicit conversion
+        location_utm = GeolocationUTM(
             location, utm_zone=utm_zone, northern_hemisphere=northern_hemisphere
         )
 
-        # GeoLocationLocal is implicitly convertible and therefore also comparable to GeoLocation UTM
-        assert location == GeoLocationLocal(location_utm)
+        # GeolocationLocal is implicitly convertible and therefore also comparable to Geolocation UTM
+        assert location == GeolocationLocal(location_utm)
 
         # this does not work because local coordinates are not comparable to utm coordinates unless the zone and hemisphere are known
         with raises(TypeError):
             location_utm == location  # pylint: disable=pointless-statement
 
-        assert GeoLocationLocal(location_utm) == location
+        assert GeolocationLocal(location_utm) == location
         assert location_utm == (
-            GeoLocationUTM(
+            GeolocationUTM(
                 location,
                 utm_zone=utm_zone,
                 northern_hemisphere=northern_hemisphere,

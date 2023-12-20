@@ -23,25 +23,25 @@ namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
-// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM
+// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_SensordataUTM
 // forward declarations for location conversions
-struct SensorDataUTM; // defined in sensordatautm.hpp
+struct SensordataUTM; // defined in sensordatautm.hpp
 
 /**
  * @brief A structure to store a georeferenced location and attitude data from different sensors
  * (e.g. GPS, IMU, etc.)
  *
  */
-struct SensorDataLatLon : public SensorData
+struct SensordataLatLon : public Sensordata
 {
     double latitude  = 0.0; ///< in °, positive northwards
     double longitude = 0.0; ///< in °, positive eastwards
 
     /**
-     * @brief Construct a new SensorDataLatLon object (all offsets set to 0)
+     * @brief Construct a new SensordataLatLon object (all offsets set to 0)
      *
      */
-    SensorDataLatLon() = default;
+    SensordataLatLon() = default;
 
     /**
      * @brief Construct a new Sensor Data Lat Lon object using a base sensor data object
@@ -50,22 +50,22 @@ struct SensorDataLatLon : public SensorData
      * @param latitude in °, positive northwards
      * @param longitude in °, positive eastwards
      */
-    SensorDataLatLon(SensorData data, double latitude, double longitude)
-        : SensorData(std::move(data))
+    SensordataLatLon(Sensordata data, double latitude, double longitude)
+        : Sensordata(std::move(data))
         , latitude(latitude)
         , longitude(longitude)
     {
     }
 
     /**
-     * @brief Construct an SensorDataLatLon object from an existing SensorDataUTM object (this
-     * allows for explicit conversion from SensorDataUTM class)
+     * @brief Construct an SensordataLatLon object from an existing SensordataUTM object (this
+     * allows for explicit conversion from SensordataUTM class)
      *
      */
-    explicit SensorDataLatLon(const SensorDataUTM& data_utm); // defined in sensordatautm.hpp
+    explicit SensordataLatLon(const SensordataUTM& data_utm); // defined in sensordatautm.hpp
 
     /**
-     * @brief Construct a new SensorDataLatLon object
+     * @brief Construct a new SensordataLatLon object
      *
      * @param latitude in °, positive northwards
      * @param longitude in °, positive eastwards
@@ -75,30 +75,30 @@ struct SensorDataLatLon : public SensorData
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
      */
-    SensorDataLatLon(double latitude,
+    SensordataLatLon(double latitude,
                      double longitude,
                      float depth,
                      float heave,
                      float heading,
                      float pitch,
                      float roll)
-        : SensorData(depth, heave, heading, pitch, roll)
+        : Sensordata(depth, heave, heading, pitch, roll)
         , latitude(latitude)
         , longitude(longitude)
     {
     }
 
-    bool operator!=(const SensorDataLatLon& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const SensordataLatLon& rhs) const { return !(operator==(rhs)); }
     /**
-     * @brief Check if two SensorDataLatLon objects are equal
+     * @brief Check if two SensordataLatLon objects are equal
      *
      * @param rhs
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const SensorDataLatLon& rhs) const
+    bool operator==(const SensordataLatLon& rhs) const
     {
-        if (SensorData::operator==(rhs))
+        if (Sensordata::operator==(rhs))
             if (tools::helper::approx(latitude, rhs.latitude))
                 if (tools::helper::approx(longitude, rhs.longitude))
                     return true;
@@ -108,9 +108,9 @@ struct SensorDataLatLon : public SensorData
 
   public:
     // ----- file I/O -----
-    static SensorDataLatLon from_stream(std::istream& is)
+    static SensordataLatLon from_stream(std::istream& is)
     {
-        SensorDataLatLon data(SensorData::from_stream(is), 0., 0.);
+        SensordataLatLon data(Sensordata::from_stream(is), 0., 0.);
 
         is.read(reinterpret_cast<char*>(&data.latitude), 2 * sizeof(double));
 
@@ -119,14 +119,14 @@ struct SensorDataLatLon : public SensorData
 
     void to_stream(std::ostream& os) const
     {
-        SensorData::to_stream(os);
+        Sensordata::to_stream(os);
         os.write(reinterpret_cast<const char*>(&latitude), 2 * sizeof(double));
     }
 
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("SensorDataLatLon", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensordataLatLon", float_precision);
 
         printer.register_string(
             "latitude",
@@ -137,7 +137,7 @@ struct SensorDataLatLon : public SensorData
             navtools::longitude_to_string(longitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
 
-        printer.append(SensorData::__printer__(float_precision));
+        printer.append(Sensordata::__printer__(float_precision));
 
         return printer;
     }
@@ -145,7 +145,7 @@ struct SensorDataLatLon : public SensorData
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialization function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorDataLatLon)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensordataLatLon)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

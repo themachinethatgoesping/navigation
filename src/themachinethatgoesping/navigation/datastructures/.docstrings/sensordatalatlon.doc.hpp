@@ -1,4 +1,4 @@
-//sourcehash: 71c7de2e54030dd5e1ad53a0573547c2c60810e3c427bb5b5f827db2454b6c6e
+//sourcehash: 85a7afca209ea443a9fad0564c893079c3be1f701ac506022047e80137419c6c
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -38,13 +38,13 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon =
 R"doc(A structure to store a georeferenced location and attitude data from
 different sensors (e.g. GPS, IMU, etc.))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_SensorDataLatLon = R"doc(Construct a new SensorDataLatLon object (all offsets set to 0))doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_SensordataLatLon = R"doc(Construct a new SensordataLatLon object (all offsets set to 0))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_SensorDataLatLon_2 =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_SensordataLatLon_2 =
 R"doc(Construct a new Sensor Data Lat Lon object using a base sensor data
 object
 
@@ -56,12 +56,12 @@ in °, positive northwards
 Parameter ``longitude``:
     in °, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_SensorDataLatLon_3 =
-R"doc(Construct an SensorDataLatLon object from an existing SensorDataUTM
-object (this allows for explicit conversion from SensorDataUTM class))doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_SensordataLatLon_3 =
+R"doc(Construct an SensordataLatLon object from an existing SensordataUTM
+object (this allows for explicit conversion from SensordataUTM class))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_SensorDataLatLon_4 =
-R"doc(Construct a new SensorDataLatLon object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_SensordataLatLon_4 =
+R"doc(Construct a new SensordataLatLon object
 
 Parameter ``latitude``:
     in °, positive northwards
@@ -84,14 +84,14 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_latitude = R"doc(< in °, positive northwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_latitude = R"doc(< in °, positive northwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_longitude = R"doc(< in °, positive eastwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_longitude = R"doc(< in °, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_operator_eq =
-R"doc(Check if two SensorDataLatLon objects are equal
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_operator_eq =
+R"doc(Check if two SensordataLatLon objects are equal
 
 Parameter ``rhs``:
     $Returns:
@@ -101,11 +101,11 @@ true if equal
 Returns:
     false if not equal)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_operator_ne = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_operator_ne = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLatLon_to_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon_to_stream = R"doc()doc";
 
 
 #if defined(__GNUG__)

@@ -15,26 +15,26 @@
 namespace py = pybind11;
 using namespace themachinethatgoesping::navigation::datastructures;
 
-#define DOC_GeoLocationUTM(ARG)                                                                    \
-    DOC(themachinethatgoesping, navigation, datastructures, GeoLocationUTM, ARG)
+#define DOC_GeolocationUTM(ARG)                                                                    \
+    DOC(themachinethatgoesping, navigation, datastructures, GeolocationUTM, ARG)
 
 void init_c_geolocationutm(py::module& m)
 {
-    py::class_<GeoLocationUTM, GeoLocationLocal>(
+    py::class_<GeolocationUTM, GeolocationLocal>(
         m,
-        "GeoLocationUTM",
-        DOC(themachinethatgoesping, navigation, datastructures, GeoLocationUTM))
-        .def(py::init<const GeoLocationLocal&, int, bool>(),
-             DOC_GeoLocationUTM(GeoLocationUTM_2),
+        "GeolocationUTM",
+        DOC(themachinethatgoesping, navigation, datastructures, GeolocationUTM))
+        .def(py::init<const GeolocationLocal&, int, bool>(),
+             DOC_GeolocationUTM(GeolocationUTM_2),
              py::arg("geolocationlocal"),
              py::arg("utm_zone"),
              py::arg("northern_hemisphere"))
-        .def(py::init<const GeoLocationLatLon&, int>(),
-             DOC_GeoLocationUTM(GeoLocationUTM_3),
+        .def(py::init<const GeolocationLatLon&, int>(),
+             DOC_GeolocationUTM(GeolocationUTM_3),
              py::arg("geolocationlatlon"),
              py::arg("setzone") = -1)
         .def(py::init<double, double, int, bool, double, double, double, double>(),
-             DOC_GeoLocationUTM(GeoLocationUTM_4),
+             DOC_GeolocationUTM(GeolocationUTM_4),
              py::arg("northing")                = 0,
              py::arg("easting")                 = 0,
              py::arg("utm_zone")                = 0,
@@ -44,19 +44,19 @@ void init_c_geolocationutm(py::module& m)
              py::arg("pitch")                   = 0,
              py::arg("roll")                    = 0)
         .def("__eq__",
-             &GeoLocationUTM::operator==,
-             DOC_GeoLocationUTM(operator_eq),
+             &GeolocationUTM::operator==,
+             DOC_GeolocationUTM(operator_eq),
              py::arg("other"))
-        .def_readwrite("utm_zone", &GeoLocationUTM::utm_zone, DOC_GeoLocationUTM(utm_zone))
+        .def_readwrite("utm_zone", &GeolocationUTM::utm_zone, DOC_GeolocationUTM(utm_zone))
         .def_readwrite("northern_hemisphere",
-                       &GeoLocationUTM::northern_hemisphere,
-                       DOC_GeoLocationUTM(northern_hemisphere))
+                       &GeolocationUTM::northern_hemisphere,
+                       DOC_GeolocationUTM(northern_hemisphere))
         // default copy functions
-        __PYCLASS_DEFAULT_COPY__(GeoLocationUTM)
+        __PYCLASS_DEFAULT_COPY__(GeolocationUTM)
         // default binary functions
-        __PYCLASS_DEFAULT_BINARY__(GeoLocationUTM)
+        __PYCLASS_DEFAULT_BINARY__(GeolocationUTM)
         // default printing functions
-        __PYCLASS_DEFAULT_PRINTING__(GeoLocationUTM)
-        // end GeoLocationUTM
+        __PYCLASS_DEFAULT_PRINTING__(GeolocationUTM)
+        // end GeolocationUTM
         ;
 }

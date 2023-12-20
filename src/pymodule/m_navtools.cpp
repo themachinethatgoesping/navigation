@@ -5,17 +5,64 @@
 // automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
+#include "../themachinethatgoesping/navigation/datastructures.hpp"
 #include "../themachinethatgoesping/navigation/navtools.hpp"
+
 #include <themachinethatgoesping/tools_pybind/enumhelper.hpp>
 
 // -- include pybind11 headers
-#include <pybind11/stl.h>
 #include "xtensor-python/pyarray.hpp"
+#include <pybind11/stl.h>
 #include <xtensor-python/pytensor.hpp>
 
 namespace py = pybind11;
 using namespace themachinethatgoesping::navigation::navtools;
+using namespace themachinethatgoesping::navigation;
 using namespace themachinethatgoesping;
+
+template<std::floating_point T_float>
+void create_distance_functions(py::module& m_navtools)
+{
+    m_navtools.def("compute_latlon_distance_m",
+                   &compute_latlon_distance_m<T_float>,
+                   DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distance_m),
+                   py::arg("lat1"),
+                   py::arg("lon1"),
+                   py::arg("lat2"),
+                   py::arg("lon2"));
+
+    m_navtools.def("compute_latlon_distances_m",
+                   &compute_latlon_distances_m<xt::pytensor<T_float, 1>>,
+                   DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
+                   py::arg("latitudes"),
+                   py::arg("longitudes"));
+
+    m_navtools.def("cumulative_latlon_distances_m",
+                   &cumulative_latlon_distances_m<xt::pytensor<T_float, 1>>,
+                   DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
+                   py::arg("latitudes"),
+                   py::arg("longitudes"));
+}
+
+template<HasLatitudeLongitude T_LLHolder>
+void create_distance_functions(py::module& m_navtools)
+{
+    m_navtools.def("compute_latlon_distance_m",
+                   &compute_latlon_distance_m<T_LLHolder>,
+                   DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distance_m),
+                   py::arg("geolocation_latlon_1"),
+                   py::arg("geolocation_latlon_2"));
+
+    m_navtools.def("compute_latlon_distances_m",
+                   &compute_latlon_distances_m<std::vector<T_LLHolder>>,
+                   DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
+                   py::arg("geolocations_latlon"));
+
+    m_navtools.def("cumulative_latlon_distances_m",
+                   &cumulative_latlon_distances_m<std::vector<T_LLHolder>>,
+                   DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
+                   py::arg("geolocations_latlon"));
+}
 
 void init_m_navtools(py::module& m)
 {
@@ -116,23 +163,8 @@ void init_m_navtools(py::module& m)
                    py::arg("longitude"),
                    py::arg("setzone"));
 
-    m_navtools.def("compute_distance",
-                   &compute_distance<double>,
-                   DOC(themachinethatgoesping, navigation, navtools, compute_distance),
-                   py::arg("lat1"),
-                   py::arg("lon1"),
-                   py::arg("lat2"),
-                   py::arg("lon2"));
-
-    m_navtools.def("compute_distances",
-                   &compute_distances<xt::pytensor<double, 1>>,
-                   DOC(themachinethatgoesping, navigation, navtools, compute_distances),
-                   py::arg("latitudes"),
-                   py::arg("longitudes"));
-
-    m_navtools.def("cumulative_distances",
-                   &cumulative_distances<xt::pytensor<double, 1>>,
-                   DOC(themachinethatgoesping, navigation, navtools, cumulative_distances),
-                   py::arg("latitudes"),
-                   py::arg("longitudes"));
+    // create_distance_functions<float>(m_navtools);
+    create_distance_functions<double>(m_navtools);
+    create_distance_functions<datastructures::GeolocationLatLon>(m_navtools);
+    create_distance_functions<datastructures::SensordataLatLon>(m_navtools);
 }

@@ -1,4 +1,4 @@
-//sourcehash: 7d099ce350fad1e90030afb03d269874cd52e54a2576d0b806e5500a8f50292c
+//sourcehash: 507583790409b015833435e5d15f33a87a7d36b651347729ea4c417953c32c3e
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -38,15 +38,15 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
 sensor) This structure does not store any coordinates except the depth
 (z))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_GeoLocation = R"doc(Construct a new Position object)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_Geolocation = R"doc(Construct a new Position object)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_GeoLocation_2 =
-R"doc(Construct a new GeoLocation object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_Geolocation_2 =
+R"doc(Construct a new Geolocation object
 
 Parameter ``z``:
     in m, positive downwards
@@ -60,10 +60,10 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_operator_eq =
-R"doc(Check if two GeoLocation objects are equal
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_operator_eq =
+R"doc(Check if two Geolocation objects are equal
 
 Parameter ``rhs``:
     $Returns:
@@ -73,24 +73,24 @@ true if equal
 Returns:
     false if not equal)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_operator_ne =
-R"doc(Construct a new GeoLocation object from a string
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_operator_ne =
+R"doc(Construct a new Geolocation object from a string
 
 Parameter ``str``:
     string containing the location in the format
     "latitude,longitude,z,yaw,pitch,roll")doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_pitch = R"doc(< in °, positive means bow up)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_pitch = R"doc(< in °, positive means bow up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_roll = R"doc(< in °, positive means port up)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_roll = R"doc(< in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_to_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_to_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_yaw = R"doc(< in °, 0° is north, 90° is east)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocation_z = R"doc(< in m, positive downwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_z = R"doc(< in m, positive downwards)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

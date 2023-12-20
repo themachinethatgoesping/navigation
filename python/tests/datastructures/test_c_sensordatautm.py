@@ -3,30 +3,30 @@
 # SPDX-License-Identifier: MPL-2.0
 
 from themachinethatgoesping.navigation.datastructures import (
-    SensorDataLatLon,
-    SensorDataUTM,
-    SensorData,
-    SensorDataLocal,
+    SensordataLatLon,
+    SensordataUTM,
+    Sensordata,
+    SensordataLocal,
 )
 
 from pytest import approx
 
 
 # define class for grouping (test sections)
-class Test_navigation_SensorDataUTM:
+class Test_navigation_SensordataUTM:
     # define actual tests (must start with "test_"
     # test case 1
-    def test_SensorDataUTM_should_support_common_functions(self):
-        data = SensorDataUTM(5427745.995, 314082.699, 60, False, 3, 4, 10, 20, 30)
-        data_base = SensorDataLocal(5427745.995, 314082.699, 3, 4, 10, 20, 30)
-        data_base_base = SensorData(3, 4, 10, 20, 30)
+    def test_SensordataUTM_should_support_common_functions(self):
+        data = SensordataUTM(5427745.995, 314082.699, 60, False, 3, 4, 10, 20, 30)
+        data_base = SensordataLocal(5427745.995, 314082.699, 3, 4, 10, 20, 30)
+        data_base_base = Sensordata(3, 4, 10, 20, 30)
         print(data)
 
         # compare to base
-        assert data_base == SensorDataLocal(data)
-        assert data_base_base == SensorData(data)
-        assert data == SensorDataUTM(data_base, 60, False)
-        assert data == SensorDataUTM(data_base_base, 5427745.995, 314082.699, 60, False)
+        assert data_base == SensordataLocal(data)
+        assert data_base_base == Sensordata(data)
+        assert data == SensordataUTM(data_base, 60, False)
+        assert data == SensordataUTM(data_base_base, 5427745.995, 314082.699, 60, False)
 
         # print
         assert len(str(data)) != 0
@@ -38,19 +38,19 @@ class Test_navigation_SensorDataUTM:
         assert data != data2
 
         # binary
-        assert data == SensorDataUTM.from_binary(data.to_binary())
+        assert data == SensordataUTM.from_binary(data.to_binary())
 
-    def test_SensorDataUTM_should_support_latlon_conversions(self):
-        data = SensorDataUTM(5427745.995, 314082.699, 60, False, 3, 4, 10, 20, 30)
+    def test_SensordataUTM_should_support_latlon_conversions(self):
+        data = SensordataUTM(5427745.995, 314082.699, 60, False, 3, 4, 10, 20, 30)
         print(data)
 
-        # create a new SensorDataLatLon object by explicit conversion
-        data_latlon = SensorDataLatLon(data)
+        # create a new SensordataLatLon object by explicit conversion
+        data_latlon = SensordataLatLon(data)
 
-        # SensorDataUTM is explicitly convertible and therefore also comparable to SensorDataLatLon
+        # SensordataUTM is explicitly convertible and therefore also comparable to SensordataLatLon
         assert data == data  # pylint: disable=comparison-with-itself
-        assert data == SensorDataUTM(data_latlon)
-        assert SensorDataUTM.from_sensordata(data_latlon) == SensorDataUTM(data_latlon)
+        assert data == SensordataUTM(data_latlon)
+        assert SensordataUTM.from_sensordata(data_latlon) == SensordataUTM(data_latlon)
 
         assert data_latlon.latitude == approx(-41.280330)
         assert data_latlon.longitude == approx(174.780011)

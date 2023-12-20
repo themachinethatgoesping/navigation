@@ -51,6 +51,6 @@ void init_c_nmea_gll(py::module& m)
         __PYCLASS_DEFAULT_BINARY__(NMEA_GLL)
         // default printing functions
         __PYCLASS_DEFAULT_PRINTING__(NMEA_GLL)
-        // end GeoLocationLatLon
+        // end GeolocationLatLon
         ;
 }

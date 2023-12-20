@@ -3,26 +3,26 @@
 # SPDX-License-Identifier: MPL-2.0
 
 from themachinethatgoesping.navigation.datastructures import (
-    SensorDataLocal,
-    SensorDataUTM,
-    SensorData,
+    SensordataLocal,
+    SensordataUTM,
+    Sensordata,
 )
 
 from pytest import raises  # , approx
 
 
 # define class for grouping (test sections)
-class Test_navigation_SensorDataLocal:
+class Test_navigation_SensordataLocal:
     # define actual tests (must start with "test_"
     # test case 1
-    def test_SensorDataLocal_should_support_common_functions(self):
-        data = SensorDataLocal(5427745.995, 314082.699, 3, 4, 10, 20, 30)
-        data_base = SensorData(3, 4, 10, 20, 30)
+    def test_SensordataLocal_should_support_common_functions(self):
+        data = SensordataLocal(5427745.995, 314082.699, 3, 4, 10, 20, 30)
+        data_base = Sensordata(3, 4, 10, 20, 30)
         print(data)
 
         # compare to base
-        assert data_base == SensorData(data)
-        assert data == SensorDataLocal(data_base, 5427745.995, 314082.699)
+        assert data_base == Sensordata(data)
+        assert data == SensordataLocal(data_base, 5427745.995, 314082.699)
 
         # print
         assert len(str(data)) != 0
@@ -34,24 +34,24 @@ class Test_navigation_SensorDataLocal:
         assert data != data2
 
         # binary
-        assert data == SensorDataLocal.from_binary(data.to_binary())
+        assert data == SensordataLocal.from_binary(data.to_binary())
 
-    def test_SensorDataLocal_should_support_utm_conversions(self):
-        data = SensorDataLocal(5427745.995, 314082.699, 3, 4, 10, 20, 30)
+    def test_SensordataLocal_should_support_utm_conversions(self):
+        data = SensordataLocal(5427745.995, 314082.699, 3, 4, 10, 20, 30)
 
         zone = 60
         northern_hemisphere = False
 
-        # create a new SensorData object by explicit conversion
-        data_utm = SensorDataUTM(
+        # create a new Sensordata object by explicit conversion
+        data_utm = SensordataUTM(
             data, utm_zone=zone, northern_hemisphere=northern_hemisphere
         )
 
-        # SensorDataLocal is implicitly convertible and therefore also comparable to SensorData
+        # SensordataLocal is implicitly convertible and therefore also comparable to Sensordata
         print(data)
         print(data_utm)
-        print(SensorDataLocal(data_utm))
-        assert data == SensorDataLocal(data_utm)
+        print(SensordataLocal(data_utm))
+        assert data == SensordataLocal(data_utm)
 
         # this should work, but fails since data_utm is declared as a derived class from data_local
         with raises(TypeError):

@@ -28,10 +28,11 @@ PYBIND11_MODULE(MODULE_NAME, m)
     m.doc()               = "Python module to store, interpolate and transform navigation data";
     m.attr("__version__") = MODULE_VERSION;
 
-    init_m_navtools(m);
     init_m_datastructures(m);
     init_c_sensorconfiguration(m);
     init_c_NavigationInterpolatorLocal(m);
     init_c_NavigationInterpolatorLatLon(m);
     init_m_nmea_0183(m);
+
+    init_m_navtools(m);
 }

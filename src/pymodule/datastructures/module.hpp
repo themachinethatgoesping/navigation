@@ -36,20 +36,20 @@ void init_m_datastructures(pybind11::module& m)
 
     using namespace themachinethatgoesping::navigation::datastructures;
 
-    // pybind11::implicitly_convertible<GeoLocationUTM, GeoLocationLatLon>();
-    // pybind11::implicitly_convertible<GeoLocationLatLon, GeoLocationUTM>();
-    pybind11::implicitly_convertible<GeoLocationUTM, GeoLocationLocal>();
-    pybind11::implicitly_convertible<GeoLocationLatLon, GeoLocation>();
-    pybind11::implicitly_convertible<GeoLocationLocal, GeoLocation>();
-    pybind11::implicitly_convertible<GeoLocationUTM, GeoLocation>();
+    // pybind11::implicitly_convertible<GeolocationUTM, GeolocationLatLon>();
+    // pybind11::implicitly_convertible<GeolocationLatLon, GeolocationUTM>();
+    pybind11::implicitly_convertible<GeolocationUTM, GeolocationLocal>();
+    pybind11::implicitly_convertible<GeolocationLatLon, Geolocation>();
+    pybind11::implicitly_convertible<GeolocationLocal, Geolocation>();
+    pybind11::implicitly_convertible<GeolocationUTM, Geolocation>();
 
-    // pybind11::implicitly_convertible<SensorDataUTM, SensorDataLatLon>();
-    // pybind11::implicitly_convertible<SensorDataLatLon, SensorDataUTM>();
-    pybind11::implicitly_convertible<SensorDataUTM,
-                                     SensorDataLocal>(); // this does not work anymore since
-                                                         // SensorData is derived from
-                                                         // SensorDataLocal
-    pybind11::implicitly_convertible<SensorDataUTM, SensorData>();
-    pybind11::implicitly_convertible<SensorDataLatLon, SensorData>();
-    pybind11::implicitly_convertible<SensorDataLocal, SensorData>();
+    // pybind11::implicitly_convertible<SensordataUTM, SensordataLatLon>();
+    // pybind11::implicitly_convertible<SensordataLatLon, SensordataUTM>();
+    pybind11::implicitly_convertible<SensordataUTM,
+                                     SensordataLocal>(); // this does not work anymore since
+                                                         // Sensordata is derived from
+                                                         // SensordataLocal
+    pybind11::implicitly_convertible<SensordataUTM, Sensordata>();
+    pybind11::implicitly_convertible<SensordataLatLon, Sensordata>();
+    pybind11::implicitly_convertible<SensordataLocal, Sensordata>();
 }

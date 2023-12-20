@@ -1,4 +1,4 @@
-//sourcehash: 7039274d013b53414ffe8d25247742f3b762936814c187ac50101d5d42bfa472
+//sourcehash: 543bfbec8a01ec70a192dd3331c8eeaee91f324bb9ab946fa68bd105358cd2c7
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -38,14 +38,14 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
-sensor) Unlike the base GeoLocation object, this also stores latitude
+sensor) Unlike the base Geolocation object, this also stores latitude
 and longitude coordinates)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_GeoLocationLatLon = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_GeolocationLatLon = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_GeoLocationLatLon_2 =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_GeolocationLatLon_2 =
 R"doc(Construct a new Sensor Data Lat Lon object using a base sensor data
 object
 
@@ -57,12 +57,12 @@ in °, positive northwards
 Parameter ``longitude``:
     in °, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_GeoLocationLatLon_3 =
-R"doc(Construct an GeoLocationLatLon object from an existing GeoLocationUTM
-object (this allows for explicit conversion from GeoLocationUTM class))doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_GeolocationLatLon_3 =
+R"doc(Construct an GeolocationLatLon object from an existing GeolocationUTM
+object (this allows for explicit conversion from GeolocationUTM class))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_GeoLocationLatLon_4 =
-R"doc(Construct a new GeoLocationLatLon object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_GeolocationLatLon_4 =
+R"doc(Construct a new GeolocationLatLon object
 
 Parameter ``latitude``:
     in °, positive northwards
@@ -82,14 +82,14 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_latitude = R"doc(< in °, positive northwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_latitude = R"doc(< in °, positive northwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_longitude = R"doc(< in °, positive eastwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_longitude = R"doc(< in °, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_operator_eq =
-R"doc(Check if two GeoLocationLatLon objects are equal
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_operator_eq =
+R"doc(Check if two GeolocationLatLon objects are equal
 
 Parameter ``rhs``:
     $Returns:
@@ -99,16 +99,16 @@ true if equal
 Returns:
     false if not equal)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_operator_ne =
-R"doc(Construct a new GeoLocationLatLon object from a string
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_operator_ne =
+R"doc(Construct a new GeolocationLatLon object from a string
 
 Parameter ``str``:
     string containing the location in the format
     "latitude,longitude,z,yaw,pitch,roll")doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLatLon_to_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon_to_stream = R"doc()doc";
 
 
 #if defined(__GNUG__)

@@ -1,4 +1,4 @@
-//sourcehash: c1089a52448d18f15e70f3b2b29fbf82e16c29317b214ac82afb4d614bf297f1
+//sourcehash: f995fd05729df633c948dc555d0edbe51128a7ab9f386e4775b9965fa45d9734
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -38,14 +38,14 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal =
 R"doc(A structure to store a georeferenced data and attitude data from
-different sensors (e.g. GPS, IMU, etc.) Unlike SensorDataUTM, this
+different sensors (e.g. GPS, IMU, etc.) Unlike SensordataUTM, this
 structure stores coordinates without zone and hemisphere information.)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_SensorDataLocal = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_SensordataLocal = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_SensorDataLocal_2 =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_SensordataLocal_2 =
 R"doc(Construct a new Sensor Data Local object using a base sensor data
 object
 
@@ -57,8 +57,8 @@ in m, positive northwards
 Parameter ``easting``:
     in m, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_SensorDataLocal_3 =
-R"doc(Construct a new SensorDataLocal object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_SensordataLocal_3 =
+R"doc(Construct a new SensordataLocal object
 
 Parameter ``northing``:
     in m, positive northwards
@@ -81,14 +81,14 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_easting = R"doc(< in m, positive eastwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_easting = R"doc(< in m, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_northing = R"doc(< in m, positive northwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_northing = R"doc(< in m, positive northwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_operator_eq =
-R"doc(Check if two SensorDataLocal objects are equal
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_operator_eq =
+R"doc(Check if two SensordataLocal objects are equal
 
 Parameter ``rhs``:
     $Returns:
@@ -98,11 +98,11 @@ true if equal
 Returns:
     false if not equal)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_operator_ne = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_operator_ne = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataLocal_to_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataLocal_to_stream = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

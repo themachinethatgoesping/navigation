@@ -18,7 +18,7 @@ class TestNavigationSensorConfiguration:
 
     def test_sensorconfiguration_should_support_common_functions(self):
         """test common, simple functions"""
-        data = nav.datastructures.SensorDataLatLon(53, 10, 3, 4, 10, 20, 30)
+        data = nav.datastructures.SensordataLatLon(53, 10, 3, 4, 10, 20, 30)
 
         # initialize
         scs = nav.SensorConfiguration()
@@ -37,7 +37,7 @@ class TestNavigationSensorConfiguration:
 
         # get target position
         position = scs.compute_target_position("mbes", data)
-        position2 = nav.datastructures.GeoLocationLatLon(
+        position2 = nav.datastructures.GeolocationLatLon(
             52.99993263333143,
             10.000048544339503,
             12.50607681274414,

@@ -2,20 +2,20 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-""" tests for the SensorData class
+""" tests for the Sensordata class
 """
 
 # import pytest
 
-from themachinethatgoesping.navigation.datastructures import SensorData
+from themachinethatgoesping.navigation.datastructures import Sensordata
 
 
-class TestNavigationSensorData:
+class TestNavigationSensordata:
     """class for grouping (test sections)"""
 
     def test_sensordata_should_support_common_functions(self):
         """test common, simple functions"""
-        data = SensorData(3, 4, 10, 20, 30)
+        data = Sensordata(3, 4, 10, 20, 30)
         print(data)
 
         # copy
@@ -25,7 +25,7 @@ class TestNavigationSensorData:
         assert data != data2
 
         # binary
-        assert data == SensorData.from_binary(data.to_binary())
+        assert data == Sensordata.from_binary(data.to_binary())
 
         # print
         assert "heading" in str(data)

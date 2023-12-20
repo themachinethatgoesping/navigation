@@ -1,4 +1,4 @@
-//sourcehash: 9e1af9f678da4bbb3592981f5c1cc048fa22c80e077cdd04e5cda74773a37ae9
+//sourcehash: 97984a6696a6e1977e6a175068728bff6466cb888a85567080d02a7f6f870e57
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -38,15 +38,15 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata =
 R"doc(A structure to store a georeferenced location and attitude data from
 different sensors (e.g. IMU, etc.) No gps coordinates are stored in
 this structure (only depth).)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_SensorData = R"doc(Construct a new SensorData object)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_Sensordata = R"doc(Construct a new Sensordata object)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_SensorData_2 =
-R"doc(Construct a new SensorData object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_Sensordata_2 =
+R"doc(Construct a new Sensordata object
 
 Parameter ``depth``:
     from depth source, in m, positive downwards
@@ -63,16 +63,16 @@ Parameter ``pitch``:
 Parameter ``roll``:
     from attitude source, in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_depth = R"doc(< in m, positive downwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_depth = R"doc(< in m, positive downwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_heading = R"doc(< from heading source in °, 0° is north, 90° is east)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_heading = R"doc(< from heading source in °, 0° is north, 90° is east)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_heave = R"doc(< from heave source, will be added to depth in m, positive upwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_heave = R"doc(< from heave source, will be added to depth in m, positive upwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_operator_eq =
-R"doc(Check if two SensorData objects are equal
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_operator_eq =
+R"doc(Check if two Sensordata objects are equal
 
 Parameter ``rhs``:
     $Returns:
@@ -82,15 +82,15 @@ true if equal
 Returns:
     false if not equal)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_operator_ne = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_operator_ne = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_pitch = R"doc(< from attitude source, in °, positive means bow up)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_pitch = R"doc(< from attitude source, in °, positive means bow up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_roll = R"doc(< from attitude source, in °, positive means port up)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_roll = R"doc(< from attitude source, in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorData_to_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_Sensordata_to_stream = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

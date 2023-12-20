@@ -38,6 +38,35 @@ enum class t_latlon_format
     seconds = 2  ///< lat/lon will be converted to degrees°minutes'seconds.seconds''E/S E/W
 };
 
+/**
+ * @brief c++20 concept to check if a type has latitude and longitude members
+ *
+ * @tparam T
+ */
+template<typename T>
+concept HasLatitudeLongitude = requires(T t) {
+    {
+        t.latitude
+    } -> std::convertible_to<float>;
+    {
+        t.longitude
+    } -> std::convertible_to<float>;
+};
+
+template<typename T>
+concept RandomAccessContainerOfLatLonHolders = requires(T t) {
+    typename T::value_type;
+    requires std::random_access_iterator<typename T::iterator>;
+    requires HasLatitudeLongitude<typename T::value_type>;
+};
+
+template<typename T>
+concept RandomAccessContainerOfFloats = requires(T t) {
+    typename T::value_type;
+    requires std::random_access_iterator<typename T::iterator>;
+    requires std::floating_point<typename T::value_type>;
+};
+
 inline std::string dms_to_string(double          dms_value,
                                  t_latlon_format format,
                                  size_t          precision,
@@ -224,8 +253,7 @@ latlon_to_utm(const std::vector<double>& lat, const std::vector<double>& lon, in
 }
 
 /**
- * @brief Calculate the distance between two points on the Earth's surface using the Haversine
- * formula
+ * @brief Calculate the distance between two points on the Earth's surface using geographiclib
  *
  * @tparam T_float floating-point type for latitude and longitude values
  * @param lat1 latitude of the first point
@@ -234,8 +262,8 @@ latlon_to_utm(const std::vector<double>& lat, const std::vector<double>& lon, in
  * @param lon2 longitude of the second point
  * @return distance between the two points in meters
  */
-template<typename T_float>
-T_float compute_distance(T_float lat1, T_float lon1, T_float lat2, T_float lon2)
+template<std::floating_point T_float>
+T_float compute_latlon_distance_m(T_float lat1, T_float lon1, T_float lat2, T_float lon2)
 {
     GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(),
                                  GeographicLib::Constants::WGS84_f());
@@ -246,16 +274,16 @@ T_float compute_distance(T_float lat1, T_float lon1, T_float lat2, T_float lon2)
 
 /**
  * @brief Calculate the distances between consecutive points in the given latitude and longitude
- * vectors
+ * vectors in meters
  *
  * @tparam T_float floating-point type for latitude and longitude values
  * @param latitudes vector of latitudes
  * @param longitudes vector of longitudes
  * @return vector of distances between consecutive points
  */
-template<typename T_float_container>
-T_float_container compute_distances(const T_float_container& latitudes,
-                                    T_float_container&       longitudes)
+template<RandomAccessContainerOfFloats T_float_container>
+T_float_container compute_latlon_distances_m(const T_float_container& latitudes,
+                                             T_float_container&       longitudes)
 {
     if (latitudes.size() != longitudes.size())
         throw std::runtime_error(
@@ -288,24 +316,24 @@ T_float_container compute_distances(const T_float_container& latitudes,
 
 /**
  * @brief Calculate the cumulative distances between consecutive points in the given latitude and
- * longitude vectors
+ * longitude vectors in meters
  *
  * @tparam T_float floating-point type for latitude and longitude values
  * @param latitudes vector of latitudes
  * @param longitudes vector of longitudes
  * @return vector of cumulative distances
  */
-template<typename T_float_container>
-T_float_container cumulative_distances(const T_float_container& latitudes,
-                                       const T_float_container& longitudes)
+template<RandomAccessContainerOfFloats T_float_container>
+T_float_container cumulative_latlon_distances_m(const T_float_container& latitudes,
+                                                const T_float_container& longitudes)
 {
     if (latitudes.size() != longitudes.size())
-        throw std::runtime_error(
-            "ERROR[cumulative_distances]: latitudes and longitudes vector sizes are not the same!");
+        throw std::runtime_error("ERROR[cumulative_latlon_distances_m]: latitudes and longitudes "
+                                 "vector sizes are not the same!");
 
     if (latitudes.size() < 2)
-        throw std::runtime_error(
-            "ERROR[cumulative_distances]: latitudes and longitudes vector sizes are too small!");
+        throw std::runtime_error("ERROR[cumulative_latlon_distances_m]: latitudes and longitudes "
+                                 "vector sizes are too small!");
 
     T_float_container distances;
     // if the container is an xtensor container, we need to resize it using a tuple
@@ -328,6 +356,84 @@ T_float_container cumulative_distances(const T_float_container& latitudes,
     }
 
     return distances;
+}
+
+/**
+ * @brief Compute the 2D distance between two points using latitude and longitude values in meters
+ *
+ * @tparam T_latlon_holder type of the latitude and longitude holder
+ * @param geolocation_latlon_1 first latitude and longitude holder
+ * @param geolocation_latlon_2 second latitude and longitude holder
+ * @return distance between the two points in meters
+ */
+template<HasLatitudeLongitude T_latlon_holder>
+inline auto compute_latlon_distance_m(const T_latlon_holder& geolocation_latlon_1,
+                                      const T_latlon_holder& geolocation_latlon_2)
+{
+    return compute_latlon_distance_m(geolocation_latlon_1.latitude,
+                                     geolocation_latlon_1.longitude,
+                                     geolocation_latlon_2.latitude,
+                                     geolocation_latlon_2.longitude);
+}
+
+/**
+ * @brief Compute the 2D distances between consecutive points in the given latitude and longitude
+ * holder container in meters
+ *
+ * @tparam T_latlon_holder_container type of the latitude and longitude holder container
+ * @param geolocations_latlon container of latitude and longitude holders
+ * @return vector of distances between consecutive points
+ */
+template<RandomAccessContainerOfLatLonHolders T_latlon_holder_container>
+inline auto compute_latlon_distances_m(const T_latlon_holder_container& geolocations_latlon)
+{
+    std::vector<decltype(T_latlon_holder_container::value_type::latitude)>  latitudes;
+    std::vector<decltype(T_latlon_holder_container::value_type::longitude)> longitudes;
+
+    latitudes.reserve(geolocations_latlon.size());
+    longitudes.reserve(geolocations_latlon.size());
+
+    std::transform(geolocations_latlon.begin(),
+                   geolocations_latlon.end(),
+                   std::back_inserter(latitudes),
+                   [](const auto& latlon_holder) { return latlon_holder.latitude; });
+
+    std::transform(geolocations_latlon.begin(),
+                   geolocations_latlon.end(),
+                   std::back_inserter(longitudes),
+                   [](const auto& latlon_holder) { return latlon_holder.longitude; });
+
+    return compute_latlon_distances_m(latitudes, longitudes);
+}
+
+/**
+ * @brief Compute the cumulative distances between consecutive points in the given latitude and
+ * longitude holder container
+ *
+ * @tparam T_latlon_holder_container type of the latitude and longitude holder container
+ * @param geolocations_latlon container of latitude and longitude holders
+ * @return vector of cumulative distances
+ */
+template<RandomAccessContainerOfLatLonHolders T_latlon_holder_container>
+inline auto cumulative_latlon_distances_m(const T_latlon_holder_container& geolocations_latlon)
+{
+    std::vector<decltype(T_latlon_holder_container::value_type::latitude)>  latitudes;
+    std::vector<decltype(T_latlon_holder_container::value_type::longitude)> longitudes;
+
+    latitudes.reserve(geolocations_latlon.size());
+    longitudes.reserve(geolocations_latlon.size());
+
+    std::transform(geolocations_latlon.begin(),
+                   geolocations_latlon.end(),
+                   std::back_inserter(latitudes),
+                   [](const auto& latlon_holder) { return latlon_holder.latitude; });
+
+    std::transform(geolocations_latlon.begin(),
+                   geolocations_latlon.end(),
+                   std::back_inserter(longitudes),
+                   [](const auto& latlon_holder) { return latlon_holder.longitude; });
+
+    return cumulative_latlon_distances_m(latitudes, longitudes);
 }
 
 } // namespace navtools

@@ -30,28 +30,28 @@ void init_c_sensorconfiguration(py::module& m)
              DOC(themachinethatgoesping, navigation, SensorConfiguration, can_merge_targets_with),
              py::arg("other"))
         .def("compute_target_position",
-             py::overload_cast<const std::string&, const datastructures::SensorDataLatLon&>(
+             py::overload_cast<const std::string&, const datastructures::SensordataLatLon&>(
                  &SensorConfiguration::compute_target_position, py::const_),
              DOC(themachinethatgoesping, navigation, SensorConfiguration, compute_target_position),
              py::arg("target_id"),
              py::arg("sensor_data"))
         .def(
             "compute_target_position",
-            py::overload_cast<const std::string&, const datastructures::SensorDataUTM&>(
+            py::overload_cast<const std::string&, const datastructures::SensordataUTM&>(
                 &SensorConfiguration::compute_target_position, py::const_),
             DOC(themachinethatgoesping, navigation, SensorConfiguration, compute_target_position_2),
             py::arg("target_id"),
             py::arg("sensor_data"))
         .def(
             "compute_target_position",
-            py::overload_cast<const std::string&, const datastructures::SensorDataLocal&>(
+            py::overload_cast<const std::string&, const datastructures::SensordataLocal&>(
                 &SensorConfiguration::compute_target_position, py::const_),
             DOC(themachinethatgoesping, navigation, SensorConfiguration, compute_target_position_3),
             py::arg("target_id"),
             py::arg("sensor_data"))
         .def(
             "compute_target_position",
-            py::overload_cast<const std::string&, const datastructures::SensorData&>(
+            py::overload_cast<const std::string&, const datastructures::Sensordata&>(
                 &SensorConfiguration::compute_target_position, py::const_),
             DOC(themachinethatgoesping, navigation, SensorConfiguration, compute_target_position_4),
             py::arg("target_id"),

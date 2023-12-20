@@ -14,10 +14,10 @@ using namespace themachinethatgoesping::navigation::datastructures;
 
 #define TESTTAG "[data]"
 
-TEST_CASE("SensorDataLatLon should support common functions", TESTTAG)
+TEST_CASE("SensordataLatLon should support common functions", TESTTAG)
 {
     // initialize data
-    auto data = SensorDataLatLon();
+    auto data = SensordataLatLon();
 
     data.latitude  = 1;
     data.longitude = 2;
@@ -30,15 +30,15 @@ TEST_CASE("SensorDataLatLon should support common functions", TESTTAG)
     data.roll  = 30;
 
     // test copy
-    REQUIRE(data == SensorDataLatLon(data));
+    REQUIRE(data == SensordataLatLon(data));
 
     // test binary
-    REQUIRE(data == SensorDataLatLon(data.from_binary(data.to_binary())));
+    REQUIRE(data == SensordataLatLon(data.from_binary(data.to_binary())));
 
     // test stream
     std::stringstream buffer;
     data.to_stream(buffer);
-    REQUIRE(data == SensorDataLatLon(data.from_stream(buffer)));
+    REQUIRE(data == SensordataLatLon(data.from_stream(buffer)));
 
     // test print does not crash
     REQUIRE(data.info_string().size() != 0);

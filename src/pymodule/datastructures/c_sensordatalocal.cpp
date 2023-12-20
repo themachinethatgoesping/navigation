@@ -18,23 +18,23 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_sensordatalocal(py::module& m)
 {
 
-    py::class_<SensorDataLocal, SensorData>(
+    py::class_<SensordataLocal, Sensordata>(
         m,
-        "SensorDataLocal",
-        DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal))
-        .def(py::init<const SensorDataUTM&>(),
+        "SensordataLocal",
+        DOC(themachinethatgoesping, navigation, datastructures, SensordataLocal))
+        .def(py::init<const SensordataUTM&>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 SensorDataLocal,
-                 SensorDataLocal),
+                 SensordataLocal,
+                 SensordataLocal),
              py::arg("sensordatautm"))
-        .def(py::init<const SensorData&, double, double>(),
+        .def(py::init<const Sensordata&, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 SensorDataLocal,
-                 SensorDataLocal_2),
+                 SensordataLocal,
+                 SensordataLocal_2),
              py::arg("sensordata"),
              py::arg("northing"),
              py::arg("easting"))
@@ -42,8 +42,8 @@ void init_c_sensordatalocal(py::module& m)
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 SensorDataLocal,
-                 SensorDataLocal_3),
+                 SensordataLocal,
+                 SensordataLocal_3),
              py::arg("northing") = 0,
              py::arg("easting")  = 0,
              py::arg("depth")    = 0,
@@ -52,23 +52,23 @@ void init_c_sensordatalocal(py::module& m)
              py::arg("pitch")    = 0,
              py::arg("roll")     = 0)
         .def("__eq__",
-             &SensorDataLocal::operator==,
-             DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, operator_eq),
+             &SensordataLocal::operator==,
+             DOC(themachinethatgoesping, navigation, datastructures, SensordataLocal, operator_eq),
              py::arg("other"))
         .def_readwrite(
             "northing",
-            &SensorDataLocal::northing,
-            DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, northing))
+            &SensordataLocal::northing,
+            DOC(themachinethatgoesping, navigation, datastructures, SensordataLocal, northing))
         .def_readwrite(
             "easting",
-            &SensorDataLocal::easting,
-            DOC(themachinethatgoesping, navigation, datastructures, SensorDataLocal, easting))
+            &SensordataLocal::easting,
+            DOC(themachinethatgoesping, navigation, datastructures, SensordataLocal, easting))
         // default copy functions
-        __PYCLASS_DEFAULT_COPY__(SensorDataLocal)
+        __PYCLASS_DEFAULT_COPY__(SensordataLocal)
         // default binary functions
-        __PYCLASS_DEFAULT_BINARY__(SensorDataLocal)
+        __PYCLASS_DEFAULT_BINARY__(SensordataLocal)
         // default printing functions
-        __PYCLASS_DEFAULT_PRINTING__(SensorDataLocal)
-        // end SensorDataLocal
+        __PYCLASS_DEFAULT_PRINTING__(SensordataLocal)
+        // end SensordataLocal
         ;
 }

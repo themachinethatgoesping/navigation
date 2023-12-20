@@ -1,4 +1,4 @@
-//sourcehash: f1084d16239211ae44e03cce729b3578aa9fdd8e1191d7603774fc061be577b4
+//sourcehash: 99efe2cba28c108d0694202a41030c7edd5454abacdec76320277c3139a838b4
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -39,14 +39,14 @@
 
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM =
 R"doc(A structure to store a georeferenced data and attitude data from
-different sensors (e.g. GPS, IMU, etc.) Unlike SensorDataLatLon, this
+different sensors (e.g. GPS, IMU, etc.) Unlike SensordataLatLon, this
 structure stores UTM coordinates.)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_SensordataUTM = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_2 =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_SensordataUTM_2 =
 R"doc(Construct a new Sensor Data Local object using a base sensor data
 object
 
@@ -64,8 +64,8 @@ Parameter ``utm_zone``:
 Parameter ``northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_3 =
-R"doc(Construct an SensorDataUTM object from an existing SensorDataLocal
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_SensordataUTM_3 =
+R"doc(Construct an SensordataUTM object from an existing SensordataLocal
 object (using a known zone and hemisphere)
 
 Parameter ``data_local``:
@@ -76,13 +76,13 @@ UTM/UPS zone number
 Parameter ``northern_hemisphere``:
     if true: northern hemisphere, else: southern hemisphere)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_4 =
-R"doc(Construct an SensorDataUTM object from an existing SensorDataLatLon
-object (this allows for explicit conversion from SensorDataLatLon
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_SensordataUTM_4 =
+R"doc(Construct an SensordataUTM object from an existing SensordataLatLon
+object (this allows for explicit conversion from SensordataLatLon
 class))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_SensorDataUTM_5 =
-R"doc(Construct a new SensorDataUTM object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_SensordataUTM_5 =
+R"doc(Construct a new SensordataUTM object
 
 Parameter ``northing``:
     in m, positive northwards
@@ -111,25 +111,25 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_from_sensordata =
-R"doc(Construct convert a SensorDataLatLon Object to UTM
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_from_sensordata =
+R"doc(Construct convert a SensordataLatLon Object to UTM
 
 Parameter ``data``:
-    valid SensorDataLatLon object
+    valid SensordataLatLon object
 
 Parameter ``setzone``:
     set a preferred UTM zone negative means automatic, zero means UPS,
     positive means a particular UTM zone
 
 Returns:
-    SensorDataUTM)doc";
+    SensordataUTM)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_northern_hemisphere = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_northern_hemisphere = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_operator_eq =
-R"doc(Check if two SensorDataUTM objects are equal
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_operator_eq =
+R"doc(Check if two SensordataUTM objects are equal
 
 Parameter ``rhs``:
     $Returns:
@@ -139,21 +139,21 @@ true if equal
 Returns:
     false if not equal)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_operator_ne = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_operator_ne = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_to_sensordata =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_to_sensordata =
 R"doc(Convert a utm sensordatalatlon to an unprojected data
 
 Parameter ``data_utm``:
     $Returns:
 
-SensorDataLatLon)doc";
+SensordataLatLon)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_to_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_to_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_SensorDataUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

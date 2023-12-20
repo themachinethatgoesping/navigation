@@ -64,6 +64,6 @@ void init_c_nmea_vtg(py::module& m)
         __PYCLASS_DEFAULT_BINARY__(NMEA_VTG)
         // default printing functions
         __PYCLASS_DEFAULT_PRINTING__(NMEA_VTG)
-        // end GeoLocationLatLon
+        // end GeolocationLatLon
         ;
 }

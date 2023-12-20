@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MPL-2.0
 
 from themachinethatgoesping.navigation import navtools
+from themachinethatgoesping.navigation import datastructures
 
 from pytest import approx
 import numpy as np
@@ -87,7 +88,7 @@ class Test_navigation_navtools:
         assert lat == approx(latitudes)
         assert lon == approx(longitudes)
 
-    def test_latlon_distances(self):
+    def test_latlon_distance_comutation(self):
         lat1 = 51.5074 # London
         lon1 = -0.1278
         lat2 = 48.8566 # Paris
@@ -101,22 +102,48 @@ class Test_navigation_navtools:
         expectedDistance2 = 559042.3365035714 # in meters
         expectedDistance3 = 8976175.5461306088 # in meters
 
-        distance1 = navtools.compute_distance(lat1, lon1, lat2, lon2)
-        distance2 = navtools.compute_distance(lat3, lon3, lat4, lon4)
+        distance1 = navtools.compute_latlon_distance_m(lat1, lon1, lat2, lon2)
+        distance2 = navtools.compute_latlon_distance_m(lat3, lon3, lat4, lon4)
 
         assert distance1 == approx(expectedDistance1)
         assert distance2 == approx(expectedDistance2)
 
         # test vectorized calls
-        distances1 = navtools.compute_distances([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])
+        distances1 = navtools.compute_latlon_distances_m([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])
         assert len(distances1) == 3
         assert type(distances1) == type(np.array([]))
         assert distances1 == approx([expectedDistance1, expectedDistance3, expectedDistance2])
 
         # test cumulative distance
-        distances2 = navtools.cumulative_distances([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])
+        distances2 = navtools.cumulative_latlon_distances_m([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])
         assert len(distances2) == 4
         assert type(distances2) == type(np.array([]))
         assert distances2 == approx([0,expectedDistance1, expectedDistance1+expectedDistance3, expectedDistance1+expectedDistance3+expectedDistance2])
 
     
+        # Test case 4 test above with datastructures::GeolocationLatLon
+        loc_latlon = [datastructures.GeolocationLatLon(datastructures.Geolocation(), lat, lon) for lat, lon in zip([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])]
+        sens_latlon = [datastructures.SensordataLatLon(datastructures.Sensordata(), lat, lon) for lat, lon in zip([lat1, lat2, lat3, lat4], [lon1, lon2, lon3, lon4])]
+
+        # individual distances
+        assert navtools.compute_latlon_distance_m(loc_latlon[0], loc_latlon[1]) == approx(distance1)
+        assert navtools.compute_latlon_distance_m(sens_latlon[0], sens_latlon[1]) == approx(distance1)
+
+        # vector distances
+        distances_loc_latlon = navtools.compute_latlon_distances_m(loc_latlon)
+        distances_sens_latlon = navtools.compute_latlon_distances_m(sens_latlon)
+
+        assert len(distances_loc_latlon) == len(distances1)
+        assert len(distances_sens_latlon) == len(distances1)
+
+        assert distances_loc_latlon == approx(distances1)
+        assert distances_sens_latlon == approx(distances1)
+
+        # cumulative distances
+        cumulative_latlon_distances_loc_latlon = navtools.cumulative_latlon_distances_m(loc_latlon)
+        cumulative_latlon_distances_sens_latlon = navtools.cumulative_latlon_distances_m(sens_latlon)
+        assert len(cumulative_latlon_distances_loc_latlon) == len(distances2)
+        assert len(cumulative_latlon_distances_sens_latlon) == len(distances2)
+
+        assert cumulative_latlon_distances_loc_latlon == approx(distances2)
+        assert cumulative_latlon_distances_sens_latlon == approx(distances2)

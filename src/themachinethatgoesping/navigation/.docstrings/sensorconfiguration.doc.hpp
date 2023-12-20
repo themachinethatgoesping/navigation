@@ -1,4 +1,4 @@
-//sourcehash: 9b66bf3c0382f12594f72ce1ed2b047001b314611dab3b39d0059bf1a69d6859
+//sourcehash: c2b61cd95908ba42a4bc8d1c555b681a418bee6b895aa938db11516dd2e8ff06
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -112,11 +112,11 @@ Parameter ``target_id``:
     name of the target (e.g. "MBES")
 
 Parameter ``sensor_data``:
-    SensorDataLatLon / this structure includes latitude and longitude
+    SensordataLatLon / this structure includes latitude and longitude
     information
 
 Returns:
-    datastructures::GeoLocationLatLon / this structure includes
+    datastructures::GeolocationLatLon / this structure includes
     latitude and longitude information)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position_2 =
@@ -127,11 +127,11 @@ Parameter ``target_id``:
     name of the target (e.g. "MBES")
 
 Parameter ``sensor_data``:
-    SensorDataUTM / this structure includes northing/easting and utm
+    SensordataUTM / this structure includes northing/easting and utm
     zone or hemisphere information
 
 Returns:
-    datastructures::GeoLocationUTM / this structure includes
+    datastructures::GeolocationUTM / this structure includes
     northing/easting and utm zone or hemisphere information)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position_3 =
@@ -142,11 +142,11 @@ Parameter ``target_id``:
     name of the target (e.g. "MBES")
 
 Parameter ``sensor_data``:
-    SensorDataLocal / this structure includes northing/easting but no
+    SensordataLocal / this structure includes northing/easting but no
     zone or hemisphere information
 
 Returns:
-    datastructures::GeoLocationLocal / this structure includes
+    datastructures::GeolocationLocal / this structure includes
     northing/easting but no zone or hemisphere information)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position_4 =
@@ -157,10 +157,10 @@ Parameter ``target_id``:
     name of the target (e.g. "MBES")
 
 Parameter ``sensor_data``:
-    SensorData / this structure includes no coordinate information
+    Sensordata / this structure includes no coordinate information
 
 Returns:
-    datastructures::GeoLocationLocal / this structure includes
+    datastructures::GeolocationLocal / this structure includes
     northing and east, which are set relative to the sensor coordinate
     system center)doc";
 

@@ -18,32 +18,32 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_geolocationlatlon(py::module& m)
 {
 
-    py::class_<GeoLocationLatLon, GeoLocation>(
+    py::class_<GeolocationLatLon, Geolocation>(
         m,
-        "GeoLocationLatLon",
-        DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon))
-        .def(py::init<const GeoLocation&, double, double>(),
+        "GeolocationLatLon",
+        DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon))
+        .def(py::init<const Geolocation&, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 GeoLocationLatLon,
-                 GeoLocationLatLon_2),
+                 GeolocationLatLon,
+                 GeolocationLatLon_2),
              py::arg("location"),
              py::arg("latitude"),
              py::arg("longitude"))
-        .def(py::init<const GeoLocationUTM&>(),
+        .def(py::init<const GeolocationUTM&>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 GeoLocationLatLon,
-                 GeoLocationLatLon_3),
+                 GeolocationLatLon,
+                 GeolocationLatLon_3),
              py::arg("geolocationlatlon_utm"))
         .def(py::init<double, double, double, double, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
-                 GeoLocationLatLon,
-                 GeoLocationLatLon_4),
+                 GeolocationLatLon,
+                 GeolocationLatLon_4),
              py::arg("latitude")  = 0,
              py::arg("longitude") = 0,
              py::arg("z")         = 0,
@@ -52,23 +52,23 @@ void init_c_geolocationlatlon(py::module& m)
              py::arg("roll")      = 0)
         .def(
             "__eq__",
-            &GeoLocationLatLon::operator==,
-            DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon, operator_eq),
+            &GeolocationLatLon::operator==,
+            DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon, operator_eq),
             py::arg("other"))
         .def_readwrite(
             "latitude",
-            &GeoLocationLatLon::latitude,
-            DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon, latitude))
+            &GeolocationLatLon::latitude,
+            DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon, latitude))
         .def_readwrite(
             "longitude",
-            &GeoLocationLatLon::longitude,
-            DOC(themachinethatgoesping, navigation, datastructures, GeoLocationLatLon, longitude))
+            &GeolocationLatLon::longitude,
+            DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon, longitude))
         // default copy functions
-        __PYCLASS_DEFAULT_COPY__(GeoLocationLatLon)
+        __PYCLASS_DEFAULT_COPY__(GeolocationLatLon)
         // default binary functions
-        __PYCLASS_DEFAULT_BINARY__(GeoLocationLatLon)
+        __PYCLASS_DEFAULT_BINARY__(GeolocationLatLon)
         // default printing functions
-        __PYCLASS_DEFAULT_PRINTING__(GeoLocationLatLon)
-        // end GeoLocationLatLon
+        __PYCLASS_DEFAULT_PRINTING__(GeolocationLatLon)
+        // end GeolocationLatLon
         ;
 }

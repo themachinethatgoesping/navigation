@@ -1,4 +1,4 @@
-//sourcehash: 7146277d3ded2a5baff1a44d90239f7522e0393bfe3a89d90b50b1025625ef4e
+//sourcehash: 6ec2fedc8de87fc9b9a8f25ef0be6f54d0c3259ed8942c914d607de843664bab
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -38,9 +38,9 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_navtools_compute_distance =
+static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distance_m =
 R"doc(Calculate the distance between two points on the Earth's surface using
-the Haversine formula
+geographiclib
 
 Template parameter ``T_float``:
     floating-point type for latitude and longitude values
@@ -60,9 +60,25 @@ Parameter ``lon2``:
 Returns:
     distance between the two points in meters)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navtools_compute_distances =
+static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distance_m_2 =
+R"doc(Compute the 2D distance between two points using latitude and
+longitude values in meters
+
+Template parameter ``T_latlon_holder``:
+    type of the latitude and longitude holder
+
+Parameter ``geolocation_latlon_1``:
+    first latitude and longitude holder
+
+Parameter ``geolocation_latlon_2``:
+    second latitude and longitude holder
+
+Returns:
+    distance between the two points in meters)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distances_m =
 R"doc(Calculate the distances between consecutive points in the given
-latitude and longitude vectors
+latitude and longitude vectors in meters
 
 Template parameter ``T_float``:
     floating-point type for latitude and longitude values
@@ -76,9 +92,22 @@ Parameter ``longitudes``:
 Returns:
     vector of distances between consecutive points)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_navtools_cumulative_distances =
+static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distances_m_2 =
+R"doc(Compute the 2D distances between consecutive points in the given
+latitude and longitude holder container in meters
+
+Template parameter ``T_latlon_holder_container``:
+    type of the latitude and longitude holder container
+
+Parameter ``geolocations_latlon``:
+    container of latitude and longitude holders
+
+Returns:
+    vector of distances between consecutive points)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_cumulative_latlon_distances_m =
 R"doc(Calculate the cumulative distances between consecutive points in the
-given latitude and longitude vectors
+given latitude and longitude vectors in meters
 
 Template parameter ``T_float``:
     floating-point type for latitude and longitude values
@@ -88,6 +117,19 @@ Parameter ``latitudes``:
 
 Parameter ``longitudes``:
     vector of longitudes
+
+Returns:
+    vector of cumulative distances)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_cumulative_latlon_distances_m_2 =
+R"doc(Compute the cumulative distances between consecutive points in the
+given latitude and longitude holder container
+
+Template parameter ``T_latlon_holder_container``:
+    type of the latitude and longitude holder container
+
+Parameter ``geolocations_latlon``:
+    container of latitude and longitude holders
 
 Returns:
     vector of cumulative distances)doc";

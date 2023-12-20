@@ -1,4 +1,4 @@
-//sourcehash: e087736bcdc40ad387d4ef0417c901c91e94edf3d638ec0b4fa42a1339dac551
+//sourcehash: d9121f3fe95fb3bd63db73e938adbd630f13a20ab79d39f6cb338c46ae4216c8
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -38,16 +38,16 @@
 #endif
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal =
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
-sensor) unlike the default GeoLocation structure, this object stores
+sensor) unlike the default Geolocation structure, this object stores
 local northing and easting coordinates. These coordinates can be
 converted to UTM coordinates if the zone and hemisphere are known.)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_GeoLocationLocal = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_GeolocationLocal = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_GeoLocationLocal_2 =
-R"doc(Construct a new GeoLocationLocal object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_GeolocationLocal_2 =
+R"doc(Construct a new GeolocationLocal object
 
 Parameter ``location``:
     $Parameter ``northing``:
@@ -57,8 +57,8 @@ in m, positive northwards
 Parameter ``easting``:
     in m, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_GeoLocationLocal_3 =
-R"doc(Construct a new GeoLocationLocal object
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_GeolocationLocal_3 =
+R"doc(Construct a new GeolocationLocal object
 
 Parameter ``northing``:
     in m, positive northwards
@@ -78,19 +78,19 @@ Parameter ``pitch``:
 Parameter ``roll``:
     in °, positive means port up)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_easting = R"doc(< in m, positive eastwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_easting = R"doc(< in m, positive eastwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_from_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_northing = R"doc(< in m, positive northwards)doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_northing = R"doc(< in m, positive northwards)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_operator_eq = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_operator_eq = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_operator_ne = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_operator_ne = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_printer = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeoLocationLocal_to_stream = R"doc()doc";
+static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationLocal_to_stream = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

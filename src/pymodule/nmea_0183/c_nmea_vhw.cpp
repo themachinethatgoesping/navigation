@@ -53,6 +53,6 @@ void init_c_nmea_vhw(py::module& m)
         __PYCLASS_DEFAULT_BINARY__(NMEA_VHW)
         // default printing functions
         __PYCLASS_DEFAULT_PRINTING__(NMEA_VHW)
-        // end GeoLocationLatLon
+        // end GeolocationLatLon
         ;
 }

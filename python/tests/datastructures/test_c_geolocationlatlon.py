@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: MPL-2.0
 
 from themachinethatgoesping.navigation.datastructures import (
-    GeoLocationLatLon,
-    GeoLocation,
+    GeolocationLatLon,
+    Geolocation,
 )
 
 # import time
@@ -13,17 +13,17 @@ from themachinethatgoesping.navigation.datastructures import (
 # define class for grouping (test sections)
 
 
-class Test_navigation_GeoLocation:
+class Test_navigation_Geolocation:
     # define actual tests (must start with "test_"
     # test case 1
-    def test_GeoLocation_should_support_common_functions(self):
-        location = GeoLocationLatLon(1, 2, 3, 10, 20, 30)
-        location_base = GeoLocation(3, 10, 20, 30)
+    def test_Geolocation_should_support_common_functions(self):
+        location = GeolocationLatLon(1, 2, 3, 10, 20, 30)
+        location_base = Geolocation(3, 10, 20, 30)
         print(location)
 
         # test base conversion
-        assert location == GeoLocationLatLon(location_base, 1, 2)
-        assert location_base == GeoLocation(location)
+        assert location == GeolocationLatLon(location_base, 1, 2)
+        assert location_base == Geolocation(location)
 
         # print
         assert len(str(location)) != 0
@@ -35,4 +35,4 @@ class Test_navigation_GeoLocation:
         assert location != location2
 
         # binary
-        assert location == GeoLocationLatLon.from_binary(location.to_binary())
+        assert location == GeolocationLatLon.from_binary(location.to_binary())

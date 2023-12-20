@@ -29,7 +29,7 @@ namespace datastructures {
  * No gps coordinates are stored in this structure (only depth).
  *
  */
-struct SensorData
+struct Sensordata
 {
     float depth   = 0.0; ///< in m, positive downwards
     float heave   = 0.0; ///< from heave source, will be added to depth in m, positive upwards
@@ -38,13 +38,13 @@ struct SensorData
     float roll    = 0.0; ///< from attitude source, in °, positive means port up
 
     /**
-     * @brief Construct a new SensorData object
+     * @brief Construct a new Sensordata object
      *
      */
-    SensorData() = default;
+    Sensordata() = default;
 
     /**
-     * @brief Construct a new SensorData object
+     * @brief Construct a new Sensordata object
      *
      * @param depth from depth source, in m, positive downwards
      * @param heave from heave sensor, will be added to depth in m, positive upwards
@@ -52,7 +52,7 @@ struct SensorData
      * @param pitch from attitude source, in °, positive means bow up
      * @param roll from attitude source, in °, positive means port up
      */
-    SensorData(float depth, float heave, float heading, float pitch, float roll)
+    Sensordata(float depth, float heave, float heading, float pitch, float roll)
         : depth(depth)
         , heave(heave)
         , heading(heading)
@@ -61,15 +61,15 @@ struct SensorData
     {
     }
 
-    bool operator!=(const SensorData& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const Sensordata& rhs) const { return !(operator==(rhs)); }
     /**
-     * @brief Check if two SensorData objects are equal
+     * @brief Check if two Sensordata objects are equal
      *
      * @param rhs
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const SensorData& rhs) const
+    bool operator==(const Sensordata& rhs) const
     {
         if (tools::helper::approx(depth, rhs.depth))
             if (tools::helper::approx(heave, rhs.heave))
@@ -83,9 +83,9 @@ struct SensorData
 
   public:
     // ----- file I/O -----
-    static SensorData from_stream(std::istream& is)
+    static Sensordata from_stream(std::istream& is)
     {
-        SensorData data;
+        Sensordata data;
 
         is.read(reinterpret_cast<char*>(&data.depth), 5 * sizeof(float));
 
@@ -100,7 +100,7 @@ struct SensorData
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("SensorData", float_precision);
+        tools::classhelper::ObjectPrinter printer("Sensordata", float_precision);
 
         printer.register_value("depth", depth, "positive downwards, m");
         printer.register_value("heave", heave, "positive upwards, m");
@@ -114,7 +114,7 @@ struct SensorData
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialization function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorData)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(Sensordata)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
