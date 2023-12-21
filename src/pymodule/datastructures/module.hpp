@@ -26,8 +26,8 @@ void init_m_datastructures(pybind11::module& m)
 
     init_c_positionaloffsets(m_datastructures);
     init_c_geolocation(m_datastructures);
-    init_c_geolocationlatlon(m_datastructures);
     init_c_geolocationlocal(m_datastructures);
+    init_c_geolocationlatlon(m_datastructures);
     init_c_geolocationutm(m_datastructures);
     init_c_sensordata(m_datastructures);
     init_c_sensordatalatlon(m_datastructures);
