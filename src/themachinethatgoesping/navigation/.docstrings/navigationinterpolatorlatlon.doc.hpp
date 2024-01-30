@@ -1,4 +1,4 @@
-//sourcehash: 0c361e3482ddc3aa7f308f5754ef4f1a6afebed27aa78c191213b56a9994082d
+//sourcehash: 998ac7fbc136c2874ddd28ce2223e9faad0198f41580e2ed92b3ea5b01e42f7a
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -58,6 +58,8 @@ Interpolator
 
 Parameter ``base``:
     Base I_NavigationInterpolator object)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_class_name = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor

@@ -33,6 +33,8 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     tools::vectorinterpolators::AkimaInterpolator
         _interpolator_easting; ///< interpolator for the easting data
 
+    std::string class_name() const override { return "NavigationInterpolatorLocal"; }
+
   public:
     /**
      * @brief Set the extrapolation mode for all interpolators
@@ -58,9 +60,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     NavigationInterpolatorLocal(SensorConfiguration                     sensor_configuration,
                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
-        : I_NavigationInterpolator(std::move(sensor_configuration),
-                                   extrapolation_mode,
-                                   "NavigationInterpolatorLocal")
+        : I_NavigationInterpolator(std::move(sensor_configuration), extrapolation_mode)
     {
         set_extrapolation_mode(extrapolation_mode);
     }

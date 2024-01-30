@@ -33,6 +33,9 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     tools::vectorinterpolators::AkimaInterpolator
         _interpolator_longitude; ///< interpolator for the longitude data
 
+  protected:
+    std::string class_name() const override { return "NavigationInterpolatorLatLon"; }
+
   public:
     /**
      * @brief Set the extrapolation mode for all interpolators
@@ -59,9 +62,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     NavigationInterpolatorLatLon(SensorConfiguration sensor_configuration = SensorConfiguration(),
                                  tools::vectorinterpolators::t_extr_mode extrapolation_mode =
                                      tools::vectorinterpolators::t_extr_mode::extrapolate)
-        : I_NavigationInterpolator(std::move(sensor_configuration),
-                                   extrapolation_mode,
-                                   "NavigationInterpolatorLatLon")
+        : I_NavigationInterpolator(std::move(sensor_configuration), extrapolation_mode)
     {
         set_extrapolation_mode(extrapolation_mode);
     }

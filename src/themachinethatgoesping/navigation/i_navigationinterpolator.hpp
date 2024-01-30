@@ -28,7 +28,7 @@ class I_NavigationInterpolator
     std::string_view _name;
 
   protected:
-    std::string_view class_name() const { return _name; }
+    virtual std::string class_name() const { return "I_NavigationInterpolator"; }
 
     SensorConfiguration _sensor_configuration; ///< sensor configuration that stores the offsets
 
@@ -55,10 +55,8 @@ class I_NavigationInterpolator
      */
     I_NavigationInterpolator(SensorConfiguration                     sensor_configuration,
                              tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                 tools::vectorinterpolators::t_extr_mode::extrapolate,
-                             std::string_view name = "I_NavigationInterpolator")
-        : _name(name)
-        , _sensor_configuration(std::move(sensor_configuration))
+                                 tools::vectorinterpolators::t_extr_mode::extrapolate)
+        : _sensor_configuration(std::move(sensor_configuration))
     {
         set_extrapolation_mode(extrapolation_mode);
     }
