@@ -7,19 +7,20 @@
 testcomponent = 'navigation'
 
 sources = [
-    'datastructures/positionaloffsets.test.cpp',
-    'datastructures/geolocation.test.cpp',
-    'datastructures/geolocationlatlon.test.cpp',
-    'datastructures/geolocationutm.test.cpp',
-    'datastructures/geolocationlocal.test.cpp',
-    'datastructures/sensordata.test.cpp',
-    'datastructures/sensordatalatlon.test.cpp',
-    'datastructures/sensordatautm.test.cpp',
-    'datastructures/sensordatalocal.test.cpp',
-    'sensorconfiguration.test.cpp',
-    'navtools.test.cpp',
-    'navigationinterpolatorlocal.test.cpp',
-    'navigationinterpolatorlatlon.test.cpp'
+  'navigationinterpolatorlatlon.test.cpp',
+  'navigationinterpolatorlocal.test.cpp',
+  'navtools.test.cpp',
+  'sensorconfiguration.test.cpp',
+  'tutorial.test.cpp',
+  'datastructures/geolocation.test.cpp',
+  'datastructures/geolocationlatlon.test.cpp',
+  'datastructures/geolocationlocal.test.cpp',
+  'datastructures/geolocationutm.test.cpp',
+  'datastructures/positionaloffsets.test.cpp',
+  'datastructures/sensordata.test.cpp',
+  'datastructures/sensordatalatlon.test.cpp',
+  'datastructures/sensordatalocal.test.cpp',
+  'datastructures/sensordatautm.test.cpp',
 ]
 
 foreach source : sources
