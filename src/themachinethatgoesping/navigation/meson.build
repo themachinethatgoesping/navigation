@@ -77,7 +77,6 @@ if build_machine.system() != 'linux'
   navigation_lib = static_library(libname,sources,
                         dependencies : [
                           boost_dep, 
-                          omp_dep,
                           #proj_dep,
                           geographiclib_dep,
                           tools_dep
@@ -93,7 +92,6 @@ else
   navigation_lib = library(libname,sources,
                         dependencies : [
                           boost_dep, 
-                          omp_dep,
                           #proj_dep,
                           geographiclib_dep,
                           tools_dep
@@ -112,7 +110,6 @@ endif
 navigation_dep = declare_dependency(
   dependencies : [
     boost_dep,
-    omp_dep,
     geographiclib_dep,
     tools_dep
   ],
