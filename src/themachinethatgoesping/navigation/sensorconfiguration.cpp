@@ -36,7 +36,8 @@ datastructures::GeolocationLocal SensorConfiguration::compute_target_position(
                                                                   _offsets_position_source.z);
 
     // compute target depth
-    location.z = target_xyz[2] - depth_source_xyz[2] + sensor_data.depth - sensor_data.heave - _waterline_offset;
+    location.z = target_xyz[2] - depth_source_xyz[2] + sensor_data.depth - sensor_data.heave -
+                 _waterline_offset;
 
     // compute target ypr
     // TODO: check if the order is correct
@@ -164,6 +165,11 @@ void SensorConfiguration::remove_targets()
 {
     _target_offsets.clear();
     add_target("0", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+}
+
+bool SensorConfiguration::has_target(std::string_view target_id) const
+{
+    return _target_offsets.find(target_id) != _target_offsets.end();
 }
 
 void SensorConfiguration::add_target(const std::string&                       target_id,

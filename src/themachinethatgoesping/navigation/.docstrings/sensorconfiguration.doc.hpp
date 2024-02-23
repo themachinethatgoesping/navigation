@@ -1,4 +1,4 @@
-//sourcehash: c2b61cd95908ba42a4bc8d1c555b681a418bee6b895aa938db11516dd2e8ff06
+//sourcehash: 9d90ea6b898e89177db5a01911a0ab0663c39739953465f63d99a3a2b312e256
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -251,6 +251,15 @@ below the waterline
 
 Returns:
     waterline_offset)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_has_target =
+R"doc(Checks if the sensor configuration has a target with the specified ID.
+
+Parameter ``target_id``:
+    The ID of the target to check for.
+
+Returns:
+    True if the sensor configuration has the target, false otherwise.)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_SensorConfiguration_offsets_attitude_source =
 R"doc(< Static Roll,Pitch,Yaw (installation) offsets of the attitude <

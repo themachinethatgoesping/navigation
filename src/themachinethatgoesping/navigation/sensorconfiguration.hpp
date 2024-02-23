@@ -12,6 +12,7 @@
 #include <iostream>
 #include <math.h>
 #include <string>
+#include <string_view>
 
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/Geodesic.hpp>
@@ -156,6 +157,15 @@ class SensorConfiguration
         const datastructures::Sensordata& sensor_data) const;
 
     // ----- get/set target offsets -----
+
+    /**
+     * Checks if the sensor configuration has a target with the specified ID.
+     *
+     * @param target_id The ID of the target to check for.
+     * @return True if the sensor configuration has the target, false otherwise.
+     */
+    bool has_target(std::string_view target_id) const;
+
     /**
      * @brief add a target (e.g. MBES) with offsets to the sensor position system
      *

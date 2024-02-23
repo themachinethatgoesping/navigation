@@ -201,6 +201,14 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
             sensor_data.roll  = ypr[2];
         }
 
+        if (_interpolator_latitude.empty())
+            throw std::runtime_error("ERROR[datastructures::SensordataLatLon]: No latitude data "
+                                     "available for interpolation");
+
+        if (_interpolator_longitude.empty())
+            throw std::runtime_error("ERROR[datastructures::SensordataLatLon]: No longitude data "
+                                     "available for interpolation");
+
         sensor_data.latitude  = _interpolator_latitude(timestamp);
         sensor_data.longitude = _interpolator_longitude(timestamp);
 
