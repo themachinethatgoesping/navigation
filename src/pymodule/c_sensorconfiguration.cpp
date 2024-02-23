@@ -15,7 +15,8 @@
 namespace py = pybind11;
 using namespace themachinethatgoesping::navigation;
 
-#define DOC_SensorConfiguration(RG) DOC(themachinethatgoesping, navigation, SensorConfiguratio, ARG)
+#define DOC_SensorConfiguration(ARG)                                                               \
+    DOC(themachinethatgoesping, navigation, SensorConfiguration, ARG)
 
 void init_c_sensorconfiguration(py::module& m)
 {

@@ -167,9 +167,9 @@ void SensorConfiguration::remove_targets()
     add_target("0", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
-bool SensorConfiguration::has_target(std::string_view target_id) const
+bool SensorConfiguration::has_target(const std::string& target_id) const
 {
-    return _target_offsets.find(target_id) != _target_offsets.end();
+    return _target_offsets.contains(target_id);
 }
 
 void SensorConfiguration::add_target(const std::string&                       target_id,
