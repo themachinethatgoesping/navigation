@@ -150,8 +150,8 @@ const datastructures::PositionalOffsets& SensorConfiguration::get_target(
     }
 }
 
-const std::unordered_map<std::string, datastructures::PositionalOffsets>&
-SensorConfiguration::get_targets() const
+const std::map<std::string, datastructures::PositionalOffsets>& SensorConfiguration::get_targets()
+    const
 {
     return _target_offsets;
 }
@@ -190,7 +190,7 @@ void SensorConfiguration::add_target(const std::string& target_id,
 }
 
 void SensorConfiguration::add_targets(
-    const std::unordered_map<std::string, datastructures::PositionalOffsets>& targets)
+    const std::map<std::string, datastructures::PositionalOffsets>& targets)
 {
     for (const auto& target : targets)
         add_target(target.first, target.second);

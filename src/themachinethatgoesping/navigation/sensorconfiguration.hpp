@@ -36,7 +36,10 @@ namespace navigation {
  */
 class SensorConfiguration
 {
-    std::unordered_map<std::string, datastructures::PositionalOffsets>
+    // Note: by using a ordered map, the targets are sorted by their target_id
+    // because the order is the same, the binary hash will be the same
+    // Otherwise, the binary hash would be different for the same content in different order
+    std::map<std::string, datastructures::PositionalOffsets>
         _target_offsets; ///< TargetId (position in vector) for each registered target_id
 
     datastructures::PositionalOffsets
@@ -202,8 +205,7 @@ class SensorConfiguration
      *
      * @param targets map<target_id, target_offsets> of target offsets
      */
-    void add_targets(
-        const std::unordered_map<std::string, datastructures::PositionalOffsets>& targets);
+    void add_targets(const std::map<std::string, datastructures::PositionalOffsets>& targets);
 
     /**
      * @brief Get stored target offsets of a specified target
@@ -218,7 +220,7 @@ class SensorConfiguration
      *
      * @return const std::unordered_map<std::string, datastructures::PositionalOffsets>&
      */
-    const std::unordered_map<std::string, datastructures::PositionalOffsets>& get_targets() const;
+    const std::map<std::string, datastructures::PositionalOffsets>& get_targets() const;
 
     /**
      * @brief Remove the target with the specified target_id

@@ -49,8 +49,9 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     auto buffer = scs.to_binary();
     auto scs3   = SensorConfiguration::from_binary(buffer);
     REQUIRE(scs == scs3);
+    CHECK(scs.binary_hash() == scs3.slow_hash()); // hash should not change after serialization
 
-    //hashing
+    // hashing
     CHECK(scs.binary_hash() == scs.slow_hash());
     CHECK(scs2.binary_hash() == scs2.slow_hash());
     CHECK(scs3.binary_hash() == scs3.slow_hash());
