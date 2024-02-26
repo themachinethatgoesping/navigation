@@ -1,4 +1,4 @@
-//sourcehash: c5f7dff3e704775bc816456825d4c24ae44102a427fc3748e051212f14869d28
+//sourcehash: b3ddf039c6218087e5f74500afdc648e81a67539ea251e0bc562069000e5381c
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -194,6 +194,8 @@ Parameter ``extrapolation_mode``:
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_set_sensor_configuration = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_to_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_valid = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

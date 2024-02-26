@@ -269,6 +269,12 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
         _interpolator_easting.to_stream(os);
     }
 
+    bool valid() const override
+    {
+        return I_NavigationInterpolator::valid() &&
+               (!_interpolator_northing.empty() && !_interpolator_easting.empty());
+    }
+
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)

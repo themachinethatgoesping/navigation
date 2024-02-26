@@ -29,6 +29,8 @@ TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTA
     // // initialize coordinate system with one target
     NavigationInterpolatorLatLon navint(sensor_configuration);
 
+    REQUIRE(navint.valid() == false); // no position data was added yet
+
     navint.set_data_depth({ 0, 1, 2, 3 }, { 10, -10, -11, 9 });
     navint.set_data_heave({ 0, 1, 2, 3 }, { -1, -2, 3, 4 });
     navint.set_data_heading({ 0.5, 6 }, { 10, 20 });
@@ -37,6 +39,9 @@ TEST_CASE("NavigationInterpolatorLatLon should support common functions", TESTTA
 
     // copy constructor
     NavigationInterpolatorLatLon navint2(navint);
+
+    REQUIRE(navint.valid()); // position data was added
+    REQUIRE(navint2.valid()); // position data was added
 
     // eq operator
     REQUIRE(navint == navint2);

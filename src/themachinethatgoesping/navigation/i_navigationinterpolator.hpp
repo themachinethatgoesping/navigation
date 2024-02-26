@@ -268,6 +268,12 @@ class I_NavigationInterpolator
         _sensor_configuration = std::move(sensor_configuration);
     }
 
+    virtual bool valid() const
+    {
+        // TODO: check which conditions are required for the interpolator to be valid
+        return true;
+    }
+
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)

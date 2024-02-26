@@ -215,6 +215,12 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
         return sensor_data;
     }
 
+    bool valid() const override
+    {
+        return I_NavigationInterpolator::valid() &&
+               (!_interpolator_latitude.empty() && !_interpolator_longitude.empty());
+    }
+
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)

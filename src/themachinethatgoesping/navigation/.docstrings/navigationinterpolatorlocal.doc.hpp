@@ -1,4 +1,4 @@
-//sourcehash: dec081617247b1600a73f795b5823e94ef07b5bc81e1a5444d38329afa4cea7f
+//sourcehash: c8d2e297be67d3800fa4630816aa5c1f10944aceb0194efc2fb09d1329ebf53e
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -171,6 +171,8 @@ Parameter ``extrapolation_mode``:
     extrapolate, fail or nearest)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_to_stream = R"doc()doc";
+
+static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_valid = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop
