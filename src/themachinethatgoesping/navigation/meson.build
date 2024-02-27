@@ -44,7 +44,6 @@ headers = [
   '.docstrings/navtools.doc.hpp',
   '.docstrings/nmea_0183.doc.hpp',
   '.docstrings/sensorconfiguration.doc.hpp',
-  'pch/pch.hpp',
   'nmea_0183/helper.hpp',
   'nmea_0183/nmea_base.hpp',
   'nmea_0183/nmea_gga.hpp',
