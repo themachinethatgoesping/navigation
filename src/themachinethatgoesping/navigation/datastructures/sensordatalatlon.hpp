@@ -126,7 +126,7 @@ struct SensordataLatLon : public Sensordata
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("SensordataLatLon", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensordataLatLon (struct)", float_precision);
 
         printer.register_string(
             "latitude",

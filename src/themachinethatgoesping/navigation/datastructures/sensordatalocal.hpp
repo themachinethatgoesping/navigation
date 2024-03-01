@@ -114,7 +114,7 @@ struct SensordataLocal : public Sensordata
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("SensordataLocal", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensordataLocal (struct)", float_precision);
 
         printer.register_value("northing", northing, "positive northwards, m");
         printer.register_value("easting", easting, "positive eastwards, m");

@@ -198,7 +198,7 @@ struct SensordataUTM : public SensordataLocal
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("SensordataUTM", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensordataUTM (struct)", float_precision);
 
         auto base_printer = SensordataLocal::__printer__(float_precision);
         base_printer.remove_sections();

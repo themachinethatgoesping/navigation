@@ -170,7 +170,7 @@ struct GeolocationUTM : public GeolocationLocal
   public:
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
     {
-        tools::classhelper::ObjectPrinter printer("GeolocationUTM", float_precision);
+        tools::classhelper::ObjectPrinter printer("GeolocationUTM (struct)", float_precision);
 
         auto base_printer = GeolocationLocal::__printer__(float_precision);
         base_printer.remove_sections();
