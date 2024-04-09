@@ -147,7 +147,7 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
             "interpolator_latitude",
             &NavigationInterpolatorLatLon::interpolator_latitude,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_latitude() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -157,7 +157,7 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
             "interpolator_longitude",
             &NavigationInterpolatorLatLon::interpolator_longitude,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_longitude() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -169,21 +169,21 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
             "interpolator_heave",
             &NavigationInterpolatorLatLon::interpolator_heave,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_heave() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heave))
         .def_property(
             "interpolator_depth",
             &NavigationInterpolatorLatLon::interpolator_depth,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator<double, double>&
                    interpolator) { self.interpolator_depth() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_depth))
         .def_property(
             "interpolator_attitude",
             &NavigationInterpolatorLatLon::interpolator_attitude,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, double>&
                    interpolator) { self.interpolator_attitude() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -193,7 +193,7 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
             "interpolator_heading",
             &NavigationInterpolatorLatLon::interpolator_heading,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, double>&
                    interpolator) { self.interpolator_heading() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heading))
         .def("merge",

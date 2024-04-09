@@ -2,10 +2,7 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-
 // automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
-
-
 
 // -- c++ library headers
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
@@ -145,7 +142,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             "interpolator_northing",
             &NavigationInterpolatorLocal::interpolator_northing,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_northing() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -155,7 +152,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             "interpolator_easting",
             &NavigationInterpolatorLocal::interpolator_easting,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_easting() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -167,21 +164,22 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             "interpolator_heave",
             &NavigationInterpolatorLocal::interpolator_heave,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_heave() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heave))
         .def_property(
             "interpolator_depth",
             &NavigationInterpolatorLocal::interpolator_depth,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator<double,
+                                                                                            double>&
                    interpolator) { self.interpolator_depth() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_depth))
         .def_property(
             "interpolator_attitude",
             &NavigationInterpolatorLocal::interpolator_attitude,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, double>&
                    interpolator) { self.interpolator_attitude() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -191,7 +189,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             "interpolator_heading",
             &NavigationInterpolatorLocal::interpolator_heading,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, double>&
                    interpolator) { self.interpolator_heading() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heading))
         .def("merge",
@@ -204,7 +202,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
              DOC(themachinethatgoesping, navigation, NavigationInterpolatorLocal, operator_eq),
              py::arg("other"))
 
-        // default copy functions
+        // default copy functionss
         __PYCLASS_DEFAULT_COPY__(NavigationInterpolatorLocal)
         // default binary functions
         __PYCLASS_DEFAULT_BINARY__(NavigationInterpolatorLocal)

@@ -33,17 +33,17 @@ class I_NavigationInterpolator
     SensorConfiguration _sensor_configuration; ///< sensor configuration that stores the offsets
 
     // SlerpInterpolator that stores timestamp, roll, pitch, yaw -> Attitude of Vessel on the Water
-    tools::vectorinterpolators::SlerpInterpolator
+    tools::vectorinterpolators::SlerpInterpolator<double, double>
         _interpolator_attitude; ///< interpolator that stores attitude data (pitch and roll)
-    tools::vectorinterpolators::SlerpInterpolator
+    tools::vectorinterpolators::SlerpInterpolator<double, double>
         _interpolator_heading; ///< interpolator that stores compass data (yaw/heading) [°]
 
     // LinearInterpolator for the depth in the world coordinate system
-    tools::vectorinterpolators::AkimaInterpolator
+    tools::vectorinterpolators::AkimaInterpolator<double>
         _interpolator_heave; ///< interpolator that stores heave data (relative change in depth,
                              ///< positive upwards) [m]
     // tools::vectorinterpolators::AkimaInterpolator // bad results for noisy data
-    tools::vectorinterpolators::LinearInterpolator
+    tools::vectorinterpolators::LinearInterpolator<double, double>
         _interpolator_depth; ///< interpolator that stores depth data (depth, positive downwards)
                              ///< [m]
 
@@ -186,7 +186,7 @@ class I_NavigationInterpolator
      *
      * @return interpolator_depth&
      */
-    tools::vectorinterpolators::LinearInterpolator& interpolator_depth()
+    auto& interpolator_depth()
     {
         return _interpolator_depth;
     }
@@ -196,7 +196,7 @@ class I_NavigationInterpolator
      *
      * @return interpolator_depth&
      */
-    tools::vectorinterpolators::AkimaInterpolator& interpolator_heave()
+    auto& interpolator_heave()
     {
         return _interpolator_heave;
     }
@@ -206,7 +206,7 @@ class I_NavigationInterpolator
      *
      * @return interpolator_attitude&
      */
-    tools::vectorinterpolators::SlerpInterpolator& interpolator_attitude()
+    auto& interpolator_attitude()
     {
         return _interpolator_attitude;
     }
@@ -216,7 +216,7 @@ class I_NavigationInterpolator
      *
      * @return interpolator_heading&
      */
-    tools::vectorinterpolators::SlerpInterpolator& interpolator_heading()
+    auto& interpolator_heading()
     {
         return _interpolator_heading;
     }

@@ -26,11 +26,10 @@ namespace navigation {
  */
 class NavigationInterpolatorLatLon : public I_NavigationInterpolator
 {
-
     // LinearInterpolator for the depth in the world coordinate system
-    tools::vectorinterpolators::AkimaInterpolator
+    tools::vectorinterpolators::AkimaInterpolator<double>
         _interpolator_latitude; ///< interpolator for the latitude data
-    tools::vectorinterpolators::AkimaInterpolator
+    tools::vectorinterpolators::AkimaInterpolator<double>
         _interpolator_longitude; ///< interpolator for the longitude data
 
   protected:
@@ -111,7 +110,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      *
      * @return interpolator_latitude&
      */
-    tools::vectorinterpolators::AkimaInterpolator& interpolator_latitude()
+    auto& interpolator_latitude()
     {
         return _interpolator_latitude;
     }
@@ -121,7 +120,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      *
      * @return interpolator_longitude&
      */
-    tools::vectorinterpolators::AkimaInterpolator& interpolator_longitude()
+    auto& interpolator_longitude()
     {
         return _interpolator_longitude;
     }

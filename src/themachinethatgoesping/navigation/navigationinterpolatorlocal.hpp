@@ -28,9 +28,9 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
 {
 
     // LinearInterpolator for the depth in the world coordinate system
-    tools::vectorinterpolators::AkimaInterpolator
+    tools::vectorinterpolators::AkimaInterpolator<double>
         _interpolator_northing; ///< interpolator for the northing data
-    tools::vectorinterpolators::AkimaInterpolator
+    tools::vectorinterpolators::AkimaInterpolator<double>
         _interpolator_easting; ///< interpolator for the easting data
 
     std::string class_name() const override { return "NavigationInterpolatorLocal"; }
@@ -151,7 +151,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      *
      * @return interpolator_northing&
      */
-    tools::vectorinterpolators::AkimaInterpolator& interpolator_northing()
+    auto& interpolator_northing()
     {
         return _interpolator_northing;
     }
@@ -161,7 +161,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      *
      * @return interpolator_easting&
      */
-    tools::vectorinterpolators::AkimaInterpolator& interpolator_easting()
+    auto& interpolator_easting()
     {
         return _interpolator_easting;
     }
