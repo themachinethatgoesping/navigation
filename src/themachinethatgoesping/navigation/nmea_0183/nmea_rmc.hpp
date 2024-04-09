@@ -76,7 +76,7 @@ class NMEA_RMC : public NMEA_Base
     {
         try
         {
-            return get_field(10)[0];
+            return get_field(10).at(0);
         }
         catch ([[maybe_unused]] std::out_of_range& e)
         {

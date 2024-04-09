@@ -58,7 +58,7 @@ class NMEA_VTG : public NMEA_Base
     {
         try
         {
-            return get_field(8)[0];
+            return get_field(8).at(0);
         }
         catch ([[maybe_unused]] std::out_of_range& e)
         {
