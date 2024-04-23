@@ -1,4 +1,4 @@
-//sourcehash: bc44be11fc66376f87aea7998f9fb46886a6d5d07cd4b46d1f955c0b24b7c543
+//sourcehash: d7a7f8174dbcf2b05541cb28d7bab9eebd18ba5c1a300e45f1b783ee24167f4e
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -134,8 +134,6 @@ R"doc(Merge data from another interpolator. Only works of the
 SensorConfiguration is compatible.
 
 Parameter ``other``:)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_name = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_I_NavigationInterpolator_operator_eq = R"doc()doc";
 

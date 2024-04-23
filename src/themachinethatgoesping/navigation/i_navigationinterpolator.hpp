@@ -25,8 +25,6 @@ namespace navigation {
  */
 class I_NavigationInterpolator
 {
-    std::string_view _name;
-
   protected:
     virtual std::string class_name() const { return "I_NavigationInterpolator"; }
 
