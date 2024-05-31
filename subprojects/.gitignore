@@ -5,7 +5,6 @@
 #wrap folders
 packagecache/*
 Catch2*/*
-date*/*
 geographiclib*
 
 #inherited wrap files
@@ -24,6 +23,9 @@ nlohman*
 indicators*
 xtensor-python*
 xxhash_cpp*
+frozen*
+sse2neon*
+date*
 
 #inherited repos
 tools-*
