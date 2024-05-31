@@ -101,6 +101,9 @@ jobs:
         submodules: recursive
         lfs: false
 
+    - name: test git
+      run: C:\\Program Files\\Git\\bin\\git.EXE clone https://github.com/themachinethatgoesping/tools.git tools-main
+
     - name: sccache
       uses: hendrikmuhs/ccache-action@v1.2
       with:
