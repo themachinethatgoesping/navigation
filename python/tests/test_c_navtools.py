@@ -88,7 +88,7 @@ class Test_navigation_navtools:
         assert lat == approx(latitudes)
         assert lon == approx(longitudes)
 
-    def test_latlon_distance_comutation(self):
+    def test_latlon_distance_computation(self):
         lat1 = 51.5074 # London
         lon1 = -0.1278
         lat2 = 48.8566 # Paris
