@@ -42,7 +42,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
     void set_extrapolation_mode(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                    tools::vectorinterpolators::t_extr_mode::extrapolate)
+                                    tools::vectorinterpolators::t_extr_mode::extrapolate) override
     {
         I_NavigationInterpolator::set_extrapolation_mode(extrapolation_mode);
 
