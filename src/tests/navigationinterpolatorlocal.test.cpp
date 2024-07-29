@@ -125,7 +125,7 @@ TEST_CASE("navigationinterpolatorlocal merging operations", TESTTAG)
         REQUIRE(navint3.interpolator_depth().get_data_X() ==
                 vector<double>({ -1, 0, 1, 1.5, 2, 3, 4 }));
         REQUIRE(navint3.interpolator_depth().get_data_Y() ==
-                vector<double>({ 1, 10, -10, 2, -11, 9, 3 }));
+                vector<float>({ 1, 10, -10, 2, -11, 9, 3 }));
         REQUIRE(navint3.interpolator_heave().get_data_X() ==
                 vector<double>({ -1, 0, 1, 1.5, 2, 3, 4 }));
         REQUIRE(navint3.interpolator_heave().get_data_Y() ==

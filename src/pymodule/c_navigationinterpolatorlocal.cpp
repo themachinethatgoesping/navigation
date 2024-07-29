@@ -74,7 +74,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
                  set_sensor_configuration),
              py::arg("sensor_configuration"))
         .def("add_target",
-             py::overload_cast<const std::string&, double, double, double, double, double, double>(
+             py::overload_cast<const std::string&, float, float, float, float, float, float>(
                  &NavigationInterpolatorLocal::add_target),
              DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, add_target),
              py::arg("target_id"),
@@ -111,7 +111,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
 
         // set depth data
         .def("set_data_depth",
-             py::overload_cast<const std::vector<double>&, const std::vector<double>&>(
+             py::overload_cast<const std::vector<double>&, const std::vector<float>&>(
                  &NavigationInterpolatorLocal::set_data_depth),
              DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_depth),
              py::arg("timestamp"),
@@ -120,8 +120,8 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
         // set attitude data (no yaw)
         .def("set_data_attitude",
              py::overload_cast<const std::vector<double>&,
-                               const std::vector<double>&,
-                               const std::vector<double>&>(
+                               const std::vector<float>&,
+                               const std::vector<float>&>(
                  &NavigationInterpolatorLocal::set_data_attitude),
              DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_attitude),
              py::arg("timestamp"),
@@ -130,7 +130,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
 
         // set data compass
         .def("set_data_heading",
-             py::overload_cast<const std::vector<double>&, const std::vector<double>&>(
+             py::overload_cast<const std::vector<double>&, const std::vector<float>&>(
                  &NavigationInterpolatorLocal::set_data_heading),
              DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, set_data_heading),
              py::arg("timestamp"),
@@ -172,14 +172,14 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             &NavigationInterpolatorLocal::interpolator_depth,
             [](NavigationInterpolatorLocal& self,
                const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator<double,
-                                                                                            double>&
+                                                                                            float>&
                    interpolator) { self.interpolator_depth() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_depth))
         .def_property(
             "interpolator_attitude",
             &NavigationInterpolatorLocal::interpolator_attitude,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, double>&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, float>&
                    interpolator) { self.interpolator_attitude() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -189,7 +189,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             "interpolator_heading",
             &NavigationInterpolatorLocal::interpolator_heading,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, double>&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, float>&
                    interpolator) { self.interpolator_heading() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heading))
         .def("merge",

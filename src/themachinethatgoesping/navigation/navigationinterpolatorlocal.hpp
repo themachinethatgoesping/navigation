@@ -10,6 +10,7 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
+#include <themachinethatgoesping/tools/classhelper/classversion.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
 
 #include "datastructures.hpp"
@@ -120,9 +121,9 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
                            const std::vector<double>& northing,
                            const std::vector<double>& easting,
                            std::string_view           name,
-                           double                     offset_x,
-                           double                     offset_y,
-                           double                     offset_z)
+                           float                      offset_x,
+                           float                      offset_y,
+                           float                      offset_z)
     {
         _sensor_configuration.set_position_source(name, offset_x, offset_y, offset_z);
         set_data_position(timestamp, northing, easting);
@@ -151,20 +152,14 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      *
      * @return interpolator_northing&
      */
-    auto& interpolator_northing()
-    {
-        return _interpolator_northing;
-    }
+    auto& interpolator_northing() { return _interpolator_northing; }
 
     /**
      * @brief direct reference to the easting interpolator object
      *
      * @return interpolator_easting&
      */
-    auto& interpolator_easting()
-    {
-        return _interpolator_easting;
-    }
+    auto& interpolator_easting() { return _interpolator_easting; }
     //----- merge interpolators -----
     /**
      * @brief see documentation of I_NavigationInterpolator::merge
@@ -253,6 +248,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     // ----- file I/O -----
     static NavigationInterpolatorLocal from_stream(std::istream& is)
     {
+        tools::classhelper::read_version(is, "NavIntLocal_V1", "NavigationInterpolatorLocal");
         NavigationInterpolatorLocal interpolator(I_NavigationInterpolator::from_stream(is));
 
         interpolator._interpolator_northing = interpolator._interpolator_northing.from_stream(is);
@@ -263,6 +259,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
 
     void to_stream(std::ostream& os) const
     {
+        tools::classhelper::write_version(os, "NavIntLocal_V1");
         I_NavigationInterpolator::to_stream(os);
 
         _interpolator_northing.to_stream(os);

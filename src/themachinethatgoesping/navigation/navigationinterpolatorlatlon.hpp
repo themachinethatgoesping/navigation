@@ -8,6 +8,7 @@
 /* generated doc strings */
 #include ".docstrings/navigationinterpolatorlatlon.doc.hpp"
 
+#include <themachinethatgoesping/tools/classhelper/classversion.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
@@ -110,20 +111,14 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      *
      * @return interpolator_latitude&
      */
-    auto& interpolator_latitude()
-    {
-        return _interpolator_latitude;
-    }
+    auto& interpolator_latitude() { return _interpolator_latitude; }
 
     /**
      * @brief direct reference to the longitude interpolator object
      *
      * @return interpolator_longitude&
      */
-    auto& interpolator_longitude()
-    {
-        return _interpolator_longitude;
-    }
+    auto& interpolator_longitude() { return _interpolator_longitude; }
 
     //----- merge interpolators -----
     /**
@@ -241,6 +236,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     // ----- file I/O -----
     static NavigationInterpolatorLatLon from_stream(std::istream& is)
     {
+        tools::classhelper::read_version(is, "NavIntLatLon_V1", "NavigationInterpolatorLatLon");
         NavigationInterpolatorLatLon interpolator(I_NavigationInterpolator::from_stream(is));
 
         interpolator._interpolator_latitude  = interpolator._interpolator_latitude.from_stream(is);
@@ -251,6 +247,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
 
     void to_stream(std::ostream& os) const
     {
+        tools::classhelper::write_version(os, "NavIntLatLon_V1");
         I_NavigationInterpolator::to_stream(os);
 
         _interpolator_latitude.to_stream(os);

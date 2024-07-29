@@ -31,9 +31,9 @@ class I_NavigationInterpolator
     SensorConfiguration _sensor_configuration; ///< sensor configuration that stores the offsets
 
     // SlerpInterpolator that stores timestamp, roll, pitch, yaw -> Attitude of Vessel on the Water
-    tools::vectorinterpolators::SlerpInterpolator<double, double>
+    tools::vectorinterpolators::SlerpInterpolator<double, float>
         _interpolator_attitude; ///< interpolator that stores attitude data (pitch and roll)
-    tools::vectorinterpolators::SlerpInterpolator<double, double>
+    tools::vectorinterpolators::SlerpInterpolator<double, float>
         _interpolator_heading; ///< interpolator that stores compass data (yaw/heading) [°]
 
     // LinearInterpolator for the depth in the world coordinate system
@@ -41,7 +41,7 @@ class I_NavigationInterpolator
         _interpolator_heave; ///< interpolator that stores heave data (relative change in depth,
                              ///< positive upwards) [m]
     // tools::vectorinterpolators::AkimaInterpolator // bad results for noisy data
-    tools::vectorinterpolators::LinearInterpolator<double, double>
+    tools::vectorinterpolators::LinearInterpolator<double, float>
         _interpolator_depth; ///< interpolator that stores depth data (depth, positive downwards)
                              ///< [m]
 
@@ -136,7 +136,7 @@ class I_NavigationInterpolator
      * @param timestamp in seconds since epoch
      * @param depth in meters, positive downwards
      */
-    void set_data_depth(const std::vector<double>& timestamp, const std::vector<double>& depth)
+    void set_data_depth(const std::vector<double>& timestamp, const std::vector<float>& depth)
     {
         _interpolator_depth.set_data_XY(timestamp, depth);
     }
@@ -160,10 +160,10 @@ class I_NavigationInterpolator
      * @param roll in °, positive is port up
      */
     void set_data_attitude(const std::vector<double>& timestamp,
-                           const std::vector<double>& pitch,
-                           const std::vector<double>& roll)
+                           const std::vector<float>& pitch,
+                           const std::vector<float>& roll)
     {
-        std::vector<double> yaw(timestamp.size(), 0.0);
+        std::vector<float> yaw(timestamp.size(), 0.0f);
         _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
     }
 
@@ -173,9 +173,9 @@ class I_NavigationInterpolator
      * @param timestamp in seconds since epoch
      * @param heading in °, positive clockwise (north is 0°)
      */
-    void set_data_heading(const std::vector<double>& timestamp, const std::vector<double>& heading)
+    void set_data_heading(const std::vector<double>& timestamp, const std::vector<float>& heading)
     {
-        std::vector<double> pr(heading.size(), 0.0);
+        std::vector<float> pr(heading.size(), 0.0);
         _interpolator_heading.set_data_XYPR(timestamp, heading, pr, pr);
     }
 
@@ -232,12 +232,12 @@ class I_NavigationInterpolator
      * @param roll roll angle of the sensor in °, positive is port up
      */
     void add_target(const std::string& target_id,
-                    double             x,
-                    double             y,
-                    double             z,
-                    double             yaw,
-                    double             pitch,
-                    double             roll)
+                    float             x,
+                    float             y,
+                    float             z,
+                    float             yaw,
+                    float             pitch,
+                    float             roll)
     {
         _sensor_configuration.add_target(target_id, x, y, z, yaw, pitch, roll);
     }
