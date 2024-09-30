@@ -7,7 +7,7 @@
 #include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
 #include <xtensor-python/pytensor.hpp>
-#include <xtensor-python/pyarray.hpp> // Numpy bindings
+#include <xtensor-python/pytensor.hpp> // Numpy bindings
 
 
 #include "datastructures/module.hpp"

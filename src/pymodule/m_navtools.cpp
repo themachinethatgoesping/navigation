@@ -11,7 +11,7 @@
 #include <themachinethatgoesping/tools_pybind/enumhelper.hpp>
 
 // -- include pybind11 headers
-#include "xtensor-python/pyarray.hpp"
+#include "xtensor-python/pytensor.hpp"
 #include <pybind11/stl.h>
 #include <xtensor-python/pytensor.hpp>
 
