@@ -102,14 +102,14 @@ struct GeolocationLocal : public Geolocation
     }
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("GeolocationLocal (struct)", float_precision);
+        tools::classhelper::ObjectPrinter printer("GeolocationLocal (struct)", float_precision, superscript_exponents);
 
         printer.register_value("northing", northing, "positive northwards, m");
         printer.register_value("easting", easting, "positive eastwards, m");
 
-        printer.append(Geolocation::__printer__(float_precision));
+        printer.append(Geolocation::__printer__(float_precision, superscript_exponents));
 
         return printer;
     }

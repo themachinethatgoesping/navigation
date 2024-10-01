@@ -100,9 +100,9 @@ struct Geolocation
     }
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("Geolocation (struct)", float_precision);
+        tools::classhelper::ObjectPrinter printer("Geolocation (struct)", float_precision, superscript_exponents);
 
         printer.register_value("z", z, "positive downwards, m");
         printer.register_value("yaw", yaw, "90 ° at east");

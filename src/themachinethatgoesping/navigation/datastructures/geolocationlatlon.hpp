@@ -128,9 +128,9 @@ struct GeolocationLatLon : public Geolocation
 
   public:
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("GeolocationLatLon (struct)", float_precision);
+        tools::classhelper::ObjectPrinter printer("GeolocationLatLon (struct)", float_precision, superscript_exponents);
 
         printer.register_string(
             "latitude",
@@ -141,7 +141,7 @@ struct GeolocationLatLon : public Geolocation
             navtools::longitude_to_string(longitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
 
-        printer.append(Geolocation::__printer__(float_precision));
+        printer.append(Geolocation::__printer__(float_precision, superscript_exponents));
 
         return printer;
     }

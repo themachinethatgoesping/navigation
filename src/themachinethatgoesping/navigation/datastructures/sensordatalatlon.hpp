@@ -124,9 +124,9 @@ struct SensordataLatLon : public Sensordata
     }
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("SensordataLatLon (struct)", float_precision);
+        tools::classhelper::ObjectPrinter printer("SensordataLatLon (struct)", float_precision, superscript_exponents);
 
         printer.register_string(
             "latitude",
@@ -137,7 +137,7 @@ struct SensordataLatLon : public Sensordata
             navtools::longitude_to_string(longitude, navtools::t_latlon_format::seconds, 1),
             "ddd°mm',ss.s''E/W");
 
-        printer.append(Sensordata::__printer__(float_precision));
+        printer.append(Sensordata::__printer__(float_precision, superscript_exponents));
 
         return printer;
     }

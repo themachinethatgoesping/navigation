@@ -49,12 +49,12 @@ class NMEA_Unknown : public NMEA_Base
     }
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
         tools::classhelper::ObjectPrinter printer("NMEA Datagram (not implemented)",
-                                                  float_precision);
+                                                  float_precision, superscript_exponents);
 
-        printer.append(NMEA_Base::__printer__(float_precision));
+        printer.append(NMEA_Base::__printer__(float_precision, superscript_exponents));
         return printer;
     }
 

@@ -65,11 +65,11 @@ class NMEA_GST : public NMEA_Base
     }
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("NMEA GST Datagram", float_precision);
+        tools::classhelper::ObjectPrinter printer("NMEA GST Datagram", float_precision, superscript_exponents);
 
-        printer.append(NMEA_Base::__printer__(float_precision));
+        printer.append(NMEA_Base::__printer__(float_precision, superscript_exponents));
 
         printer.register_section("GST attributes");
         printer.register_value("utc_time_string", get_utc_time_string(), "hhmmss.ss");

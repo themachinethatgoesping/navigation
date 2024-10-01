@@ -98,9 +98,9 @@ struct Sensordata
     }
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("Sensordata (struct)", float_precision);
+        tools::classhelper::ObjectPrinter printer("Sensordata (struct)", float_precision, superscript_exponents);
 
         printer.register_value("depth", depth, "positive downwards, m");
         printer.register_value("heave", heave, "positive upwards, m");

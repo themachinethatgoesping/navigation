@@ -168,11 +168,11 @@ struct GeolocationUTM : public GeolocationLocal
     }
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("GeolocationUTM (struct)", float_precision);
+        tools::classhelper::ObjectPrinter printer("GeolocationUTM (struct)", float_precision, superscript_exponents);
 
-        auto base_printer = GeolocationLocal::__printer__(float_precision);
+        auto base_printer = GeolocationLocal::__printer__(float_precision, superscript_exponents);
         base_printer.remove_sections();
         printer.append(base_printer);
         printer.register_value("utm_zone", utm_zone, "", 2);

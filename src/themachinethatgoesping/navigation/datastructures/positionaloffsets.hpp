@@ -136,9 +136,9 @@ struct PositionalOffsets
     }
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("PositionalOffsets (struct)", float_precision);
+        tools::classhelper::ObjectPrinter printer("PositionalOffsets (struct)", float_precision, superscript_exponents);
 
         printer.register_string("name", name, "The name of the sensor");
         printer.register_value("x", x, "positive forwards, m");

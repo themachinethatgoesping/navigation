@@ -275,24 +275,24 @@ class I_NavigationInterpolator
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer(this->class_name(), float_precision);
+        tools::classhelper::ObjectPrinter printer(this->class_name(), float_precision, superscript_exponents);
 
         printer.register_section("Sensor offset configuration", '*');
-        printer.append(_sensor_configuration.__printer__(float_precision));
+        printer.append(_sensor_configuration.__printer__(float_precision, superscript_exponents));
 
         printer.register_section("Attitude data", '*');
-        printer.append(_interpolator_attitude.__printer__(float_precision), true);
+        printer.append(_interpolator_attitude.__printer__(float_precision, superscript_exponents), true);
 
         printer.register_section("Compass data", '*');
-        printer.append(_interpolator_heading.__printer__(float_precision), true);
+        printer.append(_interpolator_heading.__printer__(float_precision, superscript_exponents), true);
 
         printer.register_section("Heave data", '*');
-        printer.append(_interpolator_heave.__printer__(float_precision), true);
+        printer.append(_interpolator_heave.__printer__(float_precision, superscript_exponents), true);
 
         printer.register_section("Depth data", '*');
-        printer.append(_interpolator_depth.__printer__(float_precision), true);
+        printer.append(_interpolator_depth.__printer__(float_precision, superscript_exponents), true);
 
         return printer;
     }

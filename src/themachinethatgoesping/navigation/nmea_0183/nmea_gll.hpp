@@ -105,11 +105,11 @@ class NMEA_GLL : public NMEA_Base
     }
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("NMEA GLL Datagram", float_precision);
+        tools::classhelper::ObjectPrinter printer("NMEA GLL Datagram", float_precision, superscript_exponents);
 
-        printer.append(NMEA_Base::__printer__(float_precision));
+        printer.append(NMEA_Base::__printer__(float_precision, superscript_exponents));
 
         printer.register_section("GLL attributes");
 

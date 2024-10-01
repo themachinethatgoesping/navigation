@@ -57,11 +57,11 @@ class NMEA_HDT : public NMEA_Base
     }
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("NMEA HDT Datagram", float_precision);
+        tools::classhelper::ObjectPrinter printer("NMEA HDT Datagram", float_precision, superscript_exponents);
 
-        printer.append(NMEA_Base::__printer__(float_precision));
+        printer.append(NMEA_Base::__printer__(float_precision, superscript_exponents));
 
         printer.register_section("HDT attributes");
         printer.register_value("heading_degrees_true", get_heading_degrees_true());
