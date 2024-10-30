@@ -40,7 +40,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
              py::arg("extrapolation_mode") = t_extr_mode::extrapolate)
         .def("__call__",
              py::overload_cast<const std::string&, double>(
-                 &NavigationInterpolatorLocal::compute_target_position),
+                 &NavigationInterpolatorLocal::compute_target_position, py::const_),
              DOC(themachinethatgoesping,
                  navigation,
                  NavigationInterpolatorLocal,
@@ -49,7 +49,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
              py::arg("timestamp"))
         .def("compute_target_position",
              py::overload_cast<const std::string&, double>(
-                 &NavigationInterpolatorLocal::compute_target_position),
+                 &NavigationInterpolatorLocal::compute_target_position, py::const_),
              DOC(themachinethatgoesping,
                  navigation,
                  NavigationInterpolatorLocal,
@@ -57,7 +57,7 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
              py::arg("target_id"),
              py::arg("timestamp"))
         .def("get_sensor_data",
-             py::overload_cast<double>(&NavigationInterpolatorLocal::get_sensor_data),
+             py::overload_cast<double>(&NavigationInterpolatorLocal::get_sensor_data, py::const_),
              DOC(themachinethatgoesping, navigation, NavigationInterpolatorLocal, get_sensor_data),
              py::arg("timestamp"))
         .def("get_sensor_configuration",
@@ -179,7 +179,8 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             "interpolator_attitude",
             &NavigationInterpolatorLocal::interpolator_attitude,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, float>&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double,
+                                                                                           float>&
                    interpolator) { self.interpolator_attitude() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -189,7 +190,8 @@ void init_c_NavigationInterpolatorLocal(py::module& m)
             "interpolator_heading",
             &NavigationInterpolatorLocal::interpolator_heading,
             [](NavigationInterpolatorLocal& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, float>&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double,
+                                                                                           float>&
                    interpolator) { self.interpolator_heading() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heading))
         .def("merge",

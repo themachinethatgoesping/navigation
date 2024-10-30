@@ -188,7 +188,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * system
      */
     datastructures::GeolocationLocal compute_target_position(const std::string& target_id,
-                                                             double             timestamp)
+                                                             double             timestamp) const
     {
         return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
     }
@@ -201,7 +201,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @return data structure that contains the sensor data interpolated for the given timestamp
      * stamp
      */
-    datastructures::SensordataLocal get_sensor_data(double timestamp)
+    datastructures::SensordataLocal get_sensor_data(double timestamp) const
     {
         datastructures::SensordataLocal sensor_data;
         if (!_interpolator_depth.empty()) // default is 0.0

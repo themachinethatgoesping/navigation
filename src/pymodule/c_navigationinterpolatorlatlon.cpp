@@ -2,10 +2,7 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-
 // automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
-
-
 
 // -- c++ library headers
 #include <themachinethatgoesping/tools/vectorinterpolators.hpp>
@@ -43,7 +40,7 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
              py::arg("extrapolation_mode") = t_extr_mode::extrapolate)
         .def("__call__",
              py::overload_cast<const std::string&, double>(
-                 &NavigationInterpolatorLatLon::compute_target_position),
+                 &NavigationInterpolatorLatLon::compute_target_position, py::const_),
              DOC(themachinethatgoesping,
                  navigation,
                  NavigationInterpolatorLatLon,
@@ -52,7 +49,7 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
              py::arg("timestamp"))
         .def("compute_target_position",
              py::overload_cast<const std::string&, double>(
-                 &NavigationInterpolatorLatLon::compute_target_position),
+                 &NavigationInterpolatorLatLon::compute_target_position, py::const_),
              DOC(themachinethatgoesping,
                  navigation,
                  NavigationInterpolatorLatLon,
@@ -60,7 +57,7 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
              py::arg("target_id"),
              py::arg("timestamp"))
         .def("get_sensor_data",
-             py::overload_cast<double>(&NavigationInterpolatorLatLon::get_sensor_data),
+             py::overload_cast<double>(&NavigationInterpolatorLatLon::get_sensor_data, py::const_),
              DOC(themachinethatgoesping, navigation, NavigationInterpolatorLatLon, get_sensor_data),
              py::arg("timestamp"))
         .def("get_sensor_configuration",
@@ -176,14 +173,16 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
             "interpolator_depth",
             &NavigationInterpolatorLatLon::interpolator_depth,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator<double, float>&
+               const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator<double,
+                                                                                            float>&
                    interpolator) { self.interpolator_depth() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_depth))
         .def_property(
             "interpolator_attitude",
             &NavigationInterpolatorLatLon::interpolator_attitude,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, float>&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double,
+                                                                                           float>&
                    interpolator) { self.interpolator_attitude() = interpolator; },
             DOC(themachinethatgoesping,
                 navigation,
@@ -193,7 +192,8 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
             "interpolator_heading",
             &NavigationInterpolatorLatLon::interpolator_heading,
             [](NavigationInterpolatorLatLon& self,
-               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double, float>&
+               const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double,
+                                                                                           float>&
                    interpolator) { self.interpolator_heading() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heading))
         .def("merge",

@@ -147,7 +147,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @return data structure that contains the position of the target in the world coordinate
      * system
      */
-    datastructures::GeolocationLatLon operator()(const std::string& target_id, double timestamp)
+    datastructures::GeolocationLatLon operator()(const std::string& target_id, double timestamp) const
     {
         return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
     }
@@ -162,7 +162,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * system
      */
     datastructures::GeolocationLatLon compute_target_position(const std::string& target_id,
-                                                              double             timestamp)
+                                                              double             timestamp) const
     {
         return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
     }
@@ -175,7 +175,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @return data structure that contains the sensor data interpolated for the given timestamp
      * stamp
      */
-    datastructures::SensordataLatLon get_sensor_data(double timestamp)
+    datastructures::SensordataLatLon get_sensor_data(double timestamp) const
     {
         datastructures::SensordataLatLon sensor_data;
         if (!_interpolator_depth.empty()) // default is 0.0
