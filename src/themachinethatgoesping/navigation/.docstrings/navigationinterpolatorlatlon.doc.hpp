@@ -1,4 +1,4 @@
-//sourcehash: 5420377404a61c1cd77c8cd0e62f58640565fc7d3b38bc20009a828e611d05fb
+//sourcehash: 71ae6fddd0e28a7b6557f40c7351926894baa8d714541c8411f65ae044d9929b
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -36,6 +36,8 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #endif
+
+
 
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon =
@@ -146,6 +148,7 @@ Parameter ``extrapolation_mode``:
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_to_stream = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_valid = R"doc()doc";
+
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

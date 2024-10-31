@@ -147,7 +147,8 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @return data structure that contains the position of the target in the world coordinate
      * system
      */
-    datastructures::GeolocationLatLon operator()(const std::string& target_id, double timestamp) const
+    datastructures::GeolocationLatLon operator()(const std::string& target_id,
+                                                 double             timestamp) const
     {
         return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
     }
@@ -218,17 +219,22 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision,
+                                                  bool         superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer(this->class_name(), float_precision, superscript_exponents);
+        tools::classhelper::ObjectPrinter printer(
+            this->class_name(), float_precision, superscript_exponents);
 
-        printer.append(I_NavigationInterpolator::__printer__(float_precision, superscript_exponents));
+        printer.append(
+            I_NavigationInterpolator::__printer__(float_precision, superscript_exponents));
 
         printer.register_section("Position system latitude", '*');
-        printer.append(_interpolator_latitude.__printer__(float_precision, superscript_exponents), true);
+        printer.append(_interpolator_latitude.__printer__(float_precision, superscript_exponents),
+                       true);
 
         printer.register_section("Position system longitude", '*');
-        printer.append(_interpolator_longitude.__printer__(float_precision, superscript_exponents), true);
+        printer.append(_interpolator_longitude.__printer__(float_precision, superscript_exponents),
+                       true);
 
         return printer;
     }
@@ -262,5 +268,32 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
+/**
+ * @brief Boost hash function
+ *
+ * @param object object to hash
+ * @return std::size_t
+ */
+inline std::size_t hash_value(
+    const themachinethatgoesping::navigation::NavigationInterpolatorLatLon& object)
+{
+    return object.binary_hash();
+}
+
 } // namespace navigation
 } // namespace themachinethatgoesping
+
+template<>
+struct std::hash<themachinethatgoesping::navigation::NavigationInterpolatorLatLon>
+{
+    std::size_t operator()(
+        const themachinethatgoesping::navigation::NavigationInterpolatorLatLon& object) const
+    {
+        return object.binary_hash();
+    }
+};
+
+
+// IGNORE_DOC: __doc_themachinethatgoesping_navigation_hash_value
+// IGNORE_DOC: __doc_hash_operator_call
+// IGNORE_DOC: __doc_hash
