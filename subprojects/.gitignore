@@ -5,7 +5,7 @@
 #wrap folders
 packagecache/*
 Catch2*/*
-geographiclib*
+geographiclib-*/*
 
 #inherited wrap files
 catch2.wrap
