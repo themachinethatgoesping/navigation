@@ -1,4 +1,4 @@
-//sourcehash: d76134780b18c432eacda39889f0653714244804e534707f2e4b03f79a3634e4
+//sourcehash: f5d8d1ed941b809f6cf8e4a2d6956cb3c1c344574d9fe7941925813d3943e2cd
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -186,6 +186,23 @@ Parameter ``format``:
 Returns:
     converted latitude string)doc";
 
+static const char *__doc_themachinethatgoesping_navigation_navtools_latlon_to_utm =
+R"doc(Convert latitudes and longitudes to utm coordinates using
+GeographicLib
+
+Parameter ``lat``:
+    list of latitudes
+
+Parameter ``lon``:
+    list of longitudes
+
+Parameter ``setzone``:
+    utm output zone number (1-60), default (-1) determines zone using
+    mean latitude and longitude
+
+Returns:
+    std::tuple<std::vector<double>, std::vector<double>, int, bool>)doc";
+
 static const char *__doc_themachinethatgoesping_navigation_navtools_longitude_to_string =
 R"doc(convert a latitude value to a string
 
@@ -211,6 +228,42 @@ static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_for
 static const char *__doc_themachinethatgoesping_navigation_navtools_t_latlon_format_seconds =
 R"doc(< lat/lon will be converted to degrees°minutes'seconds.seconds''E/S
 E/W)doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_utm_to_latlon =
+R"doc(Convert utm coordinates to latitude longitude using Geographic lib
+
+Parameter ``northing``:
+    northing in meters
+
+Parameter ``easting``:
+    easting in meters
+
+Parameter ``zone``:
+    utm zone number (1-60)
+
+Parameter ``northern_hemisphere``:
+    if true, northern hemisphere, else southern hemisphere
+
+Returns:
+    (list of latitude, list of longitudes))doc";
+
+static const char *__doc_themachinethatgoesping_navigation_navtools_utm_to_latlon_2 =
+R"doc(Convert utm coordinates to latitude longitude using Geographic lib
+
+Parameter ``northing``:
+    northing in meters
+
+Parameter ``easting``:
+    easting in meters
+
+Parameter ``zone``:
+    utm zone number (1-60)
+
+Parameter ``northern_hemisphere``:
+    if true, northern hemisphere, else southern hemisphere
+
+Returns:
+    (list of latitude, list of longitudes))doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

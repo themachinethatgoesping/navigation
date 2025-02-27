@@ -22,6 +22,7 @@
 #include <fmt/core.h>
 
 #include <xtensor/xcontainer.hpp>
+#include <xtensor/xadapt.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -45,12 +46,8 @@ enum class t_latlon_format
  */
 template<typename T>
 concept HasLatitudeLongitude = requires(T t) {
-    {
-        t.latitude
-    } -> std::convertible_to<float>;
-    {
-        t.longitude
-    } -> std::convertible_to<float>;
+    { t.latitude } -> std::convertible_to<float>;
+    { t.longitude } -> std::convertible_to<float>;
 };
 
 template<typename T>
@@ -73,6 +70,13 @@ concept RandomAccessContainerOfDoubles = requires(T t) {
     typename T::value_type;
     requires std::random_access_iterator<typename T::iterator>;
     requires std::convertible_to<typename T::value_type, double>;
+};
+
+template<typename T>
+concept RandomAccessContainerOfInts = requires(T t) {
+    typename T::value_type;
+    requires std::random_access_iterator<typename T::iterator>;
+    requires std::convertible_to<typename T::value_type, int>;
 };
 
 template<typename T>
@@ -157,11 +161,12 @@ inline std::string longitude_to_string(double          longitude,
  * @param northern_hemisphere if true, northern hemisphere, else southern hemisphere
  * @return (list of latitude, list of longitudes)
  */
-inline std::pair<std::vector<double>, std::vector<double>> utm_to_latlon(
-    const std::vector<double>& northing,
-    const std::vector<double>& easting,
-    int                        zone,
-    bool                       northern_hemisphere)
+template<RandomAccessContainerOfDoubles T_container>
+inline std::pair<T_container, T_container> utm_to_latlon(const T_container& northing,
+                                                         const T_container& easting,
+                                                         int                zone,
+                                                         bool               northern_hemisphere,
+                                                         int                mp_cores = 1)
 {
     // check if vector sizes are the same
     if (easting.size() != northing.size())
@@ -169,11 +174,21 @@ inline std::pair<std::vector<double>, std::vector<double>> utm_to_latlon(
             "ERROR[utm_to_latlon]: easting and northing vector sizes are not the same!");
 
     // initialize output vectors
-    std::vector<double> lat, lon;
-    lat.resize(northing.size());
-    lon.resize(northing.size());
+    T_container lat, lon;
+    // Check if container is xtensor and handle resize accordingly
+    if constexpr (std::is_base_of<xt::xcontainer<T_container>, T_container>::value)
+    {
+        lat = T_container::from_shape({ int64_t(northing.size()) });
+        lon = T_container::from_shape({ int64_t(northing.size()) });
+    }
+    else
+    {
+        lat.resize(northing.size());
+        lon.resize(northing.size());
+    }
 
     // loop through data and convert using GeographicLib
+#pragma omp parallel for num_threads(mp_cores)
     for (size_t i = 0; i < easting.size(); i++)
     {
         GeographicLib::UTMUPS::Reverse(
@@ -192,11 +207,14 @@ inline std::pair<std::vector<double>, std::vector<double>> utm_to_latlon(
  * @param northern_hemisphere if true, northern hemisphere, else southern hemisphere
  * @return (list of latitude, list of longitudes)
  */
-inline std::pair<std::vector<double>, std::vector<double>> utm_to_latlon(
-    const std::vector<double>& northing,
-    const std::vector<double>& easting,
-    const std::vector<int>&    zone,
-    const std::vector<bool>&   northern_hemisphere)
+template<RandomAccessContainerOfDoubles T_container_double,
+         RandomAccessContainerOfInts    T_container_int>
+inline std::pair<T_container_double, T_container_double> utm_to_latlon(
+    const T_container_double& northing,
+    const T_container_double& easting,
+    const T_container_int&    zone,
+    const T_container_int&    northern_hemisphere,
+    int                       mp_cores = 1)
 {
     // check if vector sizes are the same
     if (easting.size() != northing.size() && easting.size() != zone.size() &&
@@ -205,11 +223,21 @@ inline std::pair<std::vector<double>, std::vector<double>> utm_to_latlon(
                                  "northern_hemisphere vector sizes are not the same!");
 
     // initialize output vectors
-    std::vector<double> lat, lon;
-    lat.resize(northing.size());
-    lon.resize(northing.size());
+    T_container_double lat, lon;
+    // Check if container is xtensor and handle resize accordingly
+    if constexpr (std::is_base_of<xt::xcontainer<T_container_double>, T_container_double>::value)
+    {
+        lat = T_container_double::from_shape({int64_t(northing.size())});
+        lon = T_container_double::from_shape({int64_t(northing.size())});
+    }
+    else
+    {
+        lat.resize(northing.size());
+        lon.resize(northing.size());
+    }
 
-    // loop through data and convert using GeographicLib
+// loop through data and convert using GeographicLib
+#pragma omp parallel for num_threads(mp_cores)
     for (size_t i = 0; i < easting.size(); i++)
     {
         GeographicLib::UTMUPS::Reverse(
@@ -228,8 +256,12 @@ inline std::pair<std::vector<double>, std::vector<double>> utm_to_latlon(
  * and longitude
  * @return std::tuple<std::vector<double>, std::vector<double>, int, bool>
  */
-inline std::tuple<std::vector<double>, std::vector<double>, int, bool>
-latlon_to_utm(const std::vector<double>& lat, const std::vector<double>& lon, int setzone = -1)
+template<RandomAccessContainerOfDoubles T_container_double>
+inline std::tuple<T_container_double, T_container_double, int, bool> latlon_to_utm(
+    const T_container_double& lat,
+    const T_container_double& lon,
+    int                       setzone  = -1,
+    int                       mp_cores = 1)
 {
     // check if vector sizes are the same
     if (lat.size() != lon.size())
@@ -239,26 +271,41 @@ latlon_to_utm(const std::vector<double>& lat, const std::vector<double>& lon, in
     // determine setzone using mean of latitudes and longitudes
     if (setzone == -1)
     {
-        double mean_lat = 0;
-        double mean_lon = 0;
-        for (size_t i = 0; i < lat.size(); i++)
+        double mean_lat, mean_lon;
+        if constexpr (std::is_base_of<xt::xcontainer<T_container_double>, T_container_double>::value)
         {
-            mean_lat += lat[i];
-            mean_lon += lon[i];
+            mean_lat = xt::mean(lat)();
+            mean_lon = xt::mean(lon)();
         }
-        mean_lat /= double(lat.size());
-        mean_lon /= double(lat.size());
+        else
+        {
+            auto lat_xt = xt::adapt(lat.data(), xt::no_ownership());
+            auto lon_xt = xt::adapt(lon.data(), xt::no_ownership());
+            mean_lat = xt::mean(lat_xt)();
+            mean_lon = xt::mean(lon_xt)();
+        }
         setzone = GeographicLib::UTMUPS::StandardZone(mean_lat, mean_lon);
     }
 
     // initialize output data
-    std::vector<double> northing, easting;
-    northing.resize(lat.size());
-    easting.resize(lat.size());
+    T_container_double northing, easting;
+    // Check if container is xtensor and handle resize accordingly
+    if constexpr (std::is_base_of<xt::xcontainer<T_container_double>, T_container_double>::value)
+    {
+        northing = T_container_double::from_shape({int64_t(lat.size())});
+        easting  = T_container_double::from_shape({int64_t(lat.size())});
+    }
+    else
+    {
+        northing.resize(lat.size());
+        northing.resize(lat.size());
+    }
+
     int  zone;
     bool northern_hemisphere;
 
-    // loop through data and convert using GeographicLib
+// loop through data and convert using GeographicLib
+#pragma omp parallel for num_threads(mp_cores)
     for (size_t i = 0; i < lat.size(); i++)
     {
         GeographicLib::UTMUPS::Forward(

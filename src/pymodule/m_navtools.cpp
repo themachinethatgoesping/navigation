@@ -136,33 +136,39 @@ void init_m_navtools(py::module& m)
 
     //----- utm conversion -----
     // TODO: documentation is not updated to include these functions for some reason
-    m_navtools.def(
-        "utm_to_latlon",
-        py::overload_cast<const std::vector<double>&, const std::vector<double>&, int, bool>(
-            &utm_to_latlon),
-        // DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
-        py::arg("northing"),
-        py::arg("easting"),
-        py::arg("zone"),
-        py::arg("northern_hemisphere"));
-
     m_navtools.def("utm_to_latlon",
-                   py::overload_cast<const std::vector<double>&,
-                                     const std::vector<double>&,
-                                     const std::vector<int>&,
-                                     const std::vector<bool>&>(&utm_to_latlon),
+                   py::overload_cast<const xt::pytensor<double, 1>&,
+                                     const xt::pytensor<double, 1>&,
+                                     int,
+                                     bool,
+                                     int>(&utm_to_latlon<xt::pytensor<double, 1>>),
                    // DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
                    py::arg("northing"),
                    py::arg("easting"),
                    py::arg("zone"),
-                   py::arg("northern_hemisphere"));
+                   py::arg("northern_hemisphere"),
+                   py::arg("mp_cores") = 1);
+
+    m_navtools.def(
+        "utm_to_latlon",
+        py::overload_cast<const xt::pytensor<double, 1>&,
+                          const xt::pytensor<double, 1>&,
+                          const xt::pytensor<int, 1>&,
+                          const xt::pytensor<int, 1>&,
+                          int>(&utm_to_latlon<xt::pytensor<double, 1>, xt::pytensor<int, 1>>),
+        py::arg("northing"),
+        py::arg("easting"),
+        py::arg("zone"),
+        py::arg("northern_hemisphere"),
+        py::arg("mp_cores") = 1);
 
     m_navtools.def("latlon_to_utm",
-                   &latlon_to_utm,
+                   &latlon_to_utm<xt::pytensor<double, 1>>,
                    // DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
                    py::arg("latitude"),
                    py::arg("longitude"),
-                   py::arg("setzone"));
+                   py::arg("setzone")  = -1,
+                   py::arg("mp_cores") = 1);
 
     create_distance_functions<float>(m_navtools);
     create_distance_functions<double>(m_navtools);
