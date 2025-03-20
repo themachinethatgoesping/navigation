@@ -37,6 +37,13 @@ headers = [
   'datastructures/.docstrings/sensordatalatlon.doc.hpp',
   'datastructures/.docstrings/sensordatalocal.doc.hpp',
   'datastructures/.docstrings/sensordatautm.doc.hpp',
+  '.docstrings/datastructures.doc.hpp',
+  '.docstrings/i_navigationinterpolator.doc.hpp',
+  '.docstrings/navigationinterpolatorlatlon.doc.hpp',
+  '.docstrings/navigationinterpolatorlocal.doc.hpp',
+  '.docstrings/navtools.doc.hpp',
+  '.docstrings/nmea_0183.doc.hpp',
+  '.docstrings/sensorconfiguration.doc.hpp',
   'nmea_0183/helper.hpp',
   'nmea_0183/nmea_base.hpp',
   'nmea_0183/nmea_gga.hpp',
@@ -61,13 +68,6 @@ headers = [
   'nmea_0183/.docstrings/nmea_vlw.doc.hpp',
   'nmea_0183/.docstrings/nmea_vtg.doc.hpp',
   'nmea_0183/.docstrings/nmea_zda.doc.hpp',
-  '.docstrings/datastructures.doc.hpp',
-  '.docstrings/i_navigationinterpolator.doc.hpp',
-  '.docstrings/navigationinterpolatorlatlon.doc.hpp',
-  '.docstrings/navigationinterpolatorlocal.doc.hpp',
-  '.docstrings/navtools.doc.hpp',
-  '.docstrings/nmea_0183.doc.hpp',
-  '.docstrings/sensorconfiguration.doc.hpp',
 ]
 
 # -- targets --
