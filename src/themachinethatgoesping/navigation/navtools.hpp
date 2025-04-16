@@ -21,8 +21,8 @@
 #include <GeographicLib/UTMUPS.hpp>
 #include <fmt/core.h>
 
-#include <xtensor/xcontainer.hpp>
-#include <xtensor/xadapt.hpp>
+#include <xtensor/containers/xcontainer.hpp>
+#include <xtensor/containers/xadapt.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {
