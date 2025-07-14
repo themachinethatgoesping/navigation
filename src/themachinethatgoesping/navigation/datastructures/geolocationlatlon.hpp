@@ -13,8 +13,9 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
-#include <themachinethatgoesping/tools/helper.hpp>
+
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
+#include <themachinethatgoesping/tools/helper/approx.hpp>
 
 #include "../navtools.hpp"
 #include "geolocation.hpp"
@@ -24,7 +25,7 @@ namespace navigation {
 namespace datastructures {
 
 // forward declarations for location conversions
-// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM
+// IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM
 struct GeolocationUTM; // defined in geolocationutm.hpp
 
 /**

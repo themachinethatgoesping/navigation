@@ -11,7 +11,7 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
-#include <themachinethatgoesping/tools/helper.hpp>
+
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "../navtools.hpp"
@@ -217,7 +217,7 @@ struct SensordataUTM : public SensordataLocal
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon
+// IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon
 // backwards conversion
 inline SensordataLatLon::SensordataLatLon(const SensordataUTM& data_utm)
     : SensordataLatLon(SensordataUTM::to_sensordata(data_utm))

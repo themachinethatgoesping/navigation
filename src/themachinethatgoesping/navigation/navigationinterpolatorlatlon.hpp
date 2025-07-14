@@ -294,6 +294,6 @@ struct std::hash<themachinethatgoesping::navigation::NavigationInterpolatorLatLo
 };
 
 
-// IGNORE_DOC: __doc_themachinethatgoesping_navigation_hash_value
-// IGNORE_DOC: __doc_hash_operator_call
-// IGNORE_DOC: __doc_hash
+// IGNORE_DOC:__doc_themachinethatgoesping_navigation_hash_value
+// IGNORE_DOC:__doc_hash_operator_call
+// IGNORE_DOC:__doc_hash

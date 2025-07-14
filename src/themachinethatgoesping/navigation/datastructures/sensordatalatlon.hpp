@@ -13,8 +13,10 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
-#include <themachinethatgoesping/tools/helper.hpp>
+#include <themachinethatgoesping/tools/helper/approx.hpp>
+
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
+#include <themachinethatgoesping/tools/helper/approx.hpp>
 
 #include "../navtools.hpp"
 #include "sensordata.hpp"
@@ -23,7 +25,7 @@ namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
-// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_SensordataUTM
+// IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM
 // forward declarations for location conversions
 struct SensordataUTM; // defined in sensordatautm.hpp
 

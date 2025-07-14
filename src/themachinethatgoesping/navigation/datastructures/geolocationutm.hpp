@@ -11,7 +11,7 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
-#include <themachinethatgoesping/tools/helper.hpp>
+
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 #include "geolocationlatlon.hpp"
@@ -189,7 +189,7 @@ struct GeolocationUTM : public GeolocationLocal
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-// IGNORE_DOC: __doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon
+// IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon
 // backwards conversion
 inline GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm)
     : GeolocationLatLon(GeolocationUTM::to_geolocation_latlon(location_utm))

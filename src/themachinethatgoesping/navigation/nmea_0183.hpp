@@ -9,7 +9,7 @@
 
 #include <variant>
 
-#include <themachinethatgoesping/tools/helper.hpp>
+
 
 #include "nmea_0183/nmea_base.hpp"
 #include "nmea_0183/nmea_gga.hpp"

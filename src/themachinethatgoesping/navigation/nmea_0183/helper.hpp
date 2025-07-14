@@ -11,8 +11,7 @@
 #include <charconv>
 #include <string>
 
-#include <themachinethatgoesping/tools/helper.hpp>
-
+#include <themachinethatgoesping/tools/helper/stringconversion.hpp>
 #include "../navtools.hpp"
 
 namespace themachinethatgoesping {

@@ -13,8 +13,7 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
-
-#include <themachinethatgoesping/tools/helper.hpp>
+#include <themachinethatgoesping/tools/helper/stringconversion.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -169,9 +168,11 @@ class NMEA_Base
     std::string_view get_sentence() const { return std::string_view(_sentence); }
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision,
+                                                  bool         superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("NMEA sentence", float_precision, superscript_exponents);
+        tools::classhelper::ObjectPrinter printer(
+            "NMEA sentence", float_precision, superscript_exponents);
 
         printer.register_value("Sender", get_sender_id(), "");
         printer.register_value("Type", get_sentence_type(), "");
