@@ -10,7 +10,10 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>
-#include <themachinethatgoesping/tools/vectorinterpolators.hpp>
+
+#include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
+#include <themachinethatgoesping/tools/vectorinterpolators/linearinterpolator.hpp>
+#include <themachinethatgoesping/tools/vectorinterpolators/slerpinterpolator.hpp>
 
 #include "datastructures.hpp"
 #include "sensorconfiguration.hpp"

@@ -5,7 +5,7 @@
 // automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
-#include <themachinethatgoesping/tools/vectorinterpolators.hpp>
+
 #include <themachinethatgoesping/tools_pybind/classhelper.hpp>
 
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
