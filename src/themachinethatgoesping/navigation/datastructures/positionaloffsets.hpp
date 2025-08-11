@@ -10,7 +10,7 @@
 #include ".docstrings/positionaloffsets.doc.hpp"
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
-#include <themachinethatgoesping/tools/classhelper/stream.hpp>
+
 
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 #include <themachinethatgoesping/tools/helper/approx.hpp>

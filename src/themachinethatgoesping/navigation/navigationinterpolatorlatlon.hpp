@@ -10,8 +10,6 @@
 
 #include <themachinethatgoesping/tools/classhelper/classversion.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
-#include <themachinethatgoesping/tools/classhelper/stream.hpp>
-
 
 #include "datastructures.hpp"
 #include "i_navigationinterpolator.hpp"
@@ -292,7 +290,6 @@ struct std::hash<themachinethatgoesping::navigation::NavigationInterpolatorLatLo
         return object.binary_hash();
     }
 };
-
 
 // IGNORE_DOC:__doc_themachinethatgoesping_navigation_hash_value
 // IGNORE_DOC:__doc_hash_operator_call

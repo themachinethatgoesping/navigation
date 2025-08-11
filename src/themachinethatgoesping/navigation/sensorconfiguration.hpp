@@ -19,7 +19,7 @@
 #include <GeographicLib/LocalCartesian.hpp>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
-#include <themachinethatgoesping/tools/classhelper/stream.hpp>
+
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
 
 

@@ -9,7 +9,7 @@
 #include ".docstrings/navigationinterpolatorlocal.doc.hpp"
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
-#include <themachinethatgoesping/tools/classhelper/stream.hpp>
+
 #include <themachinethatgoesping/tools/classhelper/classversion.hpp>
 
 
