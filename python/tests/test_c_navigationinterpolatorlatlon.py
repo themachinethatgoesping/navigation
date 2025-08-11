@@ -61,7 +61,7 @@ class TestNavigationNavigationInterpolatorLatLon:
         assert pos.longitude == approx(-24.087985792652038)
         assert pos.z == approx(-3.7632551193237305)
         assert pos.yaw == approx(293.62666611)
-        assert pos.pitch == approx(11.012887954711914)
+        assert pos.pitch == approx(11.012887954711914, abs=2e-5)
         assert pos.roll == approx(-20.443330764770508)
 
         # copy

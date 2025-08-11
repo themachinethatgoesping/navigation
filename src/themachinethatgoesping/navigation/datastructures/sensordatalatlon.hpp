@@ -15,7 +15,7 @@
 
 #include <themachinethatgoesping/tools/helper/approx.hpp>
 
-#include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
+
 #include <themachinethatgoesping/tools/helper/approx.hpp>
 
 #include "../navtools.hpp"

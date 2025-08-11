@@ -19,9 +19,7 @@
 #include <GeographicLib/LocalCartesian.hpp>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
-
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
-
 
 #include "datastructures.hpp"
 
@@ -486,9 +484,11 @@ class SensorConfiguration
 
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision,
+                                                  bool         superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("SensorConfiguration", float_precision, superscript_exponents);
+        tools::classhelper::ObjectPrinter printer(
+            "SensorConfiguration", float_precision, superscript_exponents);
 
         for (const auto& [target_id, target_offsets] : _target_offsets)
         {
@@ -497,13 +497,15 @@ class SensorConfiguration
         }
 
         printer.register_section("Attitude sensor offsets");
-        printer.append(_offsets_attitude_source.__printer__(float_precision, superscript_exponents));
+        printer.append(
+            _offsets_attitude_source.__printer__(float_precision, superscript_exponents));
 
         printer.register_section("Compass offsets");
         printer.append(_offsets_heading_source.__printer__(float_precision, superscript_exponents));
 
         printer.register_section("Position system offsets");
-        printer.append(_offsets_position_source.__printer__(float_precision, superscript_exponents));
+        printer.append(
+            _offsets_position_source.__printer__(float_precision, superscript_exponents));
 
         printer.register_section("Depth sensor offsets");
         printer.append(_offsets_depth_source.__printer__(float_precision, superscript_exponents));
