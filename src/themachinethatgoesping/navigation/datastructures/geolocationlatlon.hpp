@@ -7,17 +7,8 @@
 /* generated doc strings */
 #include ".docstrings/geolocationlatlon.doc.hpp"
 
-#include <GeographicLib/Geocentric.hpp>
-#include <GeographicLib/Geodesic.hpp>
-#include <GeographicLib/LocalCartesian.hpp>
-
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
-
-
-#include <themachinethatgoesping/tools/helper/approx.hpp>
-
-#include "../navtools.hpp"
 #include "geolocation.hpp"
 
 namespace themachinethatgoesping {
@@ -50,12 +41,7 @@ struct GeolocationLatLon : public Geolocation
      * @param latitude in °, positive northwards
      * @param longitude in °, positive eastwards
      */
-    GeolocationLatLon(Geolocation location, double latitude, double longitude)
-        : Geolocation(std::move(location))
-        , latitude(latitude)
-        , longitude(longitude)
-    {
-    }
+    GeolocationLatLon(Geolocation location, double latitude, double longitude);
 
     /**
      * @brief Construct an GeolocationLatLon object from an existing GeolocationUTM object (this
@@ -79,19 +65,14 @@ struct GeolocationLatLon : public Geolocation
                       float  z,
                       float  yaw,
                       float  pitch,
-                      float  roll)
-        : Geolocation(z, yaw, pitch, roll)
-        , latitude(latitude)
-        , longitude(longitude)
-    {
-    }
+                      float  roll);
 
     /**
      * @brief Construct a new GeolocationLatLon object from a string
      *
      * @param str string containing the location in the format "latitude,longitude,z,yaw,pitch,roll"
      */
-    bool operator!=(const GeolocationLatLon& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const GeolocationLatLon& rhs) const;
 
     /**
      * @brief Check if two GeolocationLatLon objects are equal
@@ -100,52 +81,17 @@ struct GeolocationLatLon : public Geolocation
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const GeolocationLatLon& other) const
-    {
-        if (Geolocation::operator==(other))
-            if (tools::helper::approx(latitude, other.latitude))
-                if (tools::helper::approx(longitude, other.longitude))
-                    return true;
-
-        return false;
-    }
+    bool operator==(const GeolocationLatLon& other) const;
 
   public:
     // ----- file I/O -----
-    static GeolocationLatLon from_stream(std::istream& is)
-    {
-        GeolocationLatLon data(Geolocation::from_stream(is), 0., 0.);
+    static GeolocationLatLon from_stream(std::istream& is);
 
-        is.read(reinterpret_cast<char*>(&data.latitude), 2 * sizeof(double));
-
-        return data;
-    }
-
-    void to_stream(std::ostream& os) const
-    {
-        Geolocation::to_stream(os);
-        os.write(reinterpret_cast<const char*>(&latitude), 2 * sizeof(double));
-    }
+    void to_stream(std::ostream& os) const;
 
   public:
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("GeolocationLatLon (struct)", float_precision, superscript_exponents);
-
-        printer.register_string(
-            "latitude",
-            navtools::latitude_to_string(latitude, navtools::t_latlon_format::seconds, 1),
-            "ddd°mm',ss.s''N/S");
-        printer.register_string(
-            "longitude",
-            navtools::longitude_to_string(longitude, navtools::t_latlon_format::seconds, 1),
-            "ddd°mm',ss.s''E/W");
-
-        printer.append(Geolocation::__printer__(float_precision, superscript_exponents));
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
   public:
     // -- class helper function macros --

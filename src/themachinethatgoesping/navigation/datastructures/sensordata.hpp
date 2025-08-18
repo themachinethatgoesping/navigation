@@ -7,18 +7,8 @@
 /* generated doc strings */
 #include ".docstrings/sensordata.doc.hpp"
 
-#include <GeographicLib/Geocentric.hpp>
-#include <GeographicLib/Geodesic.hpp>
-#include <GeographicLib/LocalCartesian.hpp>
-
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
-#include <themachinethatgoesping/tools/helper/approx.hpp>
-
-
-#include <themachinethatgoesping/tools/helper/approx.hpp>
-
-#include "../navtools.hpp"
 #include "positionaloffsets.hpp"
 
 namespace themachinethatgoesping {
@@ -54,16 +44,9 @@ struct Sensordata
      * @param pitch from attitude source, in °, positive means bow up
      * @param roll from attitude source, in °, positive means port up
      */
-    Sensordata(float depth, float heave, float heading, float pitch, float roll)
-        : depth(depth)
-        , heave(heave)
-        , heading(heading)
-        , pitch(pitch)
-        , roll(roll)
-    {
-    }
+    Sensordata(float depth, float heave, float heading, float pitch, float roll);
 
-    bool operator!=(const Sensordata& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const Sensordata& rhs) const;
     /**
      * @brief Check if two Sensordata objects are equal
      *
@@ -71,47 +54,16 @@ struct Sensordata
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const Sensordata& rhs) const
-    {
-        if (tools::helper::approx(depth, rhs.depth))
-            if (tools::helper::approx(heave, rhs.heave))
-                if (tools::helper::approx(heading, rhs.heading))
-                    if (tools::helper::approx(pitch, rhs.pitch))
-                        if (tools::helper::approx(roll, rhs.roll))
-                            return true;
-
-        return false;
-    }
+    bool operator==(const Sensordata& rhs) const;
 
   public:
     // ----- file I/O -----
-    static Sensordata from_stream(std::istream& is)
-    {
-        Sensordata data;
+    static Sensordata from_stream(std::istream& is);
 
-        is.read(reinterpret_cast<char*>(&data.depth), 5 * sizeof(float));
-
-        return data;
-    }
-
-    void to_stream(std::ostream& os) const
-    {
-        os.write(reinterpret_cast<const char*>(&depth), 5 * sizeof(float));
-    }
+    void to_stream(std::ostream& os) const;
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("Sensordata (struct)", float_precision, superscript_exponents);
-
-        printer.register_value("depth", depth, "positive downwards, m");
-        printer.register_value("heave", heave, "positive upwards, m");
-        printer.register_value("heading", heading, "0° is north, 90 ° is east");
-        printer.register_value("pitch", pitch, "° positive bow up");
-        printer.register_value("roll", roll, "° positive port up");
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
   public:
     // -- class helper function macros --
