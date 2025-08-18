@@ -7,18 +7,10 @@
 /* generated doc strings */
 #include ".docstrings/sensordatalatlon.doc.hpp"
 
-#include <GeographicLib/Geocentric.hpp>
-#include <GeographicLib/Geodesic.hpp>
-#include <GeographicLib/LocalCartesian.hpp>
+#include <iostream>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
-#include <themachinethatgoesping/tools/helper/approx.hpp>
-
-
-#include <themachinethatgoesping/tools/helper/approx.hpp>
-
-#include "../navtools.hpp"
 #include "sensordata.hpp"
 
 namespace themachinethatgoesping {
@@ -52,12 +44,7 @@ struct SensordataLatLon : public Sensordata
      * @param latitude in °, positive northwards
      * @param longitude in °, positive eastwards
      */
-    SensordataLatLon(Sensordata data, double latitude, double longitude)
-        : Sensordata(std::move(data))
-        , latitude(latitude)
-        , longitude(longitude)
-    {
-    }
+    SensordataLatLon(Sensordata data, double latitude, double longitude);
 
     /**
      * @brief Construct an SensordataLatLon object from an existing SensordataUTM object (this
@@ -83,14 +70,9 @@ struct SensordataLatLon : public Sensordata
                      float heave,
                      float heading,
                      float pitch,
-                     float roll)
-        : Sensordata(depth, heave, heading, pitch, roll)
-        , latitude(latitude)
-        , longitude(longitude)
-    {
-    }
+                     float roll);
 
-    bool operator!=(const SensordataLatLon& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const SensordataLatLon& rhs) const;
     /**
      * @brief Check if two SensordataLatLon objects are equal
      *
@@ -98,51 +80,16 @@ struct SensordataLatLon : public Sensordata
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const SensordataLatLon& rhs) const
-    {
-        if (Sensordata::operator==(rhs))
-            if (tools::helper::approx(latitude, rhs.latitude))
-                if (tools::helper::approx(longitude, rhs.longitude))
-                    return true;
-
-        return false;
-    }
+    bool operator==(const SensordataLatLon& rhs) const;
 
   public:
     // ----- file I/O -----
-    static SensordataLatLon from_stream(std::istream& is)
-    {
-        SensordataLatLon data(Sensordata::from_stream(is), 0., 0.);
+    static SensordataLatLon from_stream(std::istream& is);
 
-        is.read(reinterpret_cast<char*>(&data.latitude), 2 * sizeof(double));
-
-        return data;
-    }
-
-    void to_stream(std::ostream& os) const
-    {
-        Sensordata::to_stream(os);
-        os.write(reinterpret_cast<const char*>(&latitude), 2 * sizeof(double));
-    }
+    void to_stream(std::ostream& os) const;
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("SensordataLatLon (struct)", float_precision, superscript_exponents);
-
-        printer.register_string(
-            "latitude",
-            navtools::latitude_to_string(latitude, navtools::t_latlon_format::seconds, 1),
-            "ddd°mm',ss.s''N/S");
-        printer.register_string(
-            "longitude",
-            navtools::longitude_to_string(longitude, navtools::t_latlon_format::seconds, 1),
-            "ddd°mm',ss.s''E/W");
-
-        printer.append(Sensordata::__printer__(float_precision, superscript_exponents));
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
   public:
     // -- class helper function macros --
