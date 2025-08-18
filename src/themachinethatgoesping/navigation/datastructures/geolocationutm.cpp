@@ -123,11 +123,6 @@ tools::classhelper::ObjectPrinter GeolocationUTM::__printer__(unsigned int float
     return printer;
 }
 
-// ----- backwards conversion implementation -----
-GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm)
-    : GeolocationLatLon(GeolocationUTM::to_geolocation_latlon(location_utm))
-{
-}
 
 } // namespace datastructures
 } // namespace navigation

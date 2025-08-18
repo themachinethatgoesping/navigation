@@ -136,8 +136,11 @@ struct SensordataUTM : public SensordataLocal
 };
 
 // IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon
-// backwards conversion - this is implemented in sensordatautm.cpp  
-SensordataLatLon::SensordataLatLon(const SensordataUTM& data_utm);
+// backwards conversion
+inline SensordataLatLon::SensordataLatLon(const SensordataUTM& data_utm)
+    : SensordataLatLon(SensordataUTM::to_sensordata(data_utm))
+{
+}
 
 } // namespace datastructures
 } // namespace navigation

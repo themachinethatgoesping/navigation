@@ -114,8 +114,12 @@ struct GeolocationUTM : public GeolocationLocal
 };
 
 // IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon
-// backwards conversion - this is implemented in geolocationutm.cpp
-GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm);
+// backwards conversion
+inline GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm)
+    : GeolocationLatLon(GeolocationUTM::to_geolocation_latlon(location_utm))
+{
+}
+
 
 } // namespace datastructures
 } // namespace navigation

@@ -132,11 +132,7 @@ tools::classhelper::ObjectPrinter SensordataUTM::__printer__(unsigned int float_
     return printer;
 }
 
-// ----- backwards conversion implementation -----
-SensordataLatLon::SensordataLatLon(const SensordataUTM& data_utm)
-    : SensordataLatLon(SensordataUTM::to_sensordata(data_utm))
-{
-}
+
 
 } // namespace datastructures
 } // namespace navigation

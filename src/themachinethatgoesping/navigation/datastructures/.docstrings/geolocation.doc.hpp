@@ -1,4 +1,4 @@
-//sourcehash: bd6dabd6346889a48dc6f08760e39f65fbf9ad2e99cfc2ef2777b22e9971aeb5
+//sourcehash: 7ee8f53c3219d9ef305715161b4ad2f4299bcd1f5e06b7e9a1c1a607a3909d80
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -74,7 +74,7 @@ Returns:
     false if not equal)doc";
 
 static const char *__doc_themachinethatgoesping_navigation_datastructures_Geolocation_operator_ne =
-R"doc(Construct a new GeoTelocation object from a string
+R"doc(Construct a new Geolocation object from a string
 
 Parameter ``str``:
     string containing the location in the format
