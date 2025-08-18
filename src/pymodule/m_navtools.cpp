@@ -5,10 +5,10 @@
 // automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
-#include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include "../themachinethatgoesping/navigation/navtools.hpp"
-
 #include <themachinethatgoesping/tools_pybind/enumhelper.hpp>
+
+#include <themachinethatgoesping/navigation/datastructures.hpp>
+#include <themachinethatgoesping/navigation/navtools.hpp>
 
 // -- include pybind11 headers
 #include "xtensor-python/pytensor.hpp"

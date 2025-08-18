@@ -13,8 +13,6 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
-
-
 #include <themachinethatgoesping/tools/helper/approx.hpp>
 
 #include "../navtools.hpp"
@@ -58,7 +56,7 @@ struct Geolocation
     }
 
     /**
-     * @brief Construct a new Geolocation object from a string
+     * @brief Construct a new GeoTelocation object from a string
      *
      * @param str string containing the location in the format "latitude,longitude,z,yaw,pitch,roll"
      */
@@ -101,9 +99,11 @@ struct Geolocation
     }
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision,
+                                                  bool         superscript_exponents) const
     {
-        tools::classhelper::ObjectPrinter printer("Geolocation (struct)", float_precision, superscript_exponents);
+        tools::classhelper::ObjectPrinter printer(
+            "Geolocation (struct)", float_precision, superscript_exponents);
 
         printer.register_value("z", z, "positive downwards, m");
         printer.register_value("yaw", yaw, "90 ° at east");
