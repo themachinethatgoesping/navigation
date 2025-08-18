@@ -22,8 +22,8 @@ GeolocationLatLon::GeolocationLatLon(Geolocation location, double latitude, doub
 
 // Conversion constructor - defined here after GeolocationUTM is complete
 GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm)
+    : GeolocationLatLon(GeolocationUTM::to_geolocation_latlon(location_utm))
 {
-    GeolocationUTM::to_geolocation_latlon(location_utm);
 }
 
 GeolocationLatLon::GeolocationLatLon(double latitude,

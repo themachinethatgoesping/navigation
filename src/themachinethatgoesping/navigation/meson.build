@@ -14,6 +14,10 @@ sources = [
   'datastructures/sensordata.cpp',
   'datastructures/geolocationlocal.cpp',
   'datastructures/geolocationlatlon.cpp',
+  'datastructures/geolocationutm.cpp',
+  'datastructures/sensordatalatlon.cpp',
+  'datastructures/sensordatalocal.cpp',
+  'datastructures/sensordatautm.cpp',
 ]
 
 headers = [
