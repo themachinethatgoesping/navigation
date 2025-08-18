@@ -7,15 +7,11 @@
 /* generated doc strings */
 #include ".docstrings/geolocationlocal.doc.hpp"
 
-#include <GeographicLib/UTMUPS.hpp>
+#include <iostream>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
-
-
-#include <themachinethatgoesping/tools/helper/approx.hpp>
-
-// #include "geolocationutm.hpp"
+#include "geolocation.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -45,12 +41,7 @@ struct GeolocationLocal : public Geolocation
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
      */
-    GeolocationLocal(Geolocation location, double northing, double easting)
-        : Geolocation(std::move(location))
-        , northing(northing)
-        , easting(easting)
-    {
-    }
+    GeolocationLocal(Geolocation location, double northing, double easting);
 
     /**
      * @brief Construct a new GeolocationLocal object
@@ -67,53 +58,19 @@ struct GeolocationLocal : public Geolocation
                      float z,
                      float yaw,
                      float pitch,
-                     float roll)
-        : Geolocation(z, yaw, pitch, roll)
-        , northing(northing)
-        , easting(easting)
-    {
-    }
+                     float roll);
 
-    bool operator!=(const GeolocationLocal& rhs) const { return !(operator==(rhs)); }
-    bool operator==(const GeolocationLocal& rhs) const
-    {
-        if (Geolocation::operator==(rhs))
-            if (tools::helper::approx(northing, rhs.northing))
-                if (tools::helper::approx(easting, rhs.easting))
-                    return true;
-
-        return false;
-    }
+    bool operator!=(const GeolocationLocal& rhs) const;
+    bool operator==(const GeolocationLocal& rhs) const;
 
   public:
     // ----- file I/O -----
-    static GeolocationLocal from_stream(std::istream& is)
-    {
-        GeolocationLocal data(Geolocation::from_stream(is), 0., 0.);
+    static GeolocationLocal from_stream(std::istream& is);
 
-        is.read(reinterpret_cast<char*>(&data.northing), 2 * sizeof(double));
-
-        return data;
-    }
-
-    void to_stream(std::ostream& os) const
-    {
-        Geolocation::to_stream(os);
-        os.write(reinterpret_cast<const char*>(&northing), 2 * sizeof(double));
-    }
+    void to_stream(std::ostream& os) const;
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("GeolocationLocal (struct)", float_precision, superscript_exponents);
-
-        printer.register_value("northing", northing, "positive northwards, m");
-        printer.register_value("easting", easting, "positive eastwards, m");
-
-        printer.append(Geolocation::__printer__(float_precision, superscript_exponents));
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
   public:
     // -- class helper function macros --

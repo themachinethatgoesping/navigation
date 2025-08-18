@@ -10,7 +10,11 @@
 #build dirs
 */build/*
 */builddir/*
+builddir/
 *.vscode/*
+
+# downloaded subproject directories - meson will download these
+subprojects/*/
 
 # Prerequisites
 *.d

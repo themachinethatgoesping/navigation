@@ -7,15 +7,10 @@
 /* generated doc strings */
 #include ".docstrings/sensordatalocal.doc.hpp"
 
-#include <GeographicLib/UTMUPS.hpp>
+#include <iostream>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
-
-
-#include <themachinethatgoesping/tools/helper/approx.hpp>
-
-#include "../navtools.hpp"
 #include "sensordata.hpp"
 
 namespace themachinethatgoesping {
@@ -46,12 +41,7 @@ struct SensordataLocal : public Sensordata
      * @param northing in m, positive northwards
      * @param easting in m, positive eastwards
      */
-    SensordataLocal(Sensordata data, double northing, double easting)
-        : Sensordata(std::move(data))
-        , northing(northing)
-        , easting(easting)
-    {
-    }
+    SensordataLocal(Sensordata data, double northing, double easting);
 
     /**
      * @brief Construct a new SensordataLocal object
@@ -70,14 +60,9 @@ struct SensordataLocal : public Sensordata
                     float heave,
                     float heading,
                     float pitch,
-                    float roll)
-        : Sensordata(depth, heave, heading, pitch, roll)
-        , northing(northing)
-        , easting(easting)
-    {
-    }
+                    float roll);
 
-    bool operator!=(const SensordataLocal& rhs) const { return !(operator==(rhs)); }
+    bool operator!=(const SensordataLocal& rhs) const;
     /**
      * @brief Check if two SensordataLocal objects are equal
      *
@@ -85,45 +70,16 @@ struct SensordataLocal : public Sensordata
      * @return true if equal
      * @return false if not equal
      */
-    bool operator==(const SensordataLocal& rhs) const
-    {
-        if (Sensordata::operator==(rhs))
-            if (tools::helper::approx(northing, rhs.northing))
-                if (tools::helper::approx(easting, rhs.easting))
-                    return true;
-
-        return false;
-    }
+    bool operator==(const SensordataLocal& rhs) const;
 
   public:
     // ----- file I/O -----
-    static SensordataLocal from_stream(std::istream& is)
-    {
-        SensordataLocal data(Sensordata::from_stream(is), 0., 0.);
+    static SensordataLocal from_stream(std::istream& is);
 
-        is.read(reinterpret_cast<char*>(&data.northing), 2 * sizeof(double));
-
-        return data;
-    }
-
-    void to_stream(std::ostream& os) const
-    {
-        Sensordata::to_stream(os);
-        os.write(reinterpret_cast<const char*>(&northing), 2 * sizeof(double));
-    }
+    void to_stream(std::ostream& os) const;
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("SensordataLocal (struct)", float_precision, superscript_exponents);
-
-        printer.register_value("northing", northing, "positive northwards, m");
-        printer.register_value("easting", easting, "positive eastwards, m");
-
-        printer.append(Sensordata::__printer__(float_precision, superscript_exponents));
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
   public:
     // -- class helper function macros --
