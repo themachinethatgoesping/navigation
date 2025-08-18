@@ -9,6 +9,12 @@ headerdir = projectnamespace + '/navigation'
 # -- source files --
 sources = [
   'sensorconfiguration.cpp',
+  'datastructures/geolocation.cpp',
+  'datastructures/geolocationlatlon.cpp',
+  'datastructures/geolocationlocal.cpp',
+  'datastructures/positionaloffsets.cpp',
+  'datastructures/sensordata.cpp',
+  'datastructures/sensordatalatlon.cpp',
 ]
 
 headers = [
