@@ -7,12 +7,9 @@
 /* generated doc strings */
 #include ".docstrings/geolocationutm.doc.hpp"
 
-#include <GeographicLib/UTMUPS.hpp>
+#include <iostream>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
-
-
-
 
 #include "geolocationlatlon.hpp"
 #include "geolocationlocal.hpp"
@@ -47,22 +44,14 @@ struct GeolocationUTM : public GeolocationLocal
      */
     GeolocationUTM(const GeolocationLocal& location_local,
                    int                     utm_zone,
-                   bool                    northern_hemisphere)
-        : GeolocationLocal(location_local)
-        , utm_zone(utm_zone)
-        , northern_hemisphere(northern_hemisphere)
-    {
-    }
+                   bool                    northern_hemisphere);
 
     /**
      * @brief Construct an GeolocationUTM object from an existing GeolocationLatLon object (this
      * allows for explicit conversion from GeolocationLatLon class)
      *
      */
-    explicit GeolocationUTM(const GeolocationLatLon& location, int setzone = -1)
-        : GeolocationUTM(from_geolocation_latlon(location, setzone))
-    {
-    }
+    explicit GeolocationUTM(const GeolocationLatLon& location, int setzone = -1);
 
     /**
      * @brief Construct a new GeolocationUTM object
@@ -83,23 +72,10 @@ struct GeolocationUTM : public GeolocationLocal
                    float z,
                    float yaw,
                    float pitch,
-                   float roll)
-        : GeolocationLocal(northing, easting, z, yaw, pitch, roll)
-        , utm_zone(utm_zone)
-        , northern_hemisphere(northern_hemisphere)
-    {
-    }
+                   float roll);
 
-    bool operator!=(const GeolocationUTM& rhs) const { return !(operator==(rhs)); }
-    bool operator==(const GeolocationUTM& rhs) const
-    {
-        if (GeolocationLocal::operator==(rhs))
-            if (utm_zone == rhs.utm_zone)
-                if (northern_hemisphere == rhs.northern_hemisphere)
-                    return true;
-
-        return false;
-    }
+    bool operator!=(const GeolocationUTM& rhs) const;
+    bool operator==(const GeolocationUTM& rhs) const;
 
     /**
      * @brief Convert a utm geolocationlatlon to an unprojected location
@@ -107,20 +83,7 @@ struct GeolocationUTM : public GeolocationLocal
      * @param location_utm
      * @return GeolocationLatLon
      */
-    static GeolocationLatLon to_geolocation_latlon(const GeolocationUTM& location_utm)
-    {
-        GeolocationLatLon location(
-            0, 0, location_utm.z, location_utm.yaw, location_utm.pitch, location_utm.roll);
-
-        GeographicLib::UTMUPS::Reverse(location_utm.utm_zone,
-                                       location_utm.northern_hemisphere,
-                                       location_utm.easting,
-                                       location_utm.northing,
-                                       location.latitude,
-                                       location.longitude);
-
-        return location;
-    }
+    static GeolocationLatLon to_geolocation_latlon(const GeolocationUTM& location_utm);
 
     /**
      * @brief Construct convert a GeolocationLatLon Object to UTM
@@ -131,55 +94,16 @@ struct GeolocationUTM : public GeolocationLocal
      * @return GeolocationUTM
      */
     static GeolocationUTM from_geolocation_latlon(const GeolocationLatLon& location,
-                                                  int                      setzone = -1)
-    {
-        GeolocationUTM location_utm(
-            0, 0, 0, 0, location.z, location.yaw, location.pitch, location.roll);
-
-        GeographicLib::UTMUPS::Forward(location.latitude,
-                                       location.longitude,
-                                       location_utm.utm_zone,
-                                       location_utm.northern_hemisphere,
-                                       location_utm.easting,
-                                       location_utm.northing,
-                                       setzone);
-
-        return location_utm;
-    }
+                                                  int                      setzone = -1);
 
   public:
     // ----- file I/O -----
-    static GeolocationUTM from_stream(std::istream& is)
-    {
-        GeolocationUTM data(GeolocationLocal::from_stream(is), 0, 0);
+    static GeolocationUTM from_stream(std::istream& is);
 
-        is.read(reinterpret_cast<char*>(&data.utm_zone), sizeof(int));
-        is.read(reinterpret_cast<char*>(&data.northern_hemisphere), sizeof(bool));
-
-        return data;
-    }
-
-    void to_stream(std::ostream& os) const
-    {
-        GeolocationLocal::to_stream(os);
-
-        os.write(reinterpret_cast<const char*>(&utm_zone), sizeof(int));
-        os.write(reinterpret_cast<const char*>(&northern_hemisphere), sizeof(bool));
-    }
+    void to_stream(std::ostream& os) const;
 
   public:
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("GeolocationUTM (struct)", float_precision, superscript_exponents);
-
-        auto base_printer = GeolocationLocal::__printer__(float_precision, superscript_exponents);
-        base_printer.remove_sections();
-        printer.append(base_printer);
-        printer.register_value("utm_zone", utm_zone, "", 2);
-        printer.register_value("northern_hemisphere", northern_hemisphere, "", 3);
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
   public:
     // -- class helper function macros --
@@ -190,11 +114,8 @@ struct GeolocationUTM : public GeolocationLocal
 };
 
 // IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon
-// backwards conversion
-inline GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm)
-    : GeolocationLatLon(GeolocationUTM::to_geolocation_latlon(location_utm))
-{
-}
+// backwards conversion - this is implemented in geolocationutm.cpp
+GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm);
 
 } // namespace datastructures
 } // namespace navigation
