@@ -10,7 +10,6 @@
 /* generated doc strings */
 #include ".docstrings/nmea_vhw.doc.hpp"
 
-#include <charconv>
 #include <string>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
@@ -36,17 +35,7 @@ class NMEA_VHW : public NMEA_Base
      * @param base Underlying NMEA_Base datagram
      * @param check Check if the NMEA string is valid
      */
-    NMEA_VHW(NMEA_Base base, bool check = false)
-        : NMEA_Base(std::move(base))
-    {
-        if (check)
-        {
-            if (get_sentence_type() != "VHW")
-                throw std::runtime_error(
-                    fmt::format("NMEA_VHW: wrong sentence type [{}]", get_sentence_type()));
-        }
-        parse_fields();
-    }
+    NMEA_VHW(NMEA_Base base, bool check = false);
 
     // ----- NMEA VHW attributes -----
     double get_vessel_heading_true() const { return get_field_as_floattype<double>(0); }
@@ -56,27 +45,10 @@ class NMEA_VHW : public NMEA_Base
 
     // ----- binary streaming -----
     // this has to be explicit, because otherwise the compiler will use the base class version
-    static NMEA_VHW from_stream(std::istream& is)
-    {
-        return NMEA_VHW(NMEA_Base::from_stream(is), true);
-    }
+    static NMEA_VHW from_stream(std::istream& is);
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("NMEA VHW Datagram", float_precision, superscript_exponents);
-
-        printer.append(NMEA_Base::__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("VHW attributes");
-        printer.register_value("vessel_heading_true", get_vessel_heading_true(), "°, true");
-        printer.register_value(
-            "vessel_heading_magnetic", get_vessel_heading_magnetic(), "°, magnetic");
-        printer.register_value("speed_over_water_knots", get_speed_over_water_knots(), "knots");
-        printer.register_value("speed_over_water_kmh", get_speed_over_water_kmh(), "km/h");
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
     // ----- class helper macros -----
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__

@@ -8,7 +8,6 @@
 /* generated doc strings */
 #include ".docstrings/nmea_unknown.doc.hpp"
 
-#include <charconv>
 #include <string>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
@@ -33,30 +32,14 @@ class NMEA_Unknown : public NMEA_Base
      * @param base Underlying NMEA_Base datagram
      * @param check Check if the NMEA string is valid
      */
-    NMEA_Unknown(NMEA_Base base, [[maybe_unused]] bool check = false)
-        : NMEA_Base(std::move(base))
-    {
-        // if (check) {
-        // }
-        parse_fields();
-    }
+    NMEA_Unknown(NMEA_Base base, [[maybe_unused]] bool check = false);
 
     // ----- binary streaming -----
     // this has to be explicit, because otherwise the compiler will use the base class version
-    static NMEA_Unknown from_stream(std::istream& is)
-    {
-        return NMEA_Unknown(NMEA_Base::from_stream(is), true);
-    }
+    static NMEA_Unknown from_stream(std::istream& is);
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("NMEA Datagram (not implemented)",
-                                                  float_precision, superscript_exponents);
-
-        printer.append(NMEA_Base::__printer__(float_precision, superscript_exponents));
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
     // ----- class helper macros -----
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__

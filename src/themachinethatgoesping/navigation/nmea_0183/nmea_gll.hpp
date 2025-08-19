@@ -8,13 +8,10 @@
 /* generated doc strings */
 #include ".docstrings/nmea_gll.doc.hpp"
 
-#include <charconv>
 #include <string>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
-#include "../navtools.hpp"
-#include "helper.hpp"
 #include "nmea_base.hpp"
 
 namespace themachinethatgoesping {
@@ -36,97 +33,24 @@ class NMEA_GLL : public NMEA_Base
      * @param base Underlying NMEA_Base datagram
      * @param check Check if the NMEA string is valid
      */
-    NMEA_GLL(NMEA_Base base, bool check = false)
-        : NMEA_Base(std::move(base))
-    {
-        if (check)
-        {
-            if (get_sentence_type() != "GLL")
-                throw std::runtime_error(
-                    fmt::format("NMEA_GLL: wrong sentence type [{}]", get_sentence_type()));
-        }
-        parse_fields();
-    }
+    NMEA_GLL(NMEA_Base base, bool check = false);
 
     // ----- NMEA GLL attributes -----
-    double get_latitude() const
-    {
-        if (get_field(1) == "N")
-            return nmea_latitude_field_to_double(get_field(0));
-        else
-            return -nmea_latitude_field_to_double(get_field(0));
-    }
-    double get_longitude() const
-    {
-        if (get_field(3) == "E")
-            return nmea_longitude_field_to_double(get_field(2));
-        else
-            return -nmea_longitude_field_to_double(get_field(2));
-    }
+    double get_latitude() const;
+    double get_longitude() const;
 
     std::string get_utc_time_string() const { return std::string(get_field(4)); }
     bool        get_status() const { return get_field(5) == "A"; }
 
-    char get_mode() const
-    {
-        try
-        {
-            return get_field(6).at(0);
-        }
-        catch ([[maybe_unused]] std::out_of_range& e)
-        {
-            return '\x00';
-        }
-    }
-    std::string get_mode_explained() const
-    {
-        char mode = get_mode();
-        if (mode == 'A')
-            return "Autonomous";
-        if (mode == 'D')
-            return "Differential";
-        if (mode == 'E')
-            return "Estimated";
-        if (mode == 'M')
-            return "Manual";
-        if (mode == 'S')
-            return "Simulated";
-        if (mode == 'N')
-            return "Data not valid";
-        return "Unknown";
-    }
+    char get_mode() const;
+    std::string get_mode_explained() const;
 
     // ----- binary streaming -----
     // this has to be explicit, because otherwise the compiler will use the base class version
-    static NMEA_GLL from_stream(std::istream& is)
-    {
-        return NMEA_GLL(NMEA_Base::from_stream(is), true);
-    }
+    static NMEA_GLL from_stream(std::istream& is);
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("NMEA GLL Datagram", float_precision, superscript_exponents);
-
-        printer.append(NMEA_Base::__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("GLL attributes");
-
-        printer.register_string(
-            "latitude",
-            navtools::latitude_to_string(get_latitude(), navtools::t_latlon_format::minutes, 2),
-            "ddd°mm.mm'N/S");
-        printer.register_string(
-            "longitude",
-            navtools::longitude_to_string(get_longitude(), navtools::t_latlon_format::minutes, 2),
-            "ddd°mm.mm'E/W");
-
-        printer.register_value("utc_time_string", get_utc_time_string(), "HHMMSS.SS");
-        printer.register_value("status", this->get_status());
-        printer.register_value("mode", get_mode(), get_mode_explained());
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
     // ----- class helper macros -----
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
