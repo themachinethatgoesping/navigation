@@ -8,7 +8,6 @@
 /* generated doc strings */
 #include ".docstrings/nmea_vlw.doc.hpp"
 
-#include <charconv>
 #include <string>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
@@ -33,17 +32,7 @@ class NMEA_VLW : public NMEA_Base
      * @param base Underlying NMEA_Base datagram
      * @param check Check if the NMEA string is valid
      */
-    NMEA_VLW(NMEA_Base base, bool check = false)
-        : NMEA_Base(std::move(base))
-    {
-        if (check)
-        {
-            if (get_sentence_type() != "VLW")
-                throw std::runtime_error(
-                    fmt::format("NMEA_VLW: wrong sentence type [{}]", get_sentence_type()));
-        }
-        parse_fields();
-    }
+    NMEA_VLW(NMEA_Base base, bool check = false);
 
     // ----- NMEA VLW attributes -----
     double get_total_water_distance_nautical_miles() const
@@ -69,31 +58,10 @@ class NMEA_VLW : public NMEA_Base
 
     // ----- binary streaming -----
     // this has to be explicit, because otherwise the compiler will use the base class version
-    static NMEA_VLW from_stream(std::istream& is)
-    {
-        return NMEA_VLW(NMEA_Base::from_stream(is), true);
-    }
+    static NMEA_VLW from_stream(std::istream& is);
 
     // ----- objectprinter -----
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer("NMEA VLW Datagram", float_precision, superscript_exponents);
-
-        printer.append(NMEA_Base::__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("VLW attributes");
-        printer.register_value(
-            "total_water_distance_nautical_miles", get_total_water_distance_nautical_miles(), "nm");
-        printer.register_value(
-            "trip_water_distance_nautical_miles", get_trip_water_distance_nautical_miles(), "nm");
-        printer.register_value("total_ground_distance_nautical_miles",
-                               get_total_ground_distance_nautical_miles(),
-                               "nm");
-        printer.register_value(
-            "trip_ground_distance_nautical_miles", get_trip_ground_distance_nautical_miles(), "nm");
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
     // ----- class helper macros -----
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
