@@ -12,6 +12,7 @@ catch2.wrap
 hinnant-date.wrap
 
 #inherited wrap and folders
+xtl*
 pybind11*
 eigen*
 fmt*
@@ -26,6 +27,7 @@ xxhash_cpp*
 frozen*
 sse2neon*
 date*
+Catch*
 
 #inherited repos
 tools-*
