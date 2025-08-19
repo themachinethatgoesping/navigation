@@ -18,6 +18,8 @@ sources = [
   'datastructures/sensordatalatlon.cpp',
   'datastructures/sensordatalocal.cpp',
   'datastructures/sensordatautm.cpp',
+  'nmea_0183/nmea_base.cpp',
+  'nmea_0183/nmea_gga.cpp',
 ]
 
 headers = [
