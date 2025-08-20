@@ -8,14 +8,23 @@
 /* generated doc strings */
 #include ".docstrings/navigationinterpolatorlocal.doc.hpp"
 
-#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <vector>
+#include <string>
+#include <iostream>
 
-#include <themachinethatgoesping/tools/classhelper/classversion.hpp>
-
+#include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
 
 #include "datastructures.hpp"
 #include "i_navigationinterpolator.hpp"
-#include "sensorconfiguration.hpp"
+
+// forward declarations
+namespace themachinethatgoesping {
+    namespace tools {
+        namespace classhelper {
+            class ObjectPrinter;
+        }
+    }
+}
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -43,13 +52,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
     void set_extrapolation_mode(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                    tools::vectorinterpolators::t_extr_mode::extrapolate) override
-    {
-        I_NavigationInterpolator::set_extrapolation_mode(extrapolation_mode);
-
-        _interpolator_northing.set_extrapolation_mode(extrapolation_mode);
-        _interpolator_easting.set_extrapolation_mode(extrapolation_mode);
-    }
+                                    tools::vectorinterpolators::t_extr_mode::extrapolate) override;
 
   public:
     /**
@@ -60,34 +63,20 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      */
     NavigationInterpolatorLocal(SensorConfiguration                     sensor_configuration,
                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                    tools::vectorinterpolators::t_extr_mode::extrapolate)
-        : I_NavigationInterpolator(std::move(sensor_configuration), extrapolation_mode)
-    {
-        set_extrapolation_mode(extrapolation_mode);
-    }
+                                    tools::vectorinterpolators::t_extr_mode::extrapolate);
 
     /**
      * @brief Construct a new Navigation Interpolator Lat Lon object from a base Interpolator
      *
      * @param base Base I_NavigationInterpolator object
      */
-    explicit NavigationInterpolatorLocal(I_NavigationInterpolator base)
-        : I_NavigationInterpolator(std::move(base))
-    {
-        set_extrapolation_mode(base.interpolator_depth().get_extrapolation_mode());
-    }
+    explicit NavigationInterpolatorLocal(I_NavigationInterpolator base);
 
     virtual ~NavigationInterpolatorLocal() = default;
 
     //----- operators -----
-    bool operator==(const NavigationInterpolatorLocal& other) const
-    {
-
-        return _interpolator_northing == other._interpolator_northing &&
-               _interpolator_easting == other._interpolator_easting &&
-               I_NavigationInterpolator::operator==(other);
-    }
-    bool operator!=(const NavigationInterpolatorLocal& other) const { return !(*this == other); }
+    bool operator==(const NavigationInterpolatorLocal& other) const;
+    bool operator!=(const NavigationInterpolatorLocal& other) const;
 
     //----- set sensor data -----
     /**
@@ -99,11 +88,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      */
     void set_data_position(const std::vector<double>& timestamp,
                            const std::vector<double>& northing,
-                           const std::vector<double>& easting)
-    {
-        _interpolator_northing.set_data_XY(timestamp, northing);
-        _interpolator_easting.set_data_XY(timestamp, easting);
-    }
+                           const std::vector<double>& easting);
 
     /**
      * @briefSet the data of the position system (northing, easting) and the offsets of the
@@ -123,11 +108,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
                            std::string_view           name,
                            float                      offset_x,
                            float                      offset_y,
-                           float                      offset_z)
-    {
-        _sensor_configuration.set_position_source(name, offset_x, offset_y, offset_z);
-        set_data_position(timestamp, northing, easting);
-    }
+                           float                      offset_z);
 
     /**
      * @briefSet the data of the position system (northing, easting) and the offsets of the
@@ -141,11 +122,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     void set_data_position(const std::vector<double>&               timestamp,
                            const std::vector<double>&               northing,
                            const std::vector<double>&               easting,
-                           const datastructures::PositionalOffsets& sensor_offsets)
-    {
-        _sensor_configuration.set_position_source(sensor_offsets);
-        set_data_position(timestamp, northing, easting);
-    }
+                           const datastructures::PositionalOffsets& sensor_offsets);
 
     /**
      * @brief direct reference to the northing interpolator object
@@ -164,18 +141,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     /**
      * @brief see documentation of I_NavigationInterpolator::merge
      */
-    void merge(const NavigationInterpolatorLocal& other)
-    {
-        I_NavigationInterpolator::merge(other);
-
-        // merge data
-        _interpolator_northing.insert(other._interpolator_northing.get_data_X(),
-                                      other._interpolator_northing.get_data_Y(),
-                                      true);
-        _interpolator_easting.insert(other._interpolator_easting.get_data_X(),
-                                     other._interpolator_easting.get_data_Y(),
-                                     true);
-    }
+    void merge(const NavigationInterpolatorLocal& other);
 
     //----- compute the position of the target sensors -----
     /**
@@ -188,10 +154,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * system
      */
     datastructures::GeolocationLocal compute_target_position(const std::string& target_id,
-                                                             double             timestamp) const
-    {
-        return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
-    }
+                                                             double             timestamp) const;
 
     //----- compute the position of the target sensors -----
     /**
@@ -201,76 +164,19 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @return data structure that contains the sensor data interpolated for the given timestamp
      * stamp
      */
-    datastructures::SensordataLocal get_sensor_data(double timestamp) const
-    {
-        datastructures::SensordataLocal sensor_data;
-        if (!_interpolator_depth.empty()) // default is 0.0
-            sensor_data.depth = _interpolator_depth(timestamp);
+    datastructures::SensordataLocal get_sensor_data(double timestamp) const;
 
-        if (!_interpolator_heave.empty()) // default is 0.0
-            sensor_data.heave = _interpolator_heave(timestamp);
-
-        if (!_interpolator_heading.empty()) // default is 0.0
-            sensor_data.heading = _interpolator_heading.ypr(timestamp)[0];
-
-        if (!_interpolator_attitude.empty()) // default is 0.0. 0.0
-        {
-            auto ypr = _interpolator_attitude.ypr(timestamp);
-            // sensor_data.imu_yaw   = ypr[0];
-            sensor_data.pitch = ypr[1];
-            sensor_data.roll  = ypr[2];
-        }
-
-        sensor_data.northing = _interpolator_northing(timestamp);
-        sensor_data.easting  = _interpolator_easting(timestamp);
-
-        return sensor_data;
-    }
+    bool valid() const override;
 
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
-    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer(this->class_name(), float_precision, superscript_exponents);
-
-        printer.append(I_NavigationInterpolator::__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("Position system northing", '*');
-        printer.append(_interpolator_northing.__printer__(float_precision, superscript_exponents), true);
-
-        printer.register_section("Position system easting", '*');
-        printer.append(_interpolator_easting.__printer__(float_precision, superscript_exponents), true);
-
-        return printer;
-    }
+    tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision, bool superscript_exponents) const;
 
     // ----- file I/O -----
-    static NavigationInterpolatorLocal from_stream(std::istream& is)
-    {
-        tools::classhelper::read_version(is, "NavIntLocal_V1", "NavigationInterpolatorLocal");
-        NavigationInterpolatorLocal interpolator(I_NavigationInterpolator::from_stream(is));
+    static NavigationInterpolatorLocal from_stream(std::istream& is);
 
-        interpolator._interpolator_northing = interpolator._interpolator_northing.from_stream(is);
-        interpolator._interpolator_easting  = interpolator._interpolator_easting.from_stream(is);
-
-        return interpolator;
-    }
-
-    void to_stream(std::ostream& os) const
-    {
-        tools::classhelper::write_version(os, "NavIntLocal_V1");
-        I_NavigationInterpolator::to_stream(os);
-
-        _interpolator_northing.to_stream(os);
-        _interpolator_easting.to_stream(os);
-    }
-
-    bool valid() const override
-    {
-        return I_NavigationInterpolator::valid() &&
-               (!_interpolator_northing.empty() && !_interpolator_easting.empty());
-    }
+    void to_stream(std::ostream& os) const;
 
   public:
     // -- class helper function macros --
