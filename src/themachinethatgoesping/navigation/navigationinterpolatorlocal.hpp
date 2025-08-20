@@ -13,8 +13,6 @@
 #include <iostream>
 
 #include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
-#include <themachinethatgoesping/tools/vectorinterpolators/linearinterpolator.hpp>
-#include <themachinethatgoesping/tools/vectorinterpolators/slerpinterpolator.hpp>
 
 #include "datastructures.hpp"
 #include "i_navigationinterpolator.hpp"
