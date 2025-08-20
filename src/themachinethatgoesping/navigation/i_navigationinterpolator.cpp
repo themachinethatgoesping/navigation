@@ -8,11 +8,6 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
-#include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
-#include <themachinethatgoesping/tools/vectorinterpolators/linearinterpolator.hpp>
-#include <themachinethatgoesping/tools/vectorinterpolators/slerpinterpolator.hpp>
-
 namespace themachinethatgoesping {
 namespace navigation {
 

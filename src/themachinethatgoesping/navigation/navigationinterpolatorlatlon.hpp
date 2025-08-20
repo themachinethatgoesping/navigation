@@ -12,19 +12,11 @@
 #include <string>
 #include <iostream>
 
+#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
 
 #include "datastructures.hpp"
 #include "i_navigationinterpolator.hpp"
-
-// forward declarations
-namespace themachinethatgoesping {
-    namespace tools {
-        namespace classhelper {
-            class ObjectPrinter;
-        }
-    }
-}
 
 namespace themachinethatgoesping {
 namespace navigation {

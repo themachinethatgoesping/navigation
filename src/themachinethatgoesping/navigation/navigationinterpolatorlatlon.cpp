@@ -7,7 +7,6 @@
 
 #include <stdexcept>
 #include <themachinethatgoesping/tools/classhelper/classversion.hpp>
-#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {

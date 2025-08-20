@@ -5,7 +5,6 @@
 
 #include "navigationinterpolatorlocal.hpp"
 
-#include <themachinethatgoesping/tools/classhelper/classversion.hpp>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
 namespace themachinethatgoesping {
