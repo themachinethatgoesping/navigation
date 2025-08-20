@@ -8,12 +8,23 @@
 /* generated doc strings */
 #include ".docstrings/navigationinterpolatorlatlon.doc.hpp"
 
-#include <themachinethatgoesping/tools/classhelper/classversion.hpp>
-#include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <vector>
+#include <string>
+#include <iostream>
+
+#include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
 
 #include "datastructures.hpp"
 #include "i_navigationinterpolator.hpp"
-#include "sensorconfiguration.hpp"
+
+// forward declarations
+namespace themachinethatgoesping {
+    namespace tools {
+        namespace classhelper {
+            class ObjectPrinter;
+        }
+    }
+}
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -41,13 +52,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
     void set_extrapolation_mode(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                    tools::vectorinterpolators::t_extr_mode::extrapolate) override
-    {
-        I_NavigationInterpolator::set_extrapolation_mode(extrapolation_mode);
-
-        _interpolator_latitude.set_extrapolation_mode(extrapolation_mode);
-        _interpolator_longitude.set_extrapolation_mode(extrapolation_mode);
-    }
+                                    tools::vectorinterpolators::t_extr_mode::extrapolate) override;
 
   public:
     /**
@@ -59,34 +64,20 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
 
     NavigationInterpolatorLatLon(SensorConfiguration sensor_configuration = SensorConfiguration(),
                                  tools::vectorinterpolators::t_extr_mode extrapolation_mode =
-                                     tools::vectorinterpolators::t_extr_mode::extrapolate)
-        : I_NavigationInterpolator(std::move(sensor_configuration), extrapolation_mode)
-    {
-        set_extrapolation_mode(extrapolation_mode);
-    }
+                                     tools::vectorinterpolators::t_extr_mode::extrapolate);
 
     /**
      * @brief Construct a new Navigation Interpolator Lat Lon object from a base Interpolator
      *
      * @param base Base I_NavigationInterpolator object
      */
-    explicit NavigationInterpolatorLatLon(I_NavigationInterpolator base)
-        : I_NavigationInterpolator(std::move(base))
-    {
-        set_extrapolation_mode(base.interpolator_depth().get_extrapolation_mode());
-    }
+    explicit NavigationInterpolatorLatLon(I_NavigationInterpolator base);
 
     virtual ~NavigationInterpolatorLatLon() = default;
 
     //----- operators -----
-    bool operator==(const NavigationInterpolatorLatLon& other) const
-    {
-
-        return _interpolator_latitude == other._interpolator_latitude &&
-               _interpolator_longitude == other._interpolator_longitude &&
-               I_NavigationInterpolator::operator==(other);
-    }
-    bool operator!=(const NavigationInterpolatorLatLon& other) const { return !(*this == other); }
+    bool operator==(const NavigationInterpolatorLatLon& other) const;
+    bool operator!=(const NavigationInterpolatorLatLon& other) const;
 
     //----- set sensor data -----
     /**
@@ -98,11 +89,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      */
     void set_data_position(const std::vector<double>& timestamp,
                            const std::vector<double>& latitude,
-                           const std::vector<double>& longitude)
-    {
-        _interpolator_latitude.set_data_XY(timestamp, latitude);
-        _interpolator_longitude.set_data_XY(timestamp, longitude);
-    }
+                           const std::vector<double>& longitude);
 
     /**
      * @brief direct reference to the latitude interpolator object
@@ -122,18 +109,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     /**
      * @brief see documentation of I_NavigationInterpolator::merge
      */
-    void merge(const NavigationInterpolatorLatLon& other)
-    {
-        I_NavigationInterpolator::merge(other);
-
-        // merge data
-        _interpolator_latitude.insert(other._interpolator_latitude.get_data_X(),
-                                      other._interpolator_latitude.get_data_Y(),
-                                      true);
-        _interpolator_longitude.insert(other._interpolator_longitude.get_data_X(),
-                                       other._interpolator_longitude.get_data_Y(),
-                                       true);
-    }
+    void merge(const NavigationInterpolatorLatLon& other);
 
     //----- compute the position of the target sensors -----
     /**
@@ -146,10 +122,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * system
      */
     datastructures::GeolocationLatLon operator()(const std::string& target_id,
-                                                 double             timestamp) const
-    {
-        return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
-    }
+                                                 double             timestamp) const;
 
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data for the given
@@ -161,10 +134,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * system
      */
     datastructures::GeolocationLatLon compute_target_position(const std::string& target_id,
-                                                              double             timestamp) const
-    {
-        return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
-    }
+                                                              double             timestamp) const;
 
     //----- compute the position of the target sensors -----
     /**
@@ -174,89 +144,20 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @return data structure that contains the sensor data interpolated for the given timestamp
      * stamp
      */
-    datastructures::SensordataLatLon get_sensor_data(double timestamp) const
-    {
-        datastructures::SensordataLatLon sensor_data;
-        if (!_interpolator_depth.empty()) // default is 0.0
-            sensor_data.depth = _interpolator_depth(timestamp);
+    datastructures::SensordataLatLon get_sensor_data(double timestamp) const;
 
-        if (!_interpolator_heave.empty()) // default is 0.0
-            sensor_data.heave = _interpolator_heave(timestamp);
-
-        if (!_interpolator_heading.empty()) // default is 0.0
-            sensor_data.heading = _interpolator_heading.ypr(timestamp)[0];
-
-        if (!_interpolator_attitude.empty()) // default is 0.0. 0.0
-        {
-            auto ypr = _interpolator_attitude.ypr(timestamp);
-            // sensor_data.imu_yaw   = ypr[0];
-            sensor_data.pitch = ypr[1];
-            sensor_data.roll  = ypr[2];
-        }
-
-        if (_interpolator_latitude.empty())
-            throw std::runtime_error("ERROR[datastructures::SensordataLatLon]: No latitude data "
-                                     "available for interpolation");
-
-        if (_interpolator_longitude.empty())
-            throw std::runtime_error("ERROR[datastructures::SensordataLatLon]: No longitude data "
-                                     "available for interpolation");
-
-        sensor_data.latitude  = _interpolator_latitude(timestamp);
-        sensor_data.longitude = _interpolator_longitude(timestamp);
-
-        return sensor_data;
-    }
-
-    bool valid() const override
-    {
-        return I_NavigationInterpolator::valid() &&
-               (!_interpolator_latitude.empty() && !_interpolator_longitude.empty());
-    }
+    bool valid() const override;
 
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by
     // __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__ macro below)
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision,
-                                                  bool         superscript_exponents) const
-    {
-        tools::classhelper::ObjectPrinter printer(
-            this->class_name(), float_precision, superscript_exponents);
-
-        printer.append(
-            I_NavigationInterpolator::__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("Position system latitude", '*');
-        printer.append(_interpolator_latitude.__printer__(float_precision, superscript_exponents),
-                       true);
-
-        printer.register_section("Position system longitude", '*');
-        printer.append(_interpolator_longitude.__printer__(float_precision, superscript_exponents),
-                       true);
-
-        return printer;
-    }
+                                                  bool         superscript_exponents) const;
 
     // ----- file I/O -----
-    static NavigationInterpolatorLatLon from_stream(std::istream& is)
-    {
-        tools::classhelper::read_version(is, "NavIntLatLon_V1", "NavigationInterpolatorLatLon");
-        NavigationInterpolatorLatLon interpolator(I_NavigationInterpolator::from_stream(is));
+    static NavigationInterpolatorLatLon from_stream(std::istream& is);
 
-        interpolator._interpolator_latitude  = interpolator._interpolator_latitude.from_stream(is);
-        interpolator._interpolator_longitude = interpolator._interpolator_longitude.from_stream(is);
-
-        return interpolator;
-    }
-
-    void to_stream(std::ostream& os) const
-    {
-        tools::classhelper::write_version(os, "NavIntLatLon_V1");
-        I_NavigationInterpolator::to_stream(os);
-
-        _interpolator_latitude.to_stream(os);
-        _interpolator_longitude.to_stream(os);
-    }
+    void to_stream(std::ostream& os) const;
 
   public:
     // -- class helper function macros --
@@ -272,11 +173,8 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
  * @param object object to hash
  * @return std::size_t
  */
-inline std::size_t hash_value(
-    const themachinethatgoesping::navigation::NavigationInterpolatorLatLon& object)
-{
-    return object.binary_hash();
-}
+std::size_t hash_value(
+    const themachinethatgoesping::navigation::NavigationInterpolatorLatLon& object);
 
 } // namespace navigation
 } // namespace themachinethatgoesping
@@ -285,10 +183,7 @@ template<>
 struct std::hash<themachinethatgoesping::navigation::NavigationInterpolatorLatLon>
 {
     std::size_t operator()(
-        const themachinethatgoesping::navigation::NavigationInterpolatorLatLon& object) const
-    {
-        return object.binary_hash();
-    }
+        const themachinethatgoesping::navigation::NavigationInterpolatorLatLon& object) const;
 };
 
 // IGNORE_DOC:__doc_themachinethatgoesping_navigation_hash_value
