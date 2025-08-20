@@ -8,6 +8,9 @@ headerdir = projectnamespace + '/navigation'
 
 # -- source files --
 sources = [
+  'i_navigationinterpolator.cpp',
+  'navigationinterpolatorlatlon.cpp',
+  'navigationinterpolatorlocal.cpp',
   'sensorconfiguration.cpp',
   'datastructures/geolocation.cpp',
   'datastructures/geolocationlatlon.cpp',
