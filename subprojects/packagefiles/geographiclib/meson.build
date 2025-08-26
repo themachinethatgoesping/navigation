@@ -9,7 +9,7 @@
 project(
     'GeographicLib',
     'cpp',
-    version : '2.5',
+    version : '2.5.2',
     license : 'MIT',
     default_options : ['cpp_std=c++11'],
 )
