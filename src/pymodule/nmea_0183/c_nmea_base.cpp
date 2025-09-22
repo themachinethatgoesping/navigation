@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_base(py::module& m)
 {
 
-    py::class_<NMEA_Base>(
+    py::classh<NMEA_Base>(
         m, "NMEA_Base", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base))
         .def(py::init<>(), DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, NMEA_Base))
         .def(py::init<std::string>(),

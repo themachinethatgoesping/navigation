@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_sensordatautm(py::module& m)
 {
 
-    py::class_<SensordataUTM, SensordataLocal>(
+    py::classh<SensordataUTM, SensordataLocal>(
         m, "SensordataUTM", DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM))
         .def(
             py::init<const Sensordata&, double, double, int, bool>(),

@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_vhw(py::module& m)
 {
 
-    py::class_<NMEA_VHW, NMEA_Base>(
+    py::classh<NMEA_VHW, NMEA_Base>(
         m, "NMEA_VHW", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_VHW))
         .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_VHW, NMEA_VHW),

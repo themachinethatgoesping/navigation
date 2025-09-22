@@ -20,7 +20,7 @@ using namespace themachinethatgoesping::navigation::datastructures;
 
 void init_c_geolocationutm(py::module& m)
 {
-    py::class_<GeolocationUTM, GeolocationLocal>(
+    py::classh<GeolocationUTM, GeolocationLocal>(
         m,
         "GeolocationUTM",
         DOC(themachinethatgoesping, navigation, datastructures, GeolocationUTM))

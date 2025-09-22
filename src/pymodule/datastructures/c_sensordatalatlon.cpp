@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_sensordatalatlon(py::module& m)
 {
 
-    py::class_<SensordataLatLon, Sensordata>(
+    py::classh<SensordataLatLon, Sensordata>(
         m,
         "SensordataLatLon",
         DOC(themachinethatgoesping, navigation, datastructures, SensordataLatLon))

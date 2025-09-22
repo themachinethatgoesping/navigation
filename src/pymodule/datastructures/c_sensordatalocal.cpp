@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_sensordatalocal(py::module& m)
 {
 
-    py::class_<SensordataLocal, Sensordata>(
+    py::classh<SensordataLocal, Sensordata>(
         m,
         "SensordataLocal",
         DOC(themachinethatgoesping, navigation, datastructures, SensordataLocal))

@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_geolocationlocal(py::module& m)
 {
 
-    py::class_<GeolocationLocal, Geolocation>(
+    py::classh<GeolocationLocal, Geolocation>(
         m,
         "GeolocationLocal",
         DOC(themachinethatgoesping, navigation, datastructures, GeolocationLocal))

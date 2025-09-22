@@ -21,7 +21,7 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_positionaloffsets(py::module& m)
 {
 
-    py::class_<PositionalOffsets>(
+    py::classh<PositionalOffsets>(
         m,
         "PositionalOffsets",
         DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets))

@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation::nmea_0183;
 void init_c_nmea_hdt(py::module& m)
 {
 
-    py::class_<NMEA_HDT, NMEA_Base>(
+    py::classh<NMEA_HDT, NMEA_Base>(
         m, "NMEA_HDT", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_HDT))
         .def(py::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_HDT, NMEA_HDT),

@@ -20,7 +20,7 @@ using namespace themachinethatgoesping::navigation;
 
 void init_c_sensorconfiguration(py::module& m)
 {
-    py::class_<SensorConfiguration>(
+    py::classh<SensorConfiguration>(
         m, "SensorConfiguration", DOC(themachinethatgoesping, navigation, SensorConfiguration))
         .def(py::init<std::string_view>(),
              DOC_SensorConfiguration(SensorConfiguration),

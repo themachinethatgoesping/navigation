@@ -20,7 +20,7 @@ using themachinethatgoesping::tools::vectorinterpolators::t_extr_mode;
 
 void init_c_NavigationInterpolatorLocal(py::module& m)
 {
-    py::class_<NavigationInterpolatorLocal>(
+    py::classh<NavigationInterpolatorLocal>(
         m,
         "NavigationInterpolatorLocal",
         DOC(themachinethatgoesping, navigation, NavigationInterpolatorLocal))

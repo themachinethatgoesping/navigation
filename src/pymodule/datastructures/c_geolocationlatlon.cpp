@@ -18,7 +18,7 @@ using namespace themachinethatgoesping::navigation::datastructures;
 void init_c_geolocationlatlon(py::module& m)
 {
 
-    py::class_<GeolocationLatLon, Geolocation>(
+    py::classh<GeolocationLatLon, Geolocation>(
         m,
         "GeolocationLatLon",
         DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon))
