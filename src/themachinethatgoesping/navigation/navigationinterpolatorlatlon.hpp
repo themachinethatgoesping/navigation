@@ -43,7 +43,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      *
      * @param extrapolation_mode extrapolate, fail or nearest
      */
-    void set_extrapolation_mode(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
+    void set_extrapolation_mode(tools::vectorinterpolators::o_extr_mode extrapolation_mode =
                                     tools::vectorinterpolators::t_extr_mode::extrapolate) override;
 
   public:
@@ -55,7 +55,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      */
 
     NavigationInterpolatorLatLon(SensorConfiguration sensor_configuration = SensorConfiguration(),
-                                 tools::vectorinterpolators::t_extr_mode extrapolation_mode =
+                                 tools::vectorinterpolators::o_extr_mode extrapolation_mode =
                                      tools::vectorinterpolators::t_extr_mode::extrapolate);
 
     /**

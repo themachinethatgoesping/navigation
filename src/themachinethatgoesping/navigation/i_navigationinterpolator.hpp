@@ -57,7 +57,7 @@ class I_NavigationInterpolator
      * @param extrapolation_mode extrapolate, fail or nearest
      */
     I_NavigationInterpolator(SensorConfiguration                     sensor_configuration,
-                             tools::vectorinterpolators::t_extr_mode extrapolation_mode =
+                             tools::vectorinterpolators::o_extr_mode extrapolation_mode =
                                  tools::vectorinterpolators::t_extr_mode::extrapolate);
 
     virtual ~I_NavigationInterpolator() = default;
@@ -77,7 +77,7 @@ class I_NavigationInterpolator
      *
      * @param extrapolation_mode extrapolate, fail or nearest
      */
-    virtual void set_extrapolation_mode(tools::vectorinterpolators::t_extr_mode extrapolation_mode =
+    virtual void set_extrapolation_mode(tools::vectorinterpolators::o_extr_mode extrapolation_mode =
                                             tools::vectorinterpolators::t_extr_mode::extrapolate);
 
     //----- operators -----

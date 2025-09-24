@@ -13,7 +13,7 @@ namespace navigation {
 
 // ----- constructor -----
 I_NavigationInterpolator::I_NavigationInterpolator(SensorConfiguration sensor_configuration,
-                                                   tools::vectorinterpolators::t_extr_mode extrapolation_mode)
+                                                   tools::vectorinterpolators::o_extr_mode extrapolation_mode)
     : _sensor_configuration(std::move(sensor_configuration))
 {
     set_extrapolation_mode(extrapolation_mode);
@@ -54,7 +54,7 @@ void I_NavigationInterpolator::merge(const I_NavigationInterpolator& other)
 }
 
 // ----- set extrapolation mode -----
-void I_NavigationInterpolator::set_extrapolation_mode(tools::vectorinterpolators::t_extr_mode extrapolation_mode)
+void I_NavigationInterpolator::set_extrapolation_mode(tools::vectorinterpolators::o_extr_mode extrapolation_mode)
 {
     _interpolator_attitude.set_extrapolation_mode(extrapolation_mode);
     _interpolator_heading.set_extrapolation_mode(extrapolation_mode);

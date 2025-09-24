@@ -16,6 +16,7 @@
 
 namespace py = pybind11;
 using namespace themachinethatgoesping::navigation;
+using themachinethatgoesping::tools::vectorinterpolators::o_extr_mode;
 using themachinethatgoesping::tools::vectorinterpolators::t_extr_mode;
 
 void init_c_NavigationInterpolatorLatLon(py::module& m)
@@ -24,7 +25,7 @@ void init_c_NavigationInterpolatorLatLon(py::module& m)
         m,
         "NavigationInterpolatorLatLon",
         DOC(themachinethatgoesping, navigation, NavigationInterpolatorLatLon))
-        .def(py::init<const SensorConfiguration&, t_extr_mode>(),
+        .def(py::init<const SensorConfiguration&, o_extr_mode>(),
              DOC(themachinethatgoesping,
                  navigation,
                  NavigationInterpolatorLatLon,
