@@ -11,6 +11,7 @@ sources = [
   'i_navigationinterpolator.cpp',
   'navigationinterpolatorlatlon.cpp',
   'navigationinterpolatorlocal.cpp',
+  'navtools.cpp',
   'sensorconfiguration.cpp',
   'datastructures/geolocation.cpp',
   'datastructures/geolocationlatlon.cpp',

@@ -21,8 +21,10 @@
 #include <GeographicLib/UTMUPS.hpp>
 #include <fmt/core.h>
 
-#include <xtensor/containers/xcontainer.hpp>
 #include <xtensor/containers/xadapt.hpp>
+#include <xtensor/containers/xcontainer.hpp>
+
+#include <themachinethatgoesping/tools/classhelper/option.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -38,6 +40,8 @@ enum class t_latlon_format
     minutes = 1, ///< lat/lon will be converted to degrees°minutes.minutes'E/S E/W
     seconds = 2  ///< lat/lon will be converted to degrees°minutes'seconds.seconds''E/S E/W
 };
+
+using o_latlon_format = tools::classhelper::Option<t_latlon_format>;
 
 /**
  * @brief c++20 concept to check if a type has latitude and longitude members
@@ -87,13 +91,13 @@ concept RandomAccessContainerOfLatLonHolders = requires(T t) {
 };
 
 inline std::string dms_to_string(double          dms_value,
-                                 t_latlon_format format,
+                                 o_latlon_format format,
                                  size_t          precision,
                                  char            sign)
 {
     dms_value = std::abs(dms_value);
 
-    switch (format)
+    switch (format.value)
     {
         case t_latlon_format::degrees:
             return fmt::format("{:.{}f}°{}", dms_value, precision, sign);
@@ -123,7 +127,7 @@ inline std::string dms_to_string(double          dms_value,
  * @return converted latitude string
  */
 inline std::string latitude_to_string(double          latitude,
-                                      t_latlon_format format    = t_latlon_format::minutes,
+                                      o_latlon_format format    = t_latlon_format::minutes,
                                       size_t          precision = 6)
 {
     char sign = 'N';
@@ -142,7 +146,7 @@ inline std::string latitude_to_string(double          latitude,
  * @return converted latitude string
  */
 inline std::string longitude_to_string(double          longitude,
-                                       t_latlon_format format    = t_latlon_format::minutes,
+                                       o_latlon_format format    = t_latlon_format::minutes,
                                        size_t          precision = 6)
 {
     char sign = 'E';
@@ -227,8 +231,8 @@ inline std::pair<T_container_double, T_container_double> utm_to_latlon(
     // Check if container is xtensor and handle resize accordingly
     if constexpr (std::is_base_of<xt::xcontainer<T_container_double>, T_container_double>::value)
     {
-        lat = T_container_double::from_shape({int64_t(northing.size())});
-        lon = T_container_double::from_shape({int64_t(northing.size())});
+        lat = T_container_double::from_shape({ int64_t(northing.size()) });
+        lon = T_container_double::from_shape({ int64_t(northing.size()) });
     }
     else
     {
@@ -272,7 +276,8 @@ inline std::tuple<T_container_double, T_container_double, int, bool> latlon_to_u
     if (setzone == -1)
     {
         double mean_lat, mean_lon;
-        if constexpr (std::is_base_of<xt::xcontainer<T_container_double>, T_container_double>::value)
+        if constexpr (std::is_base_of<xt::xcontainer<T_container_double>,
+                                      T_container_double>::value)
         {
             mean_lat = xt::mean(lat)();
             mean_lon = xt::mean(lon)();
@@ -281,8 +286,8 @@ inline std::tuple<T_container_double, T_container_double, int, bool> latlon_to_u
         {
             auto lat_xt = xt::adapt(lat.data(), xt::no_ownership());
             auto lon_xt = xt::adapt(lon.data(), xt::no_ownership());
-            mean_lat = xt::mean(lat_xt)();
-            mean_lon = xt::mean(lon_xt)();
+            mean_lat    = xt::mean(lat_xt)();
+            mean_lon    = xt::mean(lon_xt)();
         }
         setzone = GeographicLib::UTMUPS::StandardZone(mean_lat, mean_lon);
     }
@@ -292,8 +297,8 @@ inline std::tuple<T_container_double, T_container_double, int, bool> latlon_to_u
     // Check if container is xtensor and handle resize accordingly
     if constexpr (std::is_base_of<xt::xcontainer<T_container_double>, T_container_double>::value)
     {
-        northing = T_container_double::from_shape({int64_t(lat.size())});
-        easting  = T_container_double::from_shape({int64_t(lat.size())});
+        northing = T_container_double::from_shape({ int64_t(lat.size()) });
+        easting  = T_container_double::from_shape({ int64_t(lat.size()) });
     }
     else
     {
@@ -568,3 +573,6 @@ T_return_container cumulative_latlon_distances_m(const T_container& geo_location
 } // namespace navtools
 } // namespace navigation
 } // namespace themachinethatgoesping
+
+extern template class themachinethatgoesping::tools::classhelper::Option<
+    themachinethatgoesping::navigation::navtools::t_latlon_format>;

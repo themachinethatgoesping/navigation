@@ -1,4 +1,4 @@
-//sourcehash: 4e8f839b1fad3024eaa7ba0a33cd79b9d6c862935dc8e26247c77b9bd5e6ce0c
+//sourcehash: 19976f9f8ebdf6bd472293c237e40f385ca496d129f52517504d8aadb41a3b98
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -37,6 +37,8 @@
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #endif
 
+
+static const char *__doc__unnamed_class_at_themachinethatgoesping_navigation_navtools_hpp_577_67 = R"doc()doc";
 
 static const char *__doc_themachinethatgoesping_navigation_navtools_compute_latlon_distance_m =
 R"doc(Compute the distance in meters between two latitude-longitude

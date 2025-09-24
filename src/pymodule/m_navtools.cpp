@@ -82,8 +82,12 @@ void init_m_navtools(py::module& m)
         //
         ;
 
-    tools::pybind_helper::add_string_to_enum_conversion<t_latlon_format>(pyenum_latlon);
-
+    // tools::pybind_helper::add_string_to_enum_conversion<t_latlon_format>(pyenum_latlon);
+    tools::pybind_helper::make_option_class<o_latlon_format>(m_navtools, "o_latlon_format");
+    // inplace xtensor test
+    m_navtools.def("inplace_1", [](xt::pytensor<double, 1>& tensor) {
+        tensor += 1.0; // Example operation
+    });
     //----- latitude_to_string -----
     m_navtools.def("latitude_to_string",
                    &latitude_to_string,
@@ -95,7 +99,7 @@ void init_m_navtools(py::module& m)
     // vectorized call
     m_navtools.def(
         "latitude_to_string",
-        [](const std::vector<double>& latitudes, t_latlon_format format, size_t precision) {
+        [](const std::vector<double>& latitudes, o_latlon_format format, size_t precision) {
             std::vector<std::string> result;
             result.reserve(latitudes.size());
             for (auto& latitude : latitudes)
@@ -120,7 +124,7 @@ void init_m_navtools(py::module& m)
     // vectorized call
     m_navtools.def(
         "longitude_to_string",
-        [](const std::vector<double>& longitudes, t_latlon_format format, size_t precision) {
+        [](const std::vector<double>& longitudes, o_latlon_format format, size_t precision) {
             std::vector<std::string> result;
             result.reserve(longitudes.size());
             for (auto& longitude : longitudes)
