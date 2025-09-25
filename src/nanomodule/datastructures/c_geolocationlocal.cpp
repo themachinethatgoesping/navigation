@@ -7,58 +7,59 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::datastructures;
 
-void init_c_geolocationlocal(py::module& m)
+void init_c_geolocationlocal(nb::module_& m)
 {
 
-    py::classh<GeolocationLocal, Geolocation>(
+    nb::class_<GeolocationLocal, Geolocation>(
         m,
         "GeolocationLocal",
         DOC(themachinethatgoesping, navigation, datastructures, GeolocationLocal))
-        .def(py::init<const GeolocationUTM&>(),
+        .def(nb::init<const GeolocationUTM&>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
                  GeolocationLocal,
                  GeolocationLocal),
-             py::arg("geolocationutm"))
-        .def(py::init<const Geolocation&, double, double>(),
+             nb::arg("geolocationutm"))
+        .def(nb::init<const Geolocation&, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
                  GeolocationLocal,
                  GeolocationLocal_2),
-             py::arg("geolocation"),
-             py::arg("northing"),
-             py::arg("easting"))
-        .def(py::init<double, double, double, double, double, double>(),
+             nb::arg("geolocation"),
+             nb::arg("northing"),
+             nb::arg("easting"))
+        .def(nb::init<double, double, double, double, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
                  GeolocationLocal,
                  GeolocationLocal_3),
-             py::arg("northing") = 0,
-             py::arg("easting")  = 0,
-             py::arg("z")        = 0,
-             py::arg("yaw")      = 0,
-             py::arg("pitch")    = 0,
-             py::arg("roll")     = 0)
+             nb::arg("northing") = 0,
+             nb::arg("easting")  = 0,
+             nb::arg("z")        = 0,
+             nb::arg("yaw")      = 0,
+             nb::arg("pitch")    = 0,
+             nb::arg("roll")     = 0)
         .def("__eq__",
              &GeolocationLocal::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, GeolocationLocal, operator_eq),
-             py::arg("other"))
-        .def_readwrite(
+             nb::arg("other"))
+        .def_rw(
             "northing",
             &GeolocationLocal::northing,
             DOC(themachinethatgoesping, navigation, datastructures, GeolocationLocal, northing))
-        .def_readwrite(
+        .def_rw(
             "easting",
             &GeolocationLocal::easting,
             DOC(themachinethatgoesping, navigation, datastructures, GeolocationLocal, easting))

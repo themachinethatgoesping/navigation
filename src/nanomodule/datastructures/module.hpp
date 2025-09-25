@@ -3,23 +3,22 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include <pybind11/iostream.h>
-#include <pybind11/pybind11.h>
+#include <nanobind/nanobind.h>
 
 // declare modules
-void init_c_positionaloffsets(pybind11::module& m); // c_positionaloffsets.cpp
-void init_c_geolocation(pybind11::module& m);       // c_geolocation.cpp
-void init_c_geolocationlatlon(pybind11::module& m); // c_geolocationlatlon.cpp
-void init_c_geolocationutm(pybind11::module& m);    // c_geolocationutm.cpp
-void init_c_geolocationlocal(pybind11::module& m);  // c_geolocationlocal.cpp
-void init_c_sensordata(pybind11::module& m);        // c_sensordata.cpp
-void init_c_sensordatalatlon(pybind11::module& m);  // c_sensordatalatlon.cpp
-void init_c_sensordatautm(pybind11::module& m);     // c_sensordatautm.cpp
-void init_c_sensordatalocal(pybind11::module& m);   // c_sensordatalocal.cpp
+void init_c_positionaloffsets(nanobind::module_& m); // c_positionaloffsets.cpp
+void init_c_geolocation(nanobind::module_& m);       // c_geolocation.cpp
+void init_c_geolocationlatlon(nanobind::module_& m); // c_geolocationlatlon.cpp
+void init_c_geolocationutm(nanobind::module_& m);    // c_geolocationutm.cpp
+void init_c_geolocationlocal(nanobind::module_& m);  // c_geolocationlocal.cpp
+void init_c_sensordata(nanobind::module_& m);        // c_sensordata.cpp
+void init_c_sensordatalatlon(nanobind::module_& m);  // c_sensordatalatlon.cpp
+void init_c_sensordatautm(nanobind::module_& m);     // c_sensordatautm.cpp
+void init_c_sensordatalocal(nanobind::module_& m);   // c_sensordatalocal.cpp
 
-void init_m_datastructures(pybind11::module& m)
+void init_m_datastructures(nanobind::module_& m)
 {
-    pybind11::module m_datastructures = m.def_submodule("datastructures");
+    nanobind::module_ m_datastructures = m.def_submodule("datastructures");
 
     m_datastructures.doc() = "Submodule that contains datastructures that store navigation "
                              "data or navigation sensor input";
@@ -36,20 +35,20 @@ void init_m_datastructures(pybind11::module& m)
 
     using namespace themachinethatgoesping::navigation::datastructures;
 
-    // pybind11::implicitly_convertible<GeolocationUTM, GeolocationLatLon>();
-    // pybind11::implicitly_convertible<GeolocationLatLon, GeolocationUTM>();
-    pybind11::implicitly_convertible<GeolocationUTM, GeolocationLocal>();
-    pybind11::implicitly_convertible<GeolocationLatLon, Geolocation>();
-    pybind11::implicitly_convertible<GeolocationLocal, Geolocation>();
-    pybind11::implicitly_convertible<GeolocationUTM, Geolocation>();
+    // nanobind::implicitly_convertible<GeolocationUTM, GeolocationLatLon>();
+    // nanobind::implicitly_convertible<GeolocationLatLon, GeolocationUTM>();
+    nanobind::implicitly_convertible<GeolocationUTM, GeolocationLocal>();
+    nanobind::implicitly_convertible<GeolocationLatLon, Geolocation>();
+    nanobind::implicitly_convertible<GeolocationLocal, Geolocation>();
+    nanobind::implicitly_convertible<GeolocationUTM, Geolocation>();
 
-    // pybind11::implicitly_convertible<SensordataUTM, SensordataLatLon>();
-    // pybind11::implicitly_convertible<SensordataLatLon, SensordataUTM>();
-    pybind11::implicitly_convertible<SensordataUTM,
+    // nanobind::implicitly_convertible<SensordataUTM, SensordataLatLon>();
+    // nanobind::implicitly_convertible<SensordataLatLon, SensordataUTM>();
+    nanobind::implicitly_convertible<SensordataUTM,
                                      SensordataLocal>(); // this does not work anymore since
                                                          // Sensordata is derived from
                                                          // SensordataLocal
-    pybind11::implicitly_convertible<SensordataUTM, Sensordata>();
-    pybind11::implicitly_convertible<SensordataLatLon, Sensordata>();
-    pybind11::implicitly_convertible<SensordataLocal, Sensordata>();
+    nanobind::implicitly_convertible<SensordataUTM, Sensordata>();
+    nanobind::implicitly_convertible<SensordataLatLon, Sensordata>();
+    nanobind::implicitly_convertible<SensordataLocal, Sensordata>();
 }

@@ -7,55 +7,56 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::datastructures;
 
 #define DOC_PositionalOffsets(ARG)                                                                 \
     DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets, ARG)
 
-void init_c_positionaloffsets(py::module& m)
+void init_c_positionaloffsets(nb::module_& m)
 {
 
-    py::classh<PositionalOffsets>(
+    nb::class_<PositionalOffsets>(
         m,
         "PositionalOffsets",
         DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets))
-        .def(py::init<std::string, double, double, double, double, double, double>(),
+        .def(nb::init<std::string, double, double, double, double, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
                  PositionalOffsets,
                  PositionalOffsets_2),
-             py::arg("name")  = "",
-             py::arg("x")     = 0,
-             py::arg("y")     = 0,
-             py::arg("z")     = 0,
-             py::arg("yaw")   = 0,
-             py::arg("pitch") = 0,
-             py::arg("roll")  = 0)
+             nb::arg("name")  = "",
+             nb::arg("x")     = 0,
+             nb::arg("y")     = 0,
+             nb::arg("z")     = 0,
+             nb::arg("yaw")   = 0,
+             nb::arg("pitch") = 0,
+             nb::arg("roll")  = 0)
         .def_static("from_txrx",
                     &PositionalOffsets::from_txrx,
                     DOC_PositionalOffsets(from_txrx),
-                    py::arg("tx"),
-                    py::arg("rx"),
-                    py::arg("name"))
+                    nb::arg("tx"),
+                    nb::arg("rx"),
+                    nb::arg("name"))
 
         .def("__eq__",
              &PositionalOffsets::operator==,
              DOC_PositionalOffsets(operator_eq),
-             py::arg("other"))
-        .def_readwrite("name", &PositionalOffsets::name, DOC_PositionalOffsets(name))
-        .def_readwrite("x", &PositionalOffsets::x, DOC_PositionalOffsets(x))
-        .def_readwrite("y", &PositionalOffsets::y, DOC_PositionalOffsets(y))
-        .def_readwrite("z", &PositionalOffsets::z, DOC_PositionalOffsets(z))
-        .def_readwrite("yaw", &PositionalOffsets::yaw, DOC_PositionalOffsets(yaw))
-        .def_readwrite("pitch", &PositionalOffsets::pitch, DOC_PositionalOffsets(pitch))
-        .def_readwrite("roll", &PositionalOffsets::roll, DOC_PositionalOffsets(roll))
+             nb::arg("other"))
+        .def_rw("name", &PositionalOffsets::name, DOC_PositionalOffsets(name))
+        .def_rw("x", &PositionalOffsets::x, DOC_PositionalOffsets(x))
+        .def_rw("y", &PositionalOffsets::y, DOC_PositionalOffsets(y))
+        .def_rw("z", &PositionalOffsets::z, DOC_PositionalOffsets(z))
+        .def_rw("yaw", &PositionalOffsets::yaw, DOC_PositionalOffsets(yaw))
+        .def_rw("pitch", &PositionalOffsets::pitch, DOC_PositionalOffsets(pitch))
+        .def_rw("roll", &PositionalOffsets::roll, DOC_PositionalOffsets(roll))
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(PositionalOffsets)
         // default binary functions

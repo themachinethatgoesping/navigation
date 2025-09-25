@@ -7,23 +7,24 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::nmea_0183;
 
-void init_c_nmea_gll(py::module& m)
+void init_c_nmea_gll(nb::module_& m)
 {
 
-    py::classh<NMEA_GLL, NMEA_Base>(
+    nb::class_<NMEA_GLL, NMEA_Base>(
         m, "NMEA_GLL", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GLL))
-        .def(py::init<NMEA_Base, bool>(),
+        .def(nb::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GLL, NMEA_GLL),
-             py::arg("nmea_base"),
-             py::arg("check") = true)
+             nb::arg("nmea_base"),
+             nb::arg("check") = true)
 
         // GLL attributes
         .def("get_latitude",

@@ -7,23 +7,24 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::nmea_0183;
 
-void init_c_nmea_zda(py::module& m)
+void init_c_nmea_zda(nb::module_& m)
 {
 
-    py::classh<NMEA_ZDA, NMEA_Base>(
+    nb::class_<NMEA_ZDA, NMEA_Base>(
         m, "NMEA_ZDA", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_ZDA))
-        .def(py::init<NMEA_Base, bool>(),
+        .def(nb::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_ZDA, NMEA_ZDA),
-             py::arg("nmea_base"),
-             py::arg("check") = true)
+             nb::arg("nmea_base"),
+             nb::arg("check") = true)
 
         // ZDA attributes
         .def("get_utc_time_string",
@@ -52,7 +53,7 @@ void init_c_nmea_zda(py::module& m)
         .def("to_date_string",
              &NMEA_ZDA::to_date_string,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_ZDA, to_date_string),
-             py::arg("format") = "%z__%d-%m-%Y__%H:%M:%S")
+             nb::arg("format") = "%z__%d-%m-%Y__%H:%M:%S")
 
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_ZDA)

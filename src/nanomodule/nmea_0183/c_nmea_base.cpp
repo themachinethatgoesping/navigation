@@ -7,27 +7,28 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::nmea_0183;
 
-void init_c_nmea_base(py::module& m)
+void init_c_nmea_base(nb::module_& m)
 {
 
-    py::classh<NMEA_Base>(
+    nb::class_<NMEA_Base>(
         m, "NMEA_Base", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base))
-        .def(py::init<>(), DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, NMEA_Base))
-        .def(py::init<std::string>(),
+        .def(nb::init<>(), DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, NMEA_Base))
+        .def(nb::init<std::string>(),
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, NMEA_Base_2),
-             py::arg("sentence"))
+             nb::arg("sentence"))
         .def("__eq__",
              &NMEA_Base::operator==,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, operator_eq),
-             py::arg("other"))
+             nb::arg("other"))
         .def("get_sentence_type",
              &NMEA_Base::get_sentence_type,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_sentence_type))
@@ -45,15 +46,15 @@ void init_c_nmea_base(py::module& m)
         .def("get_field",
              &NMEA_Base::get_field,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field),
-             py::arg("index"))
+             nb::arg("index"))
         .def("get_field_as_int",
              &NMEA_Base::get_field_as_int,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_int),
-             py::arg("index"))
+             nb::arg("index"))
         .def("get_field_as_floattype",
              &NMEA_Base::get_field_as_floattype<double>,
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_Base, get_field_as_floattype),
-             py::arg("index"))
+             nb::arg("index"))
 
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(NMEA_Base)

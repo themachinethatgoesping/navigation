@@ -7,48 +7,49 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::datastructures;
 
 #define DOC_GeolocationUTM(ARG)                                                                    \
     DOC(themachinethatgoesping, navigation, datastructures, GeolocationUTM, ARG)
 
-void init_c_geolocationutm(py::module& m)
+void init_c_geolocationutm(nb::module_& m)
 {
-    py::classh<GeolocationUTM, GeolocationLocal>(
+    nb::class_<GeolocationUTM, GeolocationLocal>(
         m,
         "GeolocationUTM",
         DOC(themachinethatgoesping, navigation, datastructures, GeolocationUTM))
-        .def(py::init<const GeolocationLocal&, int, bool>(),
+        .def(nb::init<const GeolocationLocal&, int, bool>(),
              DOC_GeolocationUTM(GeolocationUTM_2),
-             py::arg("geolocationlocal"),
-             py::arg("utm_zone"),
-             py::arg("northern_hemisphere"))
-        .def(py::init<const GeolocationLatLon&, int>(),
+             nb::arg("geolocationlocal"),
+             nb::arg("utm_zone"),
+             nb::arg("northern_hemisphere"))
+        .def(nb::init<const GeolocationLatLon&, int>(),
              DOC_GeolocationUTM(GeolocationUTM_3),
-             py::arg("geolocationlatlon"),
-             py::arg("setzone") = -1)
-        .def(py::init<double, double, int, bool, double, double, double, double>(),
+             nb::arg("geolocationlatlon"),
+             nb::arg("setzone") = -1)
+        .def(nb::init<double, double, int, bool, double, double, double, double>(),
              DOC_GeolocationUTM(GeolocationUTM_4),
-             py::arg("northing")                = 0,
-             py::arg("easting")                 = 0,
-             py::arg("utm_zone")                = 0,
-             py::arg("northern_hemisphere") = true,
-             py::arg("z")                       = 0,
-             py::arg("yaw")                     = 0,
-             py::arg("pitch")                   = 0,
-             py::arg("roll")                    = 0)
+             nb::arg("northing")                = 0,
+             nb::arg("easting")                 = 0,
+             nb::arg("utm_zone")                = 0,
+             nb::arg("northern_hemisphere") = true,
+             nb::arg("z")                       = 0,
+             nb::arg("yaw")                     = 0,
+             nb::arg("pitch")                   = 0,
+             nb::arg("roll")                    = 0)
         .def("__eq__",
              &GeolocationUTM::operator==,
              DOC_GeolocationUTM(operator_eq),
-             py::arg("other"))
-        .def_readwrite("utm_zone", &GeolocationUTM::utm_zone, DOC_GeolocationUTM(utm_zone))
-        .def_readwrite("northern_hemisphere",
+             nb::arg("other"))
+        .def_rw("utm_zone", &GeolocationUTM::utm_zone, DOC_GeolocationUTM(utm_zone))
+        .def_rw("northern_hemisphere",
                        &GeolocationUTM::northern_hemisphere,
                        DOC_GeolocationUTM(northern_hemisphere))
         // default copy functions

@@ -7,23 +7,24 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::nmea_0183;
 
-void init_c_nmea_vlw(py::module& m)
+void init_c_nmea_vlw(nb::module_& m)
 {
 
-    py::classh<NMEA_VLW, NMEA_Base>(
+    nb::class_<NMEA_VLW, NMEA_Base>(
         m, "NMEA_VLW", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_VLW))
-        .def(py::init<NMEA_Base, bool>(),
+        .def(nb::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_VLW, NMEA_VLW),
-             py::arg("nmea_base"),
-             py::arg("check") = true)
+             nb::arg("nmea_base"),
+             nb::arg("check") = true)
 
         // VLW attributes
         .def("get_total_water_distance_nautical_miles",

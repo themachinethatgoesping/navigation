@@ -5,7 +5,6 @@
 // automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
 
 // -- c++ library headers
-#include <themachinethatgoesping/tools_nanobind/enumhelper.hpp>
 
 #include <themachinethatgoesping/navigation/datastructures.hpp>
 #include <themachinethatgoesping/navigation/navtools.hpp>
@@ -159,24 +158,6 @@ void init_m_navtools(nb::module_& m)
     auto m_navtools =
         m.def_submodule("navtools", "Convenient functions for converting latlon and utm strings.");
 
-    auto pyenum_latlon =
-        nb::enum_<t_latlon_format>(
-            m_navtools,
-            "t_latlon_format",
-            DOC(themachinethatgoesping, navigation, navtools, t_latlon_format))
-            .value("degrees",
-                   t_latlon_format::degrees,
-                   DOC(themachinethatgoesping, navigation, navtools, t_latlon_format, degrees))
-            .value("minutes",
-                   t_latlon_format::minutes,
-                   DOC(themachinethatgoesping, navigation, navtools, t_latlon_format, minutes))
-            .value("seconds",
-                   t_latlon_format::seconds,
-                   DOC(themachinethatgoesping, navigation, navtools, t_latlon_format, seconds))
-        //
-        ;
-
-    tools::nanobind_helper::make_option_class<o_latlon_format>(m_navtools, "o_latlon_format");
 
     // //----- latitude_to_string -----
     m_navtools.def("latitude_to_string",

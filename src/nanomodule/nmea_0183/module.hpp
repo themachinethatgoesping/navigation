@@ -5,28 +5,27 @@
 
 
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
-#include <pybind11/iostream.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
 // declare modules
-void init_c_nmea_base(pybind11::module& m);    // c_nmea_base.cpp
-void init_c_nmea_zda(pybind11::module& m);     // c_nmea_zda.cpp
-void init_c_nmea_vlw(pybind11::module& m);     // c_nmea_vlw.cpp
-void init_c_nmea_vtg(pybind11::module& m);     // c_nmea_vtg.cpp
-void init_c_nmea_vhw(pybind11::module& m);     // c_nmea_vhw.cpp
-void init_c_nmea_rmc(pybind11::module& m);     // c_nmea_rmc.cpp
-void init_c_nmea_hdt(pybind11::module& m);     // c_nmea_hdt.cpp
-void init_c_nmea_gll(pybind11::module& m);     // c_nmea_gll.cpp
-void init_c_nmea_gga(pybind11::module& m);     // c_nmea_gga.cpp
-void init_c_nmea_gst(pybind11::module& m);     // c_nmea_gst.cpp
-void init_c_nmea_unknown(pybind11::module& m); // c_nmea_unknown.cpp
+void init_c_nmea_base(nanobind::module_& m);    // c_nmea_base.cpp
+void init_c_nmea_zda(nanobind::module_& m);     // c_nmea_zda.cpp
+void init_c_nmea_vlw(nanobind::module_& m);     // c_nmea_vlw.cpp
+void init_c_nmea_vtg(nanobind::module_& m);     // c_nmea_vtg.cpp
+void init_c_nmea_vhw(nanobind::module_& m);     // c_nmea_vhw.cpp
+void init_c_nmea_rmc(nanobind::module_& m);     // c_nmea_rmc.cpp
+void init_c_nmea_hdt(nanobind::module_& m);     // c_nmea_hdt.cpp
+void init_c_nmea_gll(nanobind::module_& m);     // c_nmea_gll.cpp
+void init_c_nmea_gga(nanobind::module_& m);     // c_nmea_gga.cpp
+void init_c_nmea_gst(nanobind::module_& m);     // c_nmea_gst.cpp
+void init_c_nmea_unknown(nanobind::module_& m); // c_nmea_unknown.cpp
 
-void init_m_nmea_0183(pybind11::module& m)
+void init_m_nmea_0183(nanobind::module_& m)
 {
-    namespace py = pybind11;
+    namespace nb = nanobind;
 
-    py::module m_nmea = m.def_submodule("nmea_0183");
+    nb::module_ m_nmea = m.def_submodule("nmea_0183");
 
     m_nmea.doc() = "Submodule that contains nmea 0183 datastructures";
 
@@ -44,19 +43,19 @@ void init_m_nmea_0183(pybind11::module& m)
 
     m_nmea.def(
         "decode",
-        py::overload_cast<std::string>(themachinethatgoesping::navigation::nmea_0183::decode),
+        nb::overload_cast<std::string>(themachinethatgoesping::navigation::nmea_0183::decode),
         DOC(themachinethatgoesping, navigation, nmea_0183, decode),
-        py::arg("nmea_sentence"));
+        nb::arg("nmea_sentence"));
 
     using namespace themachinethatgoesping::navigation::nmea_0183;
 
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_ZDA>();
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_VLW>();
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_VTG>();
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_VHW>();
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_RMC>();
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_HDT>();
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_GLL>();
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_GGA>();
-    // pybind11::implicitly_convertible<NMEA_Base, NMEA_Unknown>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_ZDA>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_VLW>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_VTG>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_VHW>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_RMC>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_HDT>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_GLL>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_GGA>();
+    // nanobind::implicitly_convertible<NMEA_Base, NMEA_Unknown>();
 }

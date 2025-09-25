@@ -7,59 +7,60 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::datastructures;
 
-void init_c_geolocationlatlon(py::module& m)
+void init_c_geolocationlatlon(nb::module_& m)
 {
 
-    py::classh<GeolocationLatLon, Geolocation>(
+    nb::class_<GeolocationLatLon, Geolocation>(
         m,
         "GeolocationLatLon",
         DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon))
-        .def(py::init<const Geolocation&, double, double>(),
+        .def(nb::init<const Geolocation&, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
                  GeolocationLatLon,
                  GeolocationLatLon_2),
-             py::arg("location"),
-             py::arg("latitude"),
-             py::arg("longitude"))
-        .def(py::init<const GeolocationUTM&>(),
+             nb::arg("location"),
+             nb::arg("latitude"),
+             nb::arg("longitude"))
+        .def(nb::init<const GeolocationUTM&>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
                  GeolocationLatLon,
                  GeolocationLatLon_3),
-             py::arg("geolocationlatlon_utm"))
-        .def(py::init<double, double, double, double, double, double>(),
+             nb::arg("geolocationlatlon_utm"))
+        .def(nb::init<double, double, double, double, double, double>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
                  GeolocationLatLon,
                  GeolocationLatLon_4),
-             py::arg("latitude")  = 0,
-             py::arg("longitude") = 0,
-             py::arg("z")         = 0,
-             py::arg("yaw")       = 0,
-             py::arg("pitch")     = 0,
-             py::arg("roll")      = 0)
+             nb::arg("latitude")  = 0,
+             nb::arg("longitude") = 0,
+             nb::arg("z")         = 0,
+             nb::arg("yaw")       = 0,
+             nb::arg("pitch")     = 0,
+             nb::arg("roll")      = 0)
         .def(
             "__eq__",
             &GeolocationLatLon::operator==,
             DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon, operator_eq),
-            py::arg("other"))
-        .def_readwrite(
+            nb::arg("other"))
+        .def_rw(
             "latitude",
             &GeolocationLatLon::latitude,
             DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon, latitude))
-        .def_readwrite(
+        .def_rw(
             "longitude",
             &GeolocationLatLon::longitude,
             DOC(themachinethatgoesping, navigation, datastructures, GeolocationLatLon, longitude))

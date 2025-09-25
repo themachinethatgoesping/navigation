@@ -7,48 +7,49 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::datastructures;
 
-void init_c_geolocation(py::module& m)
+void init_c_geolocation(nb::module_& m)
 {
 
-    py::classh<Geolocation>(
+    nb::class_<Geolocation>(
         m, "Geolocation", DOC(themachinethatgoesping, navigation, datastructures, Geolocation))
-        .def(py::init<GeolocationLatLon>(),
+        .def(nb::init<GeolocationLatLon>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
-             py::arg("geolocation_latlon"))
-        .def(py::init<GeolocationLocal>(),
+             nb::arg("geolocation_latlon"))
+        .def(nb::init<GeolocationLocal>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
-             py::arg("geolocation_local"))
-        .def(py::init<GeolocationUTM>(),
+             nb::arg("geolocation_local"))
+        .def(nb::init<GeolocationUTM>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
-             py::arg("geolocation_utm"))
-        .def(py::init<double, double, double, double>(),
+             nb::arg("geolocation_utm"))
+        .def(nb::init<double, double, double, double>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation_2),
-             py::arg("z")     = 0,
-             py::arg("yaw")   = 0,
-             py::arg("pitch") = 0,
-             py::arg("roll")  = 0)
+             nb::arg("z")     = 0,
+             nb::arg("yaw")   = 0,
+             nb::arg("pitch") = 0,
+             nb::arg("roll")  = 0)
         .def("__eq__",
              &Geolocation::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, operator_eq),
-             py::arg("other"))
-        .def_readwrite("z",
+             nb::arg("other"))
+        .def_rw("z",
                        &Geolocation::z,
                        DOC(themachinethatgoesping, navigation, datastructures, Geolocation, z))
-        .def_readwrite("yaw",
+        .def_rw("yaw",
                        &Geolocation::yaw,
                        DOC(themachinethatgoesping, navigation, datastructures, Geolocation, yaw))
-        .def_readwrite("pitch",
+        .def_rw("pitch",
                        &Geolocation::pitch,
                        DOC(themachinethatgoesping, navigation, datastructures, Geolocation, pitch))
-        .def_readwrite("roll",
+        .def_rw("roll",
                        &Geolocation::roll,
                        DOC(themachinethatgoesping, navigation, datastructures, Geolocation, roll))
         // default copy functions

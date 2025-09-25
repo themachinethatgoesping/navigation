@@ -7,23 +7,24 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::nmea_0183;
 
-void init_c_nmea_gga(py::module& m)
+void init_c_nmea_gga(nb::module_& m)
 {
 
-    py::classh<NMEA_GGA, NMEA_Base>(
+    nb::class_<NMEA_GGA, NMEA_Base>(
         m, "NMEA_GGA", DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GGA))
-        .def(py::init<NMEA_Base, bool>(),
+        .def(nb::init<NMEA_Base, bool>(),
              DOC(themachinethatgoesping, navigation, nmea_0183, NMEA_GGA, NMEA_GGA),
-             py::arg("nmea_base"),
-             py::arg("check") = true)
+             nb::arg("nmea_base"),
+             nb::arg("check") = true)
 
         // GGA attributes
         .def("get_utc_time_string",

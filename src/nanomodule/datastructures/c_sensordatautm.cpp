@@ -7,59 +7,60 @@
 
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include <themachinethatgoesping/tools_pybind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
 
-// -- include pybind11 headers
-#include <pybind11/stl.h>
+// -- include nanobind headers
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/string.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::datastructures;
 
-void init_c_sensordatautm(py::module& m)
+void init_c_sensordatautm(nb::module_& m)
 {
 
-    py::classh<SensordataUTM, SensordataLocal>(
+    nb::class_<SensordataUTM, SensordataLocal>(
         m, "SensordataUTM", DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM))
         .def(
-            py::init<const Sensordata&, double, double, int, bool>(),
+            nb::init<const Sensordata&, double, double, int, bool>(),
             DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM, SensordataUTM_2),
-            py::arg("sensordatalatlon"),
-            py::arg("northing"),
-            py::arg("easting"),
-            py::arg("utm_zone"),
-            py::arg("northern_hemisphere"))
+            nb::arg("sensordatalatlon"),
+            nb::arg("northing"),
+            nb::arg("easting"),
+            nb::arg("utm_zone"),
+            nb::arg("northern_hemisphere"))
         .def(
-            py::init<const SensordataLocal&, int, bool>(),
+            nb::init<const SensordataLocal&, int, bool>(),
             DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM, SensordataUTM_3),
-            py::arg("sensordata_local"),
-            py::arg("utm_zone"),
-            py::arg("northern_hemisphere"))
+            nb::arg("sensordata_local"),
+            nb::arg("utm_zone"),
+            nb::arg("northern_hemisphere"))
         .def(
-            py::init<const SensordataLatLon&, int>(),
+            nb::init<const SensordataLatLon&, int>(),
             DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM, SensordataUTM_4),
-            py::arg("sensordatalatlon"),
-            py::arg("setutm_zone") = -1)
+            nb::arg("sensordatalatlon"),
+            nb::arg("setutm_zone") = -1)
         .def(
-            py::init<double, double, int, bool, double, double, double, double, double>(),
+            nb::init<double, double, int, bool, double, double, double, double, double>(),
             DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM, SensordataUTM_5),
-            py::arg("northing")                = 0,
-            py::arg("easting")                 = 0,
-            py::arg("utm_zone")                = 0,
-            py::arg("northern_hemisphere") = true,
-            py::arg("depth")                   = 0,
-            py::arg("heave")                   = 0,
-            py::arg("heading")                 = 0,
-            py::arg("pitch")                   = 0,
-            py::arg("roll")                    = 0)
+            nb::arg("northing")                = 0,
+            nb::arg("easting")                 = 0,
+            nb::arg("utm_zone")                = 0,
+            nb::arg("northern_hemisphere") = true,
+            nb::arg("depth")                   = 0,
+            nb::arg("heave")                   = 0,
+            nb::arg("heading")                 = 0,
+            nb::arg("pitch")                   = 0,
+            nb::arg("roll")                    = 0)
         .def("__eq__",
              &SensordataUTM::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM, operator_eq),
-             py::arg("other"))
-        .def_readwrite(
+             nb::arg("other"))
+        .def_rw(
             "utm_zone",
             &SensordataUTM::utm_zone,
             DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM, utm_zone))
-        .def_readwrite("northern_hemisphere",
+        .def_rw("northern_hemisphere",
                        &SensordataUTM::northern_hemisphere,
                        DOC(themachinethatgoesping,
                            navigation,
@@ -71,13 +72,13 @@ void init_c_sensordatautm(py::module& m)
             "to_sensordata",
             &SensordataUTM::to_sensordata,
             DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM, to_sensordata),
-            py::arg("sensordata_utm"))
+            nb::arg("sensordata_utm"))
         .def_static(
             "from_sensordata",
             &SensordataUTM::from_sensordata,
             DOC(themachinethatgoesping, navigation, datastructures, SensordataUTM, from_sensordata),
-            py::arg("sensordatalatlon"),
-            py::arg("setutm_zone") = -1)
+            nb::arg("sensordatalatlon"),
+            nb::arg("setutm_zone") = -1)
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(SensordataUTM)
         // default binary functions
