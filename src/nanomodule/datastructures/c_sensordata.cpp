@@ -27,13 +27,13 @@ void init_c_sensordata(nb::module_& m)
              DOC(themachinethatgoesping, navigation, datastructures, Sensordata, Sensordata))
         .def(nb::init<SensordataUTM>(),
              DOC(themachinethatgoesping, navigation, datastructures, Sensordata, Sensordata))
-        .def(nb::init<double, double, double, double, double>(),
+        .def(nb::init<float, float, float, float, float>(),
              DOC(themachinethatgoesping, navigation, datastructures, Sensordata, Sensordata_2),
-             nb::arg("depth")   = 0,
-             nb::arg("heave")   = 0,
-             nb::arg("heading") = 0,
-             nb::arg("pitch")   = 0,
-             nb::arg("roll")    = 0)
+             nb::arg("depth")   = 0.0f,
+             nb::arg("heave")   = 0.0f,
+             nb::arg("heading") = 0.0f,
+             nb::arg("pitch")   = 0.0f,
+             nb::arg("roll")    = 0.0f)
         .def("__eq__",
              &Sensordata::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, Sensordata, operator_eq),

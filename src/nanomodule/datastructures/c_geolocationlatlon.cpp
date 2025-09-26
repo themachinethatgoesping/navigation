@@ -39,7 +39,7 @@ void init_c_geolocationlatlon(nb::module_& m)
                  GeolocationLatLon,
                  GeolocationLatLon_3),
              nb::arg("geolocationlatlon_utm"))
-        .def(nb::init<double, double, double, double, double, double>(),
+    .def(nb::init<double, double, float, float, float, float>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
@@ -47,10 +47,10 @@ void init_c_geolocationlatlon(nb::module_& m)
                  GeolocationLatLon_4),
              nb::arg("latitude")  = 0,
              nb::arg("longitude") = 0,
-             nb::arg("z")         = 0,
-             nb::arg("yaw")       = 0,
-             nb::arg("pitch")     = 0,
-             nb::arg("roll")      = 0)
+             nb::arg("z")        = 0.0f,
+             nb::arg("yaw")      = 0.0f,
+             nb::arg("pitch")    = 0.0f,
+             nb::arg("roll")     = 0.0f)
         .def(
             "__eq__",
             &GeolocationLatLon::operator==,

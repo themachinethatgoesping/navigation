@@ -39,7 +39,7 @@ void init_c_sensordatalatlon(nb::module_& m)
                  SensordataLatLon,
                  SensordataLatLon_3),
              nb::arg("sensordata_utm"))
-        .def(nb::init<double, double, double, double, double, double, double>(),
+    .def(nb::init<double, double, float, float, float, float, float>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
@@ -47,11 +47,11 @@ void init_c_sensordatalatlon(nb::module_& m)
                  SensordataLatLon_4),
              nb::arg("latitude")  = 0,
              nb::arg("longitude") = 0,
-             nb::arg("depth")     = 0,
-             nb::arg("heave")     = 0,
-             nb::arg("heading")   = 0,
-             nb::arg("pitch")     = 0,
-             nb::arg("roll")      = 0)
+             nb::arg("depth")     = 0.0f,
+             nb::arg("heave")     = 0.0f,
+             nb::arg("heading")   = 0.0f,
+             nb::arg("pitch")     = 0.0f,
+             nb::arg("roll")      = 0.0f)
         .def("__eq__",
              &SensordataLatLon::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, SensordataLatLon, operator_eq),

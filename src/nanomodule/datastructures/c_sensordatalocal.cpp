@@ -39,7 +39,7 @@ void init_c_sensordatalocal(nb::module_& m)
              nb::arg("sensordata"),
              nb::arg("northing"),
              nb::arg("easting"))
-        .def(nb::init<double, double, double, double, double, double, double>(),
+    .def(nb::init<double, double, float, float, float, float, float>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
@@ -47,11 +47,11 @@ void init_c_sensordatalocal(nb::module_& m)
                  SensordataLocal_3),
              nb::arg("northing") = 0,
              nb::arg("easting")  = 0,
-             nb::arg("depth")    = 0,
-             nb::arg("heave")    = 0,
-             nb::arg("heading")  = 0,
-             nb::arg("pitch")    = 0,
-             nb::arg("roll")     = 0)
+             nb::arg("depth")    = 0.0f,
+             nb::arg("heave")    = 0.0f,
+             nb::arg("heading")  = 0.0f,
+             nb::arg("pitch")    = 0.0f,
+             nb::arg("roll")     = 0.0f)
         .def("__eq__",
              &SensordataLocal::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, SensordataLocal, operator_eq),

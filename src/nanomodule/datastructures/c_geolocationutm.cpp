@@ -34,16 +34,16 @@ void init_c_geolocationutm(nb::module_& m)
              DOC_GeolocationUTM(GeolocationUTM_3),
              nb::arg("geolocationlatlon"),
              nb::arg("setzone") = -1)
-        .def(nb::init<double, double, int, bool, double, double, double, double>(),
+            .def(nb::init<double, double, int, bool, float, float, float, float>(),
              DOC_GeolocationUTM(GeolocationUTM_4),
              nb::arg("northing")                = 0,
              nb::arg("easting")                 = 0,
              nb::arg("utm_zone")                = 0,
              nb::arg("northern_hemisphere") = true,
-             nb::arg("z")                       = 0,
-             nb::arg("yaw")                     = 0,
-             nb::arg("pitch")                   = 0,
-             nb::arg("roll")                    = 0)
+                nb::arg("z")                       = 0.0f,
+                nb::arg("yaw")                     = 0.0f,
+                nb::arg("pitch")                   = 0.0f,
+                nb::arg("roll")                    = 0.0f)
         .def("__eq__",
              &GeolocationUTM::operator==,
              DOC_GeolocationUTM(operator_eq),
