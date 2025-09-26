@@ -262,5 +262,4 @@ void init_m_navtools(nb::module_& m)
     create_distance_functions<datastructures::GeolocationLatLon>(m_navtools);
     create_distance_functions<datastructures::SensordataLatLon>(m_navtools);
     create_distance_functions<std::pair<double, double>>(m_navtools);
-    create_distance_functions<std::pair<float, float>>(m_navtools);
 }
