@@ -154,7 +154,6 @@ void create_distance_functions(nb::module_& m_navtools)
 
 void init_m_navtools(nb::module_& m)
 {
-
     auto m_navtools =
         m.def_submodule("navtools", "Convenient functions for converting latlon and utm strings.");
 
