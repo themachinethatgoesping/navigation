@@ -37,13 +37,13 @@ void create_distance_functions(nb::module_& m_navtools)
                    nb::arg("lon2"));
 
     m_navtools.def("compute_latlon_distances_m",
-                   &compute_latlon_distances_m<xt::xtensor<double, 1>, xt::xtensor<T_float, 1>>,
+                   &compute_latlon_distances_m<std::vector<double>, xt::xtensor<T_float, 1>>,
                    DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
                    nb::arg("latitudes"),
                    nb::arg("longitudes"));
 
     m_navtools.def("cumulative_latlon_distances_m",
-                   &cumulative_latlon_distances_m<xt::xtensor<double, 1>, xt::xtensor<T_float, 1>>,
+                   &cumulative_latlon_distances_m<std::vector<double>, xt::xtensor<T_float, 1>>,
                    DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
                    nb::arg("latitudes"),
                    nb::arg("longitudes"));
@@ -59,12 +59,12 @@ void create_distance_functions(nb::module_& m_navtools)
                    nb::arg("geolocation_latlon_2"));
 
     m_navtools.def("compute_latlon_distances_m",
-                   &compute_latlon_distances_m<xt::xtensor<double, 1>, std::vector<T_LLHolder>>,
+                   &compute_latlon_distances_m<std::vector<double>, std::vector<T_LLHolder>>,
                    DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
                    nb::arg("geolocations_latlon"));
 
     m_navtools.def("cumulative_latlon_distances_m",
-                   &cumulative_latlon_distances_m<xt::xtensor<double, 1>, std::vector<T_LLHolder>>,
+                   &cumulative_latlon_distances_m<std::vector<double>, std::vector<T_LLHolder>>,
                    DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
                    nb::arg("geolocations_latlon"));
 }

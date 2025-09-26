@@ -30,12 +30,12 @@ void init_c_geolocation(nb::module_& m)
         .def(nb::init<GeolocationUTM>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
              nb::arg("geolocation_utm"))
-        .def(nb::init<double, double, double, double>(),
+        .def(nb::init<float, float, float, float>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation_2),
-             nb::arg("z")     = 0,
-             nb::arg("yaw")   = 0,
-             nb::arg("pitch") = 0,
-             nb::arg("roll")  = 0)
+             nb::arg("z")     = 0.0f,
+             nb::arg("yaw")   = 0.0f,
+             nb::arg("pitch") = 0.0f,
+             nb::arg("roll")  = 0.0f)
         .def("__eq__",
              &Geolocation::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, operator_eq),
