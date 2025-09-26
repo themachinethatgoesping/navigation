@@ -29,7 +29,7 @@ void init_c_geolocation(py::module& m)
         .def(py::init<GeolocationUTM>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
              py::arg("geolocation_utm"))
-        .def(py::init<double, double, double, double>(),
+        .def(py::init<float, float, float, float>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation_2),
              py::arg("z")     = 0,
              py::arg("yaw")   = 0,

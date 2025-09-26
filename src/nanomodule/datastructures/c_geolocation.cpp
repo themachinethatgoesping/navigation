@@ -30,7 +30,7 @@ void init_c_geolocation(nb::module_& m)
         .def(nb::init<GeolocationUTM>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation),
              nb::arg("geolocation_utm"))
-        .def(nb::init<double, double, double, double>(),
+        .def(nb::init<float, float, float, float>(),
              DOC(themachinethatgoesping, navigation, datastructures, Geolocation, Geolocation_2),
              nb::arg("z")     = 0,
              nb::arg("yaw")   = 0,
