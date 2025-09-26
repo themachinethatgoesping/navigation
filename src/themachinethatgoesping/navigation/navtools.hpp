@@ -182,8 +182,9 @@ inline std::pair<T_container, T_container> utm_to_latlon(const T_container& nort
     // Check if container is xtensor and handle resize accordingly
     if constexpr (std::is_base_of<xt::xcontainer<T_container>, T_container>::value)
     {
-        lat = T_container::from_shape({ static_cast<size_t>(northing.size()) });
-        lon = T_container::from_shape({ static_cast<size_t>(northing.size()) });
+        using index_type = typename T_container::shape_type::value_type;
+        lat              = T_container::from_shape({ static_cast<index_type>(northing.size()) });
+        lon              = T_container::from_shape({ static_cast<index_type>(northing.size()) });
     }
     else
     {
@@ -231,8 +232,9 @@ inline std::pair<T_container_double, T_container_double> utm_to_latlon(
     // Check if container is xtensor and handle resize accordingly
     if constexpr (std::is_base_of<xt::xcontainer<T_container_double>, T_container_double>::value)
     {
-        lat = T_container_double::from_shape({ static_cast<size_t>(northing.size()) });
-        lon = T_container_double::from_shape({ static_cast<size_t>(northing.size()) });
+        using index_type = typename T_container_double::shape_type::value_type;
+        lat = T_container_double::from_shape({ static_cast<index_type>(northing.size()) });
+        lon = T_container_double::from_shape({ static_cast<index_type>(northing.size()) });
     }
     else
     {
@@ -297,8 +299,9 @@ inline std::tuple<T_container_double, T_container_double, int, bool> latlon_to_u
     // Check if container is xtensor and handle resize accordingly
     if constexpr (std::is_base_of<xt::xcontainer<T_container_double>, T_container_double>::value)
     {
-        northing = T_container_double::from_shape({ static_cast<size_t>(lat.size()) });
-        easting  = T_container_double::from_shape({ static_cast<size_t>(lat.size()) });
+        using index_type = typename T_container_double::shape_type::value_type;
+        northing         = T_container_double::from_shape({ static_cast<index_type>(lat.size()) });
+        easting          = T_container_double::from_shape({ static_cast<index_type>(lat.size()) });
     }
     else
     {
@@ -406,7 +409,11 @@ T_return_container compute_latlon_distances_m(const T_float_container& latitudes
     // if the container is an xtensor container, we need to resize it using a tuple
     // else we assume it is a std::vector
     if constexpr (std::is_base_of<xt::xcontainer<T_return_container>, T_return_container>::value)
-        distances = T_return_container::from_shape({ static_cast<size_t>(latitudes.size() - 1) });
+    {
+        using index_type = typename T_return_container::shape_type::value_type;
+        distances =
+            T_return_container::from_shape({ static_cast<index_type>(latitudes.size() - 1) });
+    }
     else
         distances.resize(latitudes.size() - 1);
 
@@ -445,7 +452,11 @@ T_return_container compute_latlon_distances_m(const T_container& geo_locations_l
     // if the container is an xtensor container, we need to resize it using a tuple
     // else we assume it is a std::vector
     if constexpr (std::is_base_of<xt::xcontainer<T_return_container>, T_return_container>::value)
-        distances = T_return_container::from_shape({ static_cast<size_t>(geo_locations_latlon.size() - 1) });
+    {
+        using index_type = typename T_return_container::shape_type::value_type;
+        distances        = T_return_container::from_shape(
+            { static_cast<index_type>(geo_locations_latlon.size() - 1) });
+    }
     else
         distances.resize(geo_locations_latlon.size() - 1);
 
@@ -499,7 +510,10 @@ T_return_container cumulative_latlon_distances_m(const T_float_container& latitu
     // if the container is an xtensor container, we need to resize it using a tuple
     // else we assume it is a std::vector
     if constexpr (std::is_base_of<xt::xcontainer<T_return_container>, T_return_container>::value)
-        distances = T_return_container::from_shape({ static_cast<size_t>(latitudes.size()) });
+    {
+        using index_type = typename T_return_container::shape_type::value_type;
+        distances = T_return_container::from_shape({ static_cast<index_type>(latitudes.size()) });
+    }
     else
         distances.resize(latitudes.size());
 
@@ -541,7 +555,11 @@ T_return_container cumulative_latlon_distances_m(const T_container& geo_location
     // if the container is an xtensor container, we need to resize it using a tuple
     // else we assume it is a std::vector
     if constexpr (std::is_base_of<xt::xcontainer<T_return_container>, T_return_container>::value)
-        distances = T_return_container::from_shape({ static_cast<size_t>(geo_locations_latlon.size()) });
+    {
+        using index_type = typename T_return_container::shape_type::value_type;
+        distances        = T_return_container::from_shape(
+            { static_cast<index_type>(geo_locations_latlon.size()) });
+    }
     else
         distances.resize(geo_locations_latlon.size());
 
