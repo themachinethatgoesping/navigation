@@ -14,10 +14,10 @@
 #include <nanobind/ndarray.h>
 #include <nanobind/stl/pair.h>
 #include <nanobind/stl/string.h>
-#include <nanobind/stl/vector.h>
 #include <nanobind/stl/tuple.h>
+#include <nanobind/stl/vector.h>
 
-#include <themachinethatgoesping/tools_nanobind/nanobind_xtensor.hpp> // Numpy bindings
+#include <themachinethatgoesping/tools_nanobind/pytensor_nanobind.hpp> // Numpy bindings
 // #include <themachinethatgoesping/tools_nanobind/xtensor-python/pytensor.hpp>
 
 namespace nb = nanobind;
@@ -37,13 +37,15 @@ void create_distance_functions(nb::module_& m_navtools)
                    nb::arg("lon2"));
 
     m_navtools.def("compute_latlon_distances_m",
-                   &compute_latlon_distances_m<xt::xtensor<double, 1>, xt::xtensor<T_float, 1>>,
+                   &compute_latlon_distances_m<xt::nanobind::pytensor<double, 1>,
+                                               xt::nanobind::pytensor<T_float, 1>>,
                    DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
                    nb::arg("latitudes"),
                    nb::arg("longitudes"));
 
     m_navtools.def("cumulative_latlon_distances_m",
-                   &cumulative_latlon_distances_m<xt::xtensor<double, 1>, xt::xtensor<T_float, 1>>,
+                   &cumulative_latlon_distances_m<xt::nanobind::pytensor<double, 1>,
+                                                  xt::nanobind::pytensor<T_float, 1>>,
                    DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
                    nb::arg("latitudes"),
                    nb::arg("longitudes"));
@@ -58,15 +60,17 @@ void create_distance_functions(nb::module_& m_navtools)
                    nb::arg("geolocation_latlon_1"),
                    nb::arg("geolocation_latlon_2"));
 
-    m_navtools.def("compute_latlon_distances_m",
-                   &compute_latlon_distances_m<xt::xtensor<double, 1>, std::vector<T_LLHolder>>,
-                   DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
-                   nb::arg("geolocations_latlon"));
+    m_navtools.def(
+        "compute_latlon_distances_m",
+        &compute_latlon_distances_m<xt::nanobind::pytensor<double, 1>, std::vector<T_LLHolder>>,
+        DOC(themachinethatgoesping, navigation, navtools, compute_latlon_distances_m),
+        nb::arg("geolocations_latlon"));
 
-    m_navtools.def("cumulative_latlon_distances_m",
-                   &cumulative_latlon_distances_m<xt::xtensor<double, 1>, std::vector<T_LLHolder>>,
-                   DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
-                   nb::arg("geolocations_latlon"));
+    m_navtools.def(
+        "cumulative_latlon_distances_m",
+        &cumulative_latlon_distances_m<xt::nanobind::pytensor<double, 1>, std::vector<T_LLHolder>>,
+        DOC(themachinethatgoesping, navigation, navtools, cumulative_latlon_distances_m),
+        nb::arg("geolocations_latlon"));
 }
 
 // template<size_t Dim>
@@ -93,7 +97,7 @@ void create_distance_functions(nb::module_& m_navtools)
 
 // template<typename t_value, size_t dim>
 // class NanoTensor
-//     : public xt::xtensor_adaptor<
+//     : public xt::nanobind::pytensor_adaptor<
 //           xt::xbuffer_adaptor<t_value*,
 //                               xt::no_ownership,
 //                               xt::detail::default_allocator_for_ptr_t<t_value*>>,
@@ -102,7 +106,7 @@ void create_distance_functions(nb::module_& m_navtools)
 // {
 //   public:
 //     using base_type =
-//         xt::xtensor_adaptor<xt::xbuffer_adaptor<t_value*,
+//         xt::nanobind::pytensor_adaptor<xt::xbuffer_adaptor<t_value*,
 //                                                 xt::no_ownership,
 //                                                 xt::detail::default_allocator_for_ptr_t<t_value*>>,
 //                             dim,
@@ -156,7 +160,6 @@ void init_m_navtools(nb::module_& m)
 {
     auto m_navtools =
         m.def_submodule("navtools", "Convenient functions for converting latlon and utm strings.");
-
 
     // //----- latitude_to_string -----
     m_navtools.def("latitude_to_string",
@@ -224,11 +227,11 @@ void init_m_navtools(nb::module_& m)
     //----- utm conversion -----
     // TODO: documentation is not updated to include these functions for some reason
     m_navtools.def("utm_to_latlon",
-                   nb::overload_cast<const xt::xtensor<double, 1>&,
-                                     const xt::xtensor<double, 1>&,
+                   nb::overload_cast<const xt::nanobind::pytensor<double, 1>&,
+                                     const xt::nanobind::pytensor<double, 1>&,
                                      int,
                                      bool,
-                                     int>(&utm_to_latlon<xt::xtensor<double, 1>>),
+                                     int>(&utm_to_latlon<xt::nanobind::pytensor<double, 1>>),
                    DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
                    nb::arg("northing"),
                    nb::arg("easting"),
@@ -238,11 +241,12 @@ void init_m_navtools(nb::module_& m)
 
     m_navtools.def(
         "utm_to_latlon",
-        nb::overload_cast<const xt::xtensor<double, 1>&,
-                          const xt::xtensor<double, 1>&,
-                          const xt::xtensor<int, 1>&,
-                          const xt::xtensor<int, 1>&,
-                          int>(&utm_to_latlon<xt::xtensor<double, 1>, xt::xtensor<int, 1>>),
+        nb::overload_cast<const xt::nanobind::pytensor<double, 1>&,
+                          const xt::nanobind::pytensor<double, 1>&,
+                          const xt::nanobind::pytensor<int, 1>&,
+                          const xt::nanobind::pytensor<int, 1>&,
+                          int>(
+            &utm_to_latlon<xt::nanobind::pytensor<double, 1>, xt::nanobind::pytensor<int, 1>>),
         nb::arg("northing"),
         nb::arg("easting"),
         nb::arg("zone"),
@@ -250,7 +254,7 @@ void init_m_navtools(nb::module_& m)
         nb::arg("mp_cores") = 1);
 
     m_navtools.def("latlon_to_utm",
-                   &latlon_to_utm<xt::xtensor<double, 1>>,
+                   &latlon_to_utm<xt::nanobind::pytensor<double, 1>>,
                    // DOC(themachinethatgoesping, navigation, navtools, utm_to_latlon),
                    nb::arg("latitude"),
                    nb::arg("longitude"),
