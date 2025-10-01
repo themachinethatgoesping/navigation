@@ -9,9 +9,9 @@
 project(
     'GeographicLib',
     'cpp',
-    version : '2.5.2',
+    version : '2.6',
     license : 'MIT',
-    default_options : ['cpp_std=c++11'],
+    default_options : ['cpp_std=c++20'],
 )
 
 version = meson.project_version().split('.')
