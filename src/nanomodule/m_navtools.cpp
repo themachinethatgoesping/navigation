@@ -18,7 +18,7 @@
 #include <nanobind/stl/vector.h>
 
 #include <themachinethatgoesping/tools_nanobind/pytensor_nanobind.hpp> // Numpy bindings
-// #include <themachinethatgoesping/tools_nanobind/xtensor-python/pytensor.hpp>
+// #include <themachinethatgoesping/tools_nanobind/themachinethatgoesping/tools_nanobind/pytensor_nanobind.hpp>
 
 namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation::navtools;

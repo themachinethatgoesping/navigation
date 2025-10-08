@@ -18,11 +18,10 @@ Always reference these instructions first and fallback to search or bash command
 - Run C++ tests (takes <1 second):
   - `meson test -C builddir/ --print-errorlogs`
 
-### Python Development (KNOWN LIMITATION)
-- **WARNING**: Python module compilation fails due to GeographicLib static library not being compiled with -fPIC
-- Python tests cannot run: `pytest -v` will fail with "ModuleNotFoundError: No module named 'themachinethatgoesping'"
-- This is a system-level GeographicLib packaging issue, not a code issue
-- C++ functionality works completely - use C++ tests for validation
+### Python Development
+- Always exercise the Python bindings with the **`Ping: copilot`** task. It builds the bindings, installs them, generates docs/stubs, and runs the combined Meson + pytest checks end-to-end.
+- The **`Ping: Build and Test cpp`** task only compiles C++ targets and runs the native tests; it does **not** build or validate the Python wheel.
+- The copilot task can take several minutes because it performs documentation generation, Meson install, and pytest in sequence—plan for the longer turnaround when iterating on binding changes.
 
 ### Timing Expectations
 - **CRITICAL**: meson setup takes ~18 minutes on first run (downloads dependencies). NEVER CANCEL. Set timeout to 30+ minutes.
@@ -34,7 +33,7 @@ Always reference these instructions first and fallback to search or bash command
 ## Validation
 - Always run C++ tests after making changes: `meson test -C builddir/ --print-errorlogs`
 - All 28 C++ tests should pass (navigation, sensor configuration, coordinate transformations, NMEA parsing)
-- Do NOT try to run Python tests - they will fail due to the known GeographicLib linking issue
+- For bindings work, run the `Ping: copilot` task so the full Python pipeline (doc generation, Meson tests with bindings, and pytest) executes successfully.
 - Always test key navigation functions by running the specific test categories:
   - Navigation interpolation: check tests `navigationinterpolatorlatlon` and `navigationinterpolatorlocal`
   - Coordinate transformations: check tests for `geolocation*` and `sensordata*` 
@@ -53,8 +52,8 @@ src/
 │   ├── navtools.hpp                    # Navigation utility functions
 │   └── *interpolator*.hpp              # Navigation data interpolation
 ├── tests/                              # C++ unit tests (Catch2)
-└── pymodule/                           # Python bindings (pybind11) - BROKEN
-python/tests/                           # Python tests - DO NOT USE
+└── pymodule/                           # Python bindings (pybind11)
+python/tests/                           # Python tests exercised via Ping: copilot task
 .github/workflows/ci-linux.yml          # Working CI configuration
 meson.build                             # Main build configuration  
 meson_options.txt                       # Build options
@@ -78,13 +77,13 @@ meson_options.txt                       # Build options
 - **GeographicLib linking errors**: Use `--default-library=static` option
 - **Network timeouts during setup**: Meson downloads dependencies from multiple sources
 - **Long build times**: 17+ minutes is normal for C++ builds with many template-heavy dependencies
-- **Python import errors**: Known issue - Python module doesn't build due to GeographicLib PIC problem
+- **Copilot task failures**: Check each stage (doc generation, Meson install, pytest) in the task output; rerun after addressing the first error reported.
 - **Missing dependencies**: Install via apt-get, don't try to build them manually
 
 ### Development Workflow
 1. Always build and run C++ tests before committing changes
-2. Focus on C++ functionality - Python bindings are not operational
-3. Use existing C++ test patterns in `src/tests/` for new functionality
+2. Use existing C++ test patterns in `src/tests/` for new functionality
+3. When touching bindings, run the `Ping: copilot` task to rebuild/install the module and execute pytest
 4. Test coordinate transformations with the existing sensor configuration tests
 5. Validate NMEA parsing using the datastructures tests
 
