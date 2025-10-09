@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 # -- module name
-module_name = 'navigation'
+module_name = 'navigation_cppy'
         
 # -- sources
 sources = [

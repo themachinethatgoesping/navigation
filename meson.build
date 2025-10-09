@@ -9,7 +9,7 @@ project(
   'cpp',
   license: 'MPL-2.0',
 
-  version: '0.17.7',
+  version: '0.18.0',
   default_options: ['warning_level=0', 'buildtype=release', 'cpp_std=c++20'],
   meson_version: '>=1.8.1' #there is a problem with meson 1.8.0 so just use a higher version
 )
@@ -49,7 +49,7 @@ if get_option('build_pythonmodule').enabled()
   if not tools_pybind_dep.found()
       tools_pybind_dep = subproject('tools').get_variable('tools_pybind_dep')
   endif
-  if not tools_pybind_dep.found()
+  if not tools_nanobind_dep.found()
       tools_nanobind_dep = subproject('tools').get_variable('tools_nanobind_dep')
   endif
 
@@ -68,4 +68,4 @@ endif
 subdir('src')
  
 # add python files
-#subdir('python')
+subdir('python')

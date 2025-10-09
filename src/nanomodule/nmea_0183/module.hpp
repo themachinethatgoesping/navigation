@@ -7,6 +7,7 @@
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/variant.h>
 
 // declare modules
 void init_c_nmea_base(nanobind::module_& m);    // c_nmea_base.cpp
