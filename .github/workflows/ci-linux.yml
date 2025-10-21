@@ -6,42 +6,41 @@ name: linux
 
 on:
   push:
-    branches: [ main ]
-    
+    branches: [main]
+
     paths-ignore:
-      - '.github/workflows/python-package*'
-      - '.github/workflows/cibuildwheels*'
-      - '.github/workflows/rattler*'
-      - '.github/workflows/test_*'
-      - '.github/workflows/ci-mac*'
-      - '.github/workflows/ci-win*'
-      - 'conda.recipe/*'
-      - '*.md'
-      - 'doc/*'
+      - ".github/workflows/python-package*"
+      - ".github/workflows/cibuildwheels*"
+      - ".github/workflows/rattler*"
+      - ".github/workflows/test_*"
+      - ".github/workflows/ci-mac*"
+      - ".github/workflows/ci-win*"
+      - "conda.recipe/*"
+      - "*.md"
+      - "doc/*"
     #paths:
     #  - "**meson.build"
     #  - "**.cpp"
     #  - "**.c"
     #  - "**.h"
   pull_request:
-    branches: [ main ]
-    
+    branches: [main]
+
     paths-ignore:
-      - '.github/workflows/python-package*'
-      - '.github/workflows/cibuildwheels*'
-      - '.github/workflows/rattler*'
-      - '.github/workflows/test_*'
-      - '.github/workflows/ci-mac*'
-      - '.github/workflows/ci-win*'
-      - 'conda.recipe/*'
-      - '*.md'
-      - 'doc/*'
+      - ".github/workflows/python-package*"
+      - ".github/workflows/cibuildwheels*"
+      - ".github/workflows/rattler*"
+      - ".github/workflows/test_*"
+      - ".github/workflows/ci-mac*"
+      - ".github/workflows/ci-win*"
+      - "conda.recipe/*"
+      - "*.md"
+      - "doc/*"
     #paths:
     #  - "**meson.build"
     #  - "**.cpp"
     #  - "**.c"
     #  - "**.h"
-
 
 # make sure that multiple jobs don't run for the same action (new commits cancel old jobs when they are still running)
 # Souce Ralf Gommers (commit to meson-python)
@@ -50,83 +49,88 @@ concurrency:
   cancel-in-progress: true
 
 # env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  #BUILD_TYPE: Release
-  
+# Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+#BUILD_TYPE: Release
+
 jobs:
   linux:
     name: ci on ${{matrix.container}}
     strategy:
       fail-fast: false
       matrix:
-        include:  
-          - { container: 'ghcr.io/themachinethatgoesping/ubuntu-dep:latest',
-              ccache: 'true',
-              pip2: 'pip install -r requirements.txt --break-system-packages' }
-          - { container: 'ubuntu:22.04', 
-              ccache: 'true',
-              pre-dep : 'apt update && apt-get install -y sudo git git-lfs', 
-              dep : 'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential ccache pkg-config cmake python3-pip libboost-all-dev libcurl4-openssl-dev', 
-              pip : 'pip install meson meson-python ninja pytest numpy',
-              pip2: 'pip install -r requirements.txt'}
-          - { container: 'archlinux', 
-              pre-dep : 'pacman -Syu --noconfirm; pacman -Syy sudo git git-lfs --noconfirm', 
-              dep : 'sudo pacman -Syy --noconfirm base-devel ccache pkg-config cmake python-pip boost curl', 
-              pip : 'pip install meson meson-python ninja pytest numpy --break-system-packages',
-              pip2: 'pip install -r requirements.txt --break-system-packages --pre' }
-    
+        include:
+          - {
+              container: "ghcr.io/themachinethatgoesping/ubuntu-dep:latest",
+              ccache: "true",
+              pip2: "pip install -r requirements.txt --break-system-packages",
+            }
+          - {
+              container: "ubuntu:22.04",
+              ccache: "true",
+              pre-dep: "apt update && apt-get install -y sudo git git-lfs",
+              dep: "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential ccache pkg-config cmake python3-pip libboost-all-dev libcurl4-openssl-dev gcc-12 g++-12 && sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 120 --slave /usr/bin/g++ g++ /usr/bin/g++-12 --slave /usr/bin/c++ c++ /usr/bin/g++-12 && sudo update-alternatives --set gcc /usr/bin/gcc-12",
+              pip: "pip install meson meson-python ninja pytest numpy",
+              pip2: "pip install -r requirements.txt",
+            }
+          - {
+              container: "archlinux",
+              pre-dep: "pacman -Syu --noconfirm; pacman -Syy sudo git git-lfs --noconfirm",
+              dep: "sudo pacman -Syy --noconfirm base-devel ccache pkg-config cmake python-pip boost curl",
+              pip: "pip install meson meson-python ninja pytest numpy --break-system-packages",
+              pip2: "pip install -r requirements.txt --break-system-packages --pre",
+            }
+
     runs-on: ubuntu-latest
     container: ${{matrix.container}}
 
     steps:
-    - name: install perquisites
-      if:  ${{matrix.pre-dep}}
-      run: ${{matrix.pre-dep}}
+      - name: install perquisites
+        if: ${{matrix.pre-dep}}
+        run: ${{matrix.pre-dep}}
 
-    - name: checkout main repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        lfs: false
-    
-    - name: ccache
-      if: ${{ matrix.ccache }}
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        key: super-ci-${{ matrix.container }}  # name for the cache
+      - name: checkout main repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: false
 
-    - name: install dependencies (c++)
-      if:  ${{matrix.dep}}
-      run: ${{matrix.dep}}
-      
-    - name: install dependencies (meson & python)
-      if:  ${{matrix.pip}}
-      run: ${{matrix.pip}}
+      - name: ccache
+        if: ${{ matrix.ccache }}
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: super-ci-${{ matrix.container }} # name for the cache
 
-    - name: configure meson
-      run: meson setup builddir -Dunity=on -Dunity_size=9999999 -Dpython.install_env=auto -Dprefix=/usr/;
+      - name: install dependencies (c++)
+        if: ${{matrix.dep}}
+        run: ${{matrix.dep}}
 
-    - name: compile project
-      run: meson compile -C builddir/
+      - name: install dependencies (meson & python)
+        if: ${{matrix.pip}}
+        run: ${{matrix.pip}}
 
-    - name: test (cpp)
-      run: meson test -C builddir/ --print-errorlogs
+      - name: configure meson
+        run: meson setup builddir -Dunity=on -Dunity_size=9999999 -Dpython.install_env=auto -Dprefix=/usr/;
 
-    - name: install project
-      run: meson install -C builddir/
+      - name: compile project
+        run: meson compile -C builddir/
 
-    - name: install pip requirements
-      if:  ${{matrix.pip2}}
-      run: ${{matrix.pip2}}
+      - name: test (cpp)
+        run: meson test -C builddir/ --print-errorlogs
 
-    - name: test (pytest)
-      run: pytest -v
-      
-    - name: 'Upload error log'
-      uses: actions/upload-artifact@v4
-      if: failure()
-      with:
-        name: ${{matrix.container}}_testlog
-        path: builddir/meson-logs/meson-log.txt
-        retention-days: 5
-    
+      - name: install project
+        run: meson install -C builddir/
+
+      - name: install pip requirements
+        if: ${{matrix.pip2}}
+        run: ${{matrix.pip2}}
+
+      - name: test (pytest)
+        run: pytest -v
+
+      - name: "Upload error log"
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: ${{matrix.container}}_testlog
+          path: builddir/meson-logs/meson-log.txt
+          retention-days: 5
