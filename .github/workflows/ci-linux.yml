@@ -63,14 +63,16 @@ jobs:
               container: "ghcr.io/themachinethatgoesping/ubuntu-dep:latest",
               ccache: "true",
               pip2: "pip install -r requirements.txt --break-system-packages",
+              gcc_version: "",
             }
           - {
               container: "ubuntu:22.04",
               ccache: "true",
               pre-dep: "apt update && apt-get install -y sudo git git-lfs",
-              dep: "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential ccache pkg-config cmake python3-pip libboost-all-dev libcurl4-openssl-dev gcc-12 g++-12 && sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 120 --slave /usr/bin/g++ g++ /usr/bin/g++-12 --slave /usr/bin/c++ c++ /usr/bin/g++-12 && sudo update-alternatives --set gcc /usr/bin/gcc-12",
+              dep: "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential ccache pkg-config cmake python3-pip libboost-all-dev libcurl4-openssl-dev",
               pip: "pip install meson meson-python ninja pytest numpy",
               pip2: "pip install -r requirements.txt",
+              gcc_version: "12",
             }
           - {
               container: "archlinux",
@@ -78,6 +80,7 @@ jobs:
               dep: "sudo pacman -Syy --noconfirm base-devel ccache pkg-config cmake python-pip boost curl",
               pip: "pip install meson meson-python ninja pytest numpy --break-system-packages",
               pip2: "pip install -r requirements.txt --break-system-packages --pre",
+              gcc_version: "",
             }
 
     runs-on: ubuntu-latest
@@ -107,6 +110,14 @@ jobs:
       - name: install dependencies (meson & python)
         if: ${{matrix.pip}}
         run: ${{matrix.pip}}
+
+      - name: install gcc toolchain
+        if: ${{ matrix.gcc_version != '' }}
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y gcc-${{ matrix.gcc_version }} g++-${{ matrix.gcc_version }}
+          echo "CC=gcc-${{ matrix.gcc_version }}" >> $GITHUB_ENV
+          echo "CXX=g++-${{ matrix.gcc_version }}" >> $GITHUB_ENV
 
       - name: configure meson
         run: meson setup builddir -Dunity=on -Dunity_size=9999999 -Dpython.install_env=auto -Dprefix=/usr/;
