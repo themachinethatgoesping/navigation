@@ -68,11 +68,11 @@ jobs:
           - {
               container: "ubuntu:22.04",
               ccache: "true",
-              pre-dep: "apt update && apt-get install -y sudo git git-lfs",
+              pre-dep: "apt update && DEBIAN_FRONTEND=noninteractive apt-get install -y sudo git git-lfs software-properties-common && sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update",
               dep: "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential ccache pkg-config cmake python3-pip libboost-all-dev libcurl4-openssl-dev",
               pip: "pip install meson meson-python ninja pytest numpy",
               pip2: "pip install -r requirements.txt",
-              gcc_version: "12",
+              gcc_version: "14",
             }
           - {
               container: "archlinux",
