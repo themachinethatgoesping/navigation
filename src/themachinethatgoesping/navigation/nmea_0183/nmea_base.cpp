@@ -41,7 +41,7 @@ NMEA_Base NMEA_Base::from_stream(std::istream& is)
 void NMEA_Base::to_stream(std::ostream& os) const
 {
     size_t size = this->size();
-    os.write(reinterpret_cast<char*>(&size), sizeof(size));
+    os.write(reinterpret_cast<const char*>(&size), sizeof(size));
     os.write(this->_sentence.data(), this->_sentence.size());
 }
 
