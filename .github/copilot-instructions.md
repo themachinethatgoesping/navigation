@@ -69,7 +69,7 @@ meson_options.txt                       # Build options
 ### Build Configuration
 - Uses Meson build system (not CMake)
 - Automatically downloads ~17 subproject dependencies (fmt, catch2, eigen, boost, etc.)
-- Requires C++20 standard
+- Requires c++23 standard
 - Dependencies: Boost, Eigen3, GeographicLib, OpenMP
 - Supports both static and shared library builds (use static for reliability)
 

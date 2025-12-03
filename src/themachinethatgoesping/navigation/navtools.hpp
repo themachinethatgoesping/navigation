@@ -44,7 +44,7 @@ enum class t_latlon_format
 using o_latlon_format = tools::classhelper::Option<t_latlon_format>;
 
 /**
- * @brief c++20 concept to check if a type has latitude and longitude members
+ * @brief c++23 concept to check if a type has latitude and longitude members
  *
  * @tparam T
  */
