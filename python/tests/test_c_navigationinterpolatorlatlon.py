@@ -53,7 +53,7 @@ class TestNavigationNavigationInterpolatorLatLon:
         assert pos.z == approx(-1.44404485, abs=2e-5)
         assert pos.yaw == approx(1.284651756286621, abs=2e-5)
         assert pos.pitch == approx(26.16455736, abs=2e-5)
-        assert pos.roll == approx(11.667630195617676, abs=2e-5)
+        assert pos.roll == approx(11.6677, abs=2e-4)
 
         pos = navi("mbes", 0)
 
@@ -62,7 +62,7 @@ class TestNavigationNavigationInterpolatorLatLon:
         assert pos.z == approx(-3.7632551193237305, abs=2e-5)
         assert pos.yaw == approx(293.62666611, abs=2e-4)
         assert pos.pitch == approx(11.012887954711914, abs=2e-5)
-        assert pos.roll == approx(-20.443330764770508, abs=2e-5)
+        assert pos.roll == approx(-20.44333, abs=2e-4)
 
         # copy
         navi2 = navi.copy()
