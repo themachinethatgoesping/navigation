@@ -1,4 +1,4 @@
-//sourcehash: 21acc8fa299ce7f1fcfe8f8ebb21bd23400eb8b93e7c0ea15730752fe0232a1a
+//sourcehash: 083f3c786e6a4e6ca862ac78be42bcc6347408d9e25974f23b3e59fb6c109402
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -41,45 +41,53 @@
 #endif
 
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector =
-R"doc(A class to store a vector of GeolocationLatLon elements with
-timestamps.)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector = R"doc(A class to store a vector of GeolocationUTM elements with timestamps.)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_from_stream = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_from_stream = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_latitudes =
-R"doc(Get all latitude values as a vector
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_get_eastings =
+R"doc(Get all easting values as a vector
 Returns:
-    vector of latitude values in degrees)doc";
+    vector of easting values in meters)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_longitudes =
-R"doc(Get all longitude values as a vector
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_get_northern_hemispheres =
+R"doc(Get all hemisphere flags as a vector
 Returns:
-    vector of longitude values in degrees)doc";
+    vector of booleans (true = northern hemisphere))doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_pitch =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_get_northings =
+R"doc(Get all northing values as a vector
+Returns:
+    vector of northing values in meters)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_get_pitch =
 R"doc(Get all pitch values as a vector
 Returns:
     vector of pitch values in degrees)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_roll =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_get_roll =
 R"doc(Get all roll values as a vector
 Returns:
     vector of roll values in degrees)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_yaw =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_get_utm_zones =
+R"doc(Get all UTM zone values as a vector
+Returns:
+    vector of UTM zone numbers)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_get_yaw =
 R"doc(Get all yaw values as a vector
 Returns:
     vector of yaw values in degrees)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_z =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_get_z =
 R"doc(Get all z values (depth) as a vector
 Returns:
     vector of z values in meters (positive downwards))doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_printer = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_printer = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_to_stream = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTMVector_to_stream = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

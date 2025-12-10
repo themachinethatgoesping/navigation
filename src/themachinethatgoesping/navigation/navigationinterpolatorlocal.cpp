@@ -5,6 +5,8 @@
 
 #include "navigationinterpolatorlocal.hpp"
 
+#include <cctype>
+#include <stdexcept>
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 
 namespace themachinethatgoesping {
@@ -97,6 +99,46 @@ datastructures::GeolocationLocal NavigationInterpolatorLocal::compute_target_pos
     return _sensor_configuration.compute_target_position(target_id, get_sensor_data(timestamp));
 }
 
+datastructures::GeolocationLocalVector NavigationInterpolatorLocal::compute_target_position(
+    const std::string&         target_id,
+    const std::vector<double>& timestamps,
+    int                        mp_cores) const
+{
+    datastructures::GeolocationLocalVector result;
+    result.timestamps() = timestamps;
+    result.data().resize(timestamps.size());
+
+    const auto n = static_cast<long>(timestamps.size());
+
+#pragma omp parallel for num_threads(mp_cores)
+    for (long i = 0; i < n; ++i)
+    {
+        result.data()[i] = compute_target_position(target_id, timestamps[i]);
+    }
+
+    return result;
+}
+
+datastructures::GeolocationLocalVector NavigationInterpolatorLocal::compute_target_position(
+    const std::string&            target_id,
+    const xt::xtensor<double, 1>& timestamps,
+    int                           mp_cores) const
+{
+    datastructures::GeolocationLocalVector result;
+    result.timestamps().assign(timestamps.begin(), timestamps.end());
+    result.data().resize(timestamps.size());
+
+    const auto n = static_cast<long>(timestamps.size());
+
+#pragma omp parallel for num_threads(mp_cores)
+    for (long i = 0; i < n; ++i)
+    {
+        result.data()[i] = compute_target_position(target_id, timestamps(i));
+    }
+
+    return result;
+}
+
 datastructures::SensordataLocal NavigationInterpolatorLocal::get_sensor_data(double timestamp) const
 {
     datastructures::SensordataLocal sensor_data;
@@ -123,10 +165,114 @@ datastructures::SensordataLocal NavigationInterpolatorLocal::get_sensor_data(dou
     return sensor_data;
 }
 
+datastructures::SensordataLocalVector NavigationInterpolatorLocal::get_sensor_data(
+    const std::vector<double>& timestamps,
+    int                        mp_cores) const
+{
+    datastructures::SensordataLocalVector result;
+    result.timestamps() = timestamps;
+    result.data().resize(timestamps.size());
+
+    const auto n = static_cast<long>(timestamps.size());
+
+#pragma omp parallel for num_threads(mp_cores)
+    for (long i = 0; i < n; ++i)
+    {
+        result.data()[i] = get_sensor_data(timestamps[i]);
+    }
+
+    return result;
+}
+
+datastructures::SensordataLocalVector NavigationInterpolatorLocal::get_sensor_data(
+    const xt::xtensor<double, 1>& timestamps,
+    int                           mp_cores) const
+{
+    datastructures::SensordataLocalVector result;
+    result.timestamps().assign(timestamps.begin(), timestamps.end());
+    result.data().resize(timestamps.size());
+
+    const auto n = static_cast<long>(timestamps.size());
+
+#pragma omp parallel for num_threads(mp_cores)
+    for (long i = 0; i < n; ++i)
+    {
+        result.data()[i] = get_sensor_data(timestamps(i));
+    }
+
+    return result;
+}
+
 bool NavigationInterpolatorLocal::valid() const
 {
     return I_NavigationInterpolator::valid() &&
            (!_interpolator_northing.empty() && !_interpolator_easting.empty());
+}
+
+// ----- get sampled timestamps -----
+xt::xtensor<double, 1> NavigationInterpolatorLocal::get_sampled_timestamps(
+    double                downsample_interval,
+    double                max_gap,
+    std::set<std::string> sensor_names) const
+{
+    std::vector<xt::xtensor<double, 1>> timestamp_vectors;
+    for (const auto& sensor_name : sensor_names)
+    {
+        // make a lowercase copy of the sensor name for case-insensitive comparison
+        std::string key = sensor_name;
+        for (auto& ch : key)
+        {
+            ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+        }
+
+        if (key == "northing")
+        {
+            timestamp_vectors.push_back(
+                _interpolator_northing.get_sampled_X(downsample_interval, max_gap));
+        }
+        else if (key == "easting")
+        {
+            timestamp_vectors.push_back(
+                _interpolator_easting.get_sampled_X(downsample_interval, max_gap));
+        }
+        else if (key == "attitude")
+        {
+            timestamp_vectors.push_back(
+                _interpolator_attitude.get_sampled_X(downsample_interval, max_gap));
+        }
+        else if (key == "heading")
+        {
+            timestamp_vectors.push_back(
+                _interpolator_heading.get_sampled_X(downsample_interval, max_gap));
+        }
+        else if (key == "heave")
+        {
+            timestamp_vectors.push_back(
+                _interpolator_heave.get_sampled_X(downsample_interval, max_gap));
+        }
+        else if (key == "depth")
+        {
+            timestamp_vectors.push_back(
+                _interpolator_depth.get_sampled_X(downsample_interval, max_gap));
+        }
+        else
+        {
+            throw std::invalid_argument(
+                "NavigationInterpolatorLocal::get_sampled_timestamps: Unknown sensor name '" +
+                sensor_name +
+                "'!\nTry any of: northing, easting, attitude, heading, heave, depth.");
+        }
+    }
+
+    if (timestamp_vectors.empty())
+    {
+        return xt::xtensor<double, 1>{};
+    }
+
+    const auto common_timestamps =
+        tools::helper::cut_to_shared_sections(timestamp_vectors, max_gap);
+
+    return common_timestamps.at(0);
 }
 
 // ----- printer -----

@@ -12,10 +12,17 @@ void init_c_geolocationlatlon(nanobind::module_& m);       // c_geolocationlatlo
 void init_c_geolocationlatlonvector(nanobind::module_& m); // c_geolocationlatlonvector.cpp
 void init_c_geolocationutm(nanobind::module_& m);          // c_geolocationutm.cpp
 void init_c_geolocationlocal(nanobind::module_& m);  // c_geolocationlocal.cpp
+void init_c_geolocationvector(nanobind::module_& m);      // c_geolocationvector.cpp
+void init_c_geolocationlocalvector(nanobind::module_& m); // c_geolocationlocalvector.cpp
+void init_c_geolocationutmvector(nanobind::module_& m);   // c_geolocationutmvector.cpp
 void init_c_sensordata(nanobind::module_& m);        // c_sensordata.cpp
 void init_c_sensordatalatlon(nanobind::module_& m);  // c_sensordatalatlon.cpp
 void init_c_sensordatautm(nanobind::module_& m);     // c_sensordatautm.cpp
 void init_c_sensordatalocal(nanobind::module_& m);   // c_sensordatalocal.cpp
+void init_c_sensordatavector(nanobind::module_& m);       // c_sensordatavector.cpp
+void init_c_sensordatalatlonvector(nanobind::module_& m); // c_sensordatalatlonvector.cpp
+void init_c_sensordatalocalvector(nanobind::module_& m);  // c_sensordatalocalvector.cpp
+void init_c_sensordatautmvector(nanobind::module_& m);    // c_sensordatautmvector.cpp
 
 void init_m_datastructures(nanobind::module_& m)
 {
@@ -30,10 +37,17 @@ void init_m_datastructures(nanobind::module_& m)
     init_c_geolocationlatlon(m_datastructures);
     init_c_geolocationlatlonvector(m_datastructures);
     init_c_geolocationutm(m_datastructures);
+    init_c_geolocationvector(m_datastructures);
+    init_c_geolocationlocalvector(m_datastructures);
+    init_c_geolocationutmvector(m_datastructures);
     init_c_sensordata(m_datastructures);
     init_c_sensordatalatlon(m_datastructures);
     init_c_sensordatalocal(m_datastructures);
     init_c_sensordatautm(m_datastructures);
+    init_c_sensordatavector(m_datastructures);
+    init_c_sensordatalatlonvector(m_datastructures);
+    init_c_sensordatalocalvector(m_datastructures);
+    init_c_sensordatautmvector(m_datastructures);
 
     using namespace themachinethatgoesping::navigation::datastructures;
 

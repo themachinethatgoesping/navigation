@@ -8,11 +8,15 @@
 /* generated doc strings */
 #include ".docstrings/navigationinterpolatorlatlon.doc.hpp"
 
-#include <vector>
-#include <string>
 #include <iostream>
+#include <string>
+#include <vector>
+
+#include <xtensor/containers/xtensor.hpp>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/helper/container_intersection.hpp>
+#include <themachinethatgoesping/tools/helper/downsampling.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
 
 #include "datastructures.hpp"
@@ -88,7 +92,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      *
      * @return interpolator_latitude&
      */
-    auto& interpolator_latitude() { return _interpolator_latitude; }
+    auto&       interpolator_latitude() { return _interpolator_latitude; }
     const auto& interpolator_latitude() const { return _interpolator_latitude; }
 
     /**
@@ -96,7 +100,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      *
      * @return interpolator_longitude&
      */
-    auto& interpolator_longitude() { return _interpolator_longitude; }
+    auto&       interpolator_longitude() { return _interpolator_longitude; }
     const auto& interpolator_longitude() const { return _interpolator_longitude; }
 
     //----- merge interpolators -----
@@ -119,6 +123,30 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
                                                  double             timestamp) const;
 
     /**
+     * @brief Compute the position of the target "target_id" for multiple timestamps (vectorized)
+     *
+     * @param target_id name of the target (e.g. "MBES")
+     * @param timestamps vector of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return GeolocationLatLonVector containing positions for all timestamps
+     */
+    datastructures::GeolocationLatLonVector operator()(const std::string&         target_id,
+                                                       const std::vector<double>& timestamps,
+                                                       int                        mp_cores = 1) const;
+
+    /**
+     * @brief Compute the position of the target "target_id" for multiple timestamps (xtensor)
+     *
+     * @param target_id name of the target (e.g. "MBES")
+     * @param timestamps xtensor of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return GeolocationLatLonVector containing positions for all timestamps
+     */
+    datastructures::GeolocationLatLonVector operator()(const std::string&            target_id,
+                                                       const xt::xtensor<double, 1>& timestamps,
+                                                       int                           mp_cores = 1) const;
+
+    /**
      * @brief Compute the position of the target "target_id" based on the sensor data for the given
      * timestamp stamp
      *
@@ -130,6 +158,32 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
     datastructures::GeolocationLatLon compute_target_position(const std::string& target_id,
                                                               double             timestamp) const;
 
+    /**
+     * @brief Compute the position of the target "target_id" for multiple timestamps (vectorized)
+     *
+     * @param target_id name of the target (e.g. "MBES")
+     * @param timestamps vector of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return GeolocationLatLonVector containing positions for all timestamps
+     */
+    datastructures::GeolocationLatLonVector compute_target_position(
+        const std::string&         target_id,
+        const std::vector<double>& timestamps,
+        int                        mp_cores = 1) const;
+
+    /**
+     * @brief Compute the position of the target "target_id" for multiple timestamps (xtensor)
+     *
+     * @param target_id name of the target (e.g. "MBES")
+     * @param timestamps xtensor of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return GeolocationLatLonVector containing positions for all timestamps
+     */
+    datastructures::GeolocationLatLonVector compute_target_position(
+        const std::string&            target_id,
+        const xt::xtensor<double, 1>& timestamps,
+        int                           mp_cores = 1) const;
+
     //----- compute the position of the target sensors -----
     /**
      * @brief Interpolate the saved sensor data for a specified timestamp stamp
@@ -139,6 +193,44 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * stamp
      */
     datastructures::SensordataLatLon get_sensor_data(double timestamp) const;
+
+    /**
+     * @brief Interpolate the saved sensor data for multiple timestamps (vectorized)
+     *
+     * @param timestamps vector of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return SensordataLatLonVector containing sensor data for all timestamps
+     */
+    datastructures::SensordataLatLonVector get_sensor_data(const std::vector<double>& timestamps,
+                                                           int mp_cores = 1) const;
+
+    /**
+     * @brief Interpolate the saved sensor data for multiple timestamps (xtensor vectorized)
+     *
+     * @param timestamps xtensor of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return SensordataLatLonVector containing sensor data for all timestamps
+     */
+    datastructures::SensordataLatLonVector get_sensor_data(const xt::xtensor<double, 1>& timestamps,
+                                                           int mp_cores = 1) const;
+
+    //----- get sampled timestamps -----
+    /**
+     * @brief Get sampled timestamps from the specified sensor interpolators
+     *
+     * This function retrieves timestamps from the specified sensors and returns their
+     * intersection (timestamps that are common to all specified sensors within max_gap).
+     *
+     * @param downsample_interval Interval for downsampling timestamps. If NaN, no downsampling
+     * @param max_gap Maximum allowed gap between consecutive timestamps
+     * @param sensor_names Set of sensor names to include. Valid names are:
+     *                     "latitude", "longitude", "attitude", "heading", "heave", "depth"
+     * @return xt::xtensor<double, 1> Array of timestamps that are common to all specified sensors
+     */
+    xt::xtensor<double, 1> get_sampled_timestamps(
+        double                downsample_interval = std::numeric_limits<double>::quiet_NaN(),
+        double                max_gap             = std::numeric_limits<double>::quiet_NaN(),
+        std::set<std::string> sensor_names        = { "latitude", "longitude" }) const;
 
     bool valid() const override;
 

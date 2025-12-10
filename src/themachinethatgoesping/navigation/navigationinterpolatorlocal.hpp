@@ -11,8 +11,12 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <set>
+
+#include <xtensor/containers/xtensor.hpp>
 
 #include <themachinethatgoesping/tools/classhelper/classversion.hpp>
+#include <themachinethatgoesping/tools/helper/container_intersection.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
 
 #include "datastructures.hpp"
@@ -151,6 +155,32 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     datastructures::GeolocationLocal compute_target_position(const std::string& target_id,
                                                              double             timestamp) const;
 
+    /**
+     * @brief Compute the position of the target "target_id" for multiple timestamps (vectorized)
+     *
+     * @param target_id name of the target (e.g. "MBES")
+     * @param timestamps vector of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return GeolocationLocalVector containing positions for all timestamps
+     */
+    datastructures::GeolocationLocalVector compute_target_position(
+        const std::string&         target_id,
+        const std::vector<double>& timestamps,
+        int                        mp_cores = 1) const;
+
+    /**
+     * @brief Compute the position of the target "target_id" for multiple timestamps (xtensor)
+     *
+     * @param target_id name of the target (e.g. "MBES")
+     * @param timestamps xtensor of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return GeolocationLocalVector containing positions for all timestamps
+     */
+    datastructures::GeolocationLocalVector compute_target_position(
+        const std::string&            target_id,
+        const xt::xtensor<double, 1>& timestamps,
+        int                           mp_cores = 1) const;
+
     //----- compute the position of the target sensors -----
     /**
      * @brief Interpolate the saved sensor data for a specified timestamp stamp
@@ -161,7 +191,48 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      */
     datastructures::SensordataLocal get_sensor_data(double timestamp) const;
 
+    /**
+     * @brief Interpolate the saved sensor data for multiple timestamps (vectorized)
+     *
+     * @param timestamps vector of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return SensordataLocalVector containing sensor data for all timestamps
+     */
+    datastructures::SensordataLocalVector get_sensor_data(const std::vector<double>& timestamps,
+                                                          int mp_cores = 1) const;
+
+    /**
+     * @brief Interpolate the saved sensor data for multiple timestamps (xtensor vectorized)
+     *
+     * @param timestamps xtensor of timestamps in seconds since epoch
+     * @param mp_cores Number of OpenMP threads to use for parallelization. Default is 1
+     * @return SensordataLocalVector containing sensor data for all timestamps
+     */
+    datastructures::SensordataLocalVector get_sensor_data(const xt::xtensor<double, 1>& timestamps,
+                                                          int mp_cores = 1) const;
+
+    //----- get sampled timestamps -----
+    /**
+     * @brief Get sampled timestamps from the specified sensor interpolators
+     *
+     * This function retrieves timestamps from the specified sensors and returns their
+     * intersection (timestamps that are common to all specified sensors within max_gap).
+     *
+     * @param downsample_interval Interval for downsampling timestamps. If NaN, no downsampling
+     * @param max_gap Maximum allowed gap between consecutive timestamps
+     * @param sensor_names Set of sensor names to include. Valid names are:
+     *                     "northing", "easting", "attitude", "heading", "heave", "depth"
+     * @return xt::xtensor<double, 1> Array of timestamps that are common to all specified sensors
+     * @throws std::invalid_argument if an unknown sensor name is specified
+     */
+    xt::xtensor<double, 1> get_sampled_timestamps(
+        double                downsample_interval = std::numeric_limits<double>::quiet_NaN(),
+        double                max_gap             = std::numeric_limits<double>::quiet_NaN(),
+        std::set<std::string> sensor_names        = { "northing", "easting" }) const;
+
     bool valid() const override;
+
+    
 
   public:
     // __printer__ function is necessary to support print() info_string() etc (defined by

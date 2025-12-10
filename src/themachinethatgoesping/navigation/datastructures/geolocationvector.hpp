@@ -5,39 +5,27 @@
 #pragma once
 
 /* generated doc strings */
-#include ".docstrings/geolocationlatlonvector.doc.hpp"
+#include ".docstrings/geolocationvector.doc.hpp"
 
 #include "datavector.hpp"
-#include "geolocationlatlon.hpp"
+#include "geolocation.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
 /**
- * @brief A class to store a vector of GeolocationLatLon elements with timestamps.
+ * @brief A class to store a vector of Geolocation elements with timestamps.
  */
-class GeolocationLatLonVector : public DataVector<GeolocationLatLon, GeolocationLatLonVector>
+class GeolocationVector : public DataVector<Geolocation, GeolocationVector>
 {
-    using Base = DataVector<GeolocationLatLon, GeolocationLatLonVector>;
+    using Base = DataVector<Geolocation, GeolocationVector>;
 
   public:
     // Inherit constructors
     using Base::Base;
 
     // ----- component-wise access (for Python performance) -----
-    /**
-     * @brief Get all latitude values as a vector
-     * @return vector of latitude values in degrees
-     */
-    std::vector<double> get_latitudes() const;
-
-    /**
-     * @brief Get all longitude values as a vector
-     * @return vector of longitude values in degrees
-     */
-    std::vector<double> get_longitudes() const;
-
     /**
      * @brief Get all z values (depth) as a vector
      * @return vector of z values in meters (positive downwards)
@@ -63,15 +51,15 @@ class GeolocationLatLonVector : public DataVector<GeolocationLatLon, Geolocation
     std::vector<float> get_roll() const;
 
     // ----- file I/O -----
-    static GeolocationLatLonVector from_stream(std::istream& is);
-    void                           to_stream(std::ostream& os) const;
+    static GeolocationVector from_stream(std::istream& is);
+    void                     to_stream(std::ostream& os) const;
 
     // ----- objectprinter -----
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision,
                                                   bool         superscript_exponents) const;
 
     // -- class helper function macros --
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeolocationLatLonVector)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeolocationVector)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 

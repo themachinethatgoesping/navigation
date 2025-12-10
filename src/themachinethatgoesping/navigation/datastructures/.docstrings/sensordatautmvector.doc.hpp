@@ -1,4 +1,4 @@
-//sourcehash: 21acc8fa299ce7f1fcfe8f8ebb21bd23400eb8b93e7c0ea15730752fe0232a1a
+//sourcehash: 090b3270e690e118f29f884c373cb5714e376f8eeac11f156fa2ac0844c04399
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -41,45 +41,58 @@
 #endif
 
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector =
-R"doc(A class to store a vector of GeolocationLatLon elements with
-timestamps.)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector = R"doc(A class to store a vector of SensordataUTM elements with timestamps.)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_from_stream = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_from_stream = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_latitudes =
-R"doc(Get all latitude values as a vector
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_depths =
+R"doc(Get all depth values as a vector
 Returns:
-    vector of latitude values in degrees)doc";
+    vector of depth values in meters (positive downwards))doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_longitudes =
-R"doc(Get all longitude values as a vector
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_eastings =
+R"doc(Get all easting values as a vector
 Returns:
-    vector of longitude values in degrees)doc";
+    vector of easting values in meters)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_pitch =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_headings =
+R"doc(Get all heading values as a vector
+Returns:
+    vector of heading values in degrees)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_heaves =
+R"doc(Get all heave values as a vector
+Returns:
+    vector of heave values in meters)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_northern_hemispheres =
+R"doc(Get all hemisphere flags as a vector
+Returns:
+    vector of booleans (true = northern hemisphere))doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_northings =
+R"doc(Get all northing values as a vector
+Returns:
+    vector of northing values in meters)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_pitches =
 R"doc(Get all pitch values as a vector
 Returns:
     vector of pitch values in degrees)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_roll =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_rolls =
 R"doc(Get all roll values as a vector
 Returns:
     vector of roll values in degrees)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_yaw =
-R"doc(Get all yaw values as a vector
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_get_utm_zones =
+R"doc(Get all UTM zone values as a vector
 Returns:
-    vector of yaw values in degrees)doc";
+    vector of UTM zone numbers)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_z =
-R"doc(Get all z values (depth) as a vector
-Returns:
-    vector of z values in meters (positive downwards))doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_printer = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_printer = R"doc()doc";
-
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_to_stream = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTMVector_to_stream = R"doc()doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

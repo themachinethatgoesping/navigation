@@ -1,4 +1,4 @@
-//sourcehash: 16b83eb87eb20cffae7977252eeca868f74db4425d1856d614acd4fe6390dbb2
+//sourcehash: f3858c8f729f039666ad691577ba26ae1129e1738d7098fccd2a391f7b96ac14
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -77,7 +77,52 @@ Returns:
     data structure that contains the position of the target in the
     world coordinate system)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_compute_target_position_2 =
+R"doc(Compute the position of the target "target_id" for multiple timestamps
+(vectorized)
+
+Args:
+    target_id: name of the target (e.g. "MBES")
+    timestamps: vector of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    GeolocationLatLonVector containing positions for all timestamps)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_compute_target_position_3 =
+R"doc(Compute the position of the target "target_id" for multiple timestamps
+(xtensor)
+
+Args:
+    target_id: name of the target (e.g. "MBES")
+    timestamps: xtensor of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    GeolocationLatLonVector containing positions for all timestamps)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_from_stream = R"doc()doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_get_sampled_timestamps =
+R"doc(Get sampled timestamps from the specified sensor interpolators
+
+This function retrieves timestamps from the specified sensors and
+returns their intersection (timestamps that are common to all
+specified sensors within max_gap).
+
+Args:
+    downsample_interval: Interval for downsampling timestamps. If NaN,
+                         no downsampling
+    max_gap: Maximum allowed gap between consecutive timestamps
+    sensor_names: Set of sensor names to include. Valid names are:
+                  "latitude", "longitude", "attitude", "heading",
+                  "heave", "depth"
+
+Returns:
+    xt::xtensor<double, 1> Array of timestamps that are common to all
+       specified sensors)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_get_sensor_data =
 R"doc(Interpolate the saved sensor data for a specified timestamp stamp
@@ -88,6 +133,29 @@ Args:
 Returns:
     data structure that contains the sensor data interpolated for the
     given timestamp stamp)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_get_sensor_data_2 =
+R"doc(Interpolate the saved sensor data for multiple timestamps (vectorized)
+
+Args:
+    timestamps: vector of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    SensordataLatLonVector containing sensor data for all timestamps)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_get_sensor_data_3 =
+R"doc(Interpolate the saved sensor data for multiple timestamps (xtensor
+vectorized)
+
+Args:
+    timestamps: xtensor of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    SensordataLatLonVector containing sensor data for all timestamps)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_interpolator_latitude = R"doc(interpolator for the latitude data)doc";
 
@@ -122,6 +190,32 @@ Args:
 Returns:
     data structure that contains the position of the target in the
     world coordinate system)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_operator_call_2 =
+R"doc(Compute the position of the target "target_id" for multiple timestamps
+(vectorized)
+
+Args:
+    target_id: name of the target (e.g. "MBES")
+    timestamps: vector of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    GeolocationLatLonVector containing positions for all timestamps)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_operator_call_3 =
+R"doc(Compute the position of the target "target_id" for multiple timestamps
+(xtensor)
+
+Args:
+    target_id: name of the target (e.g. "MBES")
+    timestamps: xtensor of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    GeolocationLatLonVector containing positions for all timestamps)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_operator_eq = R"doc()doc";
 

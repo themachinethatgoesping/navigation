@@ -5,21 +5,21 @@
 #pragma once
 
 /* generated doc strings */
-#include ".docstrings/geolocationlatlonvector.doc.hpp"
+#include ".docstrings/geolocationutmvector.doc.hpp"
 
 #include "datavector.hpp"
-#include "geolocationlatlon.hpp"
+#include "geolocationutm.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
 /**
- * @brief A class to store a vector of GeolocationLatLon elements with timestamps.
+ * @brief A class to store a vector of GeolocationUTM elements with timestamps.
  */
-class GeolocationLatLonVector : public DataVector<GeolocationLatLon, GeolocationLatLonVector>
+class GeolocationUTMVector : public DataVector<GeolocationUTM, GeolocationUTMVector>
 {
-    using Base = DataVector<GeolocationLatLon, GeolocationLatLonVector>;
+    using Base = DataVector<GeolocationUTM, GeolocationUTMVector>;
 
   public:
     // Inherit constructors
@@ -27,16 +27,28 @@ class GeolocationLatLonVector : public DataVector<GeolocationLatLon, Geolocation
 
     // ----- component-wise access (for Python performance) -----
     /**
-     * @brief Get all latitude values as a vector
-     * @return vector of latitude values in degrees
+     * @brief Get all northing values as a vector
+     * @return vector of northing values in meters
      */
-    std::vector<double> get_latitudes() const;
+    std::vector<double> get_northings() const;
 
     /**
-     * @brief Get all longitude values as a vector
-     * @return vector of longitude values in degrees
+     * @brief Get all easting values as a vector
+     * @return vector of easting values in meters
      */
-    std::vector<double> get_longitudes() const;
+    std::vector<double> get_eastings() const;
+
+    /**
+     * @brief Get all UTM zone values as a vector
+     * @return vector of UTM zone numbers
+     */
+    std::vector<int> get_utm_zones() const;
+
+    /**
+     * @brief Get all hemisphere flags as a vector
+     * @return vector of booleans (true = northern hemisphere)
+     */
+    std::vector<bool> get_northern_hemispheres() const;
 
     /**
      * @brief Get all z values (depth) as a vector
@@ -63,15 +75,15 @@ class GeolocationLatLonVector : public DataVector<GeolocationLatLon, Geolocation
     std::vector<float> get_roll() const;
 
     // ----- file I/O -----
-    static GeolocationLatLonVector from_stream(std::istream& is);
-    void                           to_stream(std::ostream& os) const;
+    static GeolocationUTMVector from_stream(std::istream& is);
+    void                        to_stream(std::ostream& os) const;
 
     // ----- objectprinter -----
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision,
                                                   bool         superscript_exponents) const;
 
     // -- class helper function macros --
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeolocationLatLonVector)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeolocationUTMVector)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 

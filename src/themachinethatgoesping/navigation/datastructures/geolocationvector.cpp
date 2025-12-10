@@ -2,36 +2,14 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-#include "geolocationlatlonvector.hpp"
+#include "geolocationvector.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
 // ----- component-wise access -----
-std::vector<double> GeolocationLatLonVector::get_latitudes() const
-{
-    std::vector<double> result;
-    result.reserve(_data.size());
-    for (const auto& geo : _data)
-    {
-        result.push_back(geo.latitude);
-    }
-    return result;
-}
-
-std::vector<double> GeolocationLatLonVector::get_longitudes() const
-{
-    std::vector<double> result;
-    result.reserve(_data.size());
-    for (const auto& geo : _data)
-    {
-        result.push_back(geo.longitude);
-    }
-    return result;
-}
-
-std::vector<float> GeolocationLatLonVector::get_z() const
+std::vector<float> GeolocationVector::get_z() const
 {
     std::vector<float> result;
     result.reserve(_data.size());
@@ -42,7 +20,7 @@ std::vector<float> GeolocationLatLonVector::get_z() const
     return result;
 }
 
-std::vector<float> GeolocationLatLonVector::get_yaw() const
+std::vector<float> GeolocationVector::get_yaw() const
 {
     std::vector<float> result;
     result.reserve(_data.size());
@@ -53,7 +31,7 @@ std::vector<float> GeolocationLatLonVector::get_yaw() const
     return result;
 }
 
-std::vector<float> GeolocationLatLonVector::get_pitch() const
+std::vector<float> GeolocationVector::get_pitch() const
 {
     std::vector<float> result;
     result.reserve(_data.size());
@@ -64,7 +42,7 @@ std::vector<float> GeolocationLatLonVector::get_pitch() const
     return result;
 }
 
-std::vector<float> GeolocationLatLonVector::get_roll() const
+std::vector<float> GeolocationVector::get_roll() const
 {
     std::vector<float> result;
     result.reserve(_data.size());
@@ -76,25 +54,25 @@ std::vector<float> GeolocationLatLonVector::get_roll() const
 }
 
 // ----- file I/O -----
-GeolocationLatLonVector GeolocationLatLonVector::from_stream(std::istream& is)
+GeolocationVector GeolocationVector::from_stream(std::istream& is)
 {
-    GeolocationLatLonVector result;
+    GeolocationVector result;
     result.read_from_stream(is);
     return result;
 }
 
-void GeolocationLatLonVector::to_stream(std::ostream& os) const
+void GeolocationVector::to_stream(std::ostream& os) const
 {
     write_to_stream(os);
 }
 
 // ----- printer -----
-tools::classhelper::ObjectPrinter GeolocationLatLonVector::__printer__(
+tools::classhelper::ObjectPrinter GeolocationVector::__printer__(
     unsigned int float_precision,
     bool         superscript_exponents) const
 {
     tools::classhelper::ObjectPrinter printer(
-        "GeolocationLatLonVector", float_precision, superscript_exponents);
+        "GeolocationVector", float_precision, superscript_exponents);
 
     add_base_info_to_printer(printer);
 

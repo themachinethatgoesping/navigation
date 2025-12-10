@@ -7,13 +7,16 @@
 // -- c++ library headers
 
 #include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
+#include <themachinethatgoesping/tools_nanobind/pytensor_nanobind.hpp>
 
-#include "../themachinethatgoesping/navigation/datastructures.hpp"
-#include "../themachinethatgoesping/navigation/navigationinterpolatorlatlon.hpp"
+#include <themachinethatgoesping/navigation/datastructures.hpp>
+#include <themachinethatgoesping/navigation/navigationinterpolatorlatlon.hpp>
 
 // -- include nanobind headers
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/vector.h>
+#include <nanobind/stl/set.h>
+#include <nanobind/stl/string.h>
 
 namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation;
@@ -49,6 +52,16 @@ void init_c_NavigationInterpolatorLatLon(nb::module_& m)
                  compute_target_position),
              nb::arg("target_id"),
              nb::arg("timestamp"))
+        .def("__call__",
+             nb::overload_cast<const std::string&, const std::vector<double>&, int>(
+                 &NavigationInterpolatorLatLon::operator(), nb::const_),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 NavigationInterpolatorLatLon,
+                 compute_target_position_2),
+             nb::arg("target_id"),
+             nb::arg("timestamps"),
+             nb::arg("mp_cores") = 1)
         .def("compute_target_position",
              nb::overload_cast<const std::string&, double>(
                  &NavigationInterpolatorLatLon::compute_target_position, nb::const_),
@@ -58,10 +71,38 @@ void init_c_NavigationInterpolatorLatLon(nb::module_& m)
                  compute_target_position),
              nb::arg("target_id"),
              nb::arg("timestamp"))
+        .def("compute_target_position",
+             nb::overload_cast<const std::string&, const std::vector<double>&, int>(
+                 &NavigationInterpolatorLatLon::compute_target_position, nb::const_),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 NavigationInterpolatorLatLon,
+                 compute_target_position_2),
+             nb::arg("target_id"),
+             nb::arg("timestamps"),
+             nb::arg("mp_cores") = 1)
         .def("get_sensor_data",
              nb::overload_cast<double>(&NavigationInterpolatorLatLon::get_sensor_data, nb::const_),
              DOC(themachinethatgoesping, navigation, NavigationInterpolatorLatLon, get_sensor_data),
              nb::arg("timestamp"))
+        .def("get_sensor_data",
+             nb::overload_cast<const std::vector<double>&, int>(
+                 &NavigationInterpolatorLatLon::get_sensor_data, nb::const_),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 NavigationInterpolatorLatLon,
+                 get_sensor_data_2),
+             nb::arg("timestamps"),
+             nb::arg("mp_cores") = 1)
+        .def("get_sampled_timestamps",
+             &NavigationInterpolatorLatLon::get_sampled_timestamps,
+             DOC(themachinethatgoesping,
+                 navigation,
+                 NavigationInterpolatorLatLon,
+                 get_sampled_timestamps),
+             nb::arg("downsample_interval") = std::numeric_limits<double>::quiet_NaN(),
+             nb::arg("max_gap")             = std::numeric_limits<double>::quiet_NaN(),
+             nb::arg("sensor_names")        = std::set<std::string>{ "latitude", "longitude" })
         .def("get_sensor_configuration",
              &NavigationInterpolatorLatLon::get_sensor_configuration,
              DOC(themachinethatgoesping,

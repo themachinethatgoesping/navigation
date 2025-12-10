@@ -1,4 +1,4 @@
-//sourcehash: ad149d31e099eed4e9db720026d1ace87898a4e5300da76d2e3264ef90c76bfb
+//sourcehash: 47808cec0cca80f32233de7c56a1ff799343e88d859f1afa267e5b68e9b0f4ed
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -75,7 +75,55 @@ Returns:
     data structure that contains the position of the target in the
     world coordinate system)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_compute_target_position_2 =
+R"doc(Compute the position of the target "target_id" for multiple timestamps
+(vectorized)
+
+Args:
+    target_id: name of the target (e.g. "MBES")
+    timestamps: vector of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    GeolocationLocalVector containing positions for all timestamps)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_compute_target_position_3 =
+R"doc(Compute the position of the target "target_id" for multiple timestamps
+(xtensor)
+
+Args:
+    target_id: name of the target (e.g. "MBES")
+    timestamps: xtensor of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    GeolocationLocalVector containing positions for all timestamps)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_from_stream = R"doc()doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_get_sampled_timestamps =
+R"doc(Get sampled timestamps from the specified sensor interpolators
+
+This function retrieves timestamps from the specified sensors and
+returns their intersection (timestamps that are common to all
+specified sensors within max_gap).
+
+Args:
+    downsample_interval: Interval for downsampling timestamps. If NaN,
+                         no downsampling
+    max_gap: Maximum allowed gap between consecutive timestamps
+    sensor_names: Set of sensor names to include. Valid names are:
+                  "northing", "easting", "attitude", "heading",
+                  "heave", "depth"
+
+Returns:
+    xt::xtensor<double, 1> Array of timestamps that are common to all
+       specified sensors
+
+Raises:
+    std::invalid_argument: if an unknown sensor name is specified)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_get_sensor_data =
 R"doc(Interpolate the saved sensor data for a specified timestamp stamp
@@ -86,6 +134,29 @@ Args:
 Returns:
     data structure that contains the sensor data interpolated for the
     given timestamp stamp)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_get_sensor_data_2 =
+R"doc(Interpolate the saved sensor data for multiple timestamps (vectorized)
+
+Args:
+    timestamps: vector of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    SensordataLocalVector containing sensor data for all timestamps)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_get_sensor_data_3 =
+R"doc(Interpolate the saved sensor data for multiple timestamps (xtensor
+vectorized)
+
+Args:
+    timestamps: xtensor of timestamps in seconds since epoch
+    mp_cores: Number of OpenMP threads to use for parallelization.
+              Default is 1
+
+Returns:
+    SensordataLocalVector containing sensor data for all timestamps)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLocal_interpolator_easting = R"doc(interpolator for the easting data)doc";
 

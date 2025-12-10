@@ -19,80 +19,66 @@ void init_c_geolocationlatlonvector(nb::module_& m)
     nb::class_<GeolocationLatLonVector>(
         m,
         "GeolocationLatLonVector",
-        mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector)
-        .def(nb::init<>(),
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_GeolocationLatLonVector)
-        .def(nb::init<size_t>(),
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_GeolocationLatLonVector_2,
-             nb::arg("capacity"))
+        "A class to store a vector of GeolocationLatLon elements with timestamps.")
+        .def(nb::init<>())
         .def(nb::init<std::vector<double>, std::vector<GeolocationLatLon>>(),
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_GeolocationLatLonVector_3,
              nb::arg("timestamps"),
-             nb::arg("geolocations"))
+             nb::arg("data"))
         // ----- size/empty -----
         .def("__len__",
-             &GeolocationLatLonVector::size,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_size)
+             &GeolocationLatLonVector::size)
         .def("size",
-             &GeolocationLatLonVector::size,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_size)
+             &GeolocationLatLonVector::size)
         .def("empty",
-             &GeolocationLatLonVector::empty,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_empty)
+             &GeolocationLatLonVector::empty)
+        // ----- direct vector access via properties -----
+        .def_prop_rw(
+            "timestamps",
+            [](const GeolocationLatLonVector& self) { return self.get_timestamps(); },
+            [](GeolocationLatLonVector& self, std::vector<double> val)
+            { self.timestamps() = std::move(val); },
+            "Timestamps in seconds since epoch (read/write)")
+        .def_prop_rw(
+            "data",
+            [](const GeolocationLatLonVector& self) { return self.get_data(); },
+            [](GeolocationLatLonVector& self, std::vector<GeolocationLatLon> val)
+            { self.data() = std::move(val); },
+            "GeolocationLatLon data elements (read/write)")
         // ----- element access -----
         .def("__getitem__",
-             &GeolocationLatLonVector::at,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_at,
+             nb::overload_cast<size_t>(&GeolocationLatLonVector::at, nb::const_),
              nb::arg("index"))
         .def("at",
-             &GeolocationLatLonVector::at,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_at,
+             nb::overload_cast<size_t>(&GeolocationLatLonVector::at, nb::const_),
              nb::arg("index"))
         .def("timestamp_at",
              &GeolocationLatLonVector::timestamp_at,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_timestamp_at,
              nb::arg("index"))
-        // ----- direct vector access -----
-        .def("get_timestamps",
-             &GeolocationLatLonVector::get_timestamps,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_timestamps)
-        .def("get_geolocations",
-             &GeolocationLatLonVector::get_geolocations,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_geolocations)
-        // ----- component-wise access (for Python performance) -----
-        .def("get_latitudes",
-             &GeolocationLatLonVector::get_latitudes,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_latitudes)
-        .def("get_longitudes",
-             &GeolocationLatLonVector::get_longitudes,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_longitudes)
-        .def("get_z",
-             &GeolocationLatLonVector::get_z,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_z)
-        .def("get_yaw",
-             &GeolocationLatLonVector::get_yaw,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_yaw)
-        .def("get_pitch",
-             &GeolocationLatLonVector::get_pitch,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_pitch)
-        .def("get_roll",
-             &GeolocationLatLonVector::get_roll,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_get_roll)
         // ----- modifiers -----
         .def("reserve",
              &GeolocationLatLonVector::reserve,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_reserve,
              nb::arg("n"))
-        .def("push_back",
-             nb::overload_cast<double, const GeolocationLatLon&>(
-                 &GeolocationLatLonVector::push_back),
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_push_back,
-             nb::arg("timestamp"),
-             nb::arg("geolocation"))
+        .def("clear",
+             &GeolocationLatLonVector::clear)
+        .def("resize",
+             &GeolocationLatLonVector::resize,
+             nb::arg("n"))
+        // ----- component-wise access (for Python performance) -----
+        .def("get_latitudes",
+             &GeolocationLatLonVector::get_latitudes)
+        .def("get_longitudes",
+             &GeolocationLatLonVector::get_longitudes)
+        .def("get_z",
+             &GeolocationLatLonVector::get_z)
+        .def("get_yaw",
+             &GeolocationLatLonVector::get_yaw)
+        .def("get_pitch",
+             &GeolocationLatLonVector::get_pitch)
+        .def("get_roll",
+             &GeolocationLatLonVector::get_roll)
         // ----- operators -----
         .def("__eq__",
              &GeolocationLatLonVector::operator==,
-             mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLonVector_operator_eq,
              nb::arg("other"))
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(GeolocationLatLonVector)

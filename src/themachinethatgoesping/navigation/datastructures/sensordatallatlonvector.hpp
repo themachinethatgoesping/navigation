@@ -5,21 +5,21 @@
 #pragma once
 
 /* generated doc strings */
-#include ".docstrings/geolocationlatlonvector.doc.hpp"
+#include ".docstrings/sensordatallatlonvector.doc.hpp"
 
 #include "datavector.hpp"
-#include "geolocationlatlon.hpp"
+#include "sensordatalatlon.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
 /**
- * @brief A class to store a vector of GeolocationLatLon elements with timestamps.
+ * @brief A class to store a vector of SensordataLatLon elements with timestamps.
  */
-class GeolocationLatLonVector : public DataVector<GeolocationLatLon, GeolocationLatLonVector>
+class SensordataLatLonVector : public DataVector<SensordataLatLon, SensordataLatLonVector>
 {
-    using Base = DataVector<GeolocationLatLon, GeolocationLatLonVector>;
+    using Base = DataVector<SensordataLatLon, SensordataLatLonVector>;
 
   public:
     // Inherit constructors
@@ -39,39 +39,45 @@ class GeolocationLatLonVector : public DataVector<GeolocationLatLon, Geolocation
     std::vector<double> get_longitudes() const;
 
     /**
-     * @brief Get all z values (depth) as a vector
-     * @return vector of z values in meters (positive downwards)
+     * @brief Get all depth values as a vector
+     * @return vector of depth values in meters (positive downwards)
      */
-    std::vector<float> get_z() const;
+    std::vector<float> get_depths() const;
 
     /**
-     * @brief Get all yaw values as a vector
-     * @return vector of yaw values in degrees
+     * @brief Get all heave values as a vector
+     * @return vector of heave values in meters
      */
-    std::vector<float> get_yaw() const;
+    std::vector<float> get_heaves() const;
+
+    /**
+     * @brief Get all heading values as a vector
+     * @return vector of heading values in degrees
+     */
+    std::vector<float> get_headings() const;
 
     /**
      * @brief Get all pitch values as a vector
      * @return vector of pitch values in degrees
      */
-    std::vector<float> get_pitch() const;
+    std::vector<float> get_pitches() const;
 
     /**
      * @brief Get all roll values as a vector
      * @return vector of roll values in degrees
      */
-    std::vector<float> get_roll() const;
+    std::vector<float> get_rolls() const;
 
     // ----- file I/O -----
-    static GeolocationLatLonVector from_stream(std::istream& is);
-    void                           to_stream(std::ostream& os) const;
+    static SensordataLatLonVector from_stream(std::istream& is);
+    void                          to_stream(std::ostream& os) const;
 
     // ----- objectprinter -----
     tools::classhelper::ObjectPrinter __printer__(unsigned int float_precision,
                                                   bool         superscript_exponents) const;
 
     // -- class helper function macros --
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(GeolocationLatLonVector)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensordataLatLonVector)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 

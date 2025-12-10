@@ -5,6 +5,7 @@
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <filesystem>
+#include <limits>
 
 #include "../themachinethatgoesping/navigation/datastructures.hpp"
 #include "../themachinethatgoesping/navigation/navigationinterpolatorlocal.hpp"
@@ -152,5 +153,86 @@ TEST_CASE("navigationinterpolatorlocal merging operations", TESTTAG)
         navint3.set_sensor_configuration(sc);
 
         REQUIRE_THROWS_AS(navint3.merge(naving2), std::runtime_error);
+    }
+}
+
+TEST_CASE("NavigationInterpolatorLocal get_sampled_timestamps", TESTTAG)
+{
+    // setup sensor configuration
+    SensorConfiguration sensor_configuration;
+    sensor_configuration.set_depth_source("gps", 0, 0, 1);
+    sensor_configuration.set_attitude_source("gps", 1, -2, 3);
+    sensor_configuration.set_position_source("gps", 10, -10, 5);
+
+    datastructures::PositionalOffsets targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
+    sensor_configuration.add_target("mbes", targetOffsets);
+
+    NavigationInterpolatorLocal navint(sensor_configuration);
+
+    // Set data with same timestamps for position
+    navint.set_data_position({ 0, 1, 2, 3 }, { 10, -10, -11, 9 }, { 1, -1, -2, 3 });
+    navint.set_data_depth({ 0, 1, 2, 3 }, { 10, -10, -11, 9 });
+    navint.set_data_heave({ 0, 1, 2, 3 }, { -1, -2, 3, 4 });
+    navint.set_data_heading({ 0.5, 6 }, { 10, 20 });
+    navint.set_data_attitude({ 0, 1, 2, 3 }, { 1, -1, -2, 3 }, { 2, -3, -4, 2 });
+
+    SECTION("Default sensor names (northing, easting)")
+    {
+        auto timestamps = navint.get_sampled_timestamps();
+        REQUIRE(timestamps.size() == 4);
+        REQUIRE(timestamps(0) == 0);
+        REQUIRE(timestamps(1) == 1);
+        REQUIRE(timestamps(2) == 2);
+        REQUIRE(timestamps(3) == 3);
+    }
+
+    SECTION("Single sensor name")
+    {
+        auto timestamps = navint.get_sampled_timestamps(
+            std::numeric_limits<double>::quiet_NaN(),
+            std::numeric_limits<double>::quiet_NaN(),
+            { "northing" });
+        REQUIRE(timestamps.size() == 4);
+    }
+
+    SECTION("Multiple sensor names")
+    {
+        auto timestamps = navint.get_sampled_timestamps(
+            std::numeric_limits<double>::quiet_NaN(),
+            std::numeric_limits<double>::quiet_NaN(),
+            { "northing", "easting", "depth" });
+        REQUIRE(timestamps.size() == 4);
+    }
+
+    SECTION("Unknown sensor name throws")
+    {
+        REQUIRE_THROWS_AS(
+            navint.get_sampled_timestamps(
+                std::numeric_limits<double>::quiet_NaN(),
+                std::numeric_limits<double>::quiet_NaN(),
+                { "unknown_sensor" }),
+            std::invalid_argument);
+    }
+
+    SECTION("Empty sensor names returns empty")
+    {
+        auto timestamps = navint.get_sampled_timestamps(
+            std::numeric_limits<double>::quiet_NaN(),
+            std::numeric_limits<double>::quiet_NaN(),
+            {});
+        REQUIRE(timestamps.size() == 0);
+    }
+
+    SECTION("Case insensitive sensor names")
+    {
+        auto timestamps1 = navint.get_sampled_timestamps(
+            std::numeric_limits<double>::quiet_NaN(),
+            std::numeric_limits<double>::quiet_NaN(),
+            { "NORTHING" });
+        auto timestamps2 = navint.get_sampled_timestamps(
+            std::numeric_limits<double>::quiet_NaN(),
+            std::numeric_limits<double>::quiet_NaN(),
+            { "northing" });
+        REQUIRE(timestamps1.size() == timestamps2.size());
     }
 }
