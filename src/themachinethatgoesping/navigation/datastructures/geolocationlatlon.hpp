@@ -18,7 +18,7 @@ namespace navigation {
 namespace datastructures {
 
 // forward declarations for location conversions
-// IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM
+// IGNORE_DOC:mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM
 struct GeolocationUTM; // defined in geolocationutm.hpp
 
 /**

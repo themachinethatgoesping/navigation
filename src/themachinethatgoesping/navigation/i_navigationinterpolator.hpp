@@ -129,13 +129,21 @@ class I_NavigationInterpolator
     {
         return _interpolator_depth;
     }
+    const auto& interpolator_depth() const
+    {
+        return _interpolator_depth;
+    }
 
     /**
-     * @brief direct reference to the depth data interpolator
+     * @brief direct reference to the heave data interpolator
      *
-     * @return interpolator_depth&
+     * @return interpolator_heave&
      */
     auto& interpolator_heave()
+    {
+        return _interpolator_heave;
+    }
+    const auto& interpolator_heave() const
     {
         return _interpolator_heave;
     }
@@ -149,6 +157,10 @@ class I_NavigationInterpolator
     {
         return _interpolator_attitude;
     }
+    const auto& interpolator_attitude() const
+    {
+        return _interpolator_attitude;
+    }
 
     /**
      * @brief direct reference to the compass data interpolator
@@ -156,6 +168,10 @@ class I_NavigationInterpolator
      * @return interpolator_heading&
      */
     auto& interpolator_heading()
+    {
+        return _interpolator_heading;
+    }
+    const auto& interpolator_heading() const
     {
         return _interpolator_heading;
     }

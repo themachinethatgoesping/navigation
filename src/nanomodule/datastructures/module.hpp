@@ -8,8 +8,9 @@
 // declare modules
 void init_c_positionaloffsets(nanobind::module_& m); // c_positionaloffsets.cpp
 void init_c_geolocation(nanobind::module_& m);       // c_geolocation.cpp
-void init_c_geolocationlatlon(nanobind::module_& m); // c_geolocationlatlon.cpp
-void init_c_geolocationutm(nanobind::module_& m);    // c_geolocationutm.cpp
+void init_c_geolocationlatlon(nanobind::module_& m);       // c_geolocationlatlon.cpp
+void init_c_geolocationlatlonvector(nanobind::module_& m); // c_geolocationlatlonvector.cpp
+void init_c_geolocationutm(nanobind::module_& m);          // c_geolocationutm.cpp
 void init_c_geolocationlocal(nanobind::module_& m);  // c_geolocationlocal.cpp
 void init_c_sensordata(nanobind::module_& m);        // c_sensordata.cpp
 void init_c_sensordatalatlon(nanobind::module_& m);  // c_sensordatalatlon.cpp
@@ -27,6 +28,7 @@ void init_m_datastructures(nanobind::module_& m)
     init_c_geolocation(m_datastructures);
     init_c_geolocationlocal(m_datastructures);
     init_c_geolocationlatlon(m_datastructures);
+    init_c_geolocationlatlonvector(m_datastructures);
     init_c_geolocationutm(m_datastructures);
     init_c_sensordata(m_datastructures);
     init_c_sensordatalatlon(m_datastructures);

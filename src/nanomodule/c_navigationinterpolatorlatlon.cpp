@@ -144,7 +144,7 @@ void init_c_NavigationInterpolatorLatLon(nb::module_& m)
         // latitude / longitude
         .def_prop_rw(
             "interpolator_latitude",
-            &NavigationInterpolatorLatLon::interpolator_latitude,
+            [](NavigationInterpolatorLatLon& self) -> auto& { return self.interpolator_latitude(); },
             [](NavigationInterpolatorLatLon& self,
                const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_latitude() = interpolator; },
@@ -154,7 +154,7 @@ void init_c_NavigationInterpolatorLatLon(nb::module_& m)
                 interpolator_latitude))
         .def_prop_rw(
             "interpolator_longitude",
-            &NavigationInterpolatorLatLon::interpolator_longitude,
+            [](NavigationInterpolatorLatLon& self) -> auto& { return self.interpolator_longitude(); },
             [](NavigationInterpolatorLatLon& self,
                const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_longitude() = interpolator; },
@@ -166,14 +166,14 @@ void init_c_NavigationInterpolatorLatLon(nb::module_& m)
         // heave, depth, attitude, compass
         .def_prop_rw(
             "interpolator_heave",
-            &NavigationInterpolatorLatLon::interpolator_heave,
+            [](NavigationInterpolatorLatLon& self) -> auto& { return self.interpolator_heave(); },
             [](NavigationInterpolatorLatLon& self,
                const themachinethatgoesping::tools::vectorinterpolators::AkimaInterpolator<double>&
                    interpolator) { self.interpolator_heave() = interpolator; },
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_heave))
         .def_prop_rw(
             "interpolator_depth",
-            &NavigationInterpolatorLatLon::interpolator_depth,
+            [](NavigationInterpolatorLatLon& self) -> auto& { return self.interpolator_depth(); },
             [](NavigationInterpolatorLatLon& self,
                const themachinethatgoesping::tools::vectorinterpolators::LinearInterpolator<double,
                                                                                             float>&
@@ -181,7 +181,7 @@ void init_c_NavigationInterpolatorLatLon(nb::module_& m)
             DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, interpolator_depth))
         .def_prop_rw(
             "interpolator_attitude",
-            &NavigationInterpolatorLatLon::interpolator_attitude,
+            [](NavigationInterpolatorLatLon& self) -> auto& { return self.interpolator_attitude(); },
             [](NavigationInterpolatorLatLon& self,
                const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double,
                                                                                            float>&
@@ -192,7 +192,7 @@ void init_c_NavigationInterpolatorLatLon(nb::module_& m)
                 interpolator_attitude))
         .def_prop_rw(
             "interpolator_heading",
-            &NavigationInterpolatorLatLon::interpolator_heading,
+            [](NavigationInterpolatorLatLon& self) -> auto& { return self.interpolator_heading(); },
             [](NavigationInterpolatorLatLon& self,
                const themachinethatgoesping::tools::vectorinterpolators::SlerpInterpolator<double,
                                                                                            float>&

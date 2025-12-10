@@ -113,7 +113,7 @@ struct GeolocationUTM : public GeolocationLocal
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-// IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon
+// IGNORE_DOC:mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationLatLon
 // backwards conversion
 inline GeolocationLatLon::GeolocationLatLon(const GeolocationUTM& location_utm)
     : GeolocationLatLon(GeolocationUTM::to_geolocation_latlon(location_utm))

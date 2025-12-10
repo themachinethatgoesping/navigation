@@ -14,6 +14,7 @@ sources = [
   'module.cpp',
   'datastructures/c_geolocation.cpp',
   'datastructures/c_geolocationlatlon.cpp',
+  'datastructures/c_geolocationlatlonvector.cpp',
   'datastructures/c_geolocationlocal.cpp',
   'datastructures/c_geolocationutm.cpp',
   'datastructures/c_positionaloffsets.cpp',

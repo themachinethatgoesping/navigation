@@ -9,6 +9,7 @@
 
 #include "datastructures/geolocation.hpp"
 #include "datastructures/geolocationlatlon.hpp"
+#include "datastructures/geolocationlatlonvector.hpp"
 #include "datastructures/geolocationlocal.hpp"
 #include "datastructures/geolocationutm.hpp"
 #include "datastructures/positionaloffsets.hpp"

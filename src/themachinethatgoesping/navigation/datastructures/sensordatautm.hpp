@@ -135,7 +135,7 @@ struct SensordataUTM : public SensordataLocal
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
 
-// IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon
+// IGNORE_DOC:mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataLatLon
 // backwards conversion
 inline SensordataLatLon::SensordataLatLon(const SensordataUTM& data_utm)
     : SensordataLatLon(SensordataUTM::to_sensordata(data_utm))

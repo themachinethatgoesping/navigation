@@ -1,4 +1,4 @@
-//sourcehash: 94fcfa9fbce1ed773abb3a21d5459c0ad02fe76304a17db32e5672d1fa7372e5
+//sourcehash: 827ed07518e6c1d039a2a7c570cd36ff0ebb85b13ae9bddf9c7f06e6ffb2e30b
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -10,28 +10,31 @@
 #pragma once
 
 #ifndef __DOCSTRINGS_HPP__
+#define __DOCSTRINGS_HPP__
 
-#define __EXPAND(x)                                                  x
-#define __COUNT(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, COUNT, ...) COUNT
-#define __VA_SIZE(...)                                               __EXPAND(__COUNT(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1))
-#define __CAT1(a, b)                                                 a##b
-#define __CAT2(a, b)                                                 __CAT1(a, b)
-#define __DOC1(n1)                                                   __doc_##n1
-#define __DOC2(n1, n2)                                               __doc_##n1##_##n2
-#define __DOC3(n1, n2, n3)                                           __doc_##n1##_##n2##_##n3
-#define __DOC4(n1, n2, n3, n4)                                       __doc_##n1##_##n2##_##n3##_##n4
-#define __DOC5(n1, n2, n3, n4, n5)                                   __doc_##n1##_##n2##_##n3##_##n4##_##n5
-#define __DOC6(n1, n2, n3, n4, n5, n6)                               __doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6
-#define __DOC7(n1, n2, n3, n4, n5, n6, n7)                           __doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6##_##n7
-#define __DOC8(n1, n2, n3, n4, n5, n6, n7, n8)                                                     \
-    __doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6##_##n7##_##n8
-#define __DOC9(n1, n2, n3, n4, n5, n6, n7, n8, n9)                                                 \
-    __doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6##_##n7##_##n8##_##n9
-#define __DOC10(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10)                                           \
-    __doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6##_##n7##_##n8##_##n9##_##n10
-#define DOC(...) __EXPAND(__EXPAND(__CAT2(__DOC, __VA_SIZE(__VA_ARGS__)))(__VA_ARGS__))
+#define MKD_EXPAND(x)                                      x
+#define MKD_COUNT(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, COUNT, ...)  COUNT
+#define MKD_VA_SIZE(...)                                   MKD_EXPAND(MKD_COUNT(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
+#define MKD_CAT1(a, b)                                     a ## b
+#define MKD_CAT2(a, b)                                     MKD_CAT1(a, b)
+#define MKD_DOC1(n1)                                       mkd_doc_##n1
+#define MKD_DOC2(n1, n2)                                   mkd_doc_##n1##_##n2
+#define MKD_DOC3(n1, n2, n3)                               mkd_doc_##n1##_##n2##_##n3
+#define MKD_DOC4(n1, n2, n3, n4)                           mkd_doc_##n1##_##n2##_##n3##_##n4
+#define MKD_DOC5(n1, n2, n3, n4, n5)                       mkd_doc_##n1##_##n2##_##n3##_##n4##_##n5
+#define MKD_DOC6(n1, n2, n3, n4, n5, n6)                   mkd_doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6
+#define MKD_DOC7(n1, n2, n3, n4, n5, n6, n7)               mkd_doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6##_##n7
+#define MKD_DOC8(n1, n2, n3, n4, n5, n6, n7, n8)           mkd_doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6##_##n7##_##n8
+#define MKD_DOC9(n1, n2, n3, n4, n5, n6, n7, n8, n9)       mkd_doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6##_##n7##_##n8##_##n9
+#define MKD_DOC10(n1, n2, n3, n4, n5, n6, n7, n8, n9, n10) mkd_doc_##n1##_##n2##_##n3##_##n4##_##n5##_##n6##_##n7##_##n8##_##n9##_##n10
+#define DOC(...)                                           MKD_EXPAND(MKD_EXPAND(MKD_CAT2(MKD_DOC, MKD_VA_SIZE(__VA_ARGS__)))(__VA_ARGS__))
 
-#endif // NEW_DOC_HEADER_HPP
+#if defined(__GNUG__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
+
+#endif // __DOCSTRINGS_HPP__
 #if defined(__GNUG__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
@@ -39,91 +42,75 @@
 
 
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM =
 R"doc(A structure to store a georeferenced location and attitude (e.g. of a
 sensor) unlike the default Geolocation structure, this object stores
 utm coordinates)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM = R"doc(Construct a new Sensor Position object)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM = R"doc(Construct a new Sensor Position object)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_2 =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_2 =
 R"doc(Construct an GeolocationUTM object from an existing GeolocationLocal
 object (using a known zone and hemisphere)
 
-Parameter ``location_local``:
-    $Parameter ``utm_zone``:
+Args:
+    location_local: 
+    utm_zone: UTM/UPS zone number
+    northern_hemisphere: if true: northern hemisphere, else: southern
+                         hemisphere)doc";
 
-UTM/UPS zone number
-
-Parameter ``northern_hemisphere``:
-    if true: northern hemisphere, else: southern hemisphere)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_3 =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_3 =
 R"doc(Construct an GeolocationUTM object from an existing GeolocationLatLon
 object (this allows for explicit conversion from GeolocationLatLon
 class))doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_4 =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_GeolocationUTM_4 =
 R"doc(Construct a new GeolocationUTM object
 
-Parameter ``northing``:
-    in m, positive northwards
+Args:
+    northing: in m, positive northwards
+    easting: in m, positive eastwards
+    utm_zone: UTM/UPS zone number
+    northern_hemisphere: if true: northern hemisphere, else: southern
+                         hemisphere
+    z: in m, positive downwards
+    yaw: in °, 0° is north, 90° is east
+    pitch: in °, positive means bow up
+    roll: in °, positive means port up)doc";
 
-Parameter ``easting``:
-    in m, positive eastwards
-
-Parameter ``utm_zone``:
-    UTM/UPS zone number
-
-Parameter ``northern_hemisphere``:
-    if true: northern hemisphere, else: southern hemisphere
-
-Parameter ``z``:
-    in m, positive downwards
-
-Parameter ``yaw``:
-    in °, 0° is north, 90° is east
-
-Parameter ``pitch``:
-    in °, positive means bow up
-
-Parameter ``roll``:
-    in °, positive means port up)doc";
-
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_from_geolocation_latlon =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_from_geolocation_latlon =
 R"doc(Construct convert a GeolocationLatLon Object to UTM
 
-Parameter ``location``:
-    valid GeolocationLatLon object
-
-Parameter ``setzone``:
-    set a preferred UTM zone negative means automatic, zero means UPS,
-    positive means a particular UTM zone
+Args:
+    location: valid GeolocationLatLon object
+    setzone: set a preferred UTM zone negative means automatic, zero
+             means UPS, positive means a particular UTM zone
 
 Returns:
     GeolocationUTM)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_from_stream = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_from_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_northern_hemisphere = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_northern_hemisphere = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_operator_eq = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_operator_eq = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_operator_ne = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_operator_ne = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_printer = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_printer = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_to_geolocation_latlon =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_to_geolocation_latlon =
 R"doc(Convert a utm geolocationlatlon to an unprojected location
 
-Parameter ``location_utm``:
-    $Returns:
+Args:
+    location_utm: 
 
-GeolocationLatLon)doc";
+Returns:
+    GeolocationLatLon)doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_to_stream = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_to_stream = R"doc()doc";
 
-static const char *__doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_utm_zone = R"doc(< UTM/UPS zone number)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_GeolocationUTM_utm_zone = R"doc(UTM/UPS zone number)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

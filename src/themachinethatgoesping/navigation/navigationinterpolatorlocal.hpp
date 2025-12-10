@@ -123,6 +123,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @return interpolator_northing&
      */
     auto& interpolator_northing() { return _interpolator_northing; }
+    const auto& interpolator_northing() const { return _interpolator_northing; }
 
     /**
      * @brief direct reference to the easting interpolator object
@@ -130,6 +131,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
      * @return interpolator_easting&
      */
     auto& interpolator_easting() { return _interpolator_easting; }
+    const auto& interpolator_easting() const { return _interpolator_easting; }
     //----- merge interpolators -----
     /**
      * @brief see documentation of I_NavigationInterpolator::merge

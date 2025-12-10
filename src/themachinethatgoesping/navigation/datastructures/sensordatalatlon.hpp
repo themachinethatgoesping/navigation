@@ -17,7 +17,7 @@ namespace themachinethatgoesping {
 namespace navigation {
 namespace datastructures {
 
-// IGNORE_DOC:__doc_themachinethatgoesping_navigation_datastructures_SensordataUTM
+// IGNORE_DOC:mkd_doc_themachinethatgoesping_navigation_datastructures_SensordataUTM
 // forward declarations for location conversions
 struct SensordataUTM; // defined in sensordatautm.hpp
 

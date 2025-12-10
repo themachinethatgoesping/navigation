@@ -89,6 +89,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @return interpolator_latitude&
      */
     auto& interpolator_latitude() { return _interpolator_latitude; }
+    const auto& interpolator_latitude() const { return _interpolator_latitude; }
 
     /**
      * @brief direct reference to the longitude interpolator object
@@ -96,6 +97,7 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      * @return interpolator_longitude&
      */
     auto& interpolator_longitude() { return _interpolator_longitude; }
+    const auto& interpolator_longitude() const { return _interpolator_longitude; }
 
     //----- merge interpolators -----
     /**
@@ -178,6 +180,6 @@ struct std::hash<themachinethatgoesping::navigation::NavigationInterpolatorLatLo
         const themachinethatgoesping::navigation::NavigationInterpolatorLatLon& object) const;
 };
 
-// IGNORE_DOC:__doc_themachinethatgoesping_navigation_hash_value
-// IGNORE_DOC:__doc_hash_operator_call
-// IGNORE_DOC:__doc_hash
+// IGNORE_DOC:mkd_doc_themachinethatgoesping_navigation_hash_value
+// IGNORE_DOC:mkd_doc_hash_operator_call
+// IGNORE_DOC:mkd_doc_hash
