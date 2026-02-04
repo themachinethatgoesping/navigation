@@ -7,7 +7,7 @@
 // -- c++ library headers
 
 #include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
-#include <themachinethatgoesping/tools_nanobind/pytensor_nanobind.hpp>
+#include <xtensor-python/nanobind/pytensor.hpp>
 
 #include <themachinethatgoesping/navigation/datastructures.hpp>
 #include <themachinethatgoesping/navigation/navigationinterpolatorlocal.hpp>
