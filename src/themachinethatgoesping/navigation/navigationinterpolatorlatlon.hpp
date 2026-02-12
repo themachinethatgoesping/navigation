@@ -109,6 +109,21 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
      */
     void merge(const NavigationInterpolatorLatLon& other);
 
+    /**
+     * @brief Merge data without sorting or rebuilding splines (deferred merge).
+     *
+     * Appends raw data from other. Call finalize() after all merge_unfinalized() calls.
+     * Much faster than merge() when combining many interpolators.
+     */
+    void merge_unfinalized(const NavigationInterpolatorLatLon& other);
+
+    /**
+     * @brief Sort and rebuild all interpolators after deferred merging.
+     *
+     * Call once after all merge_unfinalized() calls are complete.
+     */
+    void finalize();
+
     //----- compute the position of the target sensors -----
     /**
      * @brief Compute the position of the target "target_id" based on the sensor data for the given

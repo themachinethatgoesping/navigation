@@ -55,6 +55,50 @@ void I_NavigationInterpolator::merge(const I_NavigationInterpolator& other)
         other._interpolator_depth.get_data_X(), other._interpolator_depth.get_data_Y(), true);
 }
 
+// ----- deferred merge -----
+void I_NavigationInterpolator::merge_unfinalized(const I_NavigationInterpolator& other)
+{
+    invalidate_hash_cache();
+
+    /* compare sensor operations, without targets */
+    if (this->_sensor_configuration.without_targets() !=
+        other._sensor_configuration.without_targets())
+    {
+        throw std::runtime_error(
+            fmt::format("ERROR[{}]: Incompatible sensor configurations!", this->class_name()));
+    }
+
+    // check if sensor configuration can be merged
+    if (!_sensor_configuration.can_merge_targets_with(other.get_sensor_configuration()))
+    {
+        throw std::runtime_error(
+            fmt::format("ERROR[{}]: Incompatible target offsets!", this->class_name()));
+    }
+
+    // merge sensor configuration by adding targets
+    _sensor_configuration.add_targets(other.get_sensor_configuration().get_targets());
+
+    // append data without sorting or rebuilding
+    _interpolator_attitude.extend_unsorted(other._interpolator_attitude.get_data_X(),
+                                           other._interpolator_attitude.get_data_Y());
+    _interpolator_heading.extend_unsorted(other._interpolator_heading.get_data_X(),
+                                          other._interpolator_heading.get_data_Y());
+    _interpolator_heave.extend_unsorted(other._interpolator_heave.get_data_X(),
+                                        other._interpolator_heave.get_data_Y());
+    _interpolator_depth.extend_unsorted(other._interpolator_depth.get_data_X(),
+                                        other._interpolator_depth.get_data_Y());
+}
+
+void I_NavigationInterpolator::finalize()
+{
+    invalidate_hash_cache();
+
+    _interpolator_attitude.sort_and_finalize();
+    _interpolator_heading.sort_and_finalize();
+    _interpolator_heave.sort_and_finalize();
+    _interpolator_depth.sort_and_finalize();
+}
+
 // ----- set extrapolation mode -----
 void I_NavigationInterpolator::set_extrapolation_mode(tools::vectorinterpolators::o_extr_mode extrapolation_mode)
 {

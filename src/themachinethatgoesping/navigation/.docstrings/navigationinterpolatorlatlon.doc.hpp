@@ -1,4 +1,4 @@
-//sourcehash: 3d271f4115af4db59eb6fb78d802af31ac5ea48a3a5068a467216878cc0ad641
+//sourcehash: d7e97afeff69fcb6b81529da8cf2de249da8ced47c70becbff60a7bcaa9c4527
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -103,6 +103,11 @@ Args:
 Returns:
     GeolocationLatLonVector containing positions for all timestamps)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_finalize =
+R"doc(Sort and rebuild all interpolators after deferred merging.
+
+Call once after all merge_unfinalized() calls are complete.)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_from_stream = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_get_sampled_timestamps =
@@ -178,6 +183,13 @@ Returns:
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_interpolator_longitude_3 = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_merge = R"doc(see documentation of I_NavigationInterpolator::merge)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_merge_unfinalized =
+R"doc(Merge data without sorting or rebuilding splines (deferred merge).
+
+Appends raw data from other. Call finalize() after all
+merge_unfinalized() calls. Much faster than merge() when combining
+many interpolators.)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_NavigationInterpolatorLatLon_operator_call =
 R"doc(Compute the position of the target "target_id" based on the sensor

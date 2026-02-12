@@ -78,6 +78,28 @@ class I_NavigationInterpolator
      */
     void merge(const I_NavigationInterpolator& other);
 
+    /**
+     * @brief Merge data from another interpolator without sorting or rebuilding splines.
+     *
+     * This appends raw data from other into the internal vectors without any sorting
+     * or interpolator reconstruction. Call finalize() after all merge_unfinalized()
+     * calls are complete to sort and rebuild the interpolators.
+     *
+     * This is much faster than merge() when combining many interpolators, as it avoids
+     * the O(N*F*log(N)) cost of sorting after each merge.
+     *
+     * @param other interpolator to merge from (must have compatible sensor configuration)
+     */
+    void merge_unfinalized(const I_NavigationInterpolator& other);
+
+    /**
+     * @brief Sort and rebuild all interpolators after deferred merging.
+     *
+     * Call this once after all merge_unfinalized() calls are complete.
+     * Sorts accumulated data and rebuilds splines in O(N*log(N)) total.
+     */
+    void finalize();
+
     // ----- set extrapolation mode -----
     /**
      * @brief Set the extrapolation mode for the attitude, compass, heave and depth interpolators

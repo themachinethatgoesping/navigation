@@ -1,4 +1,4 @@
-//sourcehash: 6e901801570153429372e127791a3965fcbf946167e9c6b494bcf0d9b0b80d39
+//sourcehash: 68020d614b3d8a9d342653aefd73a249785bb994d0eed25b44b80293d16184c8
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -74,6 +74,12 @@ Args:
 
 static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_class_name = R"doc()doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_finalize =
+R"doc(Sort and rebuild all interpolators after deferred merging.
+
+Call this once after all merge_unfinalized() calls are complete. Sorts
+accumulated data and rebuilds splines in O(N*log(N)) total.)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_from_stream = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_get_sensor_configuration =
@@ -132,6 +138,22 @@ SensorConfiguration is compatible.
 
 Args:
     other:)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_merge_unfinalized =
+R"doc(Merge data from another interpolator without sorting or rebuilding
+splines.
+
+This appends raw data from other into the internal vectors without any
+sorting or interpolator reconstruction. Call finalize() after all
+merge_unfinalized() calls are complete to sort and rebuild the
+interpolators.
+
+This is much faster than merge() when combining many interpolators, as
+it avoids the O(N*F*log(N)) cost of sorting after each merge.
+
+Args:
+    other: interpolator to merge from (must have compatible sensor
+           configuration))doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_operator_eq = R"doc()doc";
 

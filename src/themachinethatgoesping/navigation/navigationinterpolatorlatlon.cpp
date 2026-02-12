@@ -73,6 +73,29 @@ void NavigationInterpolatorLatLon::merge(const NavigationInterpolatorLatLon& oth
                                    true);
 }
 
+// ----- deferred merge -----
+void NavigationInterpolatorLatLon::merge_unfinalized(const NavigationInterpolatorLatLon& other)
+{
+    // merge base class data (attitude, heading, heave, depth) without sorting
+    I_NavigationInterpolator::merge_unfinalized(other);
+
+    // append lat/lon data without sorting or spline rebuild
+    _interpolator_latitude.extend_unsorted(other._interpolator_latitude.get_data_X(),
+                                           other._interpolator_latitude.get_data_Y());
+    _interpolator_longitude.extend_unsorted(other._interpolator_longitude.get_data_X(),
+                                            other._interpolator_longitude.get_data_Y());
+}
+
+void NavigationInterpolatorLatLon::finalize()
+{
+    // finalize base class interpolators (attitude, heading, heave, depth)
+    I_NavigationInterpolator::finalize();
+
+    // sort and rebuild lat/lon akima splines
+    _interpolator_latitude.sort_and_finalize();
+    _interpolator_longitude.sort_and_finalize();
+}
+
 // ----- compute the position of the target sensors -----
 datastructures::GeolocationLatLon NavigationInterpolatorLatLon::operator()(const std::string& target_id,
                                                                            double             timestamp) const
