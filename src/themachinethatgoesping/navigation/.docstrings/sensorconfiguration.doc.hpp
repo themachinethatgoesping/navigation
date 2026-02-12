@@ -1,4 +1,4 @@
-//sourcehash: d65f0b9c8c53b389f2e50d77a94fcae07473b005f2d7593140f110a3e8ba7bf6
+//sourcehash: ec196ee88ddb66fa59d4650882426355c9e5f17d9bec9ceaa4e11bcd0bd35362
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -245,6 +245,8 @@ Args:
 
 Returns:
     True if the sensor configuration has the target, false otherwise.)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_invalidate_hash_cache = R"doc(Invalidate the cached binary hash (call from every mutating method))doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_offsets_attitude_source = R"doc(Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor)doc";
 

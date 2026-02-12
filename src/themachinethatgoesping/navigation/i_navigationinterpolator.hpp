@@ -12,6 +12,8 @@
 #include <string>
 #include <iostream>
 
+#include <optional>
+
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators/akimainterpolator.hpp>
 #include <themachinethatgoesping/tools/vectorinterpolators/linearinterpolator.hpp>
@@ -34,6 +36,11 @@ class I_NavigationInterpolator
     virtual std::string class_name() const { return "I_NavigationInterpolator"; }
 
     SensorConfiguration _sensor_configuration; ///< sensor configuration that stores the offsets
+
+    mutable std::optional<xxh::hash_t<64>> _cached_binary_hash; ///< cached binary hash, reset on mutation
+
+    /// Invalidate the cached binary hash (call from every mutating method)
+    void invalidate_hash_cache() { _cached_binary_hash.reset(); }
 
     // SlerpInterpolator that stores timestamp, roll, pitch, yaw -> Attitude of Vessel on the Water
     tools::vectorinterpolators::SlerpInterpolator<double, float>

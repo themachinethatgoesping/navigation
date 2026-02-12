@@ -22,6 +22,8 @@ I_NavigationInterpolator::I_NavigationInterpolator(SensorConfiguration sensor_co
 // ----- merge data from another interpolator -----
 void I_NavigationInterpolator::merge(const I_NavigationInterpolator& other)
 {
+    invalidate_hash_cache();
+
     /* compare sensor operations, without targets */
     if (this->_sensor_configuration.without_targets() !=
         other._sensor_configuration.without_targets())
@@ -56,6 +58,8 @@ void I_NavigationInterpolator::merge(const I_NavigationInterpolator& other)
 // ----- set extrapolation mode -----
 void I_NavigationInterpolator::set_extrapolation_mode(tools::vectorinterpolators::o_extr_mode extrapolation_mode)
 {
+    invalidate_hash_cache();
+
     _interpolator_attitude.set_extrapolation_mode(extrapolation_mode);
     _interpolator_heading.set_extrapolation_mode(extrapolation_mode);
     _interpolator_heave.set_extrapolation_mode(extrapolation_mode);
@@ -80,11 +84,13 @@ bool I_NavigationInterpolator::operator!=(const I_NavigationInterpolator& other)
 // ----- set sensor data -----
 void I_NavigationInterpolator::set_data_depth(const std::vector<double>& timestamp, const std::vector<float>& depth)
 {
+    invalidate_hash_cache();
     _interpolator_depth.set_data_XY(timestamp, depth);
 }
 
 void I_NavigationInterpolator::set_data_heave(const std::vector<double>& timestamp, const std::vector<double>& heave)
 {
+    invalidate_hash_cache();
     _interpolator_heave.set_data_XY(timestamp, heave);
 }
 
@@ -92,12 +98,14 @@ void I_NavigationInterpolator::set_data_attitude(const std::vector<double>& time
                                                  const std::vector<float>& pitch,
                                                  const std::vector<float>& roll)
 {
+    invalidate_hash_cache();
     std::vector<float> yaw(timestamp.size(), 0.0f);
     _interpolator_attitude.set_data_XYPR(timestamp, yaw, pitch, roll);
 }
 
 void I_NavigationInterpolator::set_data_heading(const std::vector<double>& timestamp, const std::vector<float>& heading)
 {
+    invalidate_hash_cache();
     std::vector<float> pr(heading.size(), 0.0);
     _interpolator_heading.set_data_XYPR(timestamp, heading, pr, pr);
 }
@@ -111,17 +119,20 @@ void I_NavigationInterpolator::add_target(const std::string& target_id,
                                           float             pitch,
                                           float             roll)
 {
+    invalidate_hash_cache();
     _sensor_configuration.add_target(target_id, x, y, z, yaw, pitch, roll);
 }
 
 void I_NavigationInterpolator::add_target(const std::string&                       target_id,
                                           const datastructures::PositionalOffsets& target_offsets)
 {
+    invalidate_hash_cache();
     _sensor_configuration.add_target(target_id, target_offsets);
 }
 
 void I_NavigationInterpolator::set_sensor_configuration(SensorConfiguration sensor_configuration)
 {
+    invalidate_hash_cache();
     _sensor_configuration = std::move(sensor_configuration);
 }
 

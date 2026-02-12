@@ -1,4 +1,4 @@
-//sourcehash: a115cc517662cc226350d87ecf7219566cf172564de453fd6e643367ddade0d3
+//sourcehash: 6e901801570153429372e127791a3965fcbf946167e9c6b494bcf0d9b0b80d39
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -123,6 +123,8 @@ Returns:
     interpolator_heave&)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_interpolator_heave_3 = R"doc()doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_invalidate_hash_cache = R"doc(Invalidate the cached binary hash (call from every mutating method))doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_I_NavigationInterpolator_merge =
 R"doc(Merge data from another interpolator. Only works of the

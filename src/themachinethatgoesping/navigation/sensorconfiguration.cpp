@@ -158,11 +158,13 @@ const std::map<std::string, datastructures::PositionalOffsets>& SensorConfigurat
 
 void SensorConfiguration::remove_target(const std::string& target_id)
 {
+    invalidate_hash_cache();
     _target_offsets.erase(target_id);
 }
 
 void SensorConfiguration::remove_targets()
 {
+    invalidate_hash_cache();
     _target_offsets.clear();
     add_target("0", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
@@ -175,6 +177,7 @@ bool SensorConfiguration::has_target(const std::string& target_id) const
 void SensorConfiguration::add_target(const std::string&                       target_id,
                                      const datastructures::PositionalOffsets& target_offsets)
 {
+    invalidate_hash_cache();
     _target_offsets[target_id] = target_offsets;
 }
 
@@ -202,12 +205,14 @@ void SensorConfiguration::set_attitude_source(std::string_view name,
                                               float            pitch,
                                               float            roll)
 {
+    invalidate_hash_cache();
     _offsets_attitude_source =
         datastructures::PositionalOffsets(name, 0.0, 0.0, 0.0, yaw, pitch, roll);
 }
 void SensorConfiguration::set_attitude_source(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
+    invalidate_hash_cache();
     _offsets_attitude_source = sensor_offsets;
 }
 
@@ -218,11 +223,13 @@ datastructures::PositionalOffsets SensorConfiguration::get_attitude_source() con
 
 void SensorConfiguration::set_heading_source(std::string_view name, float yaw)
 {
+    invalidate_hash_cache();
     _offsets_heading_source = datastructures::PositionalOffsets(name, 0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
 void SensorConfiguration::set_heading_source(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
+    invalidate_hash_cache();
     _offsets_heading_source = sensor_offsets;
 }
 datastructures::PositionalOffsets SensorConfiguration::get_heading_source() const
@@ -232,6 +239,7 @@ datastructures::PositionalOffsets SensorConfiguration::get_heading_source() cons
 
 void SensorConfiguration::set_waterline_offset(float z)
 {
+    invalidate_hash_cache();
     _waterline_offset = z;
 }
 
@@ -242,10 +250,12 @@ float SensorConfiguration::get_waterline_offset() const
 
 void SensorConfiguration::set_depth_source(std::string_view name, float x, float y, float z)
 {
+    invalidate_hash_cache();
     _offsets_depth_source = datastructures::PositionalOffsets(name, x, y, z, 0.0, 0.0, 0.0);
 }
 void SensorConfiguration::set_depth_source(const datastructures::PositionalOffsets& sensor_offsets)
 {
+    invalidate_hash_cache();
     _offsets_depth_source = sensor_offsets;
 }
 datastructures::PositionalOffsets SensorConfiguration::get_depth_source() const
@@ -255,11 +265,13 @@ datastructures::PositionalOffsets SensorConfiguration::get_depth_source() const
 
 void SensorConfiguration::set_position_source(std::string_view name, float x, float y, float z)
 {
+    invalidate_hash_cache();
     _offsets_position_source = datastructures::PositionalOffsets(name, x, y, z, 0.0, 0.0, 0.0);
 }
 void SensorConfiguration::set_position_source(
     const datastructures::PositionalOffsets& sensor_offsets)
 {
+    invalidate_hash_cache();
     _offsets_position_source = sensor_offsets;
 }
 datastructures::PositionalOffsets SensorConfiguration::get_position_source() const

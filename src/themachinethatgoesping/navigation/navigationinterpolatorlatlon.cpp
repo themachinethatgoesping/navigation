@@ -53,6 +53,7 @@ void NavigationInterpolatorLatLon::set_data_position(const std::vector<double>& 
                                                      const std::vector<double>& latitude,
                                                      const std::vector<double>& longitude)
 {
+    invalidate_hash_cache();
     _interpolator_latitude.set_data_XY(timestamp, latitude);
     _interpolator_longitude.set_data_XY(timestamp, longitude);
 }
@@ -60,6 +61,7 @@ void NavigationInterpolatorLatLon::set_data_position(const std::vector<double>& 
 // ----- merge interpolators -----
 void NavigationInterpolatorLatLon::merge(const NavigationInterpolatorLatLon& other)
 {
+    // Note: I_NavigationInterpolator::merge already calls invalidate_hash_cache()
     I_NavigationInterpolator::merge(other);
 
     // merge data

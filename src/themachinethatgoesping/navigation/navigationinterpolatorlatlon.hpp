@@ -248,7 +248,21 @@ class NavigationInterpolatorLatLon : public I_NavigationInterpolator
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(NavigationInterpolatorLatLon)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS_NO_HASH__(NavigationInterpolatorLatLon)
+
+    /// Cached binary hash: avoids re-serializing the entire object on every flyweight lookup.
+    xxh::hash_t<64> binary_hash() const
+    {
+        if (!_cached_binary_hash.has_value())
+        {
+            xxh::hash3_state_t<64>               hash;
+            boost::iostreams::stream<XXHashSink> stream(hash);
+            this->to_stream(stream);
+            stream.flush();
+            _cached_binary_hash = hash.digest();
+        }
+        return *_cached_binary_hash;
+    }
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };
