@@ -43,9 +43,9 @@ PositionalOffsets PositionalOffsets::from_txrx(const PositionalOffsets& tx,
     //trx.y = (tx.y + rx.y) * 0.5;
     trx.z = (tx.z + rx.z) * 0.5;
 
-    /* x and y are the transducer receiver values*/
+    /* x is taken from the transmitter, y from the receiver */
     trx.y = rx.y;
-    trx.x = tx.y;
+    trx.x = tx.x;
 
     /* take pitch and yaw from tx and roll from rx*/
     trx.pitch = tx.pitch;
