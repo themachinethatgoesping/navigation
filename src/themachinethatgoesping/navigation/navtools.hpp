@@ -19,7 +19,7 @@
 
 #include "GeographicLib/Geodesic.hpp"
 #include <GeographicLib/UTMUPS.hpp>
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <xtensor/containers/xadapt.hpp>
 #include <xtensor/containers/xcontainer.hpp>
