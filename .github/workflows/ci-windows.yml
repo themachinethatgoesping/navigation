@@ -129,7 +129,7 @@ jobs:
         cd ..
         #rm -rv boost*
 
-    - name: validate boost layout
+    - name: Validate Boost layout
       run: |
         $boostRoot = "c:\local\boost_${{matrix.boost-version_}}"
         if (-not (Test-Path "$boostRoot\boost\version.hpp")) { throw "Boost headers not found in $boostRoot" }
