@@ -126,6 +126,9 @@ jobs:
         cd $boostRoot
         .\bootstrap.bat ${{matrix.toolset}}
         .\b2.exe stage --stagedir=$boostRoot --variant=release --threading=multi --link=static address-model=64 ${{matrix.boost-modules}}
+        if ((-not (Test-Path "$boostRoot\lib")) -and (Test-Path "$boostRoot\stage\lib")) {
+          Move-Item "$boostRoot\stage\lib" "$boostRoot\lib"
+        }
         cd ..
         #rm -rv boost*
 
