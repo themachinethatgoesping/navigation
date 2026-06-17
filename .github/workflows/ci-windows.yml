@@ -139,8 +139,12 @@ jobs:
         if (-not (Test-Path "$boostRoot\boost\version.hpp")) { throw "Boost headers not found in $boostRoot" }
         $boostLibs = Get-ChildItem "$boostRoot\lib\boost_*.lib" -ErrorAction SilentlyContinue
         if (-not $boostLibs) {
-          $foundLibEntries = (Get-ChildItem "$boostRoot\lib" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name) -join ', '
-          throw "Boost libraries (boost_*.lib) not found in $boostRoot\lib. Found: $foundLibEntries"
+          $libStatus = "lib directory does not exist"
+          if (Test-Path "$boostRoot\lib") {
+            $foundLibEntries = (Get-ChildItem "$boostRoot\lib" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name) -join ', '
+            $libStatus = "found: $foundLibEntries"
+          }
+          throw "Boost libraries (boost_*.lib) not found in $boostRoot\lib; $libStatus"
         }
 
     - name: install dependencies (meson & python)
