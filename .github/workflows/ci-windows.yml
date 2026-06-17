@@ -114,7 +114,7 @@ jobs:
       with:
         path: c:\local\boost_${{matrix.boost-version_}}
         #key: windows-msvc-14.32-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}
-        key: windows-${{matrix.toolset}}-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}-local-prefix
+        key: windows-${{matrix.toolset}}-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}-local-prefix-x64
   
     - name: Install dependencies on windows
       if: steps.cache-boost.outputs.cache-hit != 'true'
@@ -124,7 +124,7 @@ jobs:
         7z x boost.7z 
         cd .\boost_${{matrix.boost-version_}}\
         .\bootstrap.bat ${{matrix.toolset}}
-        .\b2.exe install --prefix=$boostRoot --variant=release --threading=multi --link=static ${{matrix.boost-modules}}
+        .\b2.exe install --prefix=$boostRoot --variant=release --threading=multi --link=static address-model=64 ${{matrix.boost-modules}}
         cd ..
         #rm -rv boost*
 
