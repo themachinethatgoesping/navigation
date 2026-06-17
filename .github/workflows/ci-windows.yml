@@ -127,7 +127,7 @@ jobs:
         .\bootstrap.bat ${{matrix.toolset}}
         .\b2.exe stage --stagedir=$boostRoot --variant=release --threading=multi --link=static address-model=64 ${{matrix.boost-modules}}
         if (-not (Test-Path "$boostRoot\boost\version.hpp")) { throw "Boost headers not found in $boostRoot" }
-        if (-not (Get-ChildItem "$boostRoot\lib\boost_*.lib" -ErrorAction SilentlyContinue)) { throw "Boost libraries not found in $boostRoot\\lib" }
+        if (-not (Get-ChildItem "$boostRoot\lib\boost_*.lib" -ErrorAction SilentlyContinue)) { throw "Boost libraries not found in $boostRoot\lib" }
         cd ..
         #rm -rv boost*
 
