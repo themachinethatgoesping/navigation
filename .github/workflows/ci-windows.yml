@@ -142,9 +142,12 @@ jobs:
 
     - name: configure meson
       run: |
+        $boostVersionTag = [regex]::Replace('${{matrix.boost-version_}}', '_\d+$', '')
         $env:BOOST_ROOT = 'c:\Boost'
-        $env:BOOST_INCLUDEDIR = (Get-ChildItem 'c:\Boost\include' -Directory | Where-Object Name -like 'boost-*' | Select-Object -First 1 -ExpandProperty FullName)
+        $env:BOOST_INCLUDEDIR = "c:\Boost\include\boost-$boostVersionTag"
         $env:BOOST_LIBRARYDIR = 'c:\Boost\lib'
+        if (!(Test-Path $env:BOOST_INCLUDEDIR)) { throw "Boost include directory not found: $env:BOOST_INCLUDEDIR" }
+        if (!(Test-Path $env:BOOST_LIBRARYDIR)) { throw "Boost library directory not found: $env:BOOST_LIBRARYDIR" }
         # meson setup builddir -D"python.install_env=auto" -Ddefault_library=static -D"python.install_env=auto" -Dcpp_std=${{matrix.cpp_std}}
         meson setup builddir -Dunity=on -Dunity_size=9999999 -D"python.install_env=auto" -Ddefault_library=static -D"python.install_env=auto" -Dcpp_std=${{matrix.cpp_std}}
 
