@@ -142,6 +142,9 @@ jobs:
 
     - name: configure meson
       run: |
+        $env:BOOST_ROOT = 'c:\Boost'
+        $env:BOOST_INCLUDEDIR = (Get-ChildItem 'c:\Boost\include' -Directory | Where-Object Name -like 'boost-*' | Select-Object -First 1 -ExpandProperty FullName)
+        $env:BOOST_LIBRARYDIR = 'c:\Boost\lib'
         # meson setup builddir -D"python.install_env=auto" -Ddefault_library=static -D"python.install_env=auto" -Dcpp_std=${{matrix.cpp_std}}
         meson setup builddir -Dunity=on -Dunity_size=9999999 -D"python.install_env=auto" -Ddefault_library=static -D"python.install_env=auto" -Dcpp_std=${{matrix.cpp_std}}
 
