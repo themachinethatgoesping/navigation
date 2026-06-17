@@ -126,8 +126,9 @@ jobs:
         cd $boostRoot
         .\bootstrap.bat ${{matrix.toolset}}
         .\b2.exe stage --stagedir=$boostRoot --variant=release --threading=multi --link=static address-model=64 ${{matrix.boost-modules}}
-        if ((-not (Test-Path "$boostRoot\lib")) -and (Test-Path "$boostRoot\stage\lib")) {
-          Move-Item "$boostRoot\stage\lib" "$boostRoot\lib"
+        if (Test-Path "$boostRoot\stage\lib") {
+          New-Item -ItemType Directory -Path "$boostRoot\lib" -Force | Out-Null
+          Get-ChildItem "$boostRoot\stage\lib\boost_*.lib" -ErrorAction SilentlyContinue | Move-Item -Destination "$boostRoot\lib" -Force
         }
         cd ..
         #rm -rv boost*
@@ -136,7 +137,11 @@ jobs:
       run: |
         $boostRoot = "c:\local\boost_${{matrix.boost-version_}}"
         if (-not (Test-Path "$boostRoot\boost\version.hpp")) { throw "Boost headers not found in $boostRoot" }
-        if (-not (Get-ChildItem "$boostRoot\lib\boost_*.lib" -ErrorAction SilentlyContinue)) { throw "Boost libraries (boost_*.lib) not found in $boostRoot\lib" }
+        $boostLibs = Get-ChildItem "$boostRoot\lib\boost_*.lib" -ErrorAction SilentlyContinue
+        if (-not $boostLibs) {
+          $foundLibEntries = (Get-ChildItem "$boostRoot\lib" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name) -join ', '
+          throw "Boost libraries (boost_*.lib) not found in $boostRoot\lib. Found: $foundLibEntries"
+        }
 
     - name: install dependencies (meson & python)
       run: pip install meson meson-python pytest numpy 
