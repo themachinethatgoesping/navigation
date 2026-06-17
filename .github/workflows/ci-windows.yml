@@ -112,18 +112,19 @@ jobs:
       id: cache-boost
       uses: actions/cache@v3
       with:
-        path: c:\Boost
+        path: c:\local\boost_${{matrix.boost-version_}}
         #key: windows-msvc-14.32-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}
-        key: windows-${{matrix.toolset}}-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}
+        key: windows-${{matrix.toolset}}-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}-local-prefix
   
     - name: Install dependencies on windows
       if: steps.cache-boost.outputs.cache-hit != 'true'
       run: |
+        $boostRoot = "c:\local\boost_${{matrix.boost-version_}}"
         Invoke-WebRequest -Uri https://archives.boost.io/release/${{matrix.boost-version}}/source/boost_${{matrix.boost-version_}}.7z -outfile boost.7z
         7z x boost.7z 
         cd .\boost_${{matrix.boost-version_}}\
         .\bootstrap.bat ${{matrix.toolset}}
-        .\b2.exe install --variant=release --threading=multi --link=static ${{matrix.boost-modules}}
+        .\b2.exe install --prefix=$boostRoot --variant=release --threading=multi --link=static ${{matrix.boost-modules}}
         cd ..
         #rm -rv boost*
 
@@ -142,12 +143,6 @@ jobs:
 
     - name: configure meson
       run: |
-        $boostVersionTag = [regex]::Replace('${{matrix.boost-version_}}', '_\d+$', '')
-        $env:BOOST_ROOT = 'c:\Boost'
-        $env:BOOST_INCLUDEDIR = "c:\Boost\include\boost-$boostVersionTag"
-        $env:BOOST_LIBRARYDIR = 'c:\Boost\lib'
-        if (!(Test-Path $env:BOOST_INCLUDEDIR)) { throw "Boost include directory not found: $env:BOOST_INCLUDEDIR" }
-        if (!(Test-Path $env:BOOST_LIBRARYDIR)) { throw "Boost library directory not found: $env:BOOST_LIBRARYDIR" }
         # meson setup builddir -D"python.install_env=auto" -Ddefault_library=static -D"python.install_env=auto" -Dcpp_std=${{matrix.cpp_std}}
         meson setup builddir -Dunity=on -Dunity_size=9999999 -D"python.install_env=auto" -Ddefault_library=static -D"python.install_env=auto" -Dcpp_std=${{matrix.cpp_std}}
 
