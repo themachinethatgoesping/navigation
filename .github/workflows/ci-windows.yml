@@ -114,17 +114,20 @@ jobs:
       with:
         path: c:\local\boost_${{matrix.boost-version_}}
         #key: windows-msvc-14.32-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}
-        key: windows-${{matrix.toolset}}-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}-local-prefix-x64
+        key: windows-${{matrix.toolset}}-boost-${{matrix.boost-version}}-${{matrix.boost-modules}}-staged-root-x64
   
     - name: Install dependencies on windows
       if: steps.cache-boost.outputs.cache-hit != 'true'
       run: |
         $boostRoot = "c:\local\boost_${{matrix.boost-version_}}"
+        New-Item -ItemType Directory -Path c:\local -Force | Out-Null
         Invoke-WebRequest -Uri https://archives.boost.io/release/${{matrix.boost-version}}/source/boost_${{matrix.boost-version_}}.7z -outfile boost.7z
-        7z x boost.7z 
-        cd .\boost_${{matrix.boost-version_}}\
+        7z x boost.7z -oc:\local
+        cd $boostRoot
         .\bootstrap.bat ${{matrix.toolset}}
-        .\b2.exe install --prefix=$boostRoot --variant=release --threading=multi --link=static address-model=64 ${{matrix.boost-modules}}
+        .\b2.exe stage --stagedir=$boostRoot --variant=release --threading=multi --link=static address-model=64 ${{matrix.boost-modules}}
+        if (-not (Test-Path "$boostRoot\boost\version.hpp")) { throw "Boost headers not found in $boostRoot" }
+        if (-not (Get-ChildItem "$boostRoot\lib\boost_*.lib" -ErrorAction SilentlyContinue)) { throw "Boost libraries not found in $boostRoot\\lib" }
         cd ..
         #rm -rv boost*
 
