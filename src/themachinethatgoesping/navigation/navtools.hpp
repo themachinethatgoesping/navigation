@@ -14,6 +14,8 @@
  */
 
 #include <stdexcept>
+#include <atomic>
+#include <exception>
 #include <tuple>
 #include <vector>
 
@@ -177,6 +179,10 @@ inline std::pair<T_container, T_container> utm_to_latlon(const T_container& nort
         throw std::runtime_error(
             "ERROR[utm_to_latlon]: easting and northing vector sizes are not the same!");
 
+    if (zone < 1 || zone > 60)
+        throw std::runtime_error(
+            fmt::format("ERROR[utm_to_latlon]: invalid UTM zone {}. Expected 1..60.", zone));
+
     // initialize output vectors
     T_container lat, lon;
     // Check if container is xtensor and handle resize accordingly
@@ -192,13 +198,64 @@ inline std::pair<T_container, T_container> utm_to_latlon(const T_container& nort
         lon.resize(northing.size());
     }
 
-    // loop through data and convert using GeographicLib
+    std::atomic<bool> has_error = false;
+    std::string       error_message;
+
+    // Catch conversion failures inside OpenMP workers to avoid std::terminate/abort.
 #pragma omp parallel for num_threads(mp_cores)
     for (size_t i = 0; i < easting.size(); i++)
     {
-        GeographicLib::UTMUPS::Reverse(
-            zone, northern_hemisphere, easting[i], northing[i], lat[i], lon[i]);
+        if (has_error.load(std::memory_order_relaxed))
+            continue;
+
+        try
+        {
+            GeographicLib::UTMUPS::Reverse(
+                zone, northern_hemisphere, easting[i], northing[i], lat[i], lon[i]);
+        }
+        catch (const std::exception& ex)
+        {
+            has_error.store(true, std::memory_order_relaxed);
+#pragma omp critical(navtools_utm_to_latlon_scalar_error)
+            {
+                if (error_message.empty())
+                {
+                    error_message = fmt::format(
+                        "ERROR[utm_to_latlon]: conversion failed at index {} (zone={}, "
+                        "northing={}, easting={}, northern_hemisphere={}). {}",
+                        i,
+                        zone,
+                        northing[i],
+                        easting[i],
+                        northern_hemisphere,
+                        ex.what());
+                }
+            }
+        }
+        catch (...)
+        {
+            has_error.store(true, std::memory_order_relaxed);
+#pragma omp critical(navtools_utm_to_latlon_scalar_error)
+            {
+                if (error_message.empty())
+                {
+                    error_message = fmt::format(
+                        "ERROR[utm_to_latlon]: conversion failed at index {} (zone={}, "
+                        "northing={}, easting={}, northern_hemisphere={}) with unknown exception.",
+                        i,
+                        zone,
+                        northing[i],
+                        easting[i],
+                        northern_hemisphere);
+                }
+            }
+        }
     }
+
+    if (has_error.load(std::memory_order_relaxed))
+        throw std::runtime_error(error_message.empty()
+                                     ? "ERROR[utm_to_latlon]: conversion failed."
+                                     : error_message);
 
     return std::make_pair(lat, lon);
 }
@@ -222,7 +279,7 @@ inline std::pair<T_container_double, T_container_double> utm_to_latlon(
     int                       mp_cores = 1)
 {
     // check if vector sizes are the same
-    if (easting.size() != northing.size() && easting.size() != zone.size() &&
+    if (easting.size() != northing.size() || easting.size() != zone.size() ||
         easting.size() != northern_hemisphere.size())
         throw std::runtime_error("ERROR[utm_to_latlon]: easting, northing, zone and "
                                  "northern_hemisphere vector sizes are not the same!");
@@ -242,13 +299,64 @@ inline std::pair<T_container_double, T_container_double> utm_to_latlon(
         lon.resize(northing.size());
     }
 
-// loop through data and convert using GeographicLib
+    std::atomic<bool> has_error = false;
+    std::string       error_message;
+
+    // Catch conversion failures inside OpenMP workers to avoid std::terminate/abort.
 #pragma omp parallel for num_threads(mp_cores)
     for (size_t i = 0; i < easting.size(); i++)
     {
-        GeographicLib::UTMUPS::Reverse(
-            zone[i], northern_hemisphere[i], easting[i], northing[i], lat[i], lon[i]);
+        if (has_error.load(std::memory_order_relaxed))
+            continue;
+
+        try
+        {
+            GeographicLib::UTMUPS::Reverse(
+                zone[i], northern_hemisphere[i], easting[i], northing[i], lat[i], lon[i]);
+        }
+        catch (const std::exception& ex)
+        {
+            has_error.store(true, std::memory_order_relaxed);
+#pragma omp critical(navtools_utm_to_latlon_vector_error)
+            {
+                if (error_message.empty())
+                {
+                    error_message = fmt::format(
+                        "ERROR[utm_to_latlon]: conversion failed at index {} (zone={}, "
+                        "northing={}, easting={}, northern_hemisphere={}). {}",
+                        i,
+                        zone[i],
+                        northing[i],
+                        easting[i],
+                        northern_hemisphere[i],
+                        ex.what());
+                }
+            }
+        }
+        catch (...)
+        {
+            has_error.store(true, std::memory_order_relaxed);
+#pragma omp critical(navtools_utm_to_latlon_vector_error)
+            {
+                if (error_message.empty())
+                {
+                    error_message = fmt::format(
+                        "ERROR[utm_to_latlon]: conversion failed at index {} (zone={}, "
+                        "northing={}, easting={}, northern_hemisphere={}) with unknown exception.",
+                        i,
+                        zone[i],
+                        northing[i],
+                        easting[i],
+                        northern_hemisphere[i]);
+                }
+            }
+        }
     }
+
+    if (has_error.load(std::memory_order_relaxed))
+        throw std::runtime_error(error_message.empty()
+                                     ? "ERROR[utm_to_latlon]: conversion failed."
+                                     : error_message);
 
     return std::make_pair(lat, lon);
 }
@@ -305,19 +413,69 @@ inline std::tuple<T_container_double, T_container_double, int, bool> latlon_to_u
     else
     {
         northing.resize(lat.size());
-        northing.resize(lat.size());
+        easting.resize(lat.size());
     }
 
     int  zone;
     bool northern_hemisphere;
 
+    std::atomic<bool> has_error = false;
+    std::string       error_message;
+
 // loop through data and convert using GeographicLib
 #pragma omp parallel for num_threads(mp_cores)
     for (size_t i = 0; i < lat.size(); i++)
     {
-        GeographicLib::UTMUPS::Forward(
-            lat[i], lon[i], zone, northern_hemisphere, easting[i], northing[i], setzone);
+        if (has_error.load(std::memory_order_relaxed))
+            continue;
+
+        try
+        {
+            GeographicLib::UTMUPS::Forward(
+                lat[i], lon[i], zone, northern_hemisphere, easting[i], northing[i], setzone);
+        }
+        catch (const std::exception& ex)
+        {
+            has_error.store(true, std::memory_order_relaxed);
+#pragma omp critical(navtools_latlon_to_utm_error)
+            {
+                if (error_message.empty())
+                {
+                    error_message = fmt::format(
+                        "ERROR[latlon_to_utm]: conversion failed at index {} (latitude={}, "
+                        "longitude={}, setzone={}). {}",
+                        i,
+                        lat[i],
+                        lon[i],
+                        setzone,
+                        ex.what());
+                }
+            }
+        }
+        catch (...)
+        {
+            has_error.store(true, std::memory_order_relaxed);
+#pragma omp critical(navtools_latlon_to_utm_error)
+            {
+                if (error_message.empty())
+                {
+                    error_message = fmt::format(
+                        "ERROR[latlon_to_utm]: conversion failed at index {} (latitude={}, "
+                        "longitude={}, setzone={}) with unknown exception.",
+                        i,
+                        lat[i],
+                        lon[i],
+                        setzone);
+                }
+            }
+        }
     }
+
+    if (has_error.load(std::memory_order_relaxed))
+        throw std::runtime_error(error_message.empty()
+                                     ? "ERROR[latlon_to_utm]: conversion failed."
+                                     : error_message);
+
     return std::make_tuple(northing, easting, zone, northern_hemisphere);
 }
 

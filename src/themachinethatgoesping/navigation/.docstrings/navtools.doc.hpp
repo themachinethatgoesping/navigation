@@ -1,4 +1,4 @@
-//sourcehash: 45e72a48bf8b94e1f2025790a9e9beb46cd22fe1b53550d9706f6d6a99425aaf
+//sourcehash: 2906769e3b336166fd3e99eae17afb75f8aaf95778cfa342f02bdca5cd516542
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -41,7 +41,7 @@
 #endif
 
 
-static const char *mkd_doc__unnamed_class_at_themachinethatgoesping_navigation_navtools_hpp_594_67 = R"doc()doc";
+static const char *mkd_doc__unnamed_class_at_themachinethatgoesping_navigation_navtools_hpp_752_67 = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_navtools_compute_latlon_distance_m =
 R"doc(Compute the distance in meters between two latitude-longitude
