@@ -18,7 +18,8 @@ PositionalOffsets::PositionalOffsets(std::string_view name,
                                    float            z,
                                    float            yaw,
                                    float            pitch,
-                                   float            roll)
+                                   float            roll,
+                                   bool             ypr_offsets_applied)
     : name(std::string(name))
     , x(x)
     , y(y)
@@ -26,6 +27,7 @@ PositionalOffsets::PositionalOffsets(std::string_view name,
     , yaw(yaw)
     , pitch(pitch)
     , roll(roll)
+    , ypr_offsets_applied(ypr_offsets_applied)
 {
 }
 
@@ -70,7 +72,8 @@ bool PositionalOffsets::operator==(const PositionalOffsets& rhs) const
                     if (tools::helper::approx(yaw, rhs.yaw))
                         if (tools::helper::approx(pitch, rhs.pitch))
                             if (tools::helper::approx(roll, rhs.roll))
-                                return true;
+                                if (ypr_offsets_applied == rhs.ypr_offsets_applied)
+                                    return true;
 
     return false;
 }
@@ -83,6 +86,7 @@ PositionalOffsets PositionalOffsets::from_stream(std::istream& is)
     data.name = tools::classhelper::stream::container_from_stream<std::string>(is);
 
     is.read(reinterpret_cast<char*>(&data.x), 6 * sizeof(float));
+    is.read(reinterpret_cast<char*>(&data.ypr_offsets_applied), sizeof(bool));
 
     return data;
 }
@@ -92,6 +96,7 @@ void PositionalOffsets::to_stream(std::ostream& os) const
     tools::classhelper::stream::container_to_stream(os, name);
 
     os.write(reinterpret_cast<const char*>(&x), 6 * sizeof(float));
+    os.write(reinterpret_cast<const char*>(&ypr_offsets_applied), sizeof(bool));
 }
 
 // ----- printer -----
@@ -106,6 +111,8 @@ tools::classhelper::ObjectPrinter PositionalOffsets::__printer__(unsigned int fl
     printer.register_value("yaw", yaw, "° positive means clockwise rotation");
     printer.register_value("pitch", pitch, "° positive means bow up");
     printer.register_value("roll", roll, "° positive means port up");
+    printer.register_value(
+        "ypr_offsets_applied", ypr_offsets_applied, "yaw/pitch/roll already applied to sensor data");
 
     return printer;
 }

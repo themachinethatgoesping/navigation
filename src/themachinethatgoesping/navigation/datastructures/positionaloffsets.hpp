@@ -34,6 +34,12 @@ struct PositionalOffsets
     float       pitch = 0.0; ///< in °, positive means bow up
     float       roll  = 0.0; ///< in °, positive means port up
 
+    /// if true, the yaw/pitch/roll offsets are already applied to the associated sensor data
+    /// stream (e.g. Kongsberg .all logs the attitude/heading already corrected for the sensor
+    /// mounting offsets). In that case the SensorConfiguration must not re-apply them when
+    /// computing the vessel rotation. If false (default), the offsets still have to be applied.
+    bool ypr_offsets_applied = false;
+
     /**
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
@@ -50,6 +56,8 @@ struct PositionalOffsets
      * @param yaw positive means clockwise rotation
      * @param pitch in °, positive means bow up
      * @param roll in °, positive means port up
+     * @param ypr_offsets_applied if true, the yaw/pitch/roll offsets are already applied to the
+     *        associated sensor data (default: false)
      */
     PositionalOffsets(std::string_view name,
                       float            x,
@@ -57,7 +65,8 @@ struct PositionalOffsets
                       float            z,
                       float            yaw,
                       float            pitch,
-                      float            roll);
+                      float            roll,
+                      bool             ypr_offsets_applied = false);
 
     /**
      * @brief Construct a new PositionalOffsets object from a transmitter and receiver unit

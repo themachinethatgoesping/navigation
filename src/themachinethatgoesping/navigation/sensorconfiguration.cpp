@@ -298,11 +298,16 @@ Eigen::Quaternion<float> SensorConfiguration::get_system_rotation_as_quat(
     const datastructures::PositionalOffsets& offsets_attitude_source)
 {
     // convert offset to quaternion
+    // If the attitude offsets are already applied to the logged sensor data (e.g. Kongsberg .all,
+    // where the PU corrects the attitude for the sensor mounting offsets before logging), use the
+    // identity offset so that the correction is not applied twice.
     Eigen::Quaternion<float> imu_offset_quat =
-        tools::rotationfunctions::quaternion_from_ypr(offsets_attitude_source.yaw,
-                                                      offsets_attitude_source.pitch,
-                                                      offsets_attitude_source.roll,
-                                                      true);
+        offsets_attitude_source.ypr_offsets_applied
+            ? Eigen::Quaternion<float>::Identity()
+            : tools::rotationfunctions::quaternion_from_ypr(offsets_attitude_source.yaw,
+                                                            offsets_attitude_source.pitch,
+                                                            offsets_attitude_source.roll,
+                                                            true);
 
     // convert sensor pitch,roll to quaternion (ignore reported yaw)
     auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
@@ -318,7 +323,11 @@ Eigen::Quaternion<float> SensorConfiguration::get_system_rotation_as_quat(
     auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(0.f, ypr[1], ypr[2], false);
 
     // rotate sensor quat using heading
-    float heading      = sensor_data.heading - offsets_heading_source.yaw;
+    // As above, only remove the heading offset when it has not already been applied to the heading
+    // data (e.g. Kongsberg .all logs the heading corrected for the heading offset).
+    float heading      = offsets_heading_source.ypr_offsets_applied
+                             ? sensor_data.heading
+                             : sensor_data.heading - offsets_heading_source.yaw;
     auto  compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0f, 0.0f, true);
 
     auto vessel_quat = compass_quat * sensor_quat;

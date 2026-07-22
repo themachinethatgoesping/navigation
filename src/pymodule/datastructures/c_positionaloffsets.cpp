@@ -25,7 +25,7 @@ void init_c_positionaloffsets(py::module& m)
         m,
         "PositionalOffsets",
         DOC(themachinethatgoesping, navigation, datastructures, PositionalOffsets))
-        .def(py::init<std::string, double, double, double, double, double, double>(),
+        .def(py::init<std::string, double, double, double, double, double, double, bool>(),
              DOC(themachinethatgoesping,
                  navigation,
                  datastructures,
@@ -37,7 +37,8 @@ void init_c_positionaloffsets(py::module& m)
              py::arg("z")     = 0,
              py::arg("yaw")   = 0,
              py::arg("pitch") = 0,
-             py::arg("roll")  = 0)
+             py::arg("roll")  = 0,
+             py::arg("ypr_offsets_applied") = false)
         .def_static("from_txrx",
                     &PositionalOffsets::from_txrx,
                     DOC_PositionalOffsets(from_txrx),
@@ -56,6 +57,12 @@ void init_c_positionaloffsets(py::module& m)
         .def_readwrite("yaw", &PositionalOffsets::yaw, DOC_PositionalOffsets(yaw))
         .def_readwrite("pitch", &PositionalOffsets::pitch, DOC_PositionalOffsets(pitch))
         .def_readwrite("roll", &PositionalOffsets::roll, DOC_PositionalOffsets(roll))
+        .def_readwrite("ypr_offsets_applied",
+                       &PositionalOffsets::ypr_offsets_applied,
+                       "if true, the yaw/pitch/roll offsets are already applied to the associated "
+                       "sensor data (e.g. Kongsberg .all logs the attitude/heading already "
+                       "corrected for the sensor mounting offsets). If so, the SensorConfiguration "
+                       "does not re-apply them.")
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(PositionalOffsets)
         // default binary functions

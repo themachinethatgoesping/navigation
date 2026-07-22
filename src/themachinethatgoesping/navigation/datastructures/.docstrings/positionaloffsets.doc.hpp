@@ -1,4 +1,4 @@
-//sourcehash: 0f9e66daaf56de84d1fd6d414c442d4135ea5d55bc8b18e714e1a456eb61e017
+//sourcehash: 77c84437a9234b8d09bea81d6ee804efbb3f724e7dd2c1386c0b2fa5d4e79478
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -57,7 +57,10 @@ Args:
     z: in m, positive downwards
     yaw: positive means clockwise rotation
     pitch: in °, positive means bow up
-    roll: in °, positive means port up)doc";
+    roll: in °, positive means port up
+    ypr_offsets_applied: if true, the yaw/pitch/roll offsets are
+                         already applied to the associated sensor data
+                         (default: false))doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_from_stream = R"doc()doc";
 
@@ -92,6 +95,14 @@ static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Posi
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_y = R"doc(in m, positive starboard)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_yaw = R"doc(in °, positive means clockwise rotation)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_ypr_offsets_applied =
+R"doc(if true, the yaw/pitch/roll offsets are already applied to the
+associated sensor data stream (e.g. Kongsberg .all logs the
+attitude/heading already corrected for the sensor mounting offsets).
+In that case the SensorConfiguration must not re-apply them when
+computing the vessel rotation. If false (default), the offsets still
+have to be applied.)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_z = R"doc(in m, positive downwards)doc";
 
