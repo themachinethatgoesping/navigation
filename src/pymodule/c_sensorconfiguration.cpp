@@ -56,6 +56,14 @@ void init_c_sensorconfiguration(py::module& m)
              DOC_SensorConfiguration(compute_target_position_4),
              py::arg("target_id"),
              py::arg("sensor_data"))
+        .def("get_vessel_attitude",
+             &SensorConfiguration::get_vessel_attitude,
+             "Compute the offset-corrected vessel attitude (yaw, pitch, roll in degrees) in the "
+             "world frame by applying the registered attitude- and heading-source mounting "
+             "offsets to the raw sensor_data attitude. Uses the same convention as "
+             "compute_target_position (attitude offset removed via quaternion, heading offset "
+             "subtracted from heading).",
+             py::arg("sensor_data"))
         .def("has_target",
              &SensorConfiguration::has_target,
              DOC_SensorConfiguration(has_target),

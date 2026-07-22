@@ -7,6 +7,7 @@
 
 /* generated doc strings */
 #include ".docstrings/sensorconfiguration.doc.hpp"
+#include <array>
 #include <cmath>
 #include <exception>
 #include <iostream>
@@ -161,6 +162,23 @@ class SensorConfiguration
      */
     datastructures::GeolocationLocal compute_target_position(
         const std::string&                target_id,
+        const datastructures::Sensordata& sensor_data) const;
+
+    /**
+     * @brief Compute the offset-corrected vessel attitude (yaw, pitch, roll) in the world
+     * coordinate frame.
+     *
+     * This applies the registered sensor mounting offsets to the raw sensor_data attitude using
+     * the exact same convention as compute_target_position: the attitude source (IMU) mounting
+     * offset is removed using a quaternion operation (raw ⊗ offset⁻¹, i.e. yaw/pitch/roll are
+     * NOT simply added), and the heading source offset is subtracted from the heading. The
+     * returned angles describe the orientation of the vessel reference frame relative to the
+     * world frame (yaw includes the vessel heading).
+     *
+     * @param sensor_data Sensordata (only heading, pitch and roll are used)
+     * @return std::array<float, 3> {yaw, pitch, roll} in degrees
+     */
+    std::array<float, 3> get_vessel_attitude(
         const datastructures::Sensordata& sensor_data) const;
 
     // ----- get/set target offsets -----

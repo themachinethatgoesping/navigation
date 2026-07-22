@@ -11,6 +11,7 @@
 
 // -- include nanobind headers
 #include <nanobind/nanobind.h>
+#include <nanobind/stl/array.h>
 #include <nanobind/stl/vector.h>
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/string_view.h>
@@ -58,6 +59,14 @@ void init_c_sensorconfiguration(nb::module_& m)
                  &SensorConfiguration::compute_target_position, nb::const_),
              DOC_SensorConfiguration(compute_target_position_4),
              nb::arg("target_id"),
+             nb::arg("sensor_data"))
+        .def("get_vessel_attitude",
+             &SensorConfiguration::get_vessel_attitude,
+             "Compute the offset-corrected vessel attitude (yaw, pitch, roll in degrees) in the "
+             "world frame by applying the registered attitude- and heading-source mounting "
+             "offsets to the raw sensor_data attitude. Uses the same convention as "
+             "compute_target_position (attitude offset removed via quaternion, heading offset "
+             "subtracted from heading).",
              nb::arg("sensor_data"))
         .def("has_target",
              &SensorConfiguration::has_target,

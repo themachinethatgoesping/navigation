@@ -1,4 +1,4 @@
-//sourcehash: ec196ee88ddb66fa59d4650882426355c9e5f17d9bec9ceaa4e11bcd0bd35362
+//sourcehash: 687492036a7e92bc7ce7b7ef1cb28eecd0b69584515da0c6370204c2b9a0d62c
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -229,6 +229,25 @@ R"doc(Get the map of stored target offsets objects
 Returns:
     const std::unordered_map<std::string,
     datastructures::PositionalOffsets>&)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_vessel_attitude =
+R"doc(Compute the offset-corrected vessel attitude (yaw, pitch, roll) in the
+world coordinate frame.
+
+This applies the registered sensor mounting offsets to the raw
+sensor_data attitude using the exact same convention as
+compute_target_position: the attitude source (IMU) mounting offset is
+removed using a quaternion operation (raw ⊗ offset⁻¹, i.e.
+yaw/pitch/roll are NOT simply added), and the heading source offset is
+subtracted from the heading. The returned angles describe the
+orientation of the vessel reference frame relative to the world frame
+(yaw includes the vessel heading).
+
+Args:
+    sensor_data: Sensordata (only heading, pitch and roll are used)
+
+Returns:
+    std::array<float, 3> {yaw, pitch, roll} in degrees)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_waterline_offset =
 R"doc(Get the waterline offset Negative waterline offset means that z=0 is

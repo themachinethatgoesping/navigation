@@ -119,6 +119,18 @@ datastructures::GeolocationLatLon SensorConfiguration::compute_target_position(
     return datastructures::GeolocationLatLon(position, target_lat, target_lon);
 }
 
+std::array<float, 3> SensorConfiguration::get_vessel_attitude(
+    const datastructures::Sensordata& sensor_data) const
+{
+    // use the exact same rotation as compute_target_position (attitude offset removed via
+    // quaternion, heading offset subtracted from heading)
+    Eigen::Quaternion<float> vessel_quat =
+        get_system_rotation_as_quat(sensor_data, _offsets_heading_source, _offsets_attitude_source);
+
+    // {yaw, pitch, roll} in degrees
+    return tools::rotationfunctions::ypr_from_quaternion(vessel_quat, true);
+}
+
 // ----- get/set target offsets -----
 const datastructures::PositionalOffsets& SensorConfiguration::get_target(
     const std::string& target_id) const
