@@ -53,8 +53,7 @@ class NMEA_ZDA : public NMEA_Base
      * @brief Convert the datagram into a date time string
      *        Note: this function uses to_timestamp()
      *
-     * @param format Format string (see
-     * https://howardhinnant.github.io/date/date.html#to_stream_formatting)
+     * @param format Format string (see https://omegaup.com/docs/cpp/en/cpp/chrono/format.html)
      * @return date time string
      */
     std::string to_date_string(std::string format = std::string("%z__%d-%m-%Y__%H:%M:%S")) const;

@@ -1,4 +1,4 @@
-//sourcehash: 45e27c1530b29156547cdda58d916b3d53041050917269baae5b687d2dcf2954
+//sourcehash: 29a17ecd5896b4819e612ae780d53a38d8ab6718dae0905d1aaba282820b42e0
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -84,8 +84,8 @@ R"doc(Convert the datagram into a date time string
        Note: this function uses to_timestamp()
 
 Args:
-    format: Format string (see https://howardhinnant.github.io/date/da
-            te.html#to_stream_formatting)
+    format: Format string (see
+            https://omegaup.com/docs/cpp/en/cpp/chrono/format.html)
 
 Returns:
     date time string)doc";
