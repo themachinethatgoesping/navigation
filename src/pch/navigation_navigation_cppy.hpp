@@ -2,7 +2,6 @@
 // Target: navigation:navigation_cppy
 #pragma once
 
-#include <pybind11/stl.h>
 #include <xtensor-python/pytensor.hpp>
 #include <cmath>
 #include <GeographicLib/Geocentric.hpp>

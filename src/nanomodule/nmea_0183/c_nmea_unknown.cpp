@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: MPL-2.0
 
 
-// automatically gernerated using  python -m pybind11_mkdoc -o docstrings.h <headerfiles>
-
 // -- c++ library headers
 #include "../themachinethatgoesping/navigation/nmea_0183.hpp"
 #include <themachinethatgoesping/tools_nanobind/classhelper.hpp>
