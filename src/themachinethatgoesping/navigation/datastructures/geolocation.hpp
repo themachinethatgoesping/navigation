@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/rotationfunctions/rotation.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -22,10 +23,9 @@ namespace datastructures {
  */
 struct Geolocation
 {
-    float z     = 0;   ///< in m, positive downwards
-    float yaw   = 0.0; ///< in °, 0° is north, 90° is east
-    float pitch = 0.0; ///< in °, positive means bow up
-    float roll  = 0.0; ///< in °, positive means port up
+    float z = 0; ///< in m, positive downwards
+    /// orientation of the location; yaw/pitch/roll (°) are exposed via yaw()/pitch()/roll()
+    tools::rotationfunctions::Rotation<float> rotation;
 
     /**
      * @brief Construct a new Position object
@@ -44,10 +44,28 @@ struct Geolocation
     Geolocation(float z, float yaw, float pitch, float roll);
 
     /**
-     * @brief Construct a new Geolocation object from a string
-     *
-     * @param str string containing the location in the format "latitude,longitude,z,yaw,pitch,roll"
+     * @brief Construct a new Geolocation object from a Rotation
+     * @param z in m, positive downwards
+     * @param rotation orientation of the location
      */
+    Geolocation(float z, tools::rotationfunctions::Rotation<float> rotation);
+
+    /// @brief yaw in °, 0° is north, 90° is east
+    float yaw() const;
+    /// @brief pitch in °, positive means bow up
+    float pitch() const;
+    /// @brief roll in °, positive means port up
+    float roll() const;
+
+    /// @brief set yaw, pitch and roll (°) at once
+    void set_ypr(float yaw, float pitch, float roll);
+    /// @brief set yaw (°), keeping pitch and roll
+    void set_yaw(float yaw);
+    /// @brief set pitch (°), keeping yaw and roll
+    void set_pitch(float pitch);
+    /// @brief set roll (°), keeping yaw and pitch
+    void set_roll(float roll);
+
     bool operator!=(const Geolocation& rhs) const;
 
     /**

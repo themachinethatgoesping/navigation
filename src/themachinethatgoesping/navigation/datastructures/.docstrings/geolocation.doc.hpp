@@ -1,4 +1,4 @@
-//sourcehash: 7ee8f53c3219d9ef305715161b4ad2f4299bcd1f5e06b7e9a1c1a607a3909d80
+//sourcehash: 01436adc10836d304264d71f471d1b21cc40e0490fe040ed0adb103639618da9
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -57,6 +57,12 @@ Args:
     pitch: in °, positive means bow up
     roll: in °, positive means port up)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_Geolocation_3 =
+R"doc(Construct a new Geolocation object from a Rotation
+Args:
+    z: in m, positive downwards
+    rotation: orientation of the location)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_from_stream = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_operator_eq =
@@ -68,22 +74,29 @@ Args:
 Returns:
     true if equal false if not equal)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_operator_ne =
-R"doc(Construct a new Geolocation object from a string
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_operator_ne = R"doc()doc";
 
-Args:
-    str: string containing the location in the format
-         "latitude,longitude,z,yaw,pitch,roll")doc";
-
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_pitch = R"doc(in °, positive means bow up)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_pitch = R"doc(pitch in °, positive means bow up)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_printer = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_roll = R"doc(in °, positive means port up)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_roll = R"doc(roll in °, positive means port up)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_rotation =
+R"doc(orientation of the location; yaw/pitch/roll (°) are exposed via
+yaw()/pitch()/roll())doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_set_pitch = R"doc(set pitch (°), keeping yaw and roll)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_set_roll = R"doc(set roll (°), keeping yaw and pitch)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_set_yaw = R"doc(set yaw (°), keeping pitch and roll)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_set_ypr = R"doc(set yaw, pitch and roll (°) at once)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_to_stream = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_yaw = R"doc(in °, 0° is north, 90° is east)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_yaw = R"doc(yaw in °, 0° is north, 90° is east)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Geolocation_z = R"doc(in m, positive downwards)doc";
 

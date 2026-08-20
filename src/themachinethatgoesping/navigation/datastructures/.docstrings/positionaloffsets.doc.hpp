@@ -1,4 +1,4 @@
-//sourcehash: 77c84437a9234b8d09bea81d6ee804efbb3f724e7dd2c1386c0b2fa5d4e79478
+//sourcehash: 6b04361adf275db5bf96cd6e97982577b2d1c03c7b4f4daec2c624dfa98802b4
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -62,6 +62,18 @@ Args:
                          already applied to the associated sensor data
                          (default: false))doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_PositionalOffsets_3 =
+R"doc(Construct a new PositionalOffsets object from a Rotation
+
+Args:
+    name: The name of the sensor
+    x: in m, positive forward
+    y: in m, positive starboard
+    z: in m, positive downwards
+    rotation: yaw/pitch/roll offset orientation
+    ypr_offsets_applied: if true, the offsets are already applied
+                         (default: false))doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_from_stream = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_from_txrx =
@@ -82,11 +94,21 @@ static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Posi
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_operator_ne = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_pitch = R"doc(in °, positive means bow up)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_pitch = R"doc(pitch in °, positive means bow up)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_printer = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_roll = R"doc(in °, positive means port up)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_roll = R"doc(roll in °, positive means port up)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_rotation = R"doc(yaw/pitch/roll offsets (°); exposed via yaw()/pitch()/roll())doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_set_pitch = R"doc(set pitch (°), keeping yaw and roll)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_set_roll = R"doc(set roll (°), keeping yaw and pitch)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_set_yaw = R"doc(set yaw (°), keeping pitch and roll)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_set_ypr = R"doc(set yaw, pitch and roll (°) at once)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_to_stream = R"doc()doc";
 
@@ -94,7 +116,7 @@ static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Posi
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_y = R"doc(in m, positive starboard)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_yaw = R"doc(in °, positive means clockwise rotation)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_yaw = R"doc(yaw in °, positive means clockwise rotation)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_ypr_offsets_applied =
 R"doc(if true, the yaw/pitch/roll offsets are already applied to the

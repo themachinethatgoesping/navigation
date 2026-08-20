@@ -26,9 +26,9 @@ TEST_CASE("PositionalOffsets should support common functions", TESTTAG)
     offsets.y = 2;
     offsets.z = 3;
 
-    offsets.yaw   = 10;
-    offsets.pitch = 20;
-    offsets.roll  = 30;
+    offsets.set_yaw(10);
+    offsets.set_pitch(20);
+    offsets.set_roll(30);
 
     // test copy
     REQUIRE(offsets == PositionalOffsets(offsets));

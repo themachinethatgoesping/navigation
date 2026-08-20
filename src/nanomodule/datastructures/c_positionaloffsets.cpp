@@ -38,6 +38,23 @@ void init_c_positionaloffsets(nb::module_& m)
              nb::arg("pitch")   = 0.0f,
              nb::arg("roll")    = 0.0f,
              nb::arg("ypr_offsets_applied") = false)
+        .def(nb::init<std::string,
+                      float,
+                      float,
+                      float,
+                      themachinethatgoesping::tools::rotationfunctions::Rotation<float>,
+                      bool>(),
+             DOC(themachinethatgoesping,
+                 navigation,
+                 datastructures,
+                 PositionalOffsets,
+                 PositionalOffsets_3),
+             nb::arg("name"),
+             nb::arg("x"),
+             nb::arg("y"),
+             nb::arg("z"),
+             nb::arg("rotation"),
+             nb::arg("ypr_offsets_applied") = false)
         .def_static("from_txrx",
                     &PositionalOffsets::from_txrx,
                     DOC_PositionalOffsets(from_txrx),
@@ -53,9 +70,11 @@ void init_c_positionaloffsets(nb::module_& m)
         .def_rw("x", &PositionalOffsets::x, DOC_PositionalOffsets(x))
         .def_rw("y", &PositionalOffsets::y, DOC_PositionalOffsets(y))
         .def_rw("z", &PositionalOffsets::z, DOC_PositionalOffsets(z))
-        .def_rw("yaw", &PositionalOffsets::yaw, DOC_PositionalOffsets(yaw))
-        .def_rw("pitch", &PositionalOffsets::pitch, DOC_PositionalOffsets(pitch))
-        .def_rw("roll", &PositionalOffsets::roll, DOC_PositionalOffsets(roll))
+        .def_rw("rotation", &PositionalOffsets::rotation, DOC_PositionalOffsets(rotation))
+        .def_prop_rw("yaw", &PositionalOffsets::yaw, &PositionalOffsets::set_yaw, DOC_PositionalOffsets(yaw))
+        .def_prop_rw("pitch", &PositionalOffsets::pitch, &PositionalOffsets::set_pitch, DOC_PositionalOffsets(pitch))
+        .def_prop_rw("roll", &PositionalOffsets::roll, &PositionalOffsets::set_roll, DOC_PositionalOffsets(roll))
+        .def("set_ypr", &PositionalOffsets::set_ypr, DOC_PositionalOffsets(set_ypr), nb::arg("yaw"), nb::arg("pitch"), nb::arg("roll"))
         .def_rw("ypr_offsets_applied",
                 &PositionalOffsets::ypr_offsets_applied,
                 "if true, the yaw/pitch/roll offsets are already applied to the associated sensor "

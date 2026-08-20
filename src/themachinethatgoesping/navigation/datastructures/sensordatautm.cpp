@@ -71,7 +71,7 @@ bool SensordataUTM::operator==(const SensordataUTM& rhs) const
 SensordataLatLon SensordataUTM::to_sensordata(const SensordataUTM& data_utm)
 {
     SensordataLatLon data(
-        0, 0, data_utm.depth, data_utm.heave, data_utm.heading, data_utm.pitch, data_utm.roll);
+        0, 0, data_utm.depth, data_utm.heave, data_utm.heading(), data_utm.pitch(), data_utm.roll());
 
     GeographicLib::UTMUPS::Reverse(data_utm.utm_zone,
                                    data_utm.northern_hemisphere,
@@ -86,7 +86,7 @@ SensordataLatLon SensordataUTM::to_sensordata(const SensordataUTM& data_utm)
 SensordataUTM SensordataUTM::from_sensordata(const SensordataLatLon& data, int setzone)
 {
     SensordataUTM data_utm(
-        0, 0, 0, 0, data.depth, data.heave, data.heading, data.pitch, data.roll);
+        0, 0, 0, 0, data.depth, data.heave, data.heading(), data.pitch(), data.roll());
 
     GeographicLib::UTMUPS::Forward(data.latitude,
                                    data.longitude,

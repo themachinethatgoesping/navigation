@@ -21,9 +21,9 @@ TEST_CASE("Geolocation should support common functions", TESTTAG)
 
     location.z = 3;
 
-    location.yaw   = 10;
-    location.pitch = 20;
-    location.roll  = 30;
+    location.set_yaw(10);
+    location.set_pitch(20);
+    location.set_roll(30);
 
     // test copy
     REQUIRE(location == Geolocation(location));

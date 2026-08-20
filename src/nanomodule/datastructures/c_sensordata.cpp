@@ -32,6 +32,11 @@ void init_c_sensordata(nb::module_& m)
              nb::arg("heading") = 0.0f,
              nb::arg("pitch")   = 0.0f,
              nb::arg("roll")    = 0.0f)
+        .def(nb::init<float, float, themachinethatgoesping::tools::rotationfunctions::Rotation<float>>(),
+             DOC(themachinethatgoesping, navigation, datastructures, Sensordata, Sensordata_3),
+             nb::arg("depth"),
+             nb::arg("heave"),
+             nb::arg("rotation"))
         .def("__eq__",
              &Sensordata::operator==,
              DOC(themachinethatgoesping, navigation, datastructures, Sensordata, operator_eq),
@@ -42,15 +47,27 @@ void init_c_sensordata(nb::module_& m)
         .def_rw("heave",
                        &Sensordata::heave,
                        DOC(themachinethatgoesping, navigation, datastructures, Sensordata, heave))
-        .def_rw("heading",
+        .def_rw("rotation",
+                       &Sensordata::rotation,
+                       DOC(themachinethatgoesping, navigation, datastructures, Sensordata, rotation))
+        .def_prop_rw("heading",
                        &Sensordata::heading,
+                       &Sensordata::set_heading,
                        DOC(themachinethatgoesping, navigation, datastructures, Sensordata, heading))
-        .def_rw("pitch",
+        .def_prop_rw("pitch",
                        &Sensordata::pitch,
+                       &Sensordata::set_pitch,
                        DOC(themachinethatgoesping, navigation, datastructures, Sensordata, pitch))
-        .def_rw("roll",
+        .def_prop_rw("roll",
                        &Sensordata::roll,
+                       &Sensordata::set_roll,
                        DOC(themachinethatgoesping, navigation, datastructures, Sensordata, roll))
+        .def("set_ypr",
+                       &Sensordata::set_ypr,
+                       DOC(themachinethatgoesping, navigation, datastructures, Sensordata, set_ypr),
+                       nb::arg("heading"),
+                       nb::arg("pitch"),
+                       nb::arg("roll"))
         // default copy functions
         __PYCLASS_DEFAULT_COPY__(Sensordata)
         // default binary functions

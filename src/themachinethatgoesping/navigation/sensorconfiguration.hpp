@@ -22,6 +22,7 @@
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/quaternions.hpp>
+#include <themachinethatgoesping/tools/rotationfunctions/rotation.hpp>
 
 #include "datastructures.hpp"
 
@@ -180,6 +181,43 @@ class SensorConfiguration
      */
     std::array<float, 3> get_vessel_attitude(
         const datastructures::Sensordata& sensor_data) const;
+
+    /**
+     * @brief Compute the offset-corrected vessel orientation as a Rotation.
+     *
+     * Same convention as get_vessel_attitude / compute_target_position (attitude offset removed via
+     * quaternion, heading offset subtracted from heading), but returned as a Rotation.
+     *
+     * @param sensor_data Sensordata (only heading, pitch and roll are used)
+     * @return vessel orientation (Rotation) in the world frame
+     */
+    tools::rotationfunctions::Rotation<float> get_vessel_rotation(
+        const datastructures::Sensordata& sensor_data) const;
+
+    /**
+     * @brief Compute the ready-to-trace pose (position + ship-frame orientation) of a target.
+     *
+     * Unlike compute_target_position (which returns a geolocation), this bakes the target
+     * installation, the vessel attitude and the removal of a common reference heading into a
+     * single pose, so a raytracer can consume it without re-composing
+     * installation/attitude/heading. The orientation is
+     * Rz(-reference_heading) · vessel_rotation · target_installation; the position is the target
+     * lever arm (raw body frame, or roll/pitch-leveled when @p level_lever_arm is true) with z the
+     * depth below the waterline. Pass the SAME reference_heading (the heading at transmit time) for
+     * every target of a ping so all poses share one ship frame.
+     *
+     * @param target_id name of the target (e.g. "MBES")
+     * @param sensor_data Sensordata (heading/pitch/roll + depth/heave)
+     * @param reference_heading_in_degrees heading (deg) removed from the orientation (transmit
+     * heading)
+     * @param level_lever_arm if true, level the horizontal lever arm by vessel roll/pitch
+     * @return target pose (position + ship-frame Rotation)
+     */
+    datastructures::PositionalOffsets compute_target_pose(
+        const std::string&                target_id,
+        const datastructures::Sensordata& sensor_data,
+        float                             reference_heading_in_degrees,
+        bool                              level_lever_arm = false) const;
 
     // ----- get/set target offsets -----
 

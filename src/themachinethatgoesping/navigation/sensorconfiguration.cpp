@@ -14,38 +14,30 @@ datastructures::GeolocationLocal SensorConfiguration::compute_target_position(
     const std::string&                target_id,
     const datastructures::Sensordata& sensor_data) const
 {
+    using tools::rotationfunctions::Rotation;
     datastructures::GeolocationLocal location;
 
-    // first get the current rotation of the vessel
-    Eigen::Quaternion<float> vessel_quat =
+    // current rotation of the vessel (heading + attitude, mounting offsets removed)
+    const Rotation<float> vessel_rotation =
         get_system_rotation_as_quat(sensor_data, _offsets_heading_source, _offsets_attitude_source);
 
-    // convert target to quaternion
-    auto target_offsets  = get_target(target_id);
-    auto target_ypr_quat = tools::rotationfunctions::quaternion_from_ypr(
-        target_offsets.yaw, target_offsets.pitch, target_offsets.roll);
+    const auto&            target_offsets      = get_target(target_id);
+    const Rotation<float>& target_installation = target_offsets.rotation;
 
-    // get rotated positions
-    auto target_xyz = tools::rotationfunctions::rotateXYZ<float>(
-        vessel_quat, target_offsets.x, target_offsets.y, target_offsets.z);
-    auto depth_source_xyz = tools::rotationfunctions::rotateXYZ(
-        vessel_quat, _offsets_depth_source.x, _offsets_depth_source.y, _offsets_depth_source.z);
-    auto positionSystem_xyz = tools::rotationfunctions::rotateXYZ(vessel_quat,
-                                                                  _offsets_position_source.x,
-                                                                  _offsets_position_source.y,
-                                                                  _offsets_position_source.z);
+    // rotate the lever arms into the world frame
+    const auto target_xyz =
+        vessel_rotation.rotate(target_offsets.x, target_offsets.y, target_offsets.z);
+    const auto depth_source_xyz = vessel_rotation.rotate(
+        _offsets_depth_source.x, _offsets_depth_source.y, _offsets_depth_source.z);
+    const auto positionSystem_xyz = vessel_rotation.rotate(
+        _offsets_position_source.x, _offsets_position_source.y, _offsets_position_source.z);
 
     // compute target depth
     location.z = target_xyz[2] - depth_source_xyz[2] + sensor_data.depth - sensor_data.heave -
                  _waterline_offset;
 
-    // compute target ypr
-    // TODO: check if the order is correct
-    auto target_quat = vessel_quat * target_ypr_quat;
-    auto ypr         = tools::rotationfunctions::ypr_from_quaternion(target_quat);
-    location.yaw     = ypr[0];
-    location.pitch   = ypr[1];
-    location.roll    = ypr[2];
+    // compute target orientation
+    location.rotation = vessel_rotation * target_installation;
 
     // compute target xy
     location.northing = target_xyz[0] - positionSystem_xyz[0];
@@ -119,16 +111,57 @@ datastructures::GeolocationLatLon SensorConfiguration::compute_target_position(
     return datastructures::GeolocationLatLon(position, target_lat, target_lon);
 }
 
+tools::rotationfunctions::Rotation<float> SensorConfiguration::get_vessel_rotation(
+    const datastructures::Sensordata& sensor_data) const
+{
+    return get_system_rotation_as_quat(
+        sensor_data, _offsets_heading_source, _offsets_attitude_source);
+}
+
+datastructures::PositionalOffsets SensorConfiguration::compute_target_pose(
+    const std::string&                target_id,
+    const datastructures::Sensordata& sensor_data,
+    float                             reference_heading_in_degrees,
+    bool                              level_lever_arm) const
+{
+    using tools::rotationfunctions::Rotation;
+
+    const Rotation<float> vessel_rotation = get_vessel_rotation(sensor_data);
+    const auto&           target_offsets  = get_target(target_id);
+
+    // ship-frame orientation: remove the common reference heading (so all poses of a ping share
+    // one frame), keep the vessel attitude and the target installation.
+    const Rotation<float> pose_rotation = Rotation<float>(-reference_heading_in_degrees, 0.f, 0.f) *
+                                          vessel_rotation * target_offsets.rotation;
+
+    // horizontal lever arm: raw body-frame offsets, or roll/pitch-leveled (heading removed)
+    float x = target_offsets.x;
+    float y = target_offsets.y;
+    if (level_lever_arm)
+    {
+        const auto ypr     = vessel_rotation.ypr();
+        const auto leveled = Rotation<float>(0.f, ypr[1], ypr[2])
+                                 .rotate(target_offsets.x, target_offsets.y, target_offsets.z);
+        x = leveled[0];
+        y = leveled[1];
+    }
+
+    // depth below the waterline (heading-independent z of the rotated lever arms)
+    const auto target_xyz =
+        vessel_rotation.rotate(target_offsets.x, target_offsets.y, target_offsets.z);
+    const auto depth_source_xyz = vessel_rotation.rotate(
+        _offsets_depth_source.x, _offsets_depth_source.y, _offsets_depth_source.z);
+    const float z = target_xyz[2] - depth_source_xyz[2] + sensor_data.depth - sensor_data.heave -
+                    _waterline_offset;
+
+    return datastructures::PositionalOffsets(target_id, x, y, z, pose_rotation, false);
+}
+
 std::array<float, 3> SensorConfiguration::get_vessel_attitude(
     const datastructures::Sensordata& sensor_data) const
 {
-    // use the exact same rotation as compute_target_position (attitude offset removed via
-    // quaternion, heading offset subtracted from heading)
-    Eigen::Quaternion<float> vessel_quat =
-        get_system_rotation_as_quat(sensor_data, _offsets_heading_source, _offsets_attitude_source);
-
-    // {yaw, pitch, roll} in degrees
-    return tools::rotationfunctions::ypr_from_quaternion(vessel_quat, true);
+    // {yaw, pitch, roll} in degrees, same convention as compute_target_position
+    return get_vessel_rotation(sensor_data).ypr();
 }
 
 // ----- get/set target offsets -----
@@ -304,14 +337,14 @@ Eigen::Quaternion<float> SensorConfiguration::get_system_rotation_as_quat(
     Eigen::Quaternion<float> imu_offset_quat =
         offsets_attitude_source.ypr_offsets_applied
             ? Eigen::Quaternion<float>::Identity()
-            : tools::rotationfunctions::quaternion_from_ypr(offsets_attitude_source.yaw,
-                                                            offsets_attitude_source.pitch,
-                                                            offsets_attitude_source.roll,
+            : tools::rotationfunctions::quaternion_from_ypr(offsets_attitude_source.yaw(),
+                                                            offsets_attitude_source.pitch(),
+                                                            offsets_attitude_source.roll(),
                                                             true);
 
     // convert sensor pitch,roll to quaternion (ignore reported yaw)
     auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
-        0.0f, sensor_data.pitch, sensor_data.roll, true);
+        0.0f, sensor_data.pitch(), sensor_data.roll(), true);
 
     // compute roll and pitch using the imu_offsets (including yaw offset)
     // TODO: check if the order is correct
@@ -326,8 +359,8 @@ Eigen::Quaternion<float> SensorConfiguration::get_system_rotation_as_quat(
     // As above, only remove the heading offset when it has not already been applied to the heading
     // data (e.g. Kongsberg .all logs the heading corrected for the heading offset).
     float heading      = offsets_heading_source.ypr_offsets_applied
-                             ? sensor_data.heading
-                             : sensor_data.heading - offsets_heading_source.yaw;
+                             ? sensor_data.heading()
+                             : sensor_data.heading() - offsets_heading_source.yaw();
     auto  compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0f, 0.0f, true);
 
     auto vessel_quat = compass_quat * sensor_quat;

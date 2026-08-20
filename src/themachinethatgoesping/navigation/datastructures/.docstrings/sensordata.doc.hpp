@@ -1,4 +1,4 @@
-//sourcehash: f3f9f71bf428189daa20f909362601485df802145863609d62cde39560721f27
+//sourcehash: a457bad93dce00b68cdc787194e4985f1474263773bc7a3c05a38fe2ac72b016
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -59,11 +59,19 @@ Args:
     pitch: from attitude source, in °, positive means bow up
     roll: from attitude source, in °, positive means port up)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_Sensordata_3 =
+R"doc(Construct a new Sensordata object from depth, heave and a Rotation
+
+Args:
+    depth: in m, positive downwards
+    heave: from heave sensor, added to depth in m, positive upwards
+    rotation: combined heading/pitch/roll orientation)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_depth = R"doc(in m, positive downwards)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_from_stream = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_heading = R"doc(from heading source in °, 0° is north, 90° is east)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_heading = R"doc(heading from heading source in °, 0° is north, 90° is east)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_heave = R"doc(from heave source, will be added to depth in m, positive upwards)doc";
 
@@ -78,11 +86,21 @@ Returns:
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_operator_ne = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_pitch = R"doc(from attitude source, in °, positive means bow up)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_pitch = R"doc(pitch from attitude source in °, positive means bow up)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_printer = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_roll = R"doc(from attitude source, in °, positive means port up)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_roll = R"doc(roll from attitude source in °, positive means port up)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_rotation = R"doc(combined heading/pitch/roll; exposed via heading()/pitch()/roll())doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_set_heading = R"doc(set heading (°), keeping pitch and roll)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_set_pitch = R"doc(set pitch (°), keeping heading and roll)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_set_roll = R"doc(set roll (°), keeping heading and pitch)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_set_ypr = R"doc(set heading, pitch and roll (°) at once)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_to_stream = R"doc()doc";
 

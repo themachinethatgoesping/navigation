@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/rotationfunctions/rotation.hpp>
 
 #include "positionaloffsets.hpp"
 
@@ -25,11 +26,10 @@ namespace datastructures {
  */
 struct Sensordata
 {
-    float depth   = 0.0; ///< in m, positive downwards
-    float heave   = 0.0; ///< from heave source, will be added to depth in m, positive upwards
-    float heading = 0.0; ///< from heading source in °, 0° is north, 90° is east
-    float pitch   = 0.0; ///< from attitude source, in °, positive means bow up
-    float roll    = 0.0; ///< from attitude source, in °, positive means port up
+    float depth = 0.0; ///< in m, positive downwards
+    float heave = 0.0; ///< from heave source, will be added to depth in m, positive upwards
+    /// combined heading/pitch/roll; exposed via heading()/pitch()/roll()
+    tools::rotationfunctions::Rotation<float> rotation;
 
     /**
      * @brief Construct a new Sensordata object
@@ -47,6 +47,31 @@ struct Sensordata
      * @param roll from attitude source, in °, positive means port up
      */
     Sensordata(float depth, float heave, float heading, float pitch, float roll);
+
+    /**
+     * @brief Construct a new Sensordata object from depth, heave and a Rotation
+     *
+     * @param depth in m, positive downwards
+     * @param heave from heave sensor, added to depth in m, positive upwards
+     * @param rotation combined heading/pitch/roll orientation
+     */
+    Sensordata(float depth, float heave, tools::rotationfunctions::Rotation<float> rotation);
+
+    /// @brief heading from heading source in °, 0° is north, 90° is east
+    float heading() const;
+    /// @brief pitch from attitude source in °, positive means bow up
+    float pitch() const;
+    /// @brief roll from attitude source in °, positive means port up
+    float roll() const;
+
+    /// @brief set heading, pitch and roll (°) at once
+    void set_ypr(float heading, float pitch, float roll);
+    /// @brief set heading (°), keeping pitch and roll
+    void set_heading(float heading);
+    /// @brief set pitch (°), keeping heading and roll
+    void set_pitch(float pitch);
+    /// @brief set roll (°), keeping heading and pitch
+    void set_roll(float roll);
 
     bool operator!=(const Sensordata& rhs) const;
     /**

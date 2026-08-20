@@ -23,11 +23,11 @@ TEST_CASE("SensordataLocal should support common functions", TESTTAG)
     data.easting  = 549841.192;
     data.depth    = 3;
 
-    data.heading = 10;
+    data.set_heading(10);
     data.heave   = 1;
 
-    data.pitch = 20;
-    data.roll  = 30;
+    data.set_pitch(20);
+    data.set_roll(30);
 
     // test copy
     REQUIRE(data == SensordataLocal(data));
@@ -55,11 +55,11 @@ TEST_CASE("SensordataLocal should support common utm/local conversions", TESTTAG
     int  zone                = 31;
     bool northern_hemisphere = true;
 
-    data.heading = 10;
+    data.set_heading(10);
     data.heave   = 1;
 
-    data.pitch = 20;
-    data.roll  = 30;
+    data.set_pitch(20);
+    data.set_roll(30);
 
     // test utm/lat lon conversion
     SensordataUTM data_utm(data, zone, northern_hemisphere);

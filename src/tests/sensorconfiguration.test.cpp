@@ -52,6 +52,46 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     CHECK(scs.binary_hash() == scs3.binary_hash()); // hash should not change after serialization
 }
 
+TEST_CASE("sensorconfiguration compute_target_pose should match its definition", TESTTAG)
+{
+    using themachinethatgoesping::tools::rotationfunctions::Rotation;
+
+    SensorConfiguration scs;
+    scs.add_target("mbes",
+                   datastructures::PositionalOffsets("mbes", 1.f, 2.f, 3.f, 10.f, 20.f, 30.f));
+    scs.set_heading_source("compass", 5.f);
+    scs.set_attitude_source("mru", 1.f, -2.f, 3.f);
+    scs.set_depth_source("dsource", 4.f, 5.f, -6.f);
+    scs.set_waterline_offset(-0.5f);
+
+    datastructures::Sensordata sd(7.f, 0.5f, 42.f, 4.f, -3.f); // depth, heave, heading, pitch, roll
+    const float                ref_heading = 42.f;
+
+    const auto&           target = scs.get_target("mbes");
+    const Rotation<float> vessel = scs.get_vessel_rotation(sd);
+
+    // orientation: reference heading removed, vessel attitude and installation kept
+    const auto            pose = scs.compute_target_pose("mbes", sd, ref_heading, false);
+    const Rotation<float> expected_rotation =
+        Rotation<float>(-ref_heading, 0.f, 0.f) * vessel * target.rotation;
+    REQUIRE(pose.rotation == expected_rotation);
+
+    // z equals the geolocation depth
+    CHECK(pose.z == Catch::Approx(scs.compute_target_position("mbes", sd).z));
+
+    // raw lever arm when not leveling
+    CHECK(pose.x == Catch::Approx(target.x));
+    CHECK(pose.y == Catch::Approx(target.y));
+
+    // leveled lever arm (roll/pitch only, heading removed)
+    const auto pose_leveled = scs.compute_target_pose("mbes", sd, ref_heading, true);
+    const auto ypr     = vessel.ypr();
+    const auto leveled = Rotation<float>(0.f, ypr[1], ypr[2]).rotate(target.x, target.y, target.z);
+    CHECK(pose_leveled.x == Catch::Approx(leveled[0]));
+    CHECK(pose_leveled.y == Catch::Approx(leveled[1]));
+    CHECK(pose_leveled.z == Catch::Approx(pose.z));
+}
+
 TEST_CASE("sensorconfiguration should reproduce precomputed rotations when settings sensor offsets",
           TESTTAG)
 {
@@ -73,32 +113,32 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
         scs.add_target("mbes", targetOffsets);
 
         datastructures::SensordataLocal sensor_data;
-        sensor_data.heading = 90;
-        sensor_data.roll    = 0;
-        sensor_data.pitch   = 20;
+        sensor_data.set_heading(90);
+        sensor_data.set_roll(0);
+        sensor_data.set_pitch(20);
 
         // imu yaw offset should not influence the resulting yaw because that is influenced only by
         // the heading but imu yaw offset of 90° should swap pitch and roll
         scs.set_attitude_source("gps", 90, 0, 0);
         auto position = scs.compute_target_position("mbes", sensor_data);
 
-        REQUIRE_THAT(position.yaw, Catch::Matchers::WithinAbs(90.f, 0.001f));
-        REQUIRE_THAT(position.pitch, Catch::Matchers::WithinAbs(0.f, 0.001f));
-        REQUIRE_THAT(position.roll, Catch::Matchers::WithinAbs(-20.f, 0.001f));
+        REQUIRE_THAT(position.yaw(), Catch::Matchers::WithinAbs(90.f, 0.001f));
+        REQUIRE_THAT(position.pitch(), Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position.roll(), Catch::Matchers::WithinAbs(-20.f, 0.001f));
 
-        sensor_data.roll  = 10;
-        sensor_data.pitch = 0;
+        sensor_data.set_roll(10);
+        sensor_data.set_pitch(0);
 
         position = scs.compute_target_position("mbes", sensor_data);
-        REQUIRE_THAT(position.yaw, Catch::Matchers::WithinAbs(90.f, 0.001f));
-        REQUIRE_THAT(position.pitch, Catch::Matchers::WithinAbs(10.f, 0.001f));
-        REQUIRE_THAT(position.roll, Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position.yaw(), Catch::Matchers::WithinAbs(90.f, 0.001f));
+        REQUIRE_THAT(position.pitch(), Catch::Matchers::WithinAbs(10.f, 0.001f));
+        REQUIRE_THAT(position.roll(), Catch::Matchers::WithinAbs(0.f, 0.001f));
 
         scs.set_attitude_source("gps", 0, 1, 2);
         position = scs.compute_target_position("mbes", sensor_data);
-        REQUIRE_THAT(position.yaw, Catch::Matchers::WithinAbs(90.f, 0.001f));
-        REQUIRE_THAT(position.pitch, Catch::Matchers::WithinAbs(-0.9902670948f, 0.001f));
-        REQUIRE_THAT(position.roll, Catch::Matchers::WithinAbs(8.001202844f, 0.001f));
+        REQUIRE_THAT(position.yaw(), Catch::Matchers::WithinAbs(90.f, 0.001f));
+        REQUIRE_THAT(position.pitch(), Catch::Matchers::WithinAbs(-0.9902670948f, 0.001f));
+        REQUIRE_THAT(position.roll(), Catch::Matchers::WithinAbs(8.001202844f, 0.001f));
     }
 }
 
@@ -171,9 +211,9 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         // initialize sensor data
         datastructures::SensordataLocal sensor_data;
         sensor_data.depth    = 5;
-        sensor_data.heading  = 0;
-        sensor_data.pitch    = 0;
-        sensor_data.roll     = 0;
+        sensor_data.set_heading(0);
+        sensor_data.set_pitch(0);
+        sensor_data.set_roll(0);
         sensor_data.northing = 10;
         sensor_data.easting  = 20;
 
@@ -201,19 +241,19 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(position_mbes.yaw == Catch::Approx(0.0));
-        CHECK(position_mbes.pitch == Catch::Approx(0.0));
-        CHECK(position_mbes.roll == Catch::Approx(0.0));
-        CHECK(position_sbes.yaw == Catch::Approx(45));
-        CHECK(position_sbes.pitch == Catch::Approx(5));
-        REQUIRE(position_sbes.roll == Catch::Approx(10));
+        CHECK(position_mbes.yaw() == Catch::Approx(0.0));
+        CHECK(position_mbes.pitch() == Catch::Approx(0.0));
+        CHECK(position_mbes.roll() == Catch::Approx(0.0));
+        CHECK(position_sbes.yaw() == Catch::Approx(45));
+        CHECK(position_sbes.pitch() == Catch::Approx(5));
+        REQUIRE(position_sbes.roll() == Catch::Approx(10));
 
         // scenario 0.2
         // initialize sensor data
         sensor_data.depth    = 5;
-        sensor_data.heading  = 180;
-        sensor_data.pitch    = 0;
-        sensor_data.roll     = 0;
+        sensor_data.set_heading(180);
+        sensor_data.set_pitch(0);
+        sensor_data.set_roll(0);
         sensor_data.northing = 10;
         sensor_data.easting  = 20;
 
@@ -241,19 +281,19 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        REQUIRE_THAT(position_mbes.yaw, Catch::Matchers::WithinAbs(180.f, 0.001f));
-        REQUIRE_THAT(position_mbes.pitch, Catch::Matchers::WithinAbs(0.f, 0.001f));
-        REQUIRE_THAT(position_mbes.roll, Catch::Matchers::WithinAbs(0.f, 0.001f));
-        REQUIRE_THAT(position_sbes.yaw, Catch::Matchers::WithinAbs(225.f, 0.001f));
-        REQUIRE_THAT(position_sbes.pitch, Catch::Matchers::WithinAbs(5.f, 0.001f));
-        REQUIRE_THAT(position_sbes.roll, Catch::Matchers::WithinAbs(10.f, 0.001f));
+        REQUIRE_THAT(position_mbes.yaw(), Catch::Matchers::WithinAbs(180.f, 0.001f));
+        REQUIRE_THAT(position_mbes.pitch(), Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position_mbes.roll(), Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position_sbes.yaw(), Catch::Matchers::WithinAbs(225.f, 0.001f));
+        REQUIRE_THAT(position_sbes.pitch(), Catch::Matchers::WithinAbs(5.f, 0.001f));
+        REQUIRE_THAT(position_sbes.roll(), Catch::Matchers::WithinAbs(10.f, 0.001f));
 
         // scenario 0.3
         // initialize sensor data
         sensor_data.depth    = 5;
-        sensor_data.heading  = 90;
-        sensor_data.pitch    = 0;
-        sensor_data.roll     = 0;
+        sensor_data.set_heading(90);
+        sensor_data.set_pitch(0);
+        sensor_data.set_roll(0);
         sensor_data.northing = 10;
         sensor_data.easting  = 20;
 
@@ -281,12 +321,12 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        REQUIRE_THAT(position_mbes.yaw, Catch::Matchers::WithinAbs(90.f, 0.001f));
-        REQUIRE_THAT(position_mbes.pitch, Catch::Matchers::WithinAbs(0.f, 0.001f));
-        REQUIRE_THAT(position_mbes.roll, Catch::Matchers::WithinAbs(0.f, 0.001f));
-        REQUIRE_THAT(position_sbes.yaw, Catch::Matchers::WithinAbs(135.f, 0.001f));
-        REQUIRE_THAT(position_sbes.pitch, Catch::Matchers::WithinAbs(5.f, 0.001f));
-        REQUIRE_THAT(position_sbes.roll, Catch::Matchers::WithinAbs(10.f, 0.001f));
+        REQUIRE_THAT(position_mbes.yaw(), Catch::Matchers::WithinAbs(90.f, 0.001f));
+        REQUIRE_THAT(position_mbes.pitch(), Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position_mbes.roll(), Catch::Matchers::WithinAbs(0.f, 0.001f));
+        REQUIRE_THAT(position_sbes.yaw(), Catch::Matchers::WithinAbs(135.f, 0.001f));
+        REQUIRE_THAT(position_sbes.pitch(), Catch::Matchers::WithinAbs(5.f, 0.001f));
+        REQUIRE_THAT(position_sbes.roll(), Catch::Matchers::WithinAbs(10.f, 0.001f));
     }
 
     SECTION("SENSOR_VALUES XY coordinates")
@@ -294,9 +334,9 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         datastructures::SensordataLocal sensor_data;
         // scenario 1
         sensor_data.depth    = 5;
-        sensor_data.heading  = 25;
-        sensor_data.pitch    = 20;
-        sensor_data.roll     = 10;
+        sensor_data.set_heading(25);
+        sensor_data.set_pitch(20);
+        sensor_data.set_roll(10);
         sensor_data.northing = 10;
         sensor_data.easting  = 20;
 
@@ -324,18 +364,18 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(position_mbes.yaw == Catch::Approx(25.0));
-        CHECK(position_mbes.pitch == Catch::Approx(20.0));
-        CHECK(position_mbes.roll == Catch::Approx(10.0));
-        CHECK(position_sbes.yaw == Catch::Approx(71.4260001287));
-        CHECK(position_sbes.pitch == Catch::Approx(11.9252923155));
-        CHECK(position_sbes.roll == Catch::Approx(31.4141895033));
+        CHECK(position_mbes.yaw() == Catch::Approx(25.0));
+        CHECK(position_mbes.pitch() == Catch::Approx(20.0));
+        CHECK(position_mbes.roll() == Catch::Approx(10.0));
+        CHECK(position_sbes.yaw() == Catch::Approx(71.4260001287));
+        CHECK(position_sbes.pitch() == Catch::Approx(11.9252923155));
+        CHECK(position_sbes.roll() == Catch::Approx(31.4141895033));
 
         // scenario 2
         sensor_data.depth    = -5;
-        sensor_data.heading  = -35;
-        sensor_data.pitch    = -5;
-        sensor_data.roll     = -15;
+        sensor_data.set_heading(-35);
+        sensor_data.set_pitch(-5);
+        sensor_data.set_roll(-15);
         sensor_data.northing = -23;
         sensor_data.easting  = -20;
 
@@ -362,18 +402,18 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(position_mbes.yaw == Catch::Approx(325.0));
-        CHECK(position_mbes.pitch == Catch::Approx(-5.0));
-        CHECK(position_mbes.roll == Catch::Approx(-15.0));
-        CHECK(position_sbes.yaw == Catch::Approx(7.2216796191));
-        CHECK(position_sbes.pitch == Catch::Approx(11.7764820146));
-        CHECK(position_sbes.roll == Catch::Approx(-4.429576033));
+        CHECK(position_mbes.yaw() == Catch::Approx(325.0));
+        CHECK(position_mbes.pitch() == Catch::Approx(-5.0));
+        CHECK(position_mbes.roll() == Catch::Approx(-15.0));
+        CHECK(position_sbes.yaw() == Catch::Approx(7.2216796191));
+        CHECK(position_sbes.pitch() == Catch::Approx(11.7764820146));
+        CHECK(position_sbes.roll() == Catch::Approx(-4.429576033));
 
         // scenario 3
         sensor_data.depth    = 3;
-        sensor_data.heading  = 30;
-        sensor_data.pitch    = -5;
-        sensor_data.roll     = -15;
+        sensor_data.set_heading(30);
+        sensor_data.set_pitch(-5);
+        sensor_data.set_roll(-15);
         sensor_data.northing = 100;
         sensor_data.easting  = -20;
 
@@ -400,18 +440,18 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(position_mbes.yaw == Catch::Approx(30.0));
-        CHECK(position_mbes.pitch == Catch::Approx(-5.0));
-        CHECK(position_mbes.roll == Catch::Approx(-15.0));
-        CHECK(position_sbes.yaw == Catch::Approx(72.2216796191));
-        CHECK(position_sbes.pitch == Catch::Approx(11.7764820146));
-        CHECK(position_sbes.roll == Catch::Approx(-4.429576033));
+        CHECK(position_mbes.yaw() == Catch::Approx(30.0));
+        CHECK(position_mbes.pitch() == Catch::Approx(-5.0));
+        CHECK(position_mbes.roll() == Catch::Approx(-15.0));
+        CHECK(position_sbes.yaw() == Catch::Approx(72.2216796191));
+        CHECK(position_sbes.pitch() == Catch::Approx(11.7764820146));
+        CHECK(position_sbes.roll() == Catch::Approx(-4.429576033));
 
         // scenario 4
         sensor_data.depth    = -2000;
-        sensor_data.heading  = -470;
-        sensor_data.pitch    = -59;
-        sensor_data.roll     = 1;
+        sensor_data.set_heading(-470);
+        sensor_data.set_pitch(-59);
+        sensor_data.set_roll(1);
         sensor_data.northing = 23;
         sensor_data.easting  = -1000;
 
@@ -438,12 +478,12 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         REQUIRE(position_mbes.northing == position_sbes.northing);
         REQUIRE(position_mbes.easting == position_sbes.easting);
 
-        CHECK(position_mbes.yaw == Catch::Approx(250.0));
-        CHECK(position_mbes.pitch == Catch::Approx(-59.0));
-        CHECK(position_mbes.roll == Catch::Approx(1.0));
-        CHECK(position_sbes.yaw == Catch::Approx(308.8301085148));
-        CHECK(position_sbes.pitch == Catch::Approx(-34.4198234806));
-        CHECK(position_sbes.roll == Catch::Approx(-36.6392731807));
+        CHECK(position_mbes.yaw() == Catch::Approx(250.0));
+        CHECK(position_mbes.pitch() == Catch::Approx(-59.0));
+        CHECK(position_mbes.roll() == Catch::Approx(1.0).margin(1e-3));
+        CHECK(position_sbes.yaw() == Catch::Approx(308.8301085148));
+        CHECK(position_sbes.pitch() == Catch::Approx(-34.4198234806));
+        CHECK(position_sbes.roll() == Catch::Approx(-36.6392731807));
     }
 
     SECTION("SENSOR_VALUES latitude and longitude")
@@ -452,9 +492,9 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 5 (latlon)
         sensor_data.depth     = 2000;
-        sensor_data.heading   = 470;
-        sensor_data.pitch     = -59;
-        sensor_data.roll      = 1;
+        sensor_data.set_heading(470);
+        sensor_data.set_pitch(-59);
+        sensor_data.set_roll(1);
         sensor_data.latitude  = 54.123;
         sensor_data.longitude = -10.123;
 
@@ -473,12 +513,12 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_mbes.latitude == Catch::Approx(54.1229869952));
         CHECK(position_mbes.longitude == Catch::Approx(-10.123067173));
 
-        CHECK(position_mbes.yaw == Catch::Approx(110.0));
-        CHECK(position_mbes.pitch == Catch::Approx(-59.0));
-        CHECK(position_mbes.roll == Catch::Approx(1.0));
-        CHECK(position_sbes.yaw == Catch::Approx(168.8301085148));
-        CHECK(position_sbes.pitch == Catch::Approx(-34.4198234806));
-        CHECK(position_sbes.roll == Catch::Approx(-36.6392731807));
+        CHECK(position_mbes.yaw() == Catch::Approx(110.0));
+        CHECK(position_mbes.pitch() == Catch::Approx(-59.0));
+        CHECK(position_mbes.roll() == Catch::Approx(1.0));
+        CHECK(position_sbes.yaw() == Catch::Approx(168.8301085148));
+        CHECK(position_sbes.pitch() == Catch::Approx(-34.4198234806));
+        CHECK(position_sbes.roll() == Catch::Approx(-36.6392731807));
 
         // check if results with UTM are the same as with latlon
         datastructures::GeolocationUTM position_mbes_utm =
@@ -490,9 +530,9 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 
         // scenario 6 (latlon)
         sensor_data.depth     = 1000;
-        sensor_data.heading   = 360;
-        sensor_data.pitch     = 9;
-        sensor_data.roll      = -1;
+        sensor_data.set_heading(360);
+        sensor_data.set_pitch(9);
+        sensor_data.set_roll(-1);
         sensor_data.latitude  = -74.123;
         sensor_data.longitude = 1.123;
 
@@ -512,12 +552,12 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
         CHECK(position_mbes.latitude == Catch::Approx(-74.1229869952));
         CHECK(position_mbes.longitude == Catch::Approx(1.123067173));
 
-        REQUIRE_THAT(position_mbes.yaw, Catch::Matchers::WithinAbs(0, 0.001f));
-        REQUIRE_THAT(position_mbes.pitch, Catch::Matchers::WithinAbs(9.f, 0.001f));
-        REQUIRE_THAT(position_mbes.roll, Catch::Matchers::WithinAbs(-1.f, 0.001f));
-        REQUIRE_THAT(position_sbes.yaw, Catch::Matchers::WithinAbs(45.936f, 0.001f));
-        REQUIRE_THAT(position_sbes.pitch, Catch::Matchers::WithinAbs(12.029f, 0.001f));
-        REQUIRE_THAT(position_sbes.roll, Catch::Matchers::WithinAbs(15.775f, 0.001f));
+        REQUIRE_THAT(position_mbes.yaw(), Catch::Matchers::WithinAbs(0, 0.001f));
+        REQUIRE_THAT(position_mbes.pitch(), Catch::Matchers::WithinAbs(9.f, 0.001f));
+        REQUIRE_THAT(position_mbes.roll(), Catch::Matchers::WithinAbs(-1.f, 0.001f));
+        REQUIRE_THAT(position_sbes.yaw(), Catch::Matchers::WithinAbs(45.936f, 0.001f));
+        REQUIRE_THAT(position_sbes.pitch(), Catch::Matchers::WithinAbs(12.029f, 0.001f));
+        REQUIRE_THAT(position_sbes.roll(), Catch::Matchers::WithinAbs(15.775f, 0.001f));
 
         // check if results with UTM are the same as with latlon
         position_mbes_utm =

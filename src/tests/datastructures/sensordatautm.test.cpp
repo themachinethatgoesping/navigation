@@ -25,11 +25,11 @@ TEST_CASE("SensordataUTM should support common functions", TESTTAG)
     data.northern_hemisphere = true;
     data.depth                   = 3;
 
-    data.heading = 10;
+    data.set_heading(10);
     data.heave   = 1;
 
-    data.pitch = 20;
-    data.roll  = 30;
+    data.set_pitch(20);
+    data.set_roll(30);
 
     // test copy
     REQUIRE(data == SensordataUTM(data));
@@ -57,11 +57,11 @@ TEST_CASE("SensordataUTM should support common utm/latlon conversions", TESTTAG)
     data.northern_hemisphere = true;
     data.depth                   = 3;
 
-    data.heading = 10;
+    data.set_heading(10);
     data.heave   = 1;
 
-    data.pitch = 20;
-    data.roll  = 30;
+    data.set_pitch(20);
+    data.set_roll(30);
 
     auto data_south                    = SensordataUTM(data);
     data_south.northing                = 5427745.995;
@@ -101,7 +101,7 @@ TEST_CASE("SensordataUTM should support common utm/latlon conversions", TESTTAG)
     REQUIRE(SensordataLatLon(data_south).longitude == Catch::Approx(174.780011));
 
     // test info strings
-    data_utm.heading = 12;
+    data_utm.set_heading(12);
     data_utm.print(std::cerr);
     REQUIRE(data_utm.info_string().find("heading") != std::string::npos);
 }

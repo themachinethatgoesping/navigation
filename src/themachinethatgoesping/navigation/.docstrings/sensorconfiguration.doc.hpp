@@ -1,4 +1,4 @@
-//sourcehash: 687492036a7e92bc7ce7b7ef1cb28eecd0b69584515da0c6370204c2b9a0d62c
+//sourcehash: eaa06c83e0c5675056b2b2e5a74151cd5326c9a2ef1f902558ea547e22467302
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -92,6 +92,32 @@ that is incompatible with the given SensorConfiguration targets
 Returns:
     false if the same target_id is registered with different offsets,
     true otherwise)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_pose =
+R"doc(Compute the ready-to-trace pose (position + ship-frame orientation) of
+a target.
+
+Unlike compute_target_position (which returns a geolocation), this
+bakes the target installation, the vessel attitude and the removal of
+a common reference heading into a single pose, so a raytracer can
+consume it without re-composing installation/attitude/heading. The
+orientation is Rz(-reference_heading) · vessel_rotation ·
+target_installation; the position is the target lever arm (raw body
+frame, or roll/pitch-leveled when ``level_lever_arm`` is true) with z
+the depth below the waterline. Pass the SAME reference_heading (the
+heading at transmit time) for every target of a ping so all poses
+share one ship frame.
+
+Args:
+    target_id: name of the target (e.g. "MBES")
+    sensor_data: Sensordata (heading/pitch/roll + depth/heave)
+    reference_heading_in_degrees: heading (deg) removed from the
+                                  orientation (transmit heading)
+    level_lever_arm: if true, level the horizontal lever arm by vessel
+                     roll/pitch
+
+Returns:
+    target pose (position + ship-frame Rotation))doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor
@@ -248,6 +274,19 @@ Args:
 
 Returns:
     std::array<float, 3> {yaw, pitch, roll} in degrees)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_vessel_rotation =
+R"doc(Compute the offset-corrected vessel orientation as a Rotation.
+
+Same convention as get_vessel_attitude / compute_target_position
+(attitude offset removed via quaternion, heading offset subtracted
+from heading), but returned as a Rotation.
+
+Args:
+    sensor_data: Sensordata (only heading, pitch and roll are used)
+
+Returns:
+    vessel orientation (Rotation) in the world frame)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_waterline_offset =
 R"doc(Get the waterline offset Negative waterline offset means that z=0 is

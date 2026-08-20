@@ -174,16 +174,18 @@ datastructures::SensordataLatLon NavigationInterpolatorLatLon::get_sensor_data(d
     if (!_interpolator_heave.empty()) // default is 0.0
         sensor_data.heave = _interpolator_heave(timestamp);
 
+    float heading = 0.f, pitch = 0.f, roll = 0.f;
     if (!_interpolator_heading.empty()) // default is 0.0
-        sensor_data.heading = _interpolator_heading.ypr(timestamp)[0];
+        heading = _interpolator_heading.ypr(timestamp)[0];
 
     if (!_interpolator_attitude.empty()) // default is 0.0. 0.0
     {
         auto ypr = _interpolator_attitude.ypr(timestamp);
-        // sensor_data.imu_yaw   = ypr[0];
-        sensor_data.pitch = ypr[1];
-        sensor_data.roll  = ypr[2];
+        // imu_yaw = ypr[0];
+        pitch = ypr[1];
+        roll  = ypr[2];
     }
+    sensor_data.set_ypr(heading, pitch, roll);
 
     if (_interpolator_latitude.empty())
         throw std::runtime_error("ERROR[datastructures::SensordataLatLon]: No latitude data "

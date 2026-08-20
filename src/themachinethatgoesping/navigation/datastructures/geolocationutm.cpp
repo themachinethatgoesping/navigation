@@ -61,7 +61,7 @@ bool GeolocationUTM::operator==(const GeolocationUTM& rhs) const
 GeolocationLatLon GeolocationUTM::to_geolocation_latlon(const GeolocationUTM& location_utm)
 {
     GeolocationLatLon location(
-        0, 0, location_utm.z, location_utm.yaw, location_utm.pitch, location_utm.roll);
+        0, 0, location_utm.z, location_utm.yaw(), location_utm.pitch(), location_utm.roll());
 
     GeographicLib::UTMUPS::Reverse(location_utm.utm_zone,
                                    location_utm.northern_hemisphere,
@@ -77,7 +77,7 @@ GeolocationUTM GeolocationUTM::from_geolocation_latlon(const GeolocationLatLon& 
                                                       int                      setzone)
 {
     GeolocationUTM location_utm(
-        0, 0, 0, 0, location.z, location.yaw, location.pitch, location.roll);
+        0, 0, 0, 0, location.z, location.yaw(), location.pitch(), location.roll());
 
     GeographicLib::UTMUPS::Forward(location.latitude,
                                    location.longitude,

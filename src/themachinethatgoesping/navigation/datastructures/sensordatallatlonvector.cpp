@@ -59,7 +59,7 @@ std::vector<float> SensordataLatLonVector::get_headings() const
     result.reserve(_data.size());
     for (const auto& sd : _data)
     {
-        result.push_back(sd.heading);
+        result.push_back(sd.heading());
     }
     return result;
 }
@@ -70,7 +70,7 @@ std::vector<float> SensordataLatLonVector::get_pitches() const
     result.reserve(_data.size());
     for (const auto& sd : _data)
     {
-        result.push_back(sd.pitch);
+        result.push_back(sd.pitch());
     }
     return result;
 }
@@ -81,7 +81,7 @@ std::vector<float> SensordataLatLonVector::get_rolls() const
     result.reserve(_data.size());
     for (const auto& sd : _data)
     {
-        result.push_back(sd.roll);
+        result.push_back(sd.roll());
     }
     return result;
 }

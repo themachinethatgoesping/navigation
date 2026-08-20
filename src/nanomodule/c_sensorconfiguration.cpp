@@ -58,6 +58,13 @@ void init_c_sensorconfiguration(nb::module_& m)
              DOC_SensorConfiguration(compute_target_position_4),
              nb::arg("target_id"),
              nb::arg("sensor_data"))
+        .def("compute_target_pose",
+             &SensorConfiguration::compute_target_pose,
+             DOC_SensorConfiguration(compute_target_pose),
+             nb::arg("target_id"),
+             nb::arg("sensor_data"),
+             nb::arg("reference_heading_in_degrees"),
+             nb::arg("level_lever_arm") = false)
         .def("get_vessel_attitude",
              &SensorConfiguration::get_vessel_attitude,
              "Compute the offset-corrected vessel attitude (yaw, pitch, roll in degrees) in the "

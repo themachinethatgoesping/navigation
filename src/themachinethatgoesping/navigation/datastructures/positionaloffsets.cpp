@@ -24,11 +24,49 @@ PositionalOffsets::PositionalOffsets(std::string_view name,
     , x(x)
     , y(y)
     , z(z)
-    , yaw(yaw)
-    , pitch(pitch)
-    , roll(roll)
+    , rotation(yaw, pitch, roll)
     , ypr_offsets_applied(ypr_offsets_applied)
 {
+}
+
+PositionalOffsets::PositionalOffsets(std::string_view                          name,
+                                     float                                     x,
+                                     float                                     y,
+                                     float                                     z,
+                                     tools::rotationfunctions::Rotation<float> rotation,
+                                     bool                                      ypr_offsets_applied)
+    : name(std::string(name))
+    , x(x)
+    , y(y)
+    , z(z)
+    , rotation(rotation)
+    , ypr_offsets_applied(ypr_offsets_applied)
+{
+}
+
+// ----- yaw/pitch/roll accessors -----
+float PositionalOffsets::yaw() const { return rotation.ypr()[0]; }
+float PositionalOffsets::pitch() const { return rotation.ypr()[1]; }
+float PositionalOffsets::roll() const { return rotation.ypr()[2]; }
+
+void PositionalOffsets::set_ypr(float yaw, float pitch, float roll)
+{
+    rotation = tools::rotationfunctions::Rotation<float>(yaw, pitch, roll);
+}
+void PositionalOffsets::set_yaw(float yaw)
+{
+    const auto ypr = rotation.ypr();
+    rotation       = tools::rotationfunctions::Rotation<float>(yaw, ypr[1], ypr[2]);
+}
+void PositionalOffsets::set_pitch(float pitch)
+{
+    const auto ypr = rotation.ypr();
+    rotation       = tools::rotationfunctions::Rotation<float>(ypr[0], pitch, ypr[2]);
+}
+void PositionalOffsets::set_roll(float roll)
+{
+    const auto ypr = rotation.ypr();
+    rotation       = tools::rotationfunctions::Rotation<float>(ypr[0], ypr[1], roll);
 }
 
 // ----- static functions -----
@@ -50,9 +88,7 @@ PositionalOffsets PositionalOffsets::from_txrx(const PositionalOffsets& tx,
     trx.x = tx.x;
 
     /* take pitch and yaw from tx and roll from rx*/
-    trx.pitch = tx.pitch;
-    trx.yaw   = tx.yaw; // not sure about this one ...
-    trx.roll  = rx.roll;
+    trx.set_ypr(tx.yaw(), tx.pitch(), rx.roll());
 
     return trx;
 }
@@ -65,17 +101,9 @@ bool PositionalOffsets::operator!=(const PositionalOffsets& rhs) const
 
 bool PositionalOffsets::operator==(const PositionalOffsets& rhs) const
 {
-    if (name == rhs.name)
-        if (tools::helper::approx(x, rhs.x))
-            if (tools::helper::approx(y, rhs.y))
-                if (tools::helper::approx(z, rhs.z))
-                    if (tools::helper::approx(yaw, rhs.yaw))
-                        if (tools::helper::approx(pitch, rhs.pitch))
-                            if (tools::helper::approx(roll, rhs.roll))
-                                if (ypr_offsets_applied == rhs.ypr_offsets_applied)
-                                    return true;
-
-    return false;
+    using tools::helper::approx;
+    return name == rhs.name && approx(x, rhs.x) && approx(y, rhs.y) && approx(z, rhs.z) &&
+           rotation == rhs.rotation && ypr_offsets_applied == rhs.ypr_offsets_applied;
 }
 
 // ----- file I/O -----
@@ -85,7 +113,8 @@ PositionalOffsets PositionalOffsets::from_stream(std::istream& is)
 
     data.name = tools::classhelper::stream::container_from_stream<std::string>(is);
 
-    is.read(reinterpret_cast<char*>(&data.x), 6 * sizeof(float));
+    is.read(reinterpret_cast<char*>(&data.x), 3 * sizeof(float));
+    data.rotation = tools::rotationfunctions::Rotation<float>::from_stream(is);
     is.read(reinterpret_cast<char*>(&data.ypr_offsets_applied), sizeof(bool));
 
     return data;
@@ -95,7 +124,8 @@ void PositionalOffsets::to_stream(std::ostream& os) const
 {
     tools::classhelper::stream::container_to_stream(os, name);
 
-    os.write(reinterpret_cast<const char*>(&x), 6 * sizeof(float));
+    os.write(reinterpret_cast<const char*>(&x), 3 * sizeof(float));
+    rotation.to_stream(os);
     os.write(reinterpret_cast<const char*>(&ypr_offsets_applied), sizeof(bool));
 }
 
@@ -108,9 +138,10 @@ tools::classhelper::ObjectPrinter PositionalOffsets::__printer__(unsigned int fl
     printer.register_value("x", x, "positive forwards, m");
     printer.register_value("y", y, "positive starboard, m");
     printer.register_value("z", z, "positive downwards, m");
-    printer.register_value("yaw", yaw, "° positive means clockwise rotation");
-    printer.register_value("pitch", pitch, "° positive means bow up");
-    printer.register_value("roll", roll, "° positive means port up");
+    const auto ypr = rotation.ypr();
+    printer.register_value("yaw", ypr[0], "° positive means clockwise rotation");
+    printer.register_value("pitch", ypr[1], "° positive means bow up");
+    printer.register_value("roll", ypr[2], "° positive means port up");
     printer.register_value(
         "ypr_offsets_applied", ypr_offsets_applied, "yaw/pitch/roll already applied to sensor data");
 

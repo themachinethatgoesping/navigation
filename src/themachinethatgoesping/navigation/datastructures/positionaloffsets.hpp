@@ -14,6 +14,7 @@
 #include <string_view>
 
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
+#include <themachinethatgoesping/tools/rotationfunctions/rotation.hpp>
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -26,13 +27,12 @@ namespace datastructures {
  */
 struct PositionalOffsets
 {
-    std::string name;        ///< The name of the sensor
-    float       x     = 0.0; ///< in m, positive forward
-    float       y     = 0.0; ///< in m, positive starboard
-    float       z     = 0.0; ///< in m, positive downwards
-    float       yaw   = 0.0; ///< in °, positive means clockwise rotation
-    float       pitch = 0.0; ///< in °, positive means bow up
-    float       roll  = 0.0; ///< in °, positive means port up
+    std::string name;      ///< The name of the sensor
+    float       x = 0.0;   ///< in m, positive forward
+    float       y = 0.0;   ///< in m, positive starboard
+    float       z = 0.0;   ///< in m, positive downwards
+    /// yaw/pitch/roll offsets (°); exposed via yaw()/pitch()/roll()
+    tools::rotationfunctions::Rotation<float> rotation;
 
     /// if true, the yaw/pitch/roll offsets are already applied to the associated sensor data
     /// stream (e.g. Kongsberg .all logs the attitude/heading already corrected for the sensor
@@ -67,6 +67,39 @@ struct PositionalOffsets
                       float            pitch,
                       float            roll,
                       bool             ypr_offsets_applied = false);
+
+    /**
+     * @brief Construct a new PositionalOffsets object from a Rotation
+     *
+     * @param name The name of the sensor
+     * @param x in m, positive forward
+     * @param y in m, positive starboard
+     * @param z in m, positive downwards
+     * @param rotation yaw/pitch/roll offset orientation
+     * @param ypr_offsets_applied if true, the offsets are already applied (default: false)
+     */
+    PositionalOffsets(std::string_view                          name,
+                      float                                     x,
+                      float                                     y,
+                      float                                     z,
+                      tools::rotationfunctions::Rotation<float> rotation,
+                      bool                                      ypr_offsets_applied = false);
+
+    /// @brief yaw in °, positive means clockwise rotation
+    float yaw() const;
+    /// @brief pitch in °, positive means bow up
+    float pitch() const;
+    /// @brief roll in °, positive means port up
+    float roll() const;
+
+    /// @brief set yaw, pitch and roll (°) at once
+    void set_ypr(float yaw, float pitch, float roll);
+    /// @brief set yaw (°), keeping pitch and roll
+    void set_yaw(float yaw);
+    /// @brief set pitch (°), keeping yaw and roll
+    void set_pitch(float pitch);
+    /// @brief set roll (°), keeping yaw and pitch
+    void set_roll(float roll);
 
     /**
      * @brief Construct a new PositionalOffsets object from a transmitter and receiver unit

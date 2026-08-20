@@ -48,7 +48,7 @@ std::vector<float> GeolocationLatLonVector::get_yaw() const
     result.reserve(_data.size());
     for (const auto& geo : _data)
     {
-        result.push_back(geo.yaw);
+        result.push_back(geo.yaw());
     }
     return result;
 }
@@ -59,7 +59,7 @@ std::vector<float> GeolocationLatLonVector::get_pitch() const
     result.reserve(_data.size());
     for (const auto& geo : _data)
     {
-        result.push_back(geo.pitch);
+        result.push_back(geo.pitch());
     }
     return result;
 }
@@ -70,7 +70,7 @@ std::vector<float> GeolocationLatLonVector::get_roll() const
     result.reserve(_data.size());
     for (const auto& geo : _data)
     {
-        result.push_back(geo.roll);
+        result.push_back(geo.roll());
     }
     return result;
 }

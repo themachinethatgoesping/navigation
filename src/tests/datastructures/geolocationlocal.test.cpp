@@ -23,9 +23,9 @@ TEST_CASE("GeolocationLocal should support common functions", TESTTAG)
     location.easting  = 549841.192;
     location.z        = 3;
 
-    location.yaw   = 10;
-    location.pitch = 20;
-    location.roll  = 30;
+    location.set_yaw(10);
+    location.set_pitch(20);
+    location.set_roll(30);
 
     // test copy
     REQUIRE(location == GeolocationLocal(location));
@@ -53,9 +53,9 @@ TEST_CASE("GeolocationLocal should support common utm/local conversions", TESTTA
     int  zone                = 31;
     bool northern_hemisphere = true;
 
-    location.yaw   = 10;
-    location.pitch = 20;
-    location.roll  = 30;
+    location.set_yaw(10);
+    location.set_pitch(20);
+    location.set_roll(30);
 
     // test utm/lat lon conversion
     GeolocationUTM location_utm(location, zone, northern_hemisphere);

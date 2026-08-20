@@ -26,9 +26,9 @@ TEST_CASE("GeolocationUTM should support common functions", TESTTAG)
     location.northern_hemisphere = true;
     location.z                       = 3;
 
-    location.yaw   = 10;
-    location.pitch = 20;
-    location.roll  = 30;
+    location.set_yaw(10);
+    location.set_pitch(20);
+    location.set_roll(30);
 
     // test copy
     REQUIRE(location == GeolocationUTM(location));
@@ -56,9 +56,9 @@ TEST_CASE("GeolocationUTM should support common utm/latlon conversions", TESTTAG
     location.northern_hemisphere = true;
     location.z                       = 3;
 
-    location.yaw   = 10;
-    location.pitch = 20;
-    location.roll  = 30;
+    location.set_yaw(10);
+    location.set_pitch(20);
+    location.set_roll(30);
 
     auto location_south                    = GeolocationUTM(location);
     location_south.northing                = 5427745.995;
