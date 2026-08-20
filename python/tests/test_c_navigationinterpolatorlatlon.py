@@ -22,7 +22,7 @@ class TestNavigationNavigationInterpolatorLatLon:
 
         # register target
         scs.add_target(
-            "mbes", nav.datastructures.PositionalOffsets("mbes", -12, 9, 3, 10, 11, 12)
+            "mbes", nav.datastructures.SensorPose("mbes", -12, 9, 3, 10, 11, 12)
         )
 
         # add offsets

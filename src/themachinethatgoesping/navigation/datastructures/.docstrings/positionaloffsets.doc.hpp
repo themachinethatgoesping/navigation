@@ -1,4 +1,4 @@
-//sourcehash: 6b04361adf275db5bf96cd6e97982577b2d1c03c7b4f4daec2c624dfa98802b4
+//sourcehash: 35d3d5b30be59a7fec09cbd72c13070422c18d52e96c8996ac8fa441b0c605c0
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -41,14 +41,14 @@
 #endif
 
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose =
 R"doc(A structure to store positional offsets (e.g. of a sensor) relative to
 the vessel coordinate system)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_PositionalOffsets = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_SensorPose = R"doc(Construct a new Sensor Position object (all offsets set to 0))doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_PositionalOffsets_2 =
-R"doc(Construct a new PositionalOffsets object
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_SensorPose_2 =
+R"doc(Construct a new SensorPose object
 
 Args:
     name: The name of the sensor
@@ -62,8 +62,8 @@ Args:
                          already applied to the associated sensor data
                          (default: false))doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_PositionalOffsets_3 =
-R"doc(Construct a new PositionalOffsets object from a Rotation
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_SensorPose_3 =
+R"doc(Construct a new SensorPose object from a Rotation
 
 Args:
     name: The name of the sensor
@@ -74,11 +74,10 @@ Args:
     ypr_offsets_applied: if true, the offsets are already applied
                          (default: false))doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_from_stream = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_from_stream = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_from_txrx =
-R"doc(Construct a new PositionalOffsets object from a transmitter and
-receiver unit
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_from_txrx =
+R"doc(Construct a new SensorPose object from a transmitter and receiver unit
 
 Args:
     tx: Multibeam transmitter offsets
@@ -86,39 +85,39 @@ Args:
     name: Name of the newly constructed transceiver offsets
 
 Returns:
-    Transceiver PositionalOffsets)doc";
+    Transceiver SensorPose)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_name = R"doc(The name of the sensor)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_name = R"doc(The name of the sensor)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_operator_eq = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_operator_eq = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_operator_ne = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_operator_ne = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_pitch = R"doc(pitch in °, positive means bow up)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_pitch = R"doc(pitch in °, positive means bow up)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_printer = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_printer = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_roll = R"doc(roll in °, positive means port up)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_roll = R"doc(roll in °, positive means port up)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_rotation = R"doc(yaw/pitch/roll offsets (°); exposed via yaw()/pitch()/roll())doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_rotation = R"doc(yaw/pitch/roll offsets (°); exposed via yaw()/pitch()/roll())doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_set_pitch = R"doc(set pitch (°), keeping yaw and roll)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_set_pitch = R"doc(set pitch (°), keeping yaw and roll)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_set_roll = R"doc(set roll (°), keeping yaw and pitch)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_set_roll = R"doc(set roll (°), keeping yaw and pitch)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_set_yaw = R"doc(set yaw (°), keeping pitch and roll)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_set_yaw = R"doc(set yaw (°), keeping pitch and roll)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_set_ypr = R"doc(set yaw, pitch and roll (°) at once)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_set_ypr = R"doc(set yaw, pitch and roll (°) at once)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_to_stream = R"doc()doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_to_stream = R"doc()doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_x = R"doc(in m, positive forward)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_x = R"doc(in m, positive forward)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_y = R"doc(in m, positive starboard)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_y = R"doc(in m, positive starboard)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_yaw = R"doc(yaw in °, positive means clockwise rotation)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_yaw = R"doc(yaw in °, positive means clockwise rotation)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_ypr_offsets_applied =
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_ypr_offsets_applied =
 R"doc(if true, the yaw/pitch/roll offsets are already applied to the
 associated sensor data stream (e.g. Kongsberg .all logs the
 attitude/heading already corrected for the sensor mounting offsets).
@@ -126,7 +125,7 @@ In that case the SensorConfiguration must not re-apply them when
 computing the vessel rotation. If false (default), the offsets still
 have to be applied.)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_PositionalOffsets_z = R"doc(in m, positive downwards)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_z = R"doc(in m, positive downwards)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

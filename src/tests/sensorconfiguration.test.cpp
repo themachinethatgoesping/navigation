@@ -20,7 +20,7 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
 {
     // initialize coordinate system with one target
     SensorConfiguration               scs;
-    datastructures::PositionalOffsets targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
+    datastructures::SensorPose targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
     scs.add_target("mbes", targetOffsets);
     scs.set_position_source("gps", 10, 20, 30);
     scs.set_heading_source("compass", 12);
@@ -58,7 +58,7 @@ TEST_CASE("sensorconfiguration compute_target_pose should match its definition",
 
     SensorConfiguration scs;
     scs.add_target("mbes",
-                   datastructures::PositionalOffsets("mbes", 1.f, 2.f, 3.f, 10.f, 20.f, 30.f));
+                   datastructures::SensorPose("mbes", 1.f, 2.f, 3.f, 10.f, 20.f, 30.f));
     scs.set_heading_source("compass", 5.f);
     scs.set_attitude_source("mru", 1.f, -2.f, 3.f);
     scs.set_depth_source("dsource", 4.f, 5.f, -6.f);
@@ -96,7 +96,7 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations when setti
           TESTTAG)
 {
     // initialize offsets
-    datastructures::PositionalOffsets targetOffsets("gps", 1, 2, 3, 0, 0, 0);
+    datastructures::SensorPose targetOffsets("gps", 1, 2, 3, 0, 0, 0);
 
     SECTION("test depth sensor offsets")
     {
@@ -146,8 +146,8 @@ TEST_CASE("sensorconfiguration merging operations", TESTTAG)
 {
     // initialize offsets
     SensorConfiguration               scs;
-    datastructures::PositionalOffsets targetOffsets1("sensor1", 1, 2, 3, 0, 0, 0);
-    datastructures::PositionalOffsets targetOffsets2("sensor2", 1, 2, 3, 45, 5, 10);
+    datastructures::SensorPose targetOffsets1("sensor1", 1, 2, 3, 0, 0, 0);
+    datastructures::SensorPose targetOffsets2("sensor2", 1, 2, 3, 45, 5, 10);
 
     scs.set_attitude_source(targetOffsets1);
     scs.add_target("mbes", targetOffsets1);
@@ -185,8 +185,8 @@ TEST_CASE("sensorconfiguration should reproduce precomputed rotations", TESTTAG)
 {
     // initialize offsets
     SensorConfiguration               scs;
-    datastructures::PositionalOffsets targetOffsets1("sensor1", 1, 2, 3, 0, 0, 0);
-    datastructures::PositionalOffsets targetOffsets2("sensor2", 1, 2, 3, 45, 5, 10);
+    datastructures::SensorPose targetOffsets1("sensor1", 1, 2, 3, 0, 0, 0);
+    datastructures::SensorPose targetOffsets2("sensor2", 1, 2, 3, 45, 5, 10);
 
     scs.add_target("mbes", targetOffsets1);
     scs.add_target("sbes", targetOffsets2);

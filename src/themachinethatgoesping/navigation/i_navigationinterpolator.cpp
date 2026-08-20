@@ -168,7 +168,7 @@ void I_NavigationInterpolator::add_target(const std::string& target_id,
 }
 
 void I_NavigationInterpolator::add_target(const std::string&                       target_id,
-                                          const datastructures::PositionalOffsets& target_offsets)
+                                          const datastructures::SensorPose& target_offsets)
 {
     invalidate_hash_cache();
     _sensor_configuration.add_target(target_id, target_offsets);

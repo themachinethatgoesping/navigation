@@ -2,18 +2,18 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-from themachinethatgoesping.navigation.datastructures import PositionalOffsets
+from themachinethatgoesping.navigation.datastructures import SensorPose
 
 # import pytest
 
 # define class for grouping (test sections)
 
 
-class Test_navigation_PositionalOffsets:
+class Test_navigation_SensorPose:
     # define actual tests (must start with "test_"
     # test case 1
-    def test_PositionalOffsets_should_support_common_functions(self):
-        offsets = PositionalOffsets("sensor", 1, 2, 3, 10, 20, 30)
+    def test_SensorPose_should_support_common_functions(self):
+        offsets = SensorPose("sensor", 1, 2, 3, 10, 20, 30)
         print(offsets)
 
         # print
@@ -26,4 +26,4 @@ class Test_navigation_PositionalOffsets:
         assert offsets != offsets2
 
         # binary
-        assert offsets == PositionalOffsets.from_binary(offsets.to_binary())
+        assert offsets == SensorPose.from_binary(offsets.to_binary())

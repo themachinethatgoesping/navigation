@@ -72,7 +72,7 @@ void NavigationInterpolatorLocal::set_data_position(const std::vector<double>& t
 void NavigationInterpolatorLocal::set_data_position(const std::vector<double>&               timestamp,
                                                     const std::vector<double>&               northing,
                                                     const std::vector<double>&               easting,
-                                                    const datastructures::PositionalOffsets& sensor_offsets)
+                                                    const datastructures::SensorPose& sensor_offsets)
 {
     _sensor_configuration.set_position_source(sensor_offsets);
     set_data_position(timestamp, northing, easting);

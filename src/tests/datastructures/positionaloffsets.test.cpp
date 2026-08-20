@@ -15,10 +15,10 @@ using namespace themachinethatgoesping::navigation::datastructures;
 
 #define TESTTAG "[offsets]"
 
-TEST_CASE("PositionalOffsets should support common functions", TESTTAG)
+TEST_CASE("SensorPose should support common functions", TESTTAG)
 {
     // initialize offsets
-    auto offsets = PositionalOffsets();
+    auto offsets = SensorPose();
 
     offsets.name = "test";
 
@@ -31,15 +31,15 @@ TEST_CASE("PositionalOffsets should support common functions", TESTTAG)
     offsets.set_roll(30);
 
     // test copy
-    REQUIRE(offsets == PositionalOffsets(offsets));
+    REQUIRE(offsets == SensorPose(offsets));
 
     // test binary
-    REQUIRE(offsets == PositionalOffsets(offsets.from_binary(offsets.to_binary())));
+    REQUIRE(offsets == SensorPose(offsets.from_binary(offsets.to_binary())));
 
     // test stream
     std::stringstream buffer;
     offsets.to_stream(buffer);
-    REQUIRE(offsets == PositionalOffsets(offsets.from_stream(buffer)));
+    REQUIRE(offsets == SensorPose(offsets.from_stream(buffer)));
 
     // test print does not crash
     REQUIRE(offsets.info_string().size() != 0);

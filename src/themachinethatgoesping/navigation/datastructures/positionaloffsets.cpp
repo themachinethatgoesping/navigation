@@ -12,7 +12,7 @@ namespace navigation {
 namespace datastructures {
 
 // ----- constructors -----
-PositionalOffsets::PositionalOffsets(std::string_view name,
+SensorPose::SensorPose(std::string_view name,
                                    float            x,
                                    float            y,
                                    float            z,
@@ -29,7 +29,7 @@ PositionalOffsets::PositionalOffsets(std::string_view name,
 {
 }
 
-PositionalOffsets::PositionalOffsets(std::string_view                          name,
+SensorPose::SensorPose(std::string_view                          name,
                                      float                                     x,
                                      float                                     y,
                                      float                                     z,
@@ -45,36 +45,36 @@ PositionalOffsets::PositionalOffsets(std::string_view                          n
 }
 
 // ----- yaw/pitch/roll accessors -----
-float PositionalOffsets::yaw() const { return rotation.ypr()[0]; }
-float PositionalOffsets::pitch() const { return rotation.ypr()[1]; }
-float PositionalOffsets::roll() const { return rotation.ypr()[2]; }
+float SensorPose::yaw() const { return rotation.ypr()[0]; }
+float SensorPose::pitch() const { return rotation.ypr()[1]; }
+float SensorPose::roll() const { return rotation.ypr()[2]; }
 
-void PositionalOffsets::set_ypr(float yaw, float pitch, float roll)
+void SensorPose::set_ypr(float yaw, float pitch, float roll)
 {
     rotation = tools::rotationfunctions::Rotation<float>(yaw, pitch, roll);
 }
-void PositionalOffsets::set_yaw(float yaw)
+void SensorPose::set_yaw(float yaw)
 {
     const auto ypr = rotation.ypr();
     rotation       = tools::rotationfunctions::Rotation<float>(yaw, ypr[1], ypr[2]);
 }
-void PositionalOffsets::set_pitch(float pitch)
+void SensorPose::set_pitch(float pitch)
 {
     const auto ypr = rotation.ypr();
     rotation       = tools::rotationfunctions::Rotation<float>(ypr[0], pitch, ypr[2]);
 }
-void PositionalOffsets::set_roll(float roll)
+void SensorPose::set_roll(float roll)
 {
     const auto ypr = rotation.ypr();
     rotation       = tools::rotationfunctions::Rotation<float>(ypr[0], ypr[1], roll);
 }
 
 // ----- static functions -----
-PositionalOffsets PositionalOffsets::from_txrx(const PositionalOffsets& tx,
-                                               const PositionalOffsets& rx,
+SensorPose SensorPose::from_txrx(const SensorPose& tx,
+                                               const SensorPose& rx,
                                                std::string              name)
 {
-    PositionalOffsets trx;
+    SensorPose trx;
 
     trx.name = std::move(name);
 
@@ -94,12 +94,12 @@ PositionalOffsets PositionalOffsets::from_txrx(const PositionalOffsets& tx,
 }
 
 // ----- operators -----
-bool PositionalOffsets::operator!=(const PositionalOffsets& rhs) const 
+bool SensorPose::operator!=(const SensorPose& rhs) const 
 { 
     return !(operator==(rhs)); 
 }
 
-bool PositionalOffsets::operator==(const PositionalOffsets& rhs) const
+bool SensorPose::operator==(const SensorPose& rhs) const
 {
     using tools::helper::approx;
     return name == rhs.name && approx(x, rhs.x) && approx(y, rhs.y) && approx(z, rhs.z) &&
@@ -107,9 +107,9 @@ bool PositionalOffsets::operator==(const PositionalOffsets& rhs) const
 }
 
 // ----- file I/O -----
-PositionalOffsets PositionalOffsets::from_stream(std::istream& is)
+SensorPose SensorPose::from_stream(std::istream& is)
 {
-    PositionalOffsets data;
+    SensorPose data;
 
     data.name = tools::classhelper::stream::container_from_stream<std::string>(is);
 
@@ -120,7 +120,7 @@ PositionalOffsets PositionalOffsets::from_stream(std::istream& is)
     return data;
 }
 
-void PositionalOffsets::to_stream(std::ostream& os) const
+void SensorPose::to_stream(std::ostream& os) const
 {
     tools::classhelper::stream::container_to_stream(os, name);
 
@@ -130,9 +130,9 @@ void PositionalOffsets::to_stream(std::ostream& os) const
 }
 
 // ----- printer -----
-tools::classhelper::ObjectPrinter PositionalOffsets::__printer__(unsigned int float_precision, bool superscript_exponents) const
+tools::classhelper::ObjectPrinter SensorPose::__printer__(unsigned int float_precision, bool superscript_exponents) const
 {
-    tools::classhelper::ObjectPrinter printer("PositionalOffsets (struct)", float_precision, superscript_exponents);
+    tools::classhelper::ObjectPrinter printer("SensorPose (struct)", float_precision, superscript_exponents);
 
     printer.register_string("name", name, "The name of the sensor");
     printer.register_value("x", x, "positive forwards, m");

@@ -126,7 +126,7 @@ void init_c_NavigationInterpolatorLocal(nb::module_& m)
              nb::arg("pitch"),
              nb::arg("roll"))
         .def("add_target",
-             nb::overload_cast<const std::string&, const datastructures::PositionalOffsets&>(
+             nb::overload_cast<const std::string&, const datastructures::SensorPose&>(
                  &NavigationInterpolatorLocal::add_target),
              DOC(themachinethatgoesping, navigation, I_NavigationInterpolator, add_target_2),
              nb::arg("target_id"),

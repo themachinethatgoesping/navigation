@@ -1,4 +1,4 @@
-//sourcehash: eaa06c83e0c5675056b2b2e5a74151cd5326c9a2ef1f902558ea547e22467302
+//sourcehash: a5c7a962e584ad1c3437b9b71c8cda5001afb671b39d9cef27b11f8cd9ee7956
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -190,28 +190,25 @@ static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration
 R"doc(Get the attitude sensor offsets
 
 Returns:
-    const datastructures::PositionalOffsets& offsets of the attitude
-    sensor)doc";
+    const datastructures::SensorPose& offsets of the attitude sensor)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_depth_source =
 R"doc(Get the registered depth sensor offsets
 
 Returns:
-    const datastructures::PositionalOffsets& offsets of the depth
-    sensor)doc";
+    const datastructures::SensorPose& offsets of the depth sensor)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_heading_source =
 R"doc(Get the registered compass offsets
 
 Returns:
-    const datastructures::PositionalOffsets& offsets of the compass)doc";
+    const datastructures::SensorPose& offsets of the compass)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_position_source =
 R"doc(Get the registered position system offsets
 
 Returns:
-    const datastructures::PositionalOffsets& offsets of the position
-    system)doc";
+    const datastructures::SensorPose& offsets of the position system)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_system_rotation_as_quat =
 R"doc(Compute the rotation of the sensor coordinate system (relative to the
@@ -241,7 +238,7 @@ Args:
     target_id: name of the registered target
 
 Returns:
-    const datastructures::PositionalOffsets& offsets of the target)doc";
+    const datastructures::SensorPose& offsets of the target)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_target_ids =
 R"doc(Get the ids of the registered targets
@@ -253,8 +250,7 @@ static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration
 R"doc(Get the map of stored target offsets objects
 
 Returns:
-    const std::unordered_map<std::string,
-    datastructures::PositionalOffsets>&)doc";
+    const std::unordered_map<std::string, datastructures::SensorPose>&)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_vessel_attitude =
 R"doc(Compute the offset-corrected vessel attitude (yaw, pitch, roll) in the

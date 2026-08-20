@@ -119,7 +119,7 @@ class NavigationInterpolatorLocal : public I_NavigationInterpolator
     void set_data_position(const std::vector<double>&               timestamp,
                            const std::vector<double>&               northing,
                            const std::vector<double>&               easting,
-                           const datastructures::PositionalOffsets& sensor_offsets);
+                           const datastructures::SensorPose& sensor_offsets);
 
     /**
      * @brief direct reference to the northing interpolator object

@@ -232,7 +232,7 @@ class I_NavigationInterpolator
      * @param sensor_offsets structure that contains the sensor position
      */
     void add_target(const std::string&                       target_id,
-                    const datastructures::PositionalOffsets& target_offsets);
+                    const datastructures::SensorPose& target_offsets);
 
     //------------------------------------- set vessel functions ----------------------------------
     /**

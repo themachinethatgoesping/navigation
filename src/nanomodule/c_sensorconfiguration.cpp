@@ -89,7 +89,7 @@ void init_c_sensorconfiguration(nb::module_& m)
              nb::arg("pitch"),
              nb::arg("roll"))
         .def("add_target",
-             nb::overload_cast<const std::string&, const datastructures::PositionalOffsets&>(
+             nb::overload_cast<const std::string&, const datastructures::SensorPose&>(
                  &SensorConfiguration::add_target),
              DOC_SensorConfiguration(add_target_2),
              nb::arg("target_id"),
@@ -122,7 +122,7 @@ void init_c_sensorconfiguration(nb::module_& m)
              nb::arg("pitch"),
              nb::arg("roll"))
         .def("set_attitude_source",
-             nb::overload_cast<const datastructures::PositionalOffsets&>(
+             nb::overload_cast<const datastructures::SensorPose&>(
                  &SensorConfiguration::set_attitude_source),
              DOC_SensorConfiguration(set_attitude_source_2),
              nb::arg("sensor_offsets"))
@@ -135,7 +135,7 @@ void init_c_sensorconfiguration(nb::module_& m)
              nb::arg("name"),
              nb::arg("yaw"))
         .def("set_heading_source",
-             nb::overload_cast<const datastructures::PositionalOffsets&>(
+             nb::overload_cast<const datastructures::SensorPose&>(
                  &SensorConfiguration::set_heading_source),
              DOC_SensorConfiguration(set_heading_source_2),
              nb::arg("sensor_offsets"))
@@ -158,7 +158,7 @@ void init_c_sensorconfiguration(nb::module_& m)
              nb::arg("y"),
              nb::arg("z"))
         .def("set_depth_source",
-             nb::overload_cast<const datastructures::PositionalOffsets&>(
+             nb::overload_cast<const datastructures::SensorPose&>(
                  &SensorConfiguration::set_depth_source),
              DOC_SensorConfiguration(set_depth_source_2),
              nb::arg("sensor_offsets"))
@@ -174,7 +174,7 @@ void init_c_sensorconfiguration(nb::module_& m)
              nb::arg("y"),
              nb::arg("z"))
         .def("set_position_source",
-             nb::overload_cast<const datastructures::PositionalOffsets&>(
+             nb::overload_cast<const datastructures::SensorPose&>(
                  &SensorConfiguration::set_position_source),
              DOC_SensorConfiguration(set_position_source_2),
              nb::arg("sensor_offsets"))

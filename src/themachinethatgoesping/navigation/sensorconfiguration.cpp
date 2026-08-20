@@ -118,7 +118,7 @@ tools::rotationfunctions::Rotation<float> SensorConfiguration::get_vessel_rotati
         sensor_data, _offsets_heading_source, _offsets_attitude_source);
 }
 
-datastructures::PositionalOffsets SensorConfiguration::compute_target_pose(
+datastructures::SensorPose SensorConfiguration::compute_target_pose(
     const std::string&                target_id,
     const datastructures::Sensordata& sensor_data,
     float                             reference_heading_in_degrees,
@@ -154,7 +154,7 @@ datastructures::PositionalOffsets SensorConfiguration::compute_target_pose(
     const float z = target_xyz[2] - depth_source_xyz[2] + sensor_data.depth - sensor_data.heave -
                     _waterline_offset;
 
-    return datastructures::PositionalOffsets(target_id, x, y, z, pose_rotation, false);
+    return datastructures::SensorPose(target_id, x, y, z, pose_rotation, false);
 }
 
 std::array<float, 3> SensorConfiguration::get_vessel_attitude(
@@ -165,7 +165,7 @@ std::array<float, 3> SensorConfiguration::get_vessel_attitude(
 }
 
 // ----- get/set target offsets -----
-const datastructures::PositionalOffsets& SensorConfiguration::get_target(
+const datastructures::SensorPose& SensorConfiguration::get_target(
     const std::string& target_id) const
 {
     // more specific error message
@@ -195,7 +195,7 @@ const datastructures::PositionalOffsets& SensorConfiguration::get_target(
     }
 }
 
-const std::map<std::string, datastructures::PositionalOffsets>& SensorConfiguration::get_targets()
+const std::map<std::string, datastructures::SensorPose>& SensorConfiguration::get_targets()
     const
 {
     return _target_offsets;
@@ -220,7 +220,7 @@ bool SensorConfiguration::has_target(const std::string& target_id) const
 }
 
 void SensorConfiguration::add_target(const std::string&                       target_id,
-                                     const datastructures::PositionalOffsets& target_offsets)
+                                     const datastructures::SensorPose& target_offsets)
 {
     invalidate_hash_cache();
     _target_offsets[target_id] = target_offsets;
@@ -234,11 +234,11 @@ void SensorConfiguration::add_target(const std::string& target_id,
                                      float              pitch,
                                      float              roll)
 {
-    add_target(target_id, datastructures::PositionalOffsets(target_id, x, y, z, yaw, pitch, roll));
+    add_target(target_id, datastructures::SensorPose(target_id, x, y, z, yaw, pitch, roll));
 }
 
 void SensorConfiguration::add_targets(
-    const std::map<std::string, datastructures::PositionalOffsets>& targets)
+    const std::map<std::string, datastructures::SensorPose>& targets)
 {
     for (const auto& target : targets)
         add_target(target.first, target.second);
@@ -252,16 +252,16 @@ void SensorConfiguration::set_attitude_source(std::string_view name,
 {
     invalidate_hash_cache();
     _offsets_attitude_source =
-        datastructures::PositionalOffsets(name, 0.0, 0.0, 0.0, yaw, pitch, roll);
+        datastructures::SensorPose(name, 0.0, 0.0, 0.0, yaw, pitch, roll);
 }
 void SensorConfiguration::set_attitude_source(
-    const datastructures::PositionalOffsets& sensor_offsets)
+    const datastructures::SensorPose& sensor_offsets)
 {
     invalidate_hash_cache();
     _offsets_attitude_source = sensor_offsets;
 }
 
-datastructures::PositionalOffsets SensorConfiguration::get_attitude_source() const
+datastructures::SensorPose SensorConfiguration::get_attitude_source() const
 {
     return _offsets_attitude_source;
 }
@@ -269,15 +269,15 @@ datastructures::PositionalOffsets SensorConfiguration::get_attitude_source() con
 void SensorConfiguration::set_heading_source(std::string_view name, float yaw)
 {
     invalidate_hash_cache();
-    _offsets_heading_source = datastructures::PositionalOffsets(name, 0.0, 0.0, 0.0, yaw, 0.0, 0.0);
+    _offsets_heading_source = datastructures::SensorPose(name, 0.0, 0.0, 0.0, yaw, 0.0, 0.0);
 }
 void SensorConfiguration::set_heading_source(
-    const datastructures::PositionalOffsets& sensor_offsets)
+    const datastructures::SensorPose& sensor_offsets)
 {
     invalidate_hash_cache();
     _offsets_heading_source = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_heading_source() const
+datastructures::SensorPose SensorConfiguration::get_heading_source() const
 {
     return _offsets_heading_source;
 }
@@ -296,14 +296,14 @@ float SensorConfiguration::get_waterline_offset() const
 void SensorConfiguration::set_depth_source(std::string_view name, float x, float y, float z)
 {
     invalidate_hash_cache();
-    _offsets_depth_source = datastructures::PositionalOffsets(name, x, y, z, 0.0, 0.0, 0.0);
+    _offsets_depth_source = datastructures::SensorPose(name, x, y, z, 0.0, 0.0, 0.0);
 }
-void SensorConfiguration::set_depth_source(const datastructures::PositionalOffsets& sensor_offsets)
+void SensorConfiguration::set_depth_source(const datastructures::SensorPose& sensor_offsets)
 {
     invalidate_hash_cache();
     _offsets_depth_source = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_depth_source() const
+datastructures::SensorPose SensorConfiguration::get_depth_source() const
 {
     return _offsets_depth_source;
 }
@@ -311,15 +311,15 @@ datastructures::PositionalOffsets SensorConfiguration::get_depth_source() const
 void SensorConfiguration::set_position_source(std::string_view name, float x, float y, float z)
 {
     invalidate_hash_cache();
-    _offsets_position_source = datastructures::PositionalOffsets(name, x, y, z, 0.0, 0.0, 0.0);
+    _offsets_position_source = datastructures::SensorPose(name, x, y, z, 0.0, 0.0, 0.0);
 }
 void SensorConfiguration::set_position_source(
-    const datastructures::PositionalOffsets& sensor_offsets)
+    const datastructures::SensorPose& sensor_offsets)
 {
     invalidate_hash_cache();
     _offsets_position_source = sensor_offsets;
 }
-datastructures::PositionalOffsets SensorConfiguration::get_position_source() const
+datastructures::SensorPose SensorConfiguration::get_position_source() const
 {
     return _offsets_position_source;
 }
@@ -327,8 +327,8 @@ datastructures::PositionalOffsets SensorConfiguration::get_position_source() con
 // ----- helper functions -----
 Eigen::Quaternion<float> SensorConfiguration::get_system_rotation_as_quat(
     const datastructures::Sensordata&        sensor_data,
-    const datastructures::PositionalOffsets& offsets_heading_source,
-    const datastructures::PositionalOffsets& offsets_attitude_source)
+    const datastructures::SensorPose& offsets_heading_source,
+    const datastructures::SensorPose& offsets_attitude_source)
 {
     // convert offset to quaternion
     // If the attitude offsets are already applied to the logged sensor data (e.g. Kongsberg .all,

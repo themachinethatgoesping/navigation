@@ -25,7 +25,7 @@ namespace datastructures {
  * the vessel coordinate system
  *
  */
-struct PositionalOffsets
+struct SensorPose
 {
     std::string name;      ///< The name of the sensor
     float       x = 0.0;   ///< in m, positive forward
@@ -44,10 +44,10 @@ struct PositionalOffsets
      * @brief Construct a new Sensor Position object (all offsets set to 0)
      *
      */
-    PositionalOffsets() = default;
+    SensorPose() = default;
 
     /**
-     * @brief Construct a new PositionalOffsets object
+     * @brief Construct a new SensorPose object
      *
      * @param name The name of the sensor
      * @param x in m, positive forward
@@ -59,7 +59,7 @@ struct PositionalOffsets
      * @param ypr_offsets_applied if true, the yaw/pitch/roll offsets are already applied to the
      *        associated sensor data (default: false)
      */
-    PositionalOffsets(std::string_view name,
+    SensorPose(std::string_view name,
                       float            x,
                       float            y,
                       float            z,
@@ -69,7 +69,7 @@ struct PositionalOffsets
                       bool             ypr_offsets_applied = false);
 
     /**
-     * @brief Construct a new PositionalOffsets object from a Rotation
+     * @brief Construct a new SensorPose object from a Rotation
      *
      * @param name The name of the sensor
      * @param x in m, positive forward
@@ -78,7 +78,7 @@ struct PositionalOffsets
      * @param rotation yaw/pitch/roll offset orientation
      * @param ypr_offsets_applied if true, the offsets are already applied (default: false)
      */
-    PositionalOffsets(std::string_view                          name,
+    SensorPose(std::string_view                          name,
                       float                                     x,
                       float                                     y,
                       float                                     z,
@@ -102,23 +102,23 @@ struct PositionalOffsets
     void set_roll(float roll);
 
     /**
-     * @brief Construct a new PositionalOffsets object from a transmitter and receiver unit
+     * @brief Construct a new SensorPose object from a transmitter and receiver unit
      *
      * @param tx Multibeam transmitter offsets
      * @param rx Multibeam receiver offsets
      * @param name Name of the newly constructed transceiver offsets
-     * @return Transceiver PositionalOffsets
+     * @return Transceiver SensorPose
      */
-    static PositionalOffsets from_txrx(const PositionalOffsets& tx,
-                                       const PositionalOffsets& rx,
+    static SensorPose from_txrx(const SensorPose& tx,
+                                       const SensorPose& rx,
                                        std::string              name);
 
-    bool operator!=(const PositionalOffsets& rhs) const;
-    bool operator==(const PositionalOffsets& rhs) const;
+    bool operator!=(const SensorPose& rhs) const;
+    bool operator==(const SensorPose& rhs) const;
 
   public:
     // ----- file I/O -----
-    static PositionalOffsets from_stream(std::istream& is);
+    static SensorPose from_stream(std::istream& is);
 
     void to_stream(std::ostream& os) const;
 
@@ -128,7 +128,7 @@ struct PositionalOffsets
   public:
     // -- class helper function macros --
     // define to_binary and from_binary functions (needs the serialize function)
-    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(PositionalOffsets)
+    __STREAM_DEFAULT_TOFROM_BINARY_FUNCTIONS__(SensorPose)
     // define info_string and print functions (needs the __printer__ function)
     __CLASSHELPER_DEFAULT_PRINTING_FUNCTIONS__
 };

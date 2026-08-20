@@ -24,7 +24,7 @@ TEST_CASE("NavigationInterpolatorLocal should support common functions", TESTTAG
     sensor_configuration.set_attitude_source("gps", 1, -2, 3);
     sensor_configuration.set_position_source("gps", 10, -10, 5);
 
-    datastructures::PositionalOffsets targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
+    datastructures::SensorPose targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
     sensor_configuration.add_target("mbes", targetOffsets);
 
     // // initialize coordinate system with one target
@@ -89,7 +89,7 @@ TEST_CASE("navigationinterpolatorlocal merging operations", TESTTAG)
     sensor_configuration.set_attitude_source("gps", 1, -2, 3);
     sensor_configuration.set_position_source("gps", 10, -10, 5);
 
-    datastructures::PositionalOffsets targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
+    datastructures::SensorPose targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
     sensor_configuration.add_target("mbes", targetOffsets);
 
     // // initialize coordinate system with one target
@@ -164,7 +164,7 @@ TEST_CASE("NavigationInterpolatorLocal get_sampled_timestamps", TESTTAG)
     sensor_configuration.set_attitude_source("gps", 1, -2, 3);
     sensor_configuration.set_position_source("gps", 10, -10, 5);
 
-    datastructures::PositionalOffsets targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
+    datastructures::SensorPose targetOffsets("mbes", 1, 2, 3, 0, 0, 0);
     sensor_configuration.add_target("mbes", targetOffsets);
 
     NavigationInterpolatorLocal navint(sensor_configuration);

@@ -40,17 +40,17 @@ class SensorConfiguration
     // Note: by using a ordered map, the targets are sorted by their target_id
     // because the order is the same, the binary hash will be the same
     // Otherwise, the binary hash would be different for the same content in different order
-    std::map<std::string, datastructures::PositionalOffsets>
+    std::map<std::string, datastructures::SensorPose>
         _target_offsets; ///< TargetId (position in vector) for each registered target_id
 
-    datastructures::PositionalOffsets
+    datastructures::SensorPose
         _offsets_attitude_source; ///< Static Roll,Pitch,Yaw (installation) offsets of the attitude
                                   ///< sensor
-    datastructures::PositionalOffsets
+    datastructures::SensorPose
         _offsets_heading_source; ///< Static Yaw (installation) Offsets of CompassOffsets
-    datastructures::PositionalOffsets
+    datastructures::SensorPose
         _offsets_position_source; ///< Static x,y,z (installation) Offsets of the PositionSystem
-    datastructures::PositionalOffsets
+    datastructures::SensorPose
         _offsets_depth_source; ///< Static xy,z (installation) Offsets of the depth sensor
     // Static Position of Heave Sensor
     // Offsets _HeaveSensorOffsets;
@@ -213,7 +213,7 @@ class SensorConfiguration
      * @param level_lever_arm if true, level the horizontal lever arm by vessel roll/pitch
      * @return target pose (position + ship-frame Rotation)
      */
-    datastructures::PositionalOffsets compute_target_pose(
+    datastructures::SensorPose compute_target_pose(
         const std::string&                target_id,
         const datastructures::Sensordata& sensor_data,
         float                             reference_heading_in_degrees,
@@ -257,7 +257,7 @@ class SensorConfiguration
      * @param target_offsets mounting offsets of the target
      */
     void add_target(const std::string&                       target_id,
-                    const datastructures::PositionalOffsets& target_offsets);
+                    const datastructures::SensorPose& target_offsets);
 
     /**
      * @brief add targets (e.g. MBES) with given target_ids and offsets to the sensor position
@@ -265,22 +265,22 @@ class SensorConfiguration
      *
      * @param targets map<target_id, target_offsets> of target offsets
      */
-    void add_targets(const std::map<std::string, datastructures::PositionalOffsets>& targets);
+    void add_targets(const std::map<std::string, datastructures::SensorPose>& targets);
 
     /**
      * @brief Get stored target offsets of a specified target
      *
      * @param target_id name of the registered target
-     * @return const datastructures::PositionalOffsets& offsets of the target
+     * @return const datastructures::SensorPose& offsets of the target
      */
-    const datastructures::PositionalOffsets& get_target(const std::string& target_id) const;
+    const datastructures::SensorPose& get_target(const std::string& target_id) const;
 
     /**
      * @brief Get the map of stored target offsets objects
      *
-     * @return const std::unordered_map<std::string, datastructures::PositionalOffsets>&
+     * @return const std::unordered_map<std::string, datastructures::SensorPose>&
      */
-    const std::map<std::string, datastructures::PositionalOffsets>& get_targets() const;
+    const std::map<std::string, datastructures::SensorPose>& get_targets() const;
 
     /**
      * @brief Remove the target with the specified target_id
@@ -301,7 +301,7 @@ class SensorConfiguration
      *
      * @param sensor_offsets offsets structure (only yaw, pitch and roll are used)
      */
-    void set_attitude_source(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_attitude_source(const datastructures::SensorPose& sensor_offsets);
 
     /**
      * @brief Set the attitude sensor offsets
@@ -318,9 +318,9 @@ class SensorConfiguration
     /**
      * @brief Get the attitude sensor offsets
      *
-     * @return const datastructures::PositionalOffsets& offsets of the attitude sensor
+     * @return const datastructures::SensorPose& offsets of the attitude sensor
      */
-    datastructures::PositionalOffsets get_attitude_source() const;
+    datastructures::SensorPose get_attitude_source() const;
 
     /**
      * @brief Set the compass offsets
@@ -335,14 +335,14 @@ class SensorConfiguration
      *
      * @param sensor_offsets offsets structure (only yaw is used)
      */
-    void set_heading_source(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_heading_source(const datastructures::SensorPose& sensor_offsets);
 
     /**
      * @brief Get the registered compass offsets
      *
-     * @return const datastructures::PositionalOffsets& offsets of the compass
+     * @return const datastructures::SensorPose& offsets of the compass
      */
-    datastructures::PositionalOffsets get_heading_source() const;
+    datastructures::SensorPose get_heading_source() const;
 
     /**
      * @brief Set the waterline offset
@@ -374,14 +374,14 @@ class SensorConfiguration
      *
      * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_depth_source(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_depth_source(const datastructures::SensorPose& sensor_offsets);
 
     /**
      * @brief Get the registered depth sensor offsets
      *
-     * @return const datastructures::PositionalOffsets& offsets of the depth sensor
+     * @return const datastructures::SensorPose& offsets of the depth sensor
      */
-    datastructures::PositionalOffsets get_depth_source() const;
+    datastructures::SensorPose get_depth_source() const;
 
     /**
      * @brief Set the position system offsets
@@ -397,14 +397,14 @@ class SensorConfiguration
      *
      * @param sensor_offsets offsets structure (only x, y and z are used)
      */
-    void set_position_source(const datastructures::PositionalOffsets& sensor_offsets);
+    void set_position_source(const datastructures::SensorPose& sensor_offsets);
 
     /**
      * @brief Get the registered position system offsets
      *
-     * @return const datastructures::PositionalOffsets& offsets of the position system
+     * @return const datastructures::SensorPose& offsets of the position system
      */
-    datastructures::PositionalOffsets get_position_source() const;
+    datastructures::SensorPose get_position_source() const;
 
     /**
      * @brief Get the ids of the registered targets
@@ -439,8 +439,8 @@ class SensorConfiguration
      */
     static Eigen::Quaternion<float> get_system_rotation_as_quat(
         const datastructures::Sensordata&        sensor_data,
-        const datastructures::PositionalOffsets& offsets_heading_source,
-        const datastructures::PositionalOffsets& offsets_attitude_source);
+        const datastructures::SensorPose& offsets_heading_source,
+        const datastructures::SensorPose& offsets_attitude_source);
 
   public:
     // ----- file I/O -----
@@ -480,7 +480,7 @@ class SensorConfiguration
      */
     static SensorConfiguration from_stream(std::istream& is)
     {
-        using datastructures::PositionalOffsets;
+        using datastructures::SensorPose;
         using tools::classhelper::stream::container_from_stream;
 
         SensorConfiguration obj;
@@ -490,14 +490,14 @@ class SensorConfiguration
         while (num_targets--)
         {
             std::string       target_id               = container_from_stream<std::string>(is);
-            PositionalOffsets target_offsets          = PositionalOffsets::from_stream(is);
+            SensorPose target_offsets          = SensorPose::from_stream(is);
             obj._target_offsets[std::move(target_id)] = std::move(target_offsets);
         }
 
-        obj._offsets_attitude_source = PositionalOffsets::from_stream(is);
-        obj._offsets_heading_source  = PositionalOffsets::from_stream(is);
-        obj._offsets_position_source = PositionalOffsets::from_stream(is);
-        obj._offsets_depth_source    = PositionalOffsets::from_stream(is);
+        obj._offsets_attitude_source = SensorPose::from_stream(is);
+        obj._offsets_heading_source  = SensorPose::from_stream(is);
+        obj._offsets_position_source = SensorPose::from_stream(is);
+        obj._offsets_depth_source    = SensorPose::from_stream(is);
         is.read(reinterpret_cast<char*>(&obj._waterline_offset), sizeof(obj._waterline_offset));
 
         return obj;
