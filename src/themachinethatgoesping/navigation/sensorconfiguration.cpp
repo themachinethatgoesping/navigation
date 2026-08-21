@@ -119,10 +119,12 @@ tools::rotationfunctions::Rotation<float> SensorConfiguration::get_vessel_rotati
 }
 
 datastructures::SensorPose SensorConfiguration::compute_target_pose(
-    const std::string&                target_id,
-    const datastructures::Sensordata& sensor_data,
-    float                             reference_heading_in_degrees,
-    bool                              level_lever_arm) const
+    const std::string&                               target_id,
+    const datastructures::Sensordata&                sensor_data,
+    float                                            reference_heading_in_degrees,
+    bool                                             level_lever_arm,
+    const std::string&                               subarray_id,
+    const std::optional<datastructures::SensorPose>& subarray_pose) const
 {
     using tools::rotationfunctions::Rotation;
 
@@ -154,7 +156,29 @@ datastructures::SensorPose SensorConfiguration::compute_target_pose(
     const float z = target_xyz[2] - depth_source_xyz[2] + sensor_data.depth - sensor_data.heave -
                     _waterline_offset;
 
-    return datastructures::SensorPose(target_id, x, y, z, pose_rotation, false);
+    datastructures::SensorPose pose(target_id, x, y, z, pose_rotation, false);
+
+    // Add a subarray phase-center offset (an explicit subarray_pose overrides a registered
+    // subarray_id; "" and no pose = none). The offset is defined in the target (transducer) frame,
+    // so it is rotated into the pose frame by the pose orientation and added to the position; the
+    // pose orientation is only changed when the subarray carries a non-identity rotation.
+    const datastructures::SensorPose* subarray = nullptr;
+    if (subarray_pose.has_value())
+        subarray = &subarray_pose.value();
+    else if (!subarray_id.empty())
+        subarray = &get_target_subarray(target_id, subarray_id);
+
+    if (subarray != nullptr)
+    {
+        const auto offset = pose.rotation.rotate(subarray->x, subarray->y, subarray->z);
+        pose.x += offset[0];
+        pose.y += offset[1];
+        pose.z += offset[2];
+        if (!subarray->has_zero_rotation())
+            pose.rotation = pose.rotation * subarray->rotation;
+    }
+
+    return pose;
 }
 
 std::array<float, 3> SensorConfiguration::get_vessel_attitude(
@@ -205,12 +229,14 @@ void SensorConfiguration::remove_target(const std::string& target_id)
 {
     invalidate_hash_cache();
     _target_offsets.erase(target_id);
+    _target_subarray_offsets.erase(target_id);
 }
 
 void SensorConfiguration::remove_targets()
 {
     invalidate_hash_cache();
     _target_offsets.clear();
+    _target_subarray_offsets.clear();
     add_target("0", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
@@ -242,6 +268,118 @@ void SensorConfiguration::add_targets(
 {
     for (const auto& target : targets)
         add_target(target.first, target.second);
+}
+
+// ----- target subarray offsets -----
+
+std::map<std::string, datastructures::SensorPose> SensorConfiguration::get_model_subarray_offsets(
+    std::string_view model_name)
+{
+    return navigation::get_model_subarray_offsets(model_name);
+}
+
+datastructures::SensorPose SensorConfiguration::get_model_subarray_offset(
+    std::string_view model_name, const std::string& subarray_id)
+{
+    return navigation::get_model_subarray_offset(model_name, subarray_id);
+}
+
+void SensorConfiguration::add_target_subarray(const std::string&                target_id,
+                                              const std::string&                subarray_id,
+                                              const datastructures::SensorPose& subarray_offsets)
+{
+    invalidate_hash_cache();
+    _target_subarray_offsets[target_id][subarray_id] = subarray_offsets;
+}
+
+void SensorConfiguration::set_target_subarrays(
+    const std::string&                                       target_id,
+    const std::map<std::string, datastructures::SensorPose>& subarrays)
+{
+    invalidate_hash_cache();
+    if (subarrays.empty())
+        _target_subarray_offsets.erase(target_id);
+    else
+        _target_subarray_offsets[target_id] = subarrays;
+}
+
+void SensorConfiguration::set_target_subarrays_from_model(const std::string& target_id,
+                                                          std::string_view   model_name)
+{
+    auto offsets = get_model_subarray_offsets(model_name);
+    if (!offsets.empty())
+        set_target_subarrays(target_id, offsets);
+}
+
+bool SensorConfiguration::has_target_subarrays(const std::string& target_id) const
+{
+    auto it = _target_subarray_offsets.find(target_id);
+    return it != _target_subarray_offsets.end() && !it->second.empty();
+}
+
+bool SensorConfiguration::has_target_subarray(const std::string& target_id,
+                                              const std::string& subarray_id) const
+{
+    auto it = _target_subarray_offsets.find(target_id);
+    return it != _target_subarray_offsets.end() && it->second.contains(subarray_id);
+}
+
+const datastructures::SensorPose& SensorConfiguration::get_target_subarray(
+    const std::string& target_id, const std::string& subarray_id) const
+{
+    auto it = _target_subarray_offsets.find(target_id);
+    if (it != _target_subarray_offsets.end())
+    {
+        auto sub = it->second.find(subarray_id);
+        if (sub != it->second.end())
+            return sub->second;
+    }
+    throw std::out_of_range(
+        fmt::format("ERROR[SensorConfiguration::get_target_subarray]: no subarray '{}' registered "
+                    "for target '{}'",
+                    subarray_id,
+                    target_id));
+}
+
+const std::map<std::string, datastructures::SensorPose>& SensorConfiguration::get_target_subarrays(
+    const std::string& target_id) const
+{
+    auto it = _target_subarray_offsets.find(target_id);
+    if (it == _target_subarray_offsets.end())
+        throw std::out_of_range(fmt::format(
+            "ERROR[SensorConfiguration::get_target_subarrays]: target '{}' has no subarray offsets",
+            target_id));
+    return it->second;
+}
+
+std::vector<std::string> SensorConfiguration::get_target_subarray_ids(
+    const std::string& target_id) const
+{
+    std::vector<std::string> ids;
+    auto                     it = _target_subarray_offsets.find(target_id);
+    if (it != _target_subarray_offsets.end())
+        for (const auto& [subarray_id, offsets] : it->second)
+            ids.push_back(subarray_id);
+    return ids;
+}
+
+void SensorConfiguration::remove_target_subarrays(const std::string& target_id)
+{
+    invalidate_hash_cache();
+    _target_subarray_offsets.erase(target_id);
+}
+
+// ----- system metadata -----
+void SensorConfiguration::set_model_name(std::string name)
+{
+    invalidate_hash_cache();
+    _model_name = std::move(name);
+}
+
+void SensorConfiguration::set_transducer_configuration(std::string cfg)
+{
+    invalidate_hash_cache();
+    _transducer_configuration = std::move(cfg);
 }
 
 // ----- get/set sensor offsets -----

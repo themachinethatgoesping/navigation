@@ -75,6 +75,7 @@ void init_c_positionaloffsets(nb::module_& m)
         .def_prop_rw("pitch", &SensorPose::pitch, &SensorPose::set_pitch, DOC_SensorPose(pitch))
         .def_prop_rw("roll", &SensorPose::roll, &SensorPose::set_roll, DOC_SensorPose(roll))
         .def("set_ypr", &SensorPose::set_ypr, DOC_SensorPose(set_ypr), nb::arg("yaw"), nb::arg("pitch"), nb::arg("roll"))
+        .def("has_zero_rotation", &SensorPose::has_zero_rotation, DOC_SensorPose(has_zero_rotation))
         .def_rw("ypr_offsets_applied",
                 &SensorPose::ypr_offsets_applied,
                 "if true, the yaw/pitch/roll offsets are already applied to the associated sensor "

@@ -49,6 +49,12 @@ float SensorPose::yaw() const { return rotation.ypr()[0]; }
 float SensorPose::pitch() const { return rotation.ypr()[1]; }
 float SensorPose::roll() const { return rotation.ypr()[2]; }
 
+bool SensorPose::has_zero_rotation() const
+{
+    // the identity quaternion has a zero imaginary (vector) part
+    return rotation.vec().squaredNorm() <= 1e-9f;
+}
+
 void SensorPose::set_ypr(float yaw, float pitch, float roll)
 {
     rotation = tools::rotationfunctions::Rotation<float>(yaw, pitch, roll);

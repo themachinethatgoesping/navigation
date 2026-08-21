@@ -1,4 +1,4 @@
-//sourcehash: a5c7a962e584ad1c3437b9b71c8cda5001afb671b39d9cef27b11f8cd9ee7956
+//sourcehash: c1497919f13dfc306e33fc45f4f5c4d387d4f5a02a36ea1d063028631b7f12b2
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -78,6 +78,21 @@ Args:
     target_id: name of the target for reference
     target_offsets: mounting offsets of the target)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_add_target_subarray =
+R"doc(Register (or overwrite) a single named subarray offset for a target.
+
+A subarray offset is a small SensorPose in the target (transducer)
+frame that compute_target_pose can add to the target pose to obtain
+the pose of a specific transmit subarray or the receive-array phase
+center. The position is always applied; the rotation is only composed
+when it is not the identity (see SensorPose::has_zero_rotation).
+
+Args:
+    target_id: parent target
+    subarray_id: name of the subarray (e.g. "0"/"1"/"2" for tx
+                 port/center/starboard, "RX")
+    subarray_offsets: offset pose in the target frame)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_add_targets =
 R"doc(add targets (e.g. MBES) with given target_ids and offsets to the
 sensor position system
@@ -115,6 +130,13 @@ Args:
                                   orientation (transmit heading)
     level_lever_arm: if true, level the horizontal lever arm by vessel
                      roll/pitch
+    subarray_id: optional name of a registered subarray offset of the
+                 target to add to the pose (e.g. "0"/"1"/"2" for a
+                 transmit subarray, "RX" for the receive phase
+                 center); "" = none
+    subarray_pose: optional explicit subarray offset (target frame)
+                   that overrides ``subarray_id;`` handy for debugging
+                   or one-off corrections
 
 Returns:
     target pose (position + ship-frame Rotation))doc";
@@ -204,6 +226,35 @@ R"doc(Get the registered compass offsets
 Returns:
     const datastructures::SensorPose& offsets of the compass)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_model_name = R"doc(Echosounder model name, or empty string if not set.)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_model_subarray_offset =
+R"doc(A single hardcoded subarray offset for a model (convenience for
+building a manual
+       subarray_pose, e.g. for compute_target_pose debugging).
+Args:
+    model_name: echosounder model
+    subarray_id: "0"/"1"/"2"/"RX"
+
+Returns:
+    the offset pose (throws std::out_of_range if the model or subarray
+    is unknown))doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_model_subarray_offsets =
+R"doc(Hardcoded transmit/receive subarray phase-center offsets for a known
+echosounder model.
+
+Returns a flat map with the transmit subarrays keyed "0" (port), "1"
+(center), "2" (starboard) — or just "0" for single-array systems —
+plus the receive-array phase center keyed "RX". All offsets are
+SensorPoses in the transducer frame (x forward, y starboard, z down,
+metres). The map is empty for an unknown model. Source: QPS dm-0423 /
+Kongsberg.
+
+Args:
+    model_name: echosounder model (case-insensitive, optional leading
+                "EM" ignored))doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_position_source =
 R"doc(Get the registered position system offsets
 
@@ -246,11 +297,34 @@ R"doc(Get the ids of the registered targets
 Returns:
     std::vector<std::string_view>)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_target_subarray =
+R"doc(Get a single registered subarray offset.
+Args:
+    target_id: parent target
+    subarray_id: name of the subarray
+
+Returns:
+    the subarray offset pose (throws std::out_of_range if not
+    registered))doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_target_subarray_ids = R"doc(Ids of the subarray offsets registered for a target (empty if none).)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_target_subarrays =
+R"doc(Get all subarray offsets of a target.
+Args:
+    target_id: parent target
+
+Returns:
+    map<subarray_id, offset pose> (throws std::out_of_range if the
+    target has none))doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_targets =
 R"doc(Get the map of stored target offsets objects
 
 Returns:
     const std::unordered_map<std::string, datastructures::SensorPose>&)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_configuration = R"doc(Transducer configuration string, or empty string if not set.)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_vessel_attitude =
 R"doc(Compute the offset-corrected vessel attitude (yaw, pitch, roll) in the
@@ -300,7 +374,13 @@ Args:
 Returns:
     True if the sensor configuration has the target, false otherwise.)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_has_target_subarray = R"doc(true if the target has a subarray offset with the given id.)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_has_target_subarrays = R"doc(true if the target has any registered subarray offsets.)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_invalidate_hash_cache = R"doc(Invalidate the cached binary hash (call from every mutating method))doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_model_name = R"doc(echosounder model (e.g. "EM2040"); set by format readers)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_offsets_attitude_source = R"doc(Static Roll,Pitch,Yaw (installation) offsets of the attitude sensor)doc";
 
@@ -335,6 +415,8 @@ R"doc(Remove the target with the specified target_id
 
 Args:
     target_id: name of the registered target)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_remove_target_subarrays = R"doc(Remove all subarray offsets of a target.)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_remove_targets = R"doc(Remove all stored targets)doc";
 
@@ -383,6 +465,8 @@ R"doc(Set the compass offsets
 Args:
     sensor_offsets: offsets structure (only yaw is used))doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_model_name = R"doc(Set the echosounder model name (e.g. "EM2040", "EM710").)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_position_source =
 R"doc(Set the position system offsets
 
@@ -397,6 +481,29 @@ R"doc(Set the position system offsets
 Args:
     sensor_offsets: offsets structure (only x, y and z are used))doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_target_subarrays =
+R"doc(Replace all subarray offsets of a target with the given map.
+Args:
+    target_id: parent target
+    subarrays: map<subarray_id, offset pose in the target frame>)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_target_subarrays_from_model =
+R"doc(Set the subarray offsets of a target from the hardcoded per-model
+preset.
+
+Looks the model up with get_model_subarray_offsets and stores the
+result on ``target_id.`` Does nothing if the model is unknown
+(get_model_subarray_offsets returns an empty map).
+
+Args:
+    target_id: parent target
+    model_name: echosounder model (e.g. "EM2040", "EM2040P", "2042");
+                case-insensitive, an optional leading "EM" is ignored)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_transducer_configuration =
+R"doc(Set the transducer configuration string (e.g. "DualRx",
+"SingleTxSingleRx", "STC0").)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_waterline_offset =
 R"doc(Set the waterline offset Negative waterline offset means that z=0 is
 below the waterline
@@ -406,12 +513,21 @@ Args:
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_target_offsets = R"doc(TargetId (position in vector) for each registered target_id)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_target_subarray_offsets =
+R"doc(Optional named subarray offsets per target. Keyed
+[target_id][subarray_id]; each entry is a SensorPose in the target
+(transducer) frame that compute_target_pose can add to the target pose
+to obtain a per-subarray phase center (e.g. multibeam transmit
+subarrays port/center/starboard and the receive-array phase center).)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_to_stream =
 R"doc(Write the sensor configuration to a stream.
 Warning: there is no error checking!
 
 Args:
     os:)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_configuration = R"doc(configuration string (e.g. "DualRx", "STC0"); set by format readers)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_waterline_offset = R"doc()doc";
 

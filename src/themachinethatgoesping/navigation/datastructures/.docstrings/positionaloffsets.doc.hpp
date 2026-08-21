@@ -1,4 +1,4 @@
-//sourcehash: 35d3d5b30be59a7fec09cbd72c13070422c18d52e96c8996ac8fa441b0c605c0
+//sourcehash: 4387a53610f8cd5e65d6409793049ce3dce8c8540206fbb88860062e58305a31
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -86,6 +86,11 @@ Args:
 
 Returns:
     Transceiver SensorPose)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_has_zero_rotation =
+R"doc(true if the rotation is (numerically) the identity, i.e. yaw = pitch =
+roll = 0. Cheap check so callers can skip composing an identity
+rotation (e.g. a subarray offset that only shifts the position).)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_SensorPose_name = R"doc(The name of the sensor)doc";
 

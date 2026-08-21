@@ -10,6 +10,8 @@
 // -- include nanobind headers
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/array.h>
+#include <nanobind/stl/map.h>
+#include <nanobind/stl/optional.h>
 #include <nanobind/stl/vector.h>
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/string_view.h>
@@ -64,7 +66,9 @@ void init_c_sensorconfiguration(nb::module_& m)
              nb::arg("target_id"),
              nb::arg("sensor_data"),
              nb::arg("reference_heading_in_degrees"),
-             nb::arg("level_lever_arm") = false)
+             nb::arg("level_lever_arm") = false,
+             nb::arg("subarray_id")     = "",
+             nb::arg("subarray_pose")   = std::optional<datastructures::SensorPose>())
         .def("get_vessel_attitude",
              &SensorConfiguration::get_vessel_attitude,
              "Compute the offset-corrected vessel attitude (yaw, pitch, roll in degrees) in the "
@@ -113,6 +117,71 @@ void init_c_sensorconfiguration(nb::module_& m)
         .def("get_target_ids",
              &SensorConfiguration::get_target_ids,
              DOC_SensorConfiguration(get_target_ids))
+        .def("add_target_subarray",
+             &SensorConfiguration::add_target_subarray,
+             DOC_SensorConfiguration(add_target_subarray),
+             nb::arg("target_id"),
+             nb::arg("subarray_id"),
+             nb::arg("subarray_offsets"))
+        .def("set_target_subarrays",
+             &SensorConfiguration::set_target_subarrays,
+             DOC_SensorConfiguration(set_target_subarrays),
+             nb::arg("target_id"),
+             nb::arg("subarrays"))
+        .def("set_target_subarrays_from_model",
+             &SensorConfiguration::set_target_subarrays_from_model,
+             DOC_SensorConfiguration(set_target_subarrays_from_model),
+             nb::arg("target_id"),
+             nb::arg("model_name"))
+        .def("has_target_subarrays",
+             &SensorConfiguration::has_target_subarrays,
+             DOC_SensorConfiguration(has_target_subarrays),
+             nb::arg("target_id"))
+        .def("has_target_subarray",
+             &SensorConfiguration::has_target_subarray,
+             DOC_SensorConfiguration(has_target_subarray),
+             nb::arg("target_id"),
+             nb::arg("subarray_id"))
+        .def("get_target_subarray",
+             &SensorConfiguration::get_target_subarray,
+             DOC_SensorConfiguration(get_target_subarray),
+             nb::arg("target_id"),
+             nb::arg("subarray_id"))
+        .def("get_target_subarrays",
+             &SensorConfiguration::get_target_subarrays,
+             DOC_SensorConfiguration(get_target_subarrays),
+             nb::arg("target_id"))
+        .def("get_target_subarray_ids",
+             &SensorConfiguration::get_target_subarray_ids,
+             DOC_SensorConfiguration(get_target_subarray_ids),
+             nb::arg("target_id"))
+        .def("remove_target_subarrays",
+             &SensorConfiguration::remove_target_subarrays,
+             DOC_SensorConfiguration(remove_target_subarrays),
+             nb::arg("target_id"))
+        .def_static("get_model_subarray_offsets",
+                    &SensorConfiguration::get_model_subarray_offsets,
+                    DOC_SensorConfiguration(get_model_subarray_offsets),
+                    nb::arg("model_name"))
+        .def_static("get_model_subarray_offset",
+                    &SensorConfiguration::get_model_subarray_offset,
+                    DOC_SensorConfiguration(get_model_subarray_offset),
+                    nb::arg("model_name"),
+                    nb::arg("subarray_id"))
+        .def("set_model_name",
+             &SensorConfiguration::set_model_name,
+             DOC_SensorConfiguration(set_model_name),
+             nb::arg("name"))
+        .def("get_model_name",
+             &SensorConfiguration::get_model_name,
+             DOC_SensorConfiguration(get_model_name))
+        .def("set_transducer_configuration",
+             &SensorConfiguration::set_transducer_configuration,
+             DOC_SensorConfiguration(set_transducer_configuration),
+             nb::arg("cfg"))
+        .def("get_transducer_configuration",
+             &SensorConfiguration::get_transducer_configuration,
+             DOC_SensorConfiguration(get_transducer_configuration))
         .def("set_attitude_source",
              nb::overload_cast<std::string_view, float, float, float>(
                  &SensorConfiguration::set_attitude_source),

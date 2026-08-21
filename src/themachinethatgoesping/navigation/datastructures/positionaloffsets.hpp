@@ -92,6 +92,11 @@ struct SensorPose
     /// @brief roll in °, positive means port up
     float roll() const;
 
+    /// @brief true if the rotation is (numerically) the identity, i.e. yaw = pitch = roll = 0.
+    /// Cheap check so callers can skip composing an identity rotation (e.g. a subarray offset
+    /// that only shifts the position).
+    bool has_zero_rotation() const;
+
     /// @brief set yaw, pitch and roll (°) at once
     void set_ypr(float yaw, float pitch, float roll);
     /// @brief set yaw (°), keeping pitch and roll

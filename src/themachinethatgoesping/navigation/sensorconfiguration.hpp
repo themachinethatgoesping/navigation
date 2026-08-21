@@ -25,6 +25,7 @@
 #include <themachinethatgoesping/tools/rotationfunctions/rotation.hpp>
 
 #include "datastructures.hpp"
+#include "sensorconfiguration_presets.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {
@@ -42,6 +43,16 @@ class SensorConfiguration
     // Otherwise, the binary hash would be different for the same content in different order
     std::map<std::string, datastructures::SensorPose>
         _target_offsets; ///< TargetId (position in vector) for each registered target_id
+
+    /// Optional named subarray offsets per target. Keyed [target_id][subarray_id]; each entry is a
+    /// SensorPose in the target (transducer) frame that compute_target_pose can add to the target
+    /// pose to obtain a per-subarray phase center (e.g. multibeam transmit subarrays
+    /// port/center/starboard and the receive-array phase center).
+    std::map<std::string, std::map<std::string, datastructures::SensorPose>>
+        _target_subarray_offsets;
+
+    std::string _model_name;               ///< echosounder model (e.g. "EM2040"); set by format readers
+    std::string _transducer_configuration; ///< configuration string (e.g. "DualRx", "STC0"); set by format readers
 
     datastructures::SensorPose
         _offsets_attitude_source; ///< Static Roll,Pitch,Yaw (installation) offsets of the attitude
@@ -211,13 +222,19 @@ class SensorConfiguration
      * @param reference_heading_in_degrees heading (deg) removed from the orientation (transmit
      * heading)
      * @param level_lever_arm if true, level the horizontal lever arm by vessel roll/pitch
+     * @param subarray_id optional name of a registered subarray offset of the target to add to the
+     * pose (e.g. "0"/"1"/"2" for a transmit subarray, "RX" for the receive phase center); "" = none
+     * @param subarray_pose optional explicit subarray offset (target frame) that overrides
+     * @p subarray_id; handy for debugging or one-off corrections
      * @return target pose (position + ship-frame Rotation)
      */
     datastructures::SensorPose compute_target_pose(
-        const std::string&                target_id,
-        const datastructures::Sensordata& sensor_data,
-        float                             reference_heading_in_degrees,
-        bool                              level_lever_arm = false) const;
+        const std::string&                               target_id,
+        const datastructures::Sensordata&                sensor_data,
+        float                                            reference_heading_in_degrees,
+        bool                                             level_lever_arm = false,
+        const std::string&                               subarray_id     = "",
+        const std::optional<datastructures::SensorPose>& subarray_pose   = std::nullopt) const;
 
     // ----- get/set target offsets -----
 
@@ -294,6 +311,107 @@ class SensorConfiguration
      *
      */
     void remove_targets();
+
+    // ----- target subarray offsets (transmit subarrays / receive phase center) -----
+    /**
+     * @brief Register (or overwrite) a single named subarray offset for a target.
+     *
+     * A subarray offset is a small SensorPose in the target (transducer) frame that
+     * compute_target_pose can add to the target pose to obtain the pose of a specific transmit
+     * subarray or the receive-array phase center. The position is always applied; the rotation is
+     * only composed when it is not the identity (see SensorPose::has_zero_rotation).
+     *
+     * @param target_id parent target
+     * @param subarray_id name of the subarray (e.g. "0"/"1"/"2" for tx port/center/starboard, "RX")
+     * @param subarray_offsets offset pose in the target frame
+     */
+    void add_target_subarray(const std::string&                target_id,
+                             const std::string&                subarray_id,
+                             const datastructures::SensorPose& subarray_offsets);
+
+    /**
+     * @brief Replace all subarray offsets of a target with the given map.
+     * @param target_id parent target
+     * @param subarrays map<subarray_id, offset pose in the target frame>
+     */
+    void set_target_subarrays(
+        const std::string&                                       target_id,
+        const std::map<std::string, datastructures::SensorPose>& subarrays);
+
+    /**
+     * @brief Set the subarray offsets of a target from the hardcoded per-model preset.
+     *
+     * Looks the model up with get_model_subarray_offsets and stores the result on @p target_id.
+     * Does nothing if the model is unknown (get_model_subarray_offsets returns an empty map).
+     *
+     * @param target_id parent target
+     * @param model_name echosounder model (e.g. "EM2040", "EM2040P", "2042"); case-insensitive,
+     *        an optional leading "EM" is ignored
+     */
+    void set_target_subarrays_from_model(const std::string& target_id, std::string_view model_name);
+
+    /// @brief true if the target has any registered subarray offsets.
+    bool has_target_subarrays(const std::string& target_id) const;
+
+    /// @brief true if the target has a subarray offset with the given id.
+    bool has_target_subarray(const std::string& target_id, const std::string& subarray_id) const;
+
+    /**
+     * @brief Get a single registered subarray offset.
+     * @param target_id parent target
+     * @param subarray_id name of the subarray
+     * @return the subarray offset pose (throws std::out_of_range if not registered)
+     */
+    const datastructures::SensorPose& get_target_subarray(const std::string& target_id,
+                                                          const std::string& subarray_id) const;
+
+    /**
+     * @brief Get all subarray offsets of a target.
+     * @param target_id parent target
+     * @return map<subarray_id, offset pose> (throws std::out_of_range if the target has none)
+     */
+    const std::map<std::string, datastructures::SensorPose>& get_target_subarrays(
+        const std::string& target_id) const;
+
+    /// @brief Ids of the subarray offsets registered for a target (empty if none).
+    std::vector<std::string> get_target_subarray_ids(const std::string& target_id) const;
+
+    /// @brief Remove all subarray offsets of a target.
+    void remove_target_subarrays(const std::string& target_id);
+
+    /**
+     * @brief Hardcoded transmit/receive subarray phase-center offsets for a known echosounder model.
+     *
+     * Returns a flat map with the transmit subarrays keyed "0" (port), "1" (center), "2"
+     * (starboard) — or just "0" for single-array systems — plus the receive-array phase center
+     * keyed "RX". All offsets are SensorPoses in the transducer frame (x forward, y starboard,
+     * z down, metres). The map is empty for an unknown model. Source: QPS dm-0423 / Kongsberg.
+     *
+     * @param model_name echosounder model (case-insensitive, optional leading "EM" ignored)
+     */
+    static std::map<std::string, datastructures::SensorPose> get_model_subarray_offsets(
+        std::string_view model_name);
+
+    /**
+     * @brief A single hardcoded subarray offset for a model (convenience for building a manual
+     *        subarray_pose, e.g. for compute_target_pose debugging).
+     * @param model_name echosounder model
+     * @param subarray_id "0"/"1"/"2"/"RX"
+     * @return the offset pose (throws std::out_of_range if the model or subarray is unknown)
+     */
+    static datastructures::SensorPose get_model_subarray_offset(std::string_view   model_name,
+                                                                const std::string& subarray_id);
+
+    // ----- system metadata -----
+    /// @brief Set the echosounder model name (e.g. "EM2040", "EM710").
+    void set_model_name(std::string name);
+    /// @brief Echosounder model name, or empty string if not set.
+    std::string get_model_name() const { return _model_name; }
+
+    /// @brief Set the transducer configuration string (e.g. "DualRx", "SingleTxSingleRx", "STC0").
+    void set_transducer_configuration(std::string cfg);
+    /// @brief Transducer configuration string, or empty string if not set.
+    std::string get_transducer_configuration() const { return _transducer_configuration; }
 
     // ----- get/set sensor offsets -----
     /**
@@ -469,6 +587,24 @@ class SensorConfiguration
         _offsets_position_source.to_stream(os);
         _offsets_depth_source.to_stream(os);
         os.write(reinterpret_cast<const char*>(&_waterline_offset), sizeof(_waterline_offset));
+
+        // subarray offsets: map<target_id, map<subarray_id, SensorPose>>
+        unsigned int num_sub_targets = _target_subarray_offsets.size();
+        os.write(reinterpret_cast<const char*>(&num_sub_targets), sizeof(num_sub_targets));
+        for (const auto& [target_id, subarrays] : _target_subarray_offsets)
+        {
+            container_to_stream(os, target_id);
+            unsigned int num_subarrays = subarrays.size();
+            os.write(reinterpret_cast<const char*>(&num_subarrays), sizeof(num_subarrays));
+            for (const auto& [subarray_id, offsets] : subarrays)
+            {
+                container_to_stream(os, subarray_id);
+                offsets.to_stream(os);
+            }
+        }
+
+        container_to_stream(os, _model_name);
+        container_to_stream(os, _transducer_configuration);
     }
 
     /**
@@ -499,6 +635,25 @@ class SensorConfiguration
         obj._offsets_position_source = SensorPose::from_stream(is);
         obj._offsets_depth_source    = SensorPose::from_stream(is);
         is.read(reinterpret_cast<char*>(&obj._waterline_offset), sizeof(obj._waterline_offset));
+
+        unsigned int num_sub_targets;
+        is.read(reinterpret_cast<char*>(&num_sub_targets), sizeof(num_sub_targets));
+        while (num_sub_targets--)
+        {
+            std::string  target_id = container_from_stream<std::string>(is);
+            unsigned int num_subarrays;
+            is.read(reinterpret_cast<char*>(&num_subarrays), sizeof(num_subarrays));
+            std::map<std::string, SensorPose> subarrays;
+            while (num_subarrays--)
+            {
+                std::string subarray_id           = container_from_stream<std::string>(is);
+                subarrays[std::move(subarray_id)] = SensorPose::from_stream(is);
+            }
+            obj._target_subarray_offsets[std::move(target_id)] = std::move(subarrays);
+        }
+
+        obj._model_name              = container_from_stream<std::string>(is);
+        obj._transducer_configuration = container_from_stream<std::string>(is);
 
         return obj;
     }
@@ -533,7 +688,10 @@ class SensorConfiguration
                _offsets_heading_source == other._offsets_heading_source &&
                _offsets_position_source == other._offsets_position_source &&
                _offsets_depth_source == other._offsets_depth_source &&
-               _waterline_offset == other._waterline_offset;
+               _waterline_offset == other._waterline_offset &&
+               _target_subarray_offsets == other._target_subarray_offsets &&
+               _model_name == other._model_name &&
+               _transducer_configuration == other._transducer_configuration;
     }
     /**
      * @brief Compare two SensorConfiguration objects for inequality
@@ -574,6 +732,25 @@ class SensorConfiguration
 
         printer.register_section("waterline offsets");
         printer.register_value("Waterline offset", _waterline_offset, "m");
+
+        for (const auto& [target_id, subarrays] : _target_subarray_offsets)
+        {
+            for (const auto& [subarray_id, offsets] : subarrays)
+            {
+                printer.register_section("Subarray offsets \"" + target_id + "\" / \"" +
+                                         subarray_id + "\"");
+                printer.append(offsets.__printer__(float_precision, superscript_exponents));
+            }
+        }
+
+        if (!_model_name.empty() || !_transducer_configuration.empty())
+        {
+            printer.register_section("System information");
+            if (!_model_name.empty())
+                printer.register_string("model", _model_name, "");
+            if (!_transducer_configuration.empty())
+                printer.register_string("configuration", _transducer_configuration, "");
+        }
 
         return printer;
     }
