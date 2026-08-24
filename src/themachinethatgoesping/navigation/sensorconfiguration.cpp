@@ -18,8 +18,7 @@ datastructures::GeolocationLocal SensorConfiguration::compute_target_position(
     datastructures::GeolocationLocal location;
 
     // current rotation of the vessel (heading + attitude, mounting offsets removed)
-    const Rotation<float> vessel_rotation =
-        get_system_rotation_as_quat(sensor_data, _offsets_heading_source, _offsets_attitude_source);
+    const Rotation<float> vessel_rotation = get_vessel_rotation(sensor_data);
 
     const auto&            target_offsets      = get_target(target_id);
     const Rotation<float>& target_installation = target_offsets.rotation;
@@ -112,80 +111,76 @@ datastructures::GeolocationLatLon SensorConfiguration::compute_target_position(
 }
 
 tools::rotationfunctions::Rotation<float> SensorConfiguration::get_vessel_rotation(
-    const datastructures::Sensordata& sensor_data) const
+    const datastructures::Sensordata& sensor_data,
+    float                             reference_heading_in_degrees) const
 {
-    return get_system_rotation_as_quat(
-        sensor_data, _offsets_heading_source, _offsets_attitude_source);
+    return get_system_rotation(sensor_data,
+                               _offsets_heading_source,
+                               _offsets_attitude_source,
+                               reference_heading_in_degrees);
 }
 
 datastructures::SensorPose SensorConfiguration::compute_target_pose(
     const std::string&                               target_id,
     const datastructures::Sensordata&                sensor_data,
     float                                            reference_heading_in_degrees,
-    bool                                             level_lever_arm,
     const std::string&                               subarray_id,
     const std::optional<datastructures::SensorPose>& subarray_pose) const
 {
     using tools::rotationfunctions::Rotation;
 
-    const Rotation<float> vessel_rotation = get_vessel_rotation(sensor_data);
-    const auto&           target_offsets  = get_target(target_id);
+    // Vessel orientation in the surface frame of the reference heading:
+    // Rz(vessel_heading - reference_heading) * attitude. For a target sampled at transmit time the
+    // residual yaw is zero; for a receive pose sampled later it keeps the yaw the vessel turned
+    // through since transmit -- which a plain roll/pitch leveling would wrongly discard.
+    const Rotation<float> vessel_rotation =
+        get_vessel_rotation(sensor_data, reference_heading_in_degrees);
 
-    // ship-frame orientation: remove the common reference heading (so all poses of a ping share
-    // one frame), keep the vessel attitude and the target installation.
-    const Rotation<float> pose_rotation = Rotation<float>(-reference_heading_in_degrees, 0.f, 0.f) *
-                                          vessel_rotation * target_offsets.rotation;
+    // Static target pose in the vessel frame, already combined with the subarray phase center.
+    const datastructures::SensorPose target = get_target(target_id, subarray_id, subarray_pose);
 
-    // horizontal lever arm: raw body-frame offsets, or roll/pitch-leveled (heading removed)
-    float x = target_offsets.x;
-    float y = target_offsets.y;
-    if (level_lever_arm)
-    {
-        const auto ypr     = vessel_rotation.ypr();
-        const auto leveled = Rotation<float>(0.f, ypr[1], ypr[2])
-                                 .rotate(target_offsets.x, target_offsets.y, target_offsets.z);
-        x = leveled[0];
-        y = leveled[1];
-    }
+    const Rotation<float> pose_rotation = vessel_rotation * target.rotation;
 
-    // depth below the waterline (heading-independent z of the rotated lever arms)
-    const auto target_xyz =
-        vessel_rotation.rotate(target_offsets.x, target_offsets.y, target_offsets.z);
-    const auto depth_source_xyz = vessel_rotation.rotate(
+    // Lever arm rotated into the surface frame by the full reference-relative rotation (no yaw
+    // dropped). The z component is heading-independent, so it matches the geolocation depth.
+    const auto target_xyz    = vessel_rotation.rotate(target.x, target.y, target.z);
+    const auto depth_src_xyz = vessel_rotation.rotate(
         _offsets_depth_source.x, _offsets_depth_source.y, _offsets_depth_source.z);
-    const float z = target_xyz[2] - depth_source_xyz[2] + sensor_data.depth - sensor_data.heave -
+
+    const float x = target_xyz[0];
+    const float y = target_xyz[1];
+    const float z = target_xyz[2] - depth_src_xyz[2] + sensor_data.depth - sensor_data.heave -
                     _waterline_offset;
 
-    datastructures::SensorPose pose(target_id, x, y, z, pose_rotation, false);
-
-    // Add a subarray phase-center offset (an explicit subarray_pose overrides a registered
-    // subarray_id; "" and no pose = none). The offset is defined in the target (transducer) frame,
-    // so it is rotated into the pose frame by the pose orientation and added to the position; the
-    // pose orientation is only changed when the subarray carries a non-identity rotation.
-    const datastructures::SensorPose* subarray = nullptr;
-    if (subarray_pose.has_value())
-        subarray = &subarray_pose.value();
-    else if (!subarray_id.empty())
-        subarray = &get_target_subarray(target_id, subarray_id);
-
-    if (subarray != nullptr)
-    {
-        const auto offset = pose.rotation.rotate(subarray->x, subarray->y, subarray->z);
-        pose.x += offset[0];
-        pose.y += offset[1];
-        pose.z += offset[2];
-        if (!subarray->has_zero_rotation())
-            pose.rotation = pose.rotation * subarray->rotation;
-    }
-
-    return pose;
+    return datastructures::SensorPose(target_id, x, y, z, pose_rotation, false);
 }
 
-std::array<float, 3> SensorConfiguration::get_vessel_attitude(
-    const datastructures::Sensordata& sensor_data) const
+std::array<float, 3> SensorConfiguration::compute_position_system_offset(
+    const datastructures::Sensordata& sensor_data,
+    float                             reference_heading_in_degrees,
+    bool                              at_waterline) const
 {
-    // {yaw, pitch, roll} in degrees, same convention as compute_target_position
-    return get_vessel_rotation(sensor_data).ypr();
+    // Location of the active position-system reference point relative to the vessel reference
+    // point, expressed in the surface (reference-heading) frame: R * (position_source lever arm),
+    // where R = Rz(vessel_heading - reference_heading) * attitude. This is the heading-referenced
+    // translation between the position system and the vessel reference point, including the full
+    // horizontal antenna lever arm.
+    //
+    // at_waterline replaces the antenna height by the waterline offset, i.e. it projects the
+    // position-system point onto the water surface. This is the horizontal reference the Kongsberg
+    // .all XYZ88 beam positions use (the positioning system fixes a location on the sea surface),
+    // so the lever arm from this point to the transducer carries the transducer's depth below the
+    // waterline rather than below the antenna.
+    // If the position source is motion compensated (.all P{n}M=1 / .kmall POSI C=On), the logged
+    // position is already referenced to the vessel reference point: the reported position point
+    // coincides with the reference point, so its offset is zero. Applying the geometric antenna
+    // lever arm here would double-correct beam positions referenced to the positioning system.
+    if (_position_source_motion_compensated)
+        return { 0.f, 0.f, 0.f };
+
+    const auto vessel_rotation = get_vessel_rotation(sensor_data, reference_heading_in_degrees);
+    const float z = at_waterline ? _waterline_offset : _offsets_position_source.z;
+    return vessel_rotation.rotate(_offsets_position_source.x, _offsets_position_source.y, z);
 }
 
 // ----- get/set target offsets -----
@@ -217,6 +212,66 @@ const datastructures::SensorPose& SensorConfiguration::get_target(
                         target_id,
                         tmp)));
     }
+}
+
+datastructures::SensorPose SensorConfiguration::combine_target_subarray(
+    const datastructures::SensorPose& target, const datastructures::SensorPose& subarray)
+{
+    // The subarray offset lives in the target (array) frame: rotate it into the vessel frame by the
+    // target installation and add to the target position; compose rotations only if the subarray tilts.
+    const auto offset = target.rotation.rotate(subarray.x, subarray.y, subarray.z);
+    datastructures::SensorPose combined = target;
+    combined.x += offset[0];
+    combined.y += offset[1];
+    combined.z += offset[2];
+    if (!subarray.has_zero_rotation())
+        combined.rotation = target.rotation * subarray.rotation;
+    return combined;
+}
+
+void SensorConfiguration::ensure_subarray_poses() const
+{
+    if (_subarray_poses_cached)
+        return;
+
+    _target_subarray_poses.clear();
+    for (const auto& [target_id, subarrays] : _target_subarray_offsets)
+    {
+        auto target_it = _target_offsets.find(target_id);
+        if (target_it == _target_offsets.end())
+            continue; // orphan subarrays (target not registered yet) -> combined on the fly on demand
+        auto& out = _target_subarray_poses[target_id];
+        for (const auto& [subarray_id, subarray] : subarrays)
+            out[subarray_id] = combine_target_subarray(target_it->second, subarray);
+    }
+    _subarray_poses_cached = true;
+}
+
+datastructures::SensorPose SensorConfiguration::get_target(
+    const std::string&                               target_id,
+    const std::string&                               subarray_id,
+    const std::optional<datastructures::SensorPose>& subarray_pose) const
+{
+    const auto& target = get_target(target_id); // throws a descriptive error if the target is unknown
+
+    if (subarray_pose.has_value())
+        return combine_target_subarray(target, *subarray_pose); // custom offset -> combine on the fly
+
+    if (subarray_id.empty())
+        return target;
+
+    // registered subarray -> precomputed vessel-frame pose
+    ensure_subarray_poses();
+    auto target_it = _target_subarray_poses.find(target_id);
+    if (target_it != _target_subarray_poses.end())
+    {
+        auto sub_it = target_it->second.find(subarray_id);
+        if (sub_it != target_it->second.end())
+            return sub_it->second;
+    }
+    // not cached (e.g. subarray registered before its target): combine now. get_target_subarray
+    // throws the descriptive out_of_range if the subarray is truly not registered.
+    return combine_target_subarray(target, get_target_subarray(target_id, subarray_id));
 }
 
 const std::map<std::string, datastructures::SensorPose>& SensorConfiguration::get_targets()
@@ -301,6 +356,28 @@ void SensorConfiguration::set_target_subarrays(
         _target_subarray_offsets.erase(target_id);
     else
         _target_subarray_offsets[target_id] = subarrays;
+}
+
+void SensorConfiguration::set_subarrays_by_role(
+    const std::map<std::string, datastructures::SensorPose>& subarrays)
+{
+    if (subarrays.empty())
+        return;
+
+    // split into transmit subarrays (everything except "RX") and the receive phase center ("RX")
+    std::map<std::string, datastructures::SensorPose> tx_subs, rx_subs;
+    for (const auto& [subarray_id, offset] : subarrays)
+        (subarray_id == "RX" ? rx_subs : tx_subs)[subarray_id] = offset;
+
+    for (const auto& target_id : get_target_ids())
+    {
+        if (target_id.starts_with("TRX"))
+            set_target_subarrays(target_id, subarrays);
+        else if (target_id.starts_with("TX"))
+            set_target_subarrays(target_id, tx_subs);
+        else if (target_id.starts_with("RX"))
+            set_target_subarrays(target_id, rx_subs);
+    }
 }
 
 void SensorConfiguration::set_target_subarrays_from_model(const std::string& target_id,
@@ -462,48 +539,47 @@ datastructures::SensorPose SensorConfiguration::get_position_source() const
     return _offsets_position_source;
 }
 
-// ----- helper functions -----
-Eigen::Quaternion<float> SensorConfiguration::get_system_rotation_as_quat(
-    const datastructures::Sensordata&        sensor_data,
-    const datastructures::SensorPose& offsets_heading_source,
-    const datastructures::SensorPose& offsets_attitude_source)
+void SensorConfiguration::set_position_source_motion_compensated(bool motion_compensated)
 {
-    // convert offset to quaternion
-    // If the attitude offsets are already applied to the logged sensor data (e.g. Kongsberg .all,
-    // where the PU corrects the attitude for the sensor mounting offsets before logging), use the
-    // identity offset so that the correction is not applied twice.
-    Eigen::Quaternion<float> imu_offset_quat =
+    invalidate_hash_cache();
+    _position_source_motion_compensated = motion_compensated;
+}
+bool SensorConfiguration::get_position_source_motion_compensated() const
+{
+    return _position_source_motion_compensated;
+}
+
+// ----- helper functions -----
+tools::rotationfunctions::Rotation<float> SensorConfiguration::get_system_rotation(
+    const datastructures::Sensordata& sensor_data,
+    const datastructures::SensorPose& offsets_heading_source,
+    const datastructures::SensorPose& offsets_attitude_source,
+    float                             reference_heading_in_degrees)
+{
+    using tools::rotationfunctions::Rotation;
+
+    // sensor attitude as a rotation (pitch/roll only; the reported yaw is ignored)
+    const Rotation<float> sensor_pitch_roll(0.f, sensor_data.pitch(), sensor_data.roll());
+
+    // Remove the IMU mounting offset with the sensor pose's own rotation (raw * offset^-1), unless
+    // the offsets are already applied to the logged data (e.g. Kongsberg .all is pre-corrected).
+    const Rotation<float> pitch_roll_offset_removed =
         offsets_attitude_source.ypr_offsets_applied
-            ? Eigen::Quaternion<float>::Identity()
-            : tools::rotationfunctions::quaternion_from_ypr(offsets_attitude_source.yaw(),
-                                                            offsets_attitude_source.pitch(),
-                                                            offsets_attitude_source.roll(),
-                                                            true);
+            ? sensor_pitch_roll
+            : sensor_pitch_roll * Rotation<float>(offsets_attitude_source.rotation.inverse());
 
-    // convert sensor pitch,roll to quaternion (ignore reported yaw)
-    auto imu_sensor_quat = tools::rotationfunctions::quaternion_from_ypr(
-        0.0f, sensor_data.pitch(), sensor_data.roll(), true);
+    // keep only the corrected pitch/roll (removing the offset can introduce a spurious yaw)
+    const auto            ypr = pitch_roll_offset_removed.ypr();
+    const Rotation<float> pitch_roll(0.f, ypr[1], ypr[2]);
 
-    // compute roll and pitch using the imu_offsets (including yaw offset)
-    // TODO: check if the order is correct
-    auto pr_quat = imu_sensor_quat * imu_offset_quat.inverse();
-    pr_quat.normalize();
+    // heading: remove the heading mounting offset unless already applied, then express it relative
+    // to the reference heading (default 0 -> absolute world heading)
+    float heading = offsets_heading_source.ypr_offsets_applied
+                        ? sensor_data.heading()
+                        : sensor_data.heading() - offsets_heading_source.yaw();
+    heading -= reference_heading_in_degrees;
 
-    // compute sensor quat using the correct pitch and roll (ignore yaw)
-    auto ypr         = tools::rotationfunctions::ypr_from_quaternion(pr_quat, false);
-    auto sensor_quat = tools::rotationfunctions::quaternion_from_ypr(0.f, ypr[1], ypr[2], false);
-
-    // rotate sensor quat using heading
-    // As above, only remove the heading offset when it has not already been applied to the heading
-    // data (e.g. Kongsberg .all logs the heading corrected for the heading offset).
-    float heading      = offsets_heading_source.ypr_offsets_applied
-                             ? sensor_data.heading()
-                             : sensor_data.heading() - offsets_heading_source.yaw();
-    auto  compass_quat = tools::rotationfunctions::quaternion_from_ypr(heading, 0.0f, 0.0f, true);
-
-    auto vessel_quat = compass_quat * sensor_quat;
-    vessel_quat.normalize();
-    return vessel_quat;
+    return Rotation<float>(heading, 0.f, 0.f) * pitch_roll; // compass * pitch/roll
 }
 } // namespace navigation
 } // namespace themachinethatgoesping

@@ -38,6 +38,10 @@ TEST_CASE("sensorconfiguration should support common functions", TESTTAG)
     REQUIRE(scs != scs2);
     scs2.add_target("sbes", targetOffsets);
     REQUIRE(scs == scs2);
+    scs.set_position_source_motion_compensated(true);
+    REQUIRE(scs != scs2);
+    scs2.set_position_source_motion_compensated(true);
+    REQUIRE(scs == scs2);
     scs.set_position_source("gps", 11, 20, 30);
     REQUIRE(scs != scs2);
 
@@ -67,29 +71,101 @@ TEST_CASE("sensorconfiguration compute_target_pose should match its definition",
     datastructures::Sensordata sd(7.f, 0.5f, 42.f, 4.f, -3.f); // depth, heave, heading, pitch, roll
     const float                ref_heading = 42.f;
 
-    const auto&           target = scs.get_target("mbes");
-    const Rotation<float> vessel = scs.get_vessel_rotation(sd);
+    const auto& target = scs.get_target("mbes");
 
-    // orientation: reference heading removed, vessel attitude and installation kept
-    const auto            pose = scs.compute_target_pose("mbes", sd, ref_heading, false);
-    const Rotation<float> expected_rotation =
-        Rotation<float>(-ref_heading, 0.f, 0.f) * vessel * target.rotation;
-    REQUIRE(pose.rotation == expected_rotation);
+    // vessel orientation expressed relative to the reference heading (residual yaw kept because the
+    // reference heading is the raw heading, not the offset-corrected one)
+    const Rotation<float> vessel_rel = scs.get_vessel_rotation(sd, ref_heading);
 
-    // z equals the geolocation depth
+    const auto pose = scs.compute_target_pose("mbes", sd, ref_heading);
+
+    // orientation: reference-relative vessel rotation times the installation
+    REQUIRE(pose.rotation == vessel_rel * target.rotation);
+
+    // position: the body-frame lever arm rotated into the surface frame by the SAME rotation
+    const auto lever = vessel_rel.rotate(target.x, target.y, target.z);
+    CHECK(pose.x == Catch::Approx(lever[0]));
+    CHECK(pose.y == Catch::Approx(lever[1]));
+
+    // z is heading-independent and equals the geolocation depth
     CHECK(pose.z == Catch::Approx(scs.compute_target_position("mbes", sd).z));
+}
 
-    // raw lever arm when not leveling
-    CHECK(pose.x == Catch::Approx(target.x));
-    CHECK(pose.y == Catch::Approx(target.y));
+TEST_CASE("sensorconfiguration compute_position_system_offset should match its definition", TESTTAG)
+{
+    using themachinethatgoesping::tools::rotationfunctions::Rotation;
 
-    // leveled lever arm (roll/pitch only, heading removed)
-    const auto pose_leveled = scs.compute_target_pose("mbes", sd, ref_heading, true);
-    const auto ypr     = vessel.ypr();
-    const auto leveled = Rotation<float>(0.f, ypr[1], ypr[2]).rotate(target.x, target.y, target.z);
-    CHECK(pose_leveled.x == Catch::Approx(leveled[0]));
-    CHECK(pose_leveled.y == Catch::Approx(leveled[1]));
-    CHECK(pose_leveled.z == Catch::Approx(pose.z));
+    SensorConfiguration scs;
+    scs.set_heading_source("compass", 5.f);
+    scs.set_attitude_source("mru", 1.f, -2.f, 3.f);
+    scs.set_position_source("gps", -7.f, 0.8f, -5.f);
+    scs.set_waterline_offset(-2.f);
+
+    datastructures::Sensordata sd(0.f, 0.f, 42.f, 4.f, -3.f); // depth, heave, heading, pitch, roll
+    const float                ref_heading = 42.f;
+
+    const auto& ps         = scs.get_position_source();
+    const auto  vessel_rel = scs.get_vessel_rotation(sd, ref_heading);
+
+    // antenna at its true height: full position-source lever arm rotated into the surface frame
+    const auto off = scs.compute_position_system_offset(sd, ref_heading);
+    const auto ref = vessel_rel.rotate(ps.x, ps.y, ps.z);
+    CHECK(off[0] == Catch::Approx(ref[0]));
+    CHECK(off[1] == Catch::Approx(ref[1]));
+    CHECK(off[2] == Catch::Approx(ref[2]));
+
+    // at_waterline: antenna height replaced by the waterline offset (projected onto the surface)
+    const auto off_wl = scs.compute_position_system_offset(sd, ref_heading, true);
+    const auto ref_wl = vessel_rel.rotate(ps.x, ps.y, scs.get_waterline_offset());
+    CHECK(off_wl[0] == Catch::Approx(ref_wl[0]));
+    CHECK(off_wl[1] == Catch::Approx(ref_wl[1]));
+    CHECK(off_wl[2] == Catch::Approx(ref_wl[2]));
+
+    // motion compensated: the reported position already coincides with the vessel reference point,
+    // so the offset is zero (regardless of at_waterline)
+    scs.set_position_source_motion_compensated(true);
+    const auto off_mc = scs.compute_position_system_offset(sd, ref_heading);
+    CHECK(off_mc[0] == 0.f);
+    CHECK(off_mc[1] == 0.f);
+    CHECK(off_mc[2] == 0.f);
+}
+
+TEST_CASE("sensorconfiguration get_target combines subarray offsets statically", TESTTAG)
+{
+    using themachinethatgoesping::tools::rotationfunctions::Rotation;
+
+    SensorConfiguration scs;
+    scs.add_target("mbes", datastructures::SensorPose("mbes", 1.f, 2.f, 3.f, 10.f, 20.f, 30.f));
+    scs.add_target_subarray("mbes", "s",
+                            datastructures::SensorPose("s", 0.1f, -0.2f, 0.3f, 0.f, 0.f, 0.f));
+
+    const auto& target = scs.get_target("mbes");
+    const auto  sub    = scs.get_target_subarray("mbes", "s");
+
+    // combined pose (vessel-static frame): target position + target.rotation * subarray offset
+    const auto combined = scs.get_target("mbes", "s");
+    const auto off      = target.rotation.rotate(sub.x, sub.y, sub.z);
+    CHECK(combined.x == Catch::Approx(target.x + off[0]));
+    CHECK(combined.y == Catch::Approx(target.y + off[1]));
+    CHECK(combined.z == Catch::Approx(target.z + off[2]));
+
+    // "" subarray returns the plain target; a custom pose overrides the registered id
+    CHECK(scs.get_target("mbes", "").x == Catch::Approx(target.x));
+    const auto custom =
+        scs.get_target("mbes", "s", datastructures::SensorPose("c", 0.f, 0.f, 1.f, 0.f, 0.f, 0.f));
+    const auto coff = target.rotation.rotate(0.f, 0.f, 1.f);
+    CHECK(custom.x == Catch::Approx(target.x + coff[0]));
+    CHECK(custom.z == Catch::Approx(target.z + coff[2]));
+
+    // compute_target_pose with a subarray == the pose of the combined static target
+    datastructures::Sensordata sd(0.f, 0.f, 30.f, 4.f, -3.f);
+    const float                ref        = 12.f;
+    const auto                 pose_sub   = scs.compute_target_pose("mbes", sd, ref, "s");
+    const Rotation<float>      vessel_rel = scs.get_vessel_rotation(sd, ref);
+    const auto                 lever = vessel_rel.rotate(combined.x, combined.y, combined.z);
+    CHECK(pose_sub.x == Catch::Approx(lever[0]));
+    CHECK(pose_sub.y == Catch::Approx(lever[1]));
+    CHECK(pose_sub.rotation == vessel_rel * combined.rotation);
 }
 
 TEST_CASE("sensorconfiguration should reproduce precomputed rotations when settings sensor offsets",

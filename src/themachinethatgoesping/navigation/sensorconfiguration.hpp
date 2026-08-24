@@ -69,10 +69,40 @@ class SensorConfiguration
     float _waterline_offset =
         0.0; ///< Waterline offset (negative waterline offset means that z=0 is below the waterline
 
+    bool _position_source_motion_compensated =
+        false; ///< true if the logged position is already referenced to the vessel reference point
+               ///< (motion compensation applied by the PU, e.g. .all P{n}M=1 / .kmall POSI C=On).
+               ///< Then compute_position_system_offset returns {0,0,0}.
+
+    /// Display preference for __printer__ only (NOT serialized, NOT part of equality/hash):
+    /// true = one row per target (compact table); false = transposed (fields as rows, with an
+    /// explanation column). Toggle with set_printer_style / print(optionA=...).
+    bool _printer_style_a = true;
+
     mutable std::optional<xxh::hash_t<64>> _cached_binary_hash; ///< cached binary hash, reset on mutation
 
-    /// Invalidate the cached binary hash (call from every mutating method)
-    void invalidate_hash_cache() { _cached_binary_hash.reset(); }
+    /// Derived cache: each registered subarray phase center combined with its target, expressed in
+    /// the vessel-static frame (position target.xyz + target.rotation·subarray.xyz, rotation
+    /// target.rotation·subarray.rotation). Keyed [target_id][subarray_id] — linked to
+    /// _target_subarray_offsets by the same keys — and rebuilt on demand whenever the configuration
+    /// changes. Not serialized (fully derived from _target_offsets + _target_subarray_offsets).
+    mutable bool _subarray_poses_cached = false;
+    mutable std::map<std::string, std::map<std::string, datastructures::SensorPose>>
+        _target_subarray_poses;
+
+    /// Invalidate the cached binary hash and derived caches (call from every mutating method)
+    void invalidate_hash_cache()
+    {
+        _cached_binary_hash.reset();
+        _subarray_poses_cached = false;
+    }
+
+    /// Combine a target pose with a subarray offset (target/array frame) into the vessel-static frame.
+    static datastructures::SensorPose combine_target_subarray(
+        const datastructures::SensorPose& target, const datastructures::SensorPose& subarray);
+
+    /// (Re)build _target_subarray_poses from the current targets + subarray offsets if stale.
+    void ensure_subarray_poses() const;
 
   public:
     /**
@@ -177,33 +207,24 @@ class SensorConfiguration
         const datastructures::Sensordata& sensor_data) const;
 
     /**
-     * @brief Compute the offset-corrected vessel attitude (yaw, pitch, roll) in the world
-     * coordinate frame.
-     *
-     * This applies the registered sensor mounting offsets to the raw sensor_data attitude using
-     * the exact same convention as compute_target_position: the attitude source (IMU) mounting
-     * offset is removed using a quaternion operation (raw ⊗ offset⁻¹, i.e. yaw/pitch/roll are
-     * NOT simply added), and the heading source offset is subtracted from the heading. The
-     * returned angles describe the orientation of the vessel reference frame relative to the
-     * world frame (yaw includes the vessel heading).
-     *
-     * @param sensor_data Sensordata (only heading, pitch and roll are used)
-     * @return std::array<float, 3> {yaw, pitch, roll} in degrees
-     */
-    std::array<float, 3> get_vessel_attitude(
-        const datastructures::Sensordata& sensor_data) const;
-
-    /**
      * @brief Compute the offset-corrected vessel orientation as a Rotation.
      *
-     * Same convention as get_vessel_attitude / compute_target_position (attitude offset removed via
-     * quaternion, heading offset subtracted from heading), but returned as a Rotation.
+     * Applies the registered sensor mounting offsets to the raw sensor_data attitude: the attitude
+     * source (IMU) mounting offset is removed with a rotation operation (raw ⊗ offset⁻¹, i.e.
+     * yaw/pitch/roll are NOT simply added) and the heading source offset is subtracted from the
+     * heading -- both only when they are not already applied to the logged data
+     * (SensorPose::ypr_offsets_applied). The heading is then expressed relative to
+     * reference_heading_in_degrees. Use rotation.ypr() to obtain the {yaw, pitch, roll} angles.
      *
      * @param sensor_data Sensordata (only heading, pitch and roll are used)
-     * @return vessel orientation (Rotation) in the world frame
+     * @param reference_heading_in_degrees heading (deg) removed from the orientation so the result
+     * is expressed in the surface frame of that heading (0 = keep the absolute world heading); for a
+     * receive pose sampled after transmit this keeps the residual yaw (vessel turn since transmit)
+     * @return vessel orientation (Rotation), heading measured relative to reference_heading
      */
     tools::rotationfunctions::Rotation<float> get_vessel_rotation(
-        const datastructures::Sensordata& sensor_data) const;
+        const datastructures::Sensordata& sensor_data,
+        float                             reference_heading_in_degrees = 0.f) const;
 
     /**
      * @brief Compute the ready-to-trace pose (position + ship-frame orientation) of a target.
@@ -212,16 +233,15 @@ class SensorConfiguration
      * installation, the vessel attitude and the removal of a common reference heading into a
      * single pose, so a raytracer can consume it without re-composing
      * installation/attitude/heading. The orientation is
-     * Rz(-reference_heading) · vessel_rotation · target_installation; the position is the target
-     * lever arm (raw body frame, or roll/pitch-leveled when @p level_lever_arm is true) with z the
-     * depth below the waterline. Pass the SAME reference_heading (the heading at transmit time) for
-     * every target of a ping so all poses share one ship frame.
+     * vessel_rotation(reference_heading) · target_installation and the position is that SAME
+     * reference-relative vessel_rotation applied to the body-frame lever arm (z reduced to the
+     * depth below the waterline). Pass the SAME reference_heading (the heading at transmit time) for
+     * every target of a ping so all poses share one surface frame.
      *
      * @param target_id name of the target (e.g. "MBES")
      * @param sensor_data Sensordata (heading/pitch/roll + depth/heave)
      * @param reference_heading_in_degrees heading (deg) removed from the orientation (transmit
      * heading)
-     * @param level_lever_arm if true, level the horizontal lever arm by vessel roll/pitch
      * @param subarray_id optional name of a registered subarray offset of the target to add to the
      * pose (e.g. "0"/"1"/"2" for a transmit subarray, "RX" for the receive phase center); "" = none
      * @param subarray_pose optional explicit subarray offset (target frame) that overrides
@@ -232,9 +252,31 @@ class SensorConfiguration
         const std::string&                               target_id,
         const datastructures::Sensordata&                sensor_data,
         float                                            reference_heading_in_degrees,
-        bool                                             level_lever_arm = false,
-        const std::string&                               subarray_id     = "",
-        const std::optional<datastructures::SensorPose>& subarray_pose   = std::nullopt) const;
+        const std::string&                               subarray_id   = "",
+        const std::optional<datastructures::SensorPose>& subarray_pose = std::nullopt) const;
+
+    /**
+     * @brief Compute the location of the active position-system reference point relative to the
+     * vessel reference point, in the surface (reference-heading) frame.
+     *
+     * This is the heading-referenced translation between the position system and the vessel
+     * reference point: vessel_rotation(reference_heading) · position_source_lever_arm. It carries
+     * the full horizontal antenna lever arm (not only its vertical component), so it can be used to
+     * convert beam positions referenced to the positioning system (e.g. Kongsberg .all XYZ88) into
+     * the vessel-reference-point convention (e.g. Kongsberg .kmall).
+     *
+     * @param sensor_data Sensordata (heading/pitch/roll are used)
+     * @param reference_heading_in_degrees heading (deg) removed from the orientation (transmit
+     * heading); 0 = keep the absolute world heading
+     * @param at_waterline if true, replace the antenna height by the waterline offset, i.e. project
+     * the position-system point onto the water surface (the horizontal reference of the .all XYZ88
+     * beam positions); if false, use the true antenna height (position_source.z)
+     * @return {x, y, z} of the position-system reference point in the surface frame (metres)
+     */
+    std::array<float, 3> compute_position_system_offset(
+        const datastructures::Sensordata& sensor_data,
+        float                             reference_heading_in_degrees = 0.f,
+        bool                              at_waterline                 = false) const;
 
     // ----- get/set target offsets -----
 
@@ -293,6 +335,24 @@ class SensorConfiguration
     const datastructures::SensorPose& get_target(const std::string& target_id) const;
 
     /**
+     * @brief Get a target's static pose, optionally combined with one of its subarray phase centers.
+     *
+     * The subarray offset lives in the target (transducer/array) frame; the returned combined pose is
+     * in the vessel-static frame (independent of vessel attitude), so compute_target_pose can rotate
+     * it in one step. Registered subarrays return a precomputed pose; a custom @p subarray_pose is
+     * combined on the fly.
+     *
+     * @param target_id registered target
+     * @param subarray_id registered subarray of the target ("" = none, returns the plain target)
+     * @param subarray_pose optional explicit subarray offset (target frame) overriding @p subarray_id
+     * @return the (combined) target pose in the vessel-static frame
+     */
+    datastructures::SensorPose get_target(
+        const std::string&                               target_id,
+        const std::string&                               subarray_id,
+        const std::optional<datastructures::SensorPose>& subarray_pose = std::nullopt) const;
+
+    /**
      * @brief Get the map of stored target offsets objects
      *
      * @return const std::unordered_map<std::string, datastructures::SensorPose>&
@@ -337,6 +397,19 @@ class SensorConfiguration
     void set_target_subarrays(
         const std::string&                                       target_id,
         const std::map<std::string, datastructures::SensorPose>& subarrays);
+
+    /**
+     * @brief Attach a flat subarray-offset map to every registered target by its role, so a head
+     * only carries the offsets of the array(s) it actually contains.
+     *
+     * The transmit subarrays (all keys except "RX") are attached to transmit targets (id starts
+     * with "TX"), the receive phase center ("RX") to receive targets (id starts with "RX"), and a
+     * combined transmit/receive target (id starts with "TRX") receives both. Targets that match no
+     * role (e.g. "0") are left untouched. No-op if @p subarrays is empty.
+     *
+     * @param subarrays flat map<subarray_id, offset pose> as returned by get_model_subarray_offsets
+     */
+    void set_subarrays_by_role(const std::map<std::string, datastructures::SensorPose>& subarrays);
 
     /**
      * @brief Set the subarray offsets of a target from the hardcoded per-model preset.
@@ -413,6 +486,12 @@ class SensorConfiguration
     /// @brief Transducer configuration string, or empty string if not set.
     std::string get_transducer_configuration() const { return _transducer_configuration; }
 
+    /// @brief select the print()/info_string() table layout: true = one row per target (default,
+    /// compact), false = transposed (fields x/y/z/... as rows, records as columns + explanation).
+    void set_printer_style(bool row_per_target) { _printer_style_a = row_per_target; }
+    /// @brief current print() table layout (see set_printer_style)
+    bool get_printer_style() const { return _printer_style_a; }
+
     // ----- get/set sensor offsets -----
     /**
      * @brief Set the attitude sensor offsets
@@ -477,6 +556,28 @@ class SensorConfiguration
      * @return waterline_offset
      */
     float get_waterline_offset() const;
+
+    /**
+     * @brief Set whether the position source is motion compensated.
+     *
+     * When true, the logged position is already referenced to the vessel reference point (the PU
+     * applied the antenna-to-reference-point lever arm, e.g. Kongsberg .all P{n}M=1 or .kmall POSI
+     * C=On). In that case compute_position_system_offset returns {0,0,0} instead of the geometric
+     * antenna lever arm, so beam positions referenced to the positioning system are not
+     * double-corrected.
+     *
+     * @param motion_compensated true if the position is already re the vessel reference point
+     */
+    void set_position_source_motion_compensated(bool motion_compensated);
+
+    /**
+     * @brief Get whether the position source is motion compensated.
+     *
+     * See set_position_source_motion_compensated.
+     *
+     * @return true if the logged position is already re the vessel reference point
+     */
+    bool get_position_source_motion_compensated() const;
 
     /**
      * @brief Set the depth sensor offsets
@@ -552,13 +653,15 @@ class SensorConfiguration
      * @param offsets_heading_source Offsets of the compass (used is only yaw offset)
      * @param offsets_attitude_source Offsets of the IMU (used are yaw, pitch and roll), if
      * heading is used, yaw is used to correct pitch, and roll but not added to the heading
-     * @return Eigen::Quaternion<float> Rotation of the sensor system compared to the world
-     * reference system
+     * @param reference_heading_in_degrees heading (deg) removed from the result so it is expressed
+     * relative to that heading (0 = absolute world heading)
+     * @return Rotation of the sensor system relative to the (reference) world reference system
      */
-    static Eigen::Quaternion<float> get_system_rotation_as_quat(
-        const datastructures::Sensordata&        sensor_data,
+    static tools::rotationfunctions::Rotation<float> get_system_rotation(
+        const datastructures::Sensordata& sensor_data,
         const datastructures::SensorPose& offsets_heading_source,
-        const datastructures::SensorPose& offsets_attitude_source);
+        const datastructures::SensorPose& offsets_attitude_source,
+        float                             reference_heading_in_degrees = 0.f);
 
   public:
     // ----- file I/O -----
@@ -587,6 +690,8 @@ class SensorConfiguration
         _offsets_position_source.to_stream(os);
         _offsets_depth_source.to_stream(os);
         os.write(reinterpret_cast<const char*>(&_waterline_offset), sizeof(_waterline_offset));
+        os.write(reinterpret_cast<const char*>(&_position_source_motion_compensated),
+                 sizeof(_position_source_motion_compensated));
 
         // subarray offsets: map<target_id, map<subarray_id, SensorPose>>
         unsigned int num_sub_targets = _target_subarray_offsets.size();
@@ -635,6 +740,8 @@ class SensorConfiguration
         obj._offsets_position_source = SensorPose::from_stream(is);
         obj._offsets_depth_source    = SensorPose::from_stream(is);
         is.read(reinterpret_cast<char*>(&obj._waterline_offset), sizeof(obj._waterline_offset));
+        is.read(reinterpret_cast<char*>(&obj._position_source_motion_compensated),
+                sizeof(obj._position_source_motion_compensated));
 
         unsigned int num_sub_targets;
         is.read(reinterpret_cast<char*>(&num_sub_targets), sizeof(num_sub_targets));
@@ -689,6 +796,8 @@ class SensorConfiguration
                _offsets_position_source == other._offsets_position_source &&
                _offsets_depth_source == other._offsets_depth_source &&
                _waterline_offset == other._waterline_offset &&
+               _position_source_motion_compensated ==
+                   other._position_source_motion_compensated &&
                _target_subarray_offsets == other._target_subarray_offsets &&
                _model_name == other._model_name &&
                _transducer_configuration == other._transducer_configuration;
@@ -710,47 +819,65 @@ class SensorConfiguration
         tools::classhelper::ObjectPrinter printer(
             "SensorConfiguration", float_precision, superscript_exponents);
 
-        for (const auto& [target_id, target_offsets] : _target_offsets)
-        {
-            printer.register_section("Target offsets \"" + target_id + "\"");
-            printer.append(target_offsets.__printer__(float_precision, superscript_exponents));
-        }
+        auto fnum = [&](float v) { return fmt::format("{:.{}f}", v, float_precision); };
+        auto pose_cells = [&](const datastructures::SensorPose& p) {
+            return std::vector<std::string>{ fnum(p.x),     fnum(p.y),       fnum(p.z),
+                                             fnum(p.yaw()), fnum(p.pitch()), fnum(p.roll()) };
+        };
+        auto make_row = [&](const std::string& label, const datastructures::SensorPose& p) {
+            std::vector<std::string> row   = { label };
+            auto                     cells = pose_cells(p);
+            row.insert(row.end(), cells.begin(), cells.end());
+            return row;
+        };
 
-        printer.register_section("Attitude sensor offsets");
-        printer.append(
-            _offsets_attitude_source.__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("Compass offsets");
-        printer.append(_offsets_heading_source.__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("Position system offsets");
-        printer.append(
-            _offsets_position_source.__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("Depth sensor offsets");
-        printer.append(_offsets_depth_source.__printer__(float_precision, superscript_exponents));
-
-        printer.register_section("waterline offsets");
-        printer.register_value("Waterline offset", _waterline_offset, "m");
-
-        for (const auto& [target_id, subarrays] : _target_subarray_offsets)
-        {
-            for (const auto& [subarray_id, offsets] : subarrays)
+        // Stack similar records as an aligned table. Two styles, selectable via set_printer_style /
+        // print(optionA=...): style A = one row per record; style B = the transposed layout (fields
+        // x/y/z/yaw/pitch/roll as rows, records as columns) which keeps an explanation last column.
+        const std::vector<std::string> explanation = { "explanation", "forward, m",  "starboard, m",
+                                                       "down, m",     "yaw, deg",    "pitch, deg",
+                                                       "roll, deg" };
+        auto add_table = [&](std::string_view title, const std::string& first_column,
+                             std::vector<std::vector<std::string>> rows) {
+            if (rows.empty())
+                return;
+            if (_printer_style_a)
+                printer.register_table(
+                    title, { first_column, "x", "y", "z", "yaw", "pitch", "roll" }, rows);
+            else
             {
-                printer.register_section("Subarray offsets \"" + target_id + "\" / \"" +
-                                         subarray_id + "\"");
-                printer.append(offsets.__printer__(float_precision, superscript_exponents));
+                rows.push_back(explanation);
+                printer.register_table(
+                    title, { "field", "x", "y", "z", "yaw", "pitch", "roll" }, rows, true);
             }
-        }
+        };
 
-        if (!_model_name.empty() || !_transducer_configuration.empty())
-        {
-            printer.register_section("System information");
-            if (!_model_name.empty())
-                printer.register_string("model", _model_name, "");
-            if (!_transducer_configuration.empty())
-                printer.register_string("configuration", _transducer_configuration, "");
-        }
+        std::vector<std::vector<std::string>> targets;
+        for (const auto& [id, pose] : _target_offsets)
+            targets.push_back(make_row(id, pose));
+        add_table("Target offsets", "target", std::move(targets));
+
+        add_table("Sensor offsets", "sensor",
+                  { make_row("attitude", _offsets_attitude_source),
+                    make_row("compass", _offsets_heading_source),
+                    make_row("position", _offsets_position_source),
+                    make_row("depth", _offsets_depth_source) });
+
+        std::vector<std::vector<std::string>> subarrays;
+        for (const auto& [target_id, subs] : _target_subarray_offsets)
+            for (const auto& [subarray_id, pose] : subs)
+                subarrays.push_back(make_row(target_id + " / " + subarray_id, pose));
+        add_table("Subarray offsets", "target / subarray", std::move(subarrays));
+
+        printer.register_section("System");
+        printer.register_value("waterline_offset", _waterline_offset, "m");
+        printer.register_string("position_motion_compensated",
+                                _position_source_motion_compensated ? "true" : "false",
+                                "position already re reference point");
+        if (!_model_name.empty())
+            printer.register_string("model", _model_name, "");
+        if (!_transducer_configuration.empty())
+            printer.register_string("configuration", _transducer_configuration, "");
 
         return printer;
     }

@@ -1,4 +1,4 @@
-//sourcehash: c1497919f13dfc306e33fc45f4f5c4d387d4f5a02a36ea1d063028631b7f12b2
+//sourcehash: d6d27e823367c0a8c220608b5f0d9ffbb53b2c4571ae1296c747d994b6bb4914
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -108,6 +108,38 @@ Returns:
     false if the same target_id is registered with different offsets,
     true otherwise)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_combine_target_subarray =
+R"doc(Combine a target pose with a subarray offset (target/array frame) into
+the vessel-static frame.)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_position_system_offset =
+R"doc(Compute the location of the active position-system reference point
+relative to the vessel reference point, in the surface (reference-
+heading) frame.
+
+This is the heading-referenced translation between the position system
+and the vessel reference point: vessel_rotation(reference_heading) ·
+position_source_lever_arm. It carries the full horizontal antenna
+lever arm (not only its vertical component), so it can be used to
+convert beam positions referenced to the positioning system (e.g.
+Kongsberg .all XYZ88) into the vessel-reference-point convention (e.g.
+Kongsberg .kmall).
+
+Args:
+    sensor_data: Sensordata (heading/pitch/roll are used)
+    reference_heading_in_degrees: heading (deg) removed from the
+                                  orientation (transmit heading); 0 =
+                                  keep the absolute world heading
+    at_waterline: if true, replace the antenna height by the waterline
+                  offset, i.e. project the position-system point onto
+                  the water surface (the horizontal reference of the
+                  .all XYZ88 beam positions); if false, use the true
+                  antenna height (position_source.z)
+
+Returns:
+    {x, y, z} of the position-system reference point in the surface
+    frame (metres))doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_pose =
 R"doc(Compute the ready-to-trace pose (position + ship-frame orientation) of
 a target.
@@ -116,20 +148,18 @@ Unlike compute_target_position (which returns a geolocation), this
 bakes the target installation, the vessel attitude and the removal of
 a common reference heading into a single pose, so a raytracer can
 consume it without re-composing installation/attitude/heading. The
-orientation is Rz(-reference_heading) · vessel_rotation ·
-target_installation; the position is the target lever arm (raw body
-frame, or roll/pitch-leveled when ``level_lever_arm`` is true) with z
-the depth below the waterline. Pass the SAME reference_heading (the
+orientation is vessel_rotation(reference_heading) ·
+target_installation and the position is that SAME reference-relative
+vessel_rotation applied to the body-frame lever arm (z reduced to the
+depth below the waterline). Pass the SAME reference_heading (the
 heading at transmit time) for every target of a ping so all poses
-share one ship frame.
+share one surface frame.
 
 Args:
     target_id: name of the target (e.g. "MBES")
     sensor_data: Sensordata (heading/pitch/roll + depth/heave)
     reference_heading_in_degrees: heading (deg) removed from the
                                   orientation (transmit heading)
-    level_lever_arm: if true, level the horizontal lever arm by vessel
-                     roll/pitch
     subarray_id: optional name of a registered subarray offset of the
                  target to add to the pose (e.g. "0"/"1"/"2" for a
                  transmit subarray, "RX" for the receive phase
@@ -198,6 +228,10 @@ Returns:
                    northing and east, which are set relative to the
                    sensor coordinate system center)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_ensure_subarray_poses =
+R"doc((Re)build _target_subarray_poses from the current targets + subarray
+offsets if stale.)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_from_stream =
 R"doc(Read the sensor configuration from a stream.
 Warning: there is no error checking!
@@ -261,7 +295,18 @@ R"doc(Get the registered position system offsets
 Returns:
     const datastructures::SensorPose& offsets of the position system)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_system_rotation_as_quat =
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_position_source_motion_compensated =
+R"doc(Get whether the position source is motion compensated.
+
+See set_position_source_motion_compensated.
+
+Returns:
+    true if the logged position is already re the vessel reference
+    point)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_printer_style = R"doc(current print() table layout (see set_printer_style))doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_system_rotation =
 R"doc(Compute the rotation of the sensor coordinate system (relative to the
 world reference coordinate system) using the sensor data and
 (rotation) offsets. Note: if heading is used the
@@ -277,10 +322,14 @@ Args:
                              and roll), if heading is used, yaw is
                              used to correct pitch, and roll but not
                              added to the heading
+    reference_heading_in_degrees: heading (deg) removed from the
+                                  result so it is expressed relative
+                                  to that heading (0 = absolute world
+                                  heading)
 
 Returns:
-    Eigen::Quaternion<float> Rotation of the sensor system compared to
-          the world reference system)doc";
+    Rotation of the sensor system relative to the (reference) world
+    reference system)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_target =
 R"doc(Get stored target offsets of a specified target
@@ -290,6 +339,26 @@ Args:
 
 Returns:
     const datastructures::SensorPose& offsets of the target)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_target_2 =
+R"doc(Get a target's static pose, optionally combined with one of its
+subarray phase centers.
+
+The subarray offset lives in the target (transducer/array) frame; the
+returned combined pose is in the vessel-static frame (independent of
+vessel attitude), so compute_target_pose can rotate it in one step.
+Registered subarrays return a precomputed pose; a custom
+``subarray_pose`` is combined on the fly.
+
+Args:
+    target_id: registered target
+    subarray_id: registered subarray of the target ("" = none, returns
+                 the plain target)
+    subarray_pose: optional explicit subarray offset (target frame)
+                   overriding ``subarray_id``
+
+Returns:
+    the (combined) target pose in the vessel-static frame)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_target_ids =
 R"doc(Get the ids of the registered targets
@@ -326,37 +395,32 @@ Returns:
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_configuration = R"doc(Transducer configuration string, or empty string if not set.)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_vessel_attitude =
-R"doc(Compute the offset-corrected vessel attitude (yaw, pitch, roll) in the
-world coordinate frame.
-
-This applies the registered sensor mounting offsets to the raw
-sensor_data attitude using the exact same convention as
-compute_target_position: the attitude source (IMU) mounting offset is
-removed using a quaternion operation (raw ⊗ offset⁻¹, i.e.
-yaw/pitch/roll are NOT simply added), and the heading source offset is
-subtracted from the heading. The returned angles describe the
-orientation of the vessel reference frame relative to the world frame
-(yaw includes the vessel heading).
-
-Args:
-    sensor_data: Sensordata (only heading, pitch and roll are used)
-
-Returns:
-    std::array<float, 3> {yaw, pitch, roll} in degrees)doc";
-
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_vessel_rotation =
 R"doc(Compute the offset-corrected vessel orientation as a Rotation.
 
-Same convention as get_vessel_attitude / compute_target_position
-(attitude offset removed via quaternion, heading offset subtracted
-from heading), but returned as a Rotation.
+Applies the registered sensor mounting offsets to the raw sensor_data
+attitude: the attitude source (IMU) mounting offset is removed with a
+rotation operation (raw ⊗ offset⁻¹, i.e. yaw/pitch/roll are NOT simply
+added) and the heading source offset is subtracted from the heading --
+both only when they are not already applied to the logged data
+(SensorPose::ypr_offsets_applied). The heading is then expressed
+relative to reference_heading_in_degrees. Use rotation.ypr() to obtain
+the {yaw, pitch, roll} angles.
 
 Args:
     sensor_data: Sensordata (only heading, pitch and roll are used)
+    reference_heading_in_degrees: heading (deg) removed from the
+                                  orientation so the result is
+                                  expressed in the surface frame of
+                                  that heading (0 = keep the absolute
+                                  world heading); for a receive pose
+                                  sampled after transmit this keeps
+                                  the residual yaw (vessel turn since
+                                  transmit)
 
 Returns:
-    vessel orientation (Rotation) in the world frame)doc";
+    vessel orientation (Rotation), heading measured relative to
+    reference_heading)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_waterline_offset =
 R"doc(Get the waterline offset Negative waterline offset means that z=0 is
@@ -378,7 +442,9 @@ static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_has_target_subarrays = R"doc(true if the target has any registered subarray offsets.)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_invalidate_hash_cache = R"doc(Invalidate the cached binary hash (call from every mutating method))doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_invalidate_hash_cache =
+R"doc(Invalidate the cached binary hash and derived caches (call from every
+mutating method))doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_model_name = R"doc(echosounder model (e.g. "EM2040"); set by format readers)doc";
 
@@ -408,7 +474,15 @@ Args:
 Returns:
     true false)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_position_source_motion_compensated = R"doc()doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_printer = R"doc()doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_printer_style_a =
+R"doc(Display preference for __printer__ only (NOT serialized, NOT part of
+equality/hash): true = one row per target (compact table); false =
+transposed (fields as rows, with an explanation column). Toggle with
+set_printer_style / print(optionA=...).)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_remove_target =
 R"doc(Remove the target with the specified target_id
@@ -481,6 +555,40 @@ R"doc(Set the position system offsets
 Args:
     sensor_offsets: offsets structure (only x, y and z are used))doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_position_source_motion_compensated =
+R"doc(Set whether the position source is motion compensated.
+
+When true, the logged position is already referenced to the vessel
+reference point (the PU applied the antenna-to-reference-point lever
+arm, e.g. Kongsberg .all P{n}M=1 or .kmall POSI C=On). In that case
+compute_position_system_offset returns {0,0,0} instead of the
+geometric antenna lever arm, so beam positions referenced to the
+positioning system are not double-corrected.
+
+Args:
+    motion_compensated: true if the position is already re the vessel
+                        reference point)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_printer_style =
+R"doc(select the print()/info_string() table layout: true = one row per
+target (default, compact), false = transposed (fields x/y/z/... as
+rows, records as columns + explanation).)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_subarrays_by_role =
+R"doc(Attach a flat subarray-offset map to every registered target by its
+role, so a head only carries the offsets of the array(s) it actually
+contains.
+
+The transmit subarrays (all keys except "RX") are attached to transmit
+targets (id starts with "TX"), the receive phase center ("RX") to
+receive targets (id starts with "RX"), and a combined transmit/receive
+target (id starts with "TRX") receives both. Targets that match no
+role (e.g. "0") are left untouched. No-op if ``subarrays`` is empty.
+
+Args:
+    subarrays: flat map<subarray_id, offset pose> as returned by
+               get_model_subarray_offsets)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_target_subarrays =
 R"doc(Replace all subarray offsets of a target with the given map.
 Args:
@@ -511,6 +619,15 @@ below the waterline
 Args:
     waterline_offset:)doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_subarray_poses_cached =
+R"doc(Derived cache: each registered subarray phase center combined with its
+target, expressed in the vessel-static frame (position target.xyz +
+target.rotation·subarray.xyz, rotation
+target.rotation·subarray.rotation). Keyed [target_id][subarray_id] —
+linked to _target_subarray_offsets by the same keys — and rebuilt on
+demand whenever the configuration changes. Not serialized (fully
+derived from _target_offsets + _target_subarray_offsets).)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_target_offsets = R"doc(TargetId (position in vector) for each registered target_id)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_target_subarray_offsets =
@@ -519,6 +636,8 @@ R"doc(Optional named subarray offsets per target. Keyed
 (transducer) frame that compute_target_pose can add to the target pose
 to obtain a per-subarray phase center (e.g. multibeam transmit
 subarrays port/center/starboard and the receive-array phase center).)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_target_subarray_poses = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_to_stream =
 R"doc(Write the sensor configuration to a stream.
