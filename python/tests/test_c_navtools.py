@@ -148,3 +148,4 @@ class Test_navigation_navtools:
         assert cumulative_latlon_distances_loc_latlon == approx(distances2)
         assert cumulative_latlon_distances_sens_latlon == approx(distances2)
         assert cumulative_latlon_distances_pair_latlon == approx(distances2)
+        

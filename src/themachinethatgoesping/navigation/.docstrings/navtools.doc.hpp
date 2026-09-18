@@ -1,4 +1,4 @@
-//sourcehash: 2906769e3b336166fd3e99eae17afb75f8aaf95778cfa342f02bdca5cd516542
+//sourcehash: 890062f45bffd800133e18ca2249ad357b4cab51643bc3972b21a9792db7cb26
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -41,7 +41,7 @@
 #endif
 
 
-static const char *mkd_doc__unnamed_class_at_themachinethatgoesping_navigation_navtools_hpp_752_67 = R"doc()doc";
+static const char *mkd_doc__unnamed_class_at_themachinethatgoesping_navigation_navtools_hpp_778_67 = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_navtools_compute_latlon_distance_m =
 R"doc(Compute the distance in meters between two latitude-longitude
@@ -153,6 +153,35 @@ Returns:
     meters.)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_navtools_dms_to_string = R"doc()doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_navtools_epsg_from_latlon =
+R"doc(Get the EPSG code (UTMUPS) for a given latitude and longitude. This
+function determines the appropriate UTM/UPS zone and hemisphere for
+the given latitude and longitude, and returns the corresponding EPSG
+code.
+
+Args:
+    lat: latitude in decimal degrees
+    lon: longitude in decimal degrees
+
+Returns:
+    std::string)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_navtools_epsg_from_utmups =
+R"doc(Get the EPSG code for a given UTM/UPS zone and hemisphere.
+
+Args:
+    zone: UTM Zone number
+    northp: 1 for norhtern hemisphere, 0 for southern hemisphere
+
+Returns:
+    std::string)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_navtools_epsg_wgs84 =
+R"doc(Get the wgs84 epsg object
+
+Returns:
+    std::string)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_navtools_latitude_to_string =
 R"doc(convert a latitude value to a string

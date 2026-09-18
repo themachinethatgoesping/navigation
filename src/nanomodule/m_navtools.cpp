@@ -265,4 +265,17 @@ void init_m_navtools(nb::module_& m)
     create_distance_functions<datastructures::SensordataLatLon>(m_navtools);
     create_distance_functions<std::pair<double, double>>(m_navtools);
     create_distance_functions<std::pair<float, float>>(m_navtools);
+
+    // EPSG helper
+    m_navtools.def("epsg_from_utmups",
+                   &epsg_from_utmups,
+                   DOC(themachinethatgoesping, navigation, navtools, epsg_from_utmups),
+                   nb::arg("zone"),
+                   nb::arg("northp"));
+
+    m_navtools.def("epsg_from_latlon",
+                   &epsg_from_latlon,
+                   DOC(themachinethatgoesping, navigation, navtools, epsg_from_latlon),
+                   nb::arg("latitude"),
+                   nb::arg("longitude"));
 }

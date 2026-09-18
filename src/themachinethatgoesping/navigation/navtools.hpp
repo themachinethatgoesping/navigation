@@ -13,9 +13,9 @@
  *
  */
 
-#include <stdexcept>
 #include <atomic>
 #include <exception>
+#include <stdexcept>
 #include <tuple>
 #include <vector>
 
@@ -186,7 +186,9 @@ inline std::pair<T_container, T_container> utm_to_latlon(const T_container& nort
     // initialize output vectors
     T_container lat, lon;
     // Check if container is xtensor and handle resize accordingly
-    if constexpr (requires { T_container::from_shape(std::declval<typename T_container::shape_type>()); })
+    if constexpr (requires {
+                      T_container::from_shape(std::declval<typename T_container::shape_type>());
+                  })
     {
         using index_type = typename T_container::shape_type::value_type;
         lat              = T_container::from_shape({ static_cast<index_type>(northing.size()) });
@@ -220,15 +222,15 @@ inline std::pair<T_container, T_container> utm_to_latlon(const T_container& nort
             {
                 if (error_message.empty())
                 {
-                    error_message = fmt::format(
-                        "ERROR[utm_to_latlon]: conversion failed at index {} (zone={}, "
-                        "northing={}, easting={}, northern_hemisphere={}). {}",
-                        i,
-                        zone,
-                        northing[i],
-                        easting[i],
-                        northern_hemisphere,
-                        ex.what());
+                    error_message =
+                        fmt::format("ERROR[utm_to_latlon]: conversion failed at index {} (zone={}, "
+                                    "northing={}, easting={}, northern_hemisphere={}). {}",
+                                    i,
+                                    zone,
+                                    northing[i],
+                                    easting[i],
+                                    northern_hemisphere,
+                                    ex.what());
                 }
             }
         }
@@ -253,9 +255,8 @@ inline std::pair<T_container, T_container> utm_to_latlon(const T_container& nort
     }
 
     if (has_error.load(std::memory_order_relaxed))
-        throw std::runtime_error(error_message.empty()
-                                     ? "ERROR[utm_to_latlon]: conversion failed."
-                                     : error_message);
+        throw std::runtime_error(error_message.empty() ? "ERROR[utm_to_latlon]: conversion failed."
+                                                       : error_message);
 
     return std::make_pair(lat, lon);
 }
@@ -321,15 +322,15 @@ inline std::pair<T_container_double, T_container_double> utm_to_latlon(
             {
                 if (error_message.empty())
                 {
-                    error_message = fmt::format(
-                        "ERROR[utm_to_latlon]: conversion failed at index {} (zone={}, "
-                        "northing={}, easting={}, northern_hemisphere={}). {}",
-                        i,
-                        zone[i],
-                        northing[i],
-                        easting[i],
-                        northern_hemisphere[i],
-                        ex.what());
+                    error_message =
+                        fmt::format("ERROR[utm_to_latlon]: conversion failed at index {} (zone={}, "
+                                    "northing={}, easting={}, northern_hemisphere={}). {}",
+                                    i,
+                                    zone[i],
+                                    northing[i],
+                                    easting[i],
+                                    northern_hemisphere[i],
+                                    ex.what());
                 }
             }
         }
@@ -354,9 +355,8 @@ inline std::pair<T_container_double, T_container_double> utm_to_latlon(
     }
 
     if (has_error.load(std::memory_order_relaxed))
-        throw std::runtime_error(error_message.empty()
-                                     ? "ERROR[utm_to_latlon]: conversion failed."
-                                     : error_message);
+        throw std::runtime_error(error_message.empty() ? "ERROR[utm_to_latlon]: conversion failed."
+                                                       : error_message);
 
     return std::make_pair(lat, lon);
 }
@@ -472,9 +472,8 @@ inline std::tuple<T_container_double, T_container_double, int, bool> latlon_to_u
     }
 
     if (has_error.load(std::memory_order_relaxed))
-        throw std::runtime_error(error_message.empty()
-                                     ? "ERROR[latlon_to_utm]: conversion failed."
-                                     : error_message);
+        throw std::runtime_error(error_message.empty() ? "ERROR[latlon_to_utm]: conversion failed."
+                                                       : error_message);
 
     return std::make_tuple(northing, easting, zone, northern_hemisphere);
 }
@@ -744,6 +743,33 @@ T_return_container cumulative_latlon_distances_m(const T_container& geo_location
 
     return distances;
 }
+
+/**
+ * @brief Get the EPSG code for a given UTM/UPS zone and hemisphere.
+ *
+ * @param zone UTM Zone number
+ * @param northp 1 for norhtern hemisphere, 0 for southern hemisphere
+ * @return std::string
+ */
+std::string epsg_from_utmups(int zone, bool northp);
+
+/**
+ * @brief Get the EPSG code (UTMUPS) for a given latitude and longitude.
+ * This function determines the appropriate UTM/UPS zone and hemisphere for the given latitude and
+ * longitude, and returns the corresponding EPSG code.
+ *
+ * @param lat latitude in decimal degrees
+ * @param lon longitude in decimal degrees
+ * @return std::string
+ */
+std::string epsg_from_latlon(double latitude, double longitude);
+
+/**
+ * @brief Get the wgs84 epsg object
+ *
+ * @return std::string
+ */
+constexpr std::string epsg_wgs84();
 
 } // namespace navtools
 } // namespace navigation
