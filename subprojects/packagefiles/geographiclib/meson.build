@@ -57,11 +57,14 @@ geographiclib_library = library(
     geographiclib_sources,
     include_directories : geographiclib_include_directories,
     install: true,
-    override_options : ['unity=off', 'cpp_std=c++20'],
+    override_options : [
+        'unity=off', 
+        #'cpp_std=c++20
+        ],
 )
 
 geographiclib_dep = declare_dependency(
     link_with : geographiclib_library,
     include_directories : geographiclib_include_directories,
-    compile_args : ['-std=c++20'],
+    #compile_args : ['-std=c++20'],
 )
