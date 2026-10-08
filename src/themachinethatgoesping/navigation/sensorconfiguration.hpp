@@ -53,12 +53,25 @@ class SensorConfiguration
 
     // transducer_channel to target mapping
     // call register_transducer_channel to populate this mapping
+    // std::map<std::string, std::pair<std::string, std::optional<std::string>>>
+    //     _transducer_channel_id_to_trx; ///< Mapping from transducer channel to target reference,
+    //     and
+    //                                    ///< optionall subarray
+    // std::map<std::string, std::pair<std::string, std::optional<std::string>>>
+    //     _transducer_channel_id_to_tx; ///< Mapping from transducer channel to tx reference, and
+    //                                   ///< optionall subarray
+    // std::map<std::string, std::pair<std::string, std::optional<std::string>>>
+    //     _transducer_channel_id_to_rx; ///< Mapping from transducer channel to rx reference, and
+    //                                   ///< optionall subarray
     std::map<std::string, std::string>
-        _transducer_channel_id_to_trx; ///< Mapping from transducer channel to target
+        _transducer_channel_id_to_trx; ///< Mapping from transducer channel to target reference, and
+                                       ///< optionall subarray
     std::map<std::string, std::string>
-        _transducer_channel_id_to_tx; ///< Mapping from transducer channel to target
+        _transducer_channel_id_to_tx; ///< Mapping from transducer channel to tx reference, and
+                                      ///< optionall subarray
     std::map<std::string, std::string>
-        _transducer_channel_id_to_rx; ///< Mapping from transducer channel to target
+        _transducer_channel_id_to_rx; ///< Mapping from transducer channel to rx reference, and
+                                      ///< optionall subarray
 
     std::string _model_name; ///< echosounder model (e.g. "EM2040"); set by format readers
     std::string _transducer_configuration; ///< configuration string (e.g. "DualRx", "STC0"); set by
@@ -471,30 +484,6 @@ class SensorConfiguration
     void set_target_subarrays(const std::string&                                       target_id,
                               const std::map<std::string, datastructures::SensorPose>& subarrays);
 
-    /**
-     * @brief Attach a flat subarray-offset map to every registered target by its role, so a head
-     * only carries the offsets of the array(s) it actually contains.
-     *
-     * The transmit subarrays (all keys except "RX") are attached to transmit targets (id starts
-     * with "TX"), the receive phase center ("RX") to receive targets (id starts with "RX"), and a
-     * combined transmit/receive target (id starts with "TRX") receives both. Targets that match no
-     * role (e.g. "0") are left untouched. No-op if @p subarrays is empty.
-     *
-     * @param subarrays flat map<subarray_id, offset pose> as returned by get_model_subarray_offsets
-     */
-    void set_subarrays_by_role(const std::map<std::string, datastructures::SensorPose>& subarrays);
-
-    /**
-     * @brief Set the subarray offsets of a target from the hardcoded per-model preset.
-     *
-     * Looks the model up with get_model_subarray_offsets and stores the result on @p target_id.
-     * Does nothing if the model is unknown (get_model_subarray_offsets returns an empty map).
-     *
-     * @param target_id parent target
-     * @param model_name echosounder model (e.g. "EM2040", "EM2040P", "2042"); case-insensitive,
-     *        an optional leading "EM" is ignored
-     */
-    void set_target_subarrays_from_model(const std::string& target_id, std::string_view model_name);
 
     /// @brief true if the target has any registered subarray offsets.
     bool has_target_subarrays(const std::string& target_id) const;
@@ -536,18 +525,10 @@ class SensorConfiguration
      *
      * @param model_name echosounder model (case-insensitive, optional leading "EM" ignored)
      */
-    static std::map<std::string, datastructures::SensorPose> get_model_subarray_offsets(
-        std::string_view model_name);
+    static std::pair<std::map<std::string, datastructures::SensorPose>,
+                     std::map<std::string, datastructures::SensorPose>>
+    get_model_subarray_offsets(std::string_view model_name);
 
-    /**
-     * @brief A single hardcoded subarray offset for a model (convenience for building a manual
-     *        subarray_pose, e.g. for compute_target_pose debugging).
-     * @param model_name echosounder model
-     * @param subarray_id "0"/"1"/"2"/"RX"
-     * @return the offset pose (throws std::out_of_range if the model or subarray is unknown)
-     */
-    static datastructures::SensorPose get_model_subarray_offset(std::string_view   model_name,
-                                                                const std::string& subarray_id);
 
     // ----- system metadata -----
     /// @brief Set the echosounder model name (e.g. "EM2040", "EM710").

@@ -1,4 +1,4 @@
-//sourcehash: 4f0589f5624eca175d267635bd10686f4dd4a4e8f89e7d216bc4fea6648caf7e
+//sourcehash: 06a4cd3b95418f54fc4830afe3d751a9f148e64346d9f38a1da872dda7d12f42
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -320,21 +320,6 @@ Returns:
 )doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_model_name = R"doc(Echosounder model name, or empty string if not set.)doc";
-
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_model_subarray_offset =
-R"doc(A single hardcoded subarray offset for a model (convenience for
-building a manual subarray_pose, e.g. for compute_target_pose
-debugging).
-
-Args:
-    model_name: echosounder model
-    subarray_id: "0"/"1"/"2"/"RX"
-
-Returns:
-    the offset pose (throws std::out_of_range if the model or subarray
-    is unknown)
-
-)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_model_subarray_offsets =
 R"doc(Hardcoded transmit/receive subarray phase-center offsets for a known
@@ -781,44 +766,12 @@ rows, records as columns + explanation).
 
 )doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_subarrays_by_role =
-R"doc(Attach a flat subarray-offset map to every registered target by its
-role, so a head only carries the offsets of the array(s) it actually
-contains.
-
-The transmit subarrays (all keys except "RX") are attached to transmit
-targets (id starts with "TX"), the receive phase center ("RX") to
-receive targets (id starts with "RX"), and a combined transmit/receive
-target (id starts with "TRX") receives both. Targets that match no
-role (e.g. "0") are left untouched. No-op if ``subarrays`` is empty.
-
-Args:
-    subarrays: flat map<subarray_id, offset pose> as returned by
-               get_model_subarray_offsets
-
-)doc";
-
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_target_subarrays =
 R"doc(Replace all subarray offsets of a target with the given map.
 
 Args:
     target_id: parent target
     subarrays: map<subarray_id, offset pose in the target frame>
-
-)doc";
-
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_set_target_subarrays_from_model =
-R"doc(Set the subarray offsets of a target from the hardcoded per-model
-preset.
-
-Looks the model up with get_model_subarray_offsets and stores the
-result on ``target_id.`` Does nothing if the model is unknown
-(get_model_subarray_offsets returns an empty map).
-
-Args:
-    target_id: parent target
-    model_name: echosounder model (e.g. "EM2040", "EM2040P", "2042");
-                case-insensitive, an optional leading "EM" is ignored
 
 )doc";
 
@@ -881,11 +834,17 @@ Args:
 
 )doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_rx = R"doc(Mapping from transducer channel to target)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_rx =
+R"doc(Mapping from transducer channel to rx reference, and optionall
+subarray)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_trx = R"doc(Mapping from transducer channel to target)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_trx =
+R"doc(Mapping from transducer channel to target reference, and optionall
+subarray)doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_tx = R"doc(Mapping from transducer channel to target)doc";
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_tx =
+R"doc(Mapping from transducer channel to tx reference, and optionall
+subarray)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_configuration = R"doc(configuration string (e.g. "DualRx", "STC0"); set by format readers)doc";
 

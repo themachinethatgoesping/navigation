@@ -1,4 +1,4 @@
-//sourcehash: f4d8f10704bbbe4a1b39643af9d62758ce9bb3e2cb681a01624a1b996705b841
+//sourcehash: 44630100e85eaad251bdf66b2e3d769e7baa3ea73814f5188a45bfede192923b
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -41,13 +41,6 @@
 #endif
 
 
-static const char *mkd_doc_themachinethatgoesping_navigation_get_model_subarray_offset =
-R"doc(A single hardcoded subarray offset for a model (throws if unknown).
-Args:
-    model_name: echosounder model (case-insensitive, optional leading
-                "EM" ignored)
-    subarray_id: "0"/"1"/"2"/"RX")doc";
-
 static const char *mkd_doc_themachinethatgoesping_navigation_get_model_subarray_offsets =
 R"doc(Hardcoded transmit/receive subarray phase-center offsets for known
 echosounder models.
@@ -61,7 +54,9 @@ map for unknown models.
 
 Args:
     model_name: echosounder model (case-insensitive, optional leading
-                "EM" ignored))doc";
+                "EM" ignored)
+
+)doc";
 
 #if defined(__GNUG__)
 #pragma GCC diagnostic pop

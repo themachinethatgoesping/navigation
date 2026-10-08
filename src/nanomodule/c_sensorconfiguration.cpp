@@ -15,6 +15,7 @@
 #include <nanobind/stl/vector.h>
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/string_view.h>
+#include <nanobind/stl/pair.h>
 
 namespace nb = nanobind;
 using namespace themachinethatgoesping::navigation;
@@ -85,40 +86,33 @@ void init_c_sensorconfiguration(nb::module_& m)
              nb::arg("target_id"))
         .def("has_transducer_channel",
              &SensorConfiguration::has_transducer_channel,
-             //DOC_SensorConfiguration(has_transducer_channel),
-             "Check if a transducer channel is registered.",
+             DOC_SensorConfiguration(has_transducer_channel),
              nb::arg("channel_id"))
         .def("register_transducer_channel",
              &SensorConfiguration::register_transducer_channel,
-             //DOC_SensorConfiguration(register_transducer_channel),
-             "Register channel -> transmit/receive/transmit-receive transducer IDs.",
+             DOC_SensorConfiguration(register_transducer_channel),
              nb::arg("channel_id"),
              nb::arg("tx_id"),
              nb::arg("rx_id"),
              nb::arg("trx_id"))
         .def("unregister_transducer_channel",
              &SensorConfiguration::unregister_transducer_channel,
-             //DOC_SensorConfiguration(unregister_transducer_channel),
-             "Unregister one transducer channel.",
+             DOC_SensorConfiguration(unregister_transducer_channel),
              nb::arg("channel_id"))
         .def("unregister_all_transducer_channels",
              &SensorConfiguration::unregister_all_transducer_channels,
-             //DOC_SensorConfiguration(unregister_all_transducer_channels),
-             "Unregister all transducer channels.")
+             DOC_SensorConfiguration(unregister_all_transducer_channels))
         .def("get_transducer_transmit_id",
              &SensorConfiguration::get_transducer_transmit_id,
-             "Get the transmit transducer ID registered for a channel.",
-             //DOC_SensorConfiguration(get_transducer_transmit_id),
+             DOC_SensorConfiguration(get_transducer_transmit_id),
              nb::arg("channel_id"))
         .def("get_transducer_receive_id",
              &SensorConfiguration::get_transducer_receive_id,
-             "Get the receive transducer ID registered for a channel.",
-             //DOC_SensorConfiguration(get_transducer_receive_id),
+             DOC_SensorConfiguration(get_transducer_receive_id),
              nb::arg("channel_id"))
         .def("get_transducer_transmit_receive_id",
              &SensorConfiguration::get_transducer_transmit_receive_id,
-             "Get the transmit-receive transducer ID registered for a channel.",
-             //DOC_SensorConfiguration(get_transducer_transmit_receive_id),
+             DOC_SensorConfiguration(get_transducer_transmit_receive_id),
              nb::arg("channel_id"))
         .def("add_target",
              nb::overload_cast<const std::string&, float, float, float, float, float, float>(
@@ -177,11 +171,6 @@ void init_c_sensorconfiguration(nb::module_& m)
              DOC_SensorConfiguration(set_target_subarrays),
              nb::arg("target_id"),
              nb::arg("subarrays"))
-        .def("set_target_subarrays_from_model",
-             &SensorConfiguration::set_target_subarrays_from_model,
-             DOC_SensorConfiguration(set_target_subarrays_from_model),
-             nb::arg("target_id"),
-             nb::arg("model_name"))
         .def("has_target_subarrays",
              &SensorConfiguration::has_target_subarrays,
              DOC_SensorConfiguration(has_target_subarrays),
@@ -212,11 +201,6 @@ void init_c_sensorconfiguration(nb::module_& m)
                     &SensorConfiguration::get_model_subarray_offsets,
                     DOC_SensorConfiguration(get_model_subarray_offsets),
                     nb::arg("model_name"))
-        .def_static("get_model_subarray_offset",
-                    &SensorConfiguration::get_model_subarray_offset,
-                    DOC_SensorConfiguration(get_model_subarray_offset),
-                    nb::arg("model_name"),
-                    nb::arg("subarray_id"))
         .def("set_model_name",
              &SensorConfiguration::set_model_name,
              DOC_SensorConfiguration(set_model_name),
