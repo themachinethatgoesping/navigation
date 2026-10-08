@@ -259,13 +259,19 @@ bool SensorConfiguration::has_transducer_channel(const std::string& channel_id) 
 
 void SensorConfiguration::register_transducer_channel(const std::string& channel_id,
                                                       const std::string& tx_id,
+                                                      const std::string& tx_default_sub,
                                                       const std::string& rx_id,
-                                                      const std::string& trx_id)
+                                                      const std::string& rx_default_sub,
+                                                      const std::string& trx_id,
+                                                      const std::string& trx_default_sub)
 {
     invalidate_hash_cache();
-    _transducer_channel_id_to_tx[channel_id]  = tx_id;
-    _transducer_channel_id_to_rx[channel_id]  = rx_id;
-    _transducer_channel_id_to_trx[channel_id] = trx_id;
+    _transducer_channel_id_to_tx[channel_id].first   = tx_id;
+    _transducer_channel_id_to_tx[channel_id].second  = tx_default_sub;
+    _transducer_channel_id_to_rx[channel_id].first   = rx_id;
+    _transducer_channel_id_to_rx[channel_id].second  = rx_default_sub;
+    _transducer_channel_id_to_trx[channel_id].first  = trx_id;
+    _transducer_channel_id_to_trx[channel_id].second = trx_default_sub;
 }
 
 void SensorConfiguration::unregister_transducer_channel(const std::string& channel_id)
@@ -284,7 +290,7 @@ void SensorConfiguration::unregister_all_transducer_channels()
     _transducer_channel_id_to_trx.clear();
 }
 
-const std::string& SensorConfiguration::get_transducer_transmit_id(
+const std::pair<std::string, std::string>& SensorConfiguration::get_transducer_transmit_id(
     const std::string& channel_id) const
 {
     auto it = _transducer_channel_id_to_tx.find(channel_id);
@@ -296,7 +302,7 @@ const std::string& SensorConfiguration::get_transducer_transmit_id(
     return it->second;
 }
 
-const std::string& SensorConfiguration::get_transducer_receive_id(
+const std::pair<std::string, std::string>& SensorConfiguration::get_transducer_receive_id(
     const std::string& channel_id) const
 {
     auto it = _transducer_channel_id_to_rx.find(channel_id);
@@ -308,7 +314,7 @@ const std::string& SensorConfiguration::get_transducer_receive_id(
     return it->second;
 }
 
-const std::string& SensorConfiguration::get_transducer_transmit_receive_id(
+const std::pair<std::string, std::string>& SensorConfiguration::get_transducer_transmit_receive_id(
     const std::string& channel_id) const
 {
     auto it = _transducer_channel_id_to_trx.find(channel_id);

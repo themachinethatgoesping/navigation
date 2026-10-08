@@ -98,35 +98,38 @@ TEST_CASE("sensorconfiguration transducer channel registration should work", TES
     scs.add_target("RX1", datastructures::SensorPose("RX1", 0.f, 0.f, 0.f, 0.f, 0.f, 0.f));
     scs.add_target("TRX1", datastructures::SensorPose("TRX1", 0.f, 0.f, 0.f, 0.f, 0.f, 0.f));
 
+    using strpair = std::pair<std::string, std::string>;
+
     REQUIRE_FALSE(scs.has_transducer_channel("ch1"));
     REQUIRE_THROWS_AS(scs.get_transducer_transmit_id("ch1"), std::out_of_range);
 
-    scs.register_transducer_channel("ch1", "TX1", "RX1", "TRX1");
+    // each transducer maps to a (target_id, default_subarray) pair
+    scs.register_transducer_channel("ch1", "TX1", "txsub1", "RX1", "rxsub1", "TRX1", "trxsub1");
     REQUIRE(scs.has_transducer_channel("ch1"));
-    REQUIRE(scs.get_transducer_transmit_id("ch1") == "TX1");
-    REQUIRE(scs.get_transducer_receive_id("ch1") == "RX1");
-    REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == "TRX1");
+    REQUIRE(scs.get_transducer_transmit_id("ch1") == strpair{ "TX1", "txsub1" });
+    REQUIRE(scs.get_transducer_receive_id("ch1") == strpair{ "RX1", "rxsub1" });
+    REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == strpair{ "TRX1", "trxsub1" });
 
     // re-register updates an existing channel
-    scs.register_transducer_channel("ch1", "TX2", "RX2", "TRX2");
-    REQUIRE(scs.get_transducer_transmit_id("ch1") == "TX2");
-    REQUIRE(scs.get_transducer_receive_id("ch1") == "RX2");
-    REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == "TRX2");
+    scs.register_transducer_channel("ch1", "TX2", "txsub2", "RX2", "rxsub2", "TRX2", "trxsub2");
+    REQUIRE(scs.get_transducer_transmit_id("ch1") == strpair{ "TX2", "txsub2" });
+    REQUIRE(scs.get_transducer_receive_id("ch1") == strpair{ "RX2", "rxsub2" });
+    REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == strpair{ "TRX2", "trxsub2" });
 
     // mapping participates in equality + binary roundtrip
     auto scs2 = SensorConfiguration::from_binary(scs.to_binary());
     REQUIRE(scs2 == scs);
     REQUIRE(scs2.has_transducer_channel("ch1"));
-    REQUIRE(scs2.get_transducer_transmit_id("ch1") == "TX2");
-    REQUIRE(scs2.get_transducer_receive_id("ch1") == "RX2");
-    REQUIRE(scs2.get_transducer_transmit_receive_id("ch1") == "TRX2");
+    REQUIRE(scs2.get_transducer_transmit_id("ch1") == strpair{ "TX2", "txsub2" });
+    REQUIRE(scs2.get_transducer_receive_id("ch1") == strpair{ "RX2", "rxsub2" });
+    REQUIRE(scs2.get_transducer_transmit_receive_id("ch1") == strpair{ "TRX2", "trxsub2" });
 
     scs.unregister_transducer_channel("ch1");
     REQUIRE_FALSE(scs.has_transducer_channel("ch1"));
     REQUIRE_THROWS_AS(scs.get_transducer_receive_id("ch1"), std::out_of_range);
 
-    scs.register_transducer_channel("chA", "TXA", "RXA", "TRXA");
-    scs.register_transducer_channel("chB", "TXB", "RXB", "TRXB");
+    scs.register_transducer_channel("chA", "TXA", "txsubA", "RXA", "rxsubA", "TRXA", "trxsubA");
+    scs.register_transducer_channel("chB", "TXB", "txsubB", "RXB", "rxsubB", "TRXB", "trxsubB");
     scs.unregister_all_transducer_channels();
     REQUIRE_FALSE(scs.has_transducer_channel("chA"));
     REQUIRE_FALSE(scs.has_transducer_channel("chB"));

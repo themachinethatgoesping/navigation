@@ -1,4 +1,4 @@
-//sourcehash: 06a4cd3b95418f54fc4830afe3d751a9f148e64346d9f38a1da872dda7d12f42
+//sourcehash: 7c785b83d44c0c60d35db68eb67a017f886559a5bbdf8c7a603d4b9ed71dc62e
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -465,36 +465,36 @@ Returns:
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_configuration = R"doc(Transducer configuration string, or empty string if not set.)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_receive_id =
-R"doc(Get the receive transducer ID registered for a transducer channel.
+R"doc(Get the receive transducer registered for a transducer channel.
 
 Args:
     channel_id: The ID of the transducer channel.
 
 Returns:
-    The receive transducer ID.
+    The receive transducer as a (target_id, default_subarray) pair.
 
 )doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_transmit_id =
-R"doc(Get the transmit transducer ID registered for a transducer channel.
+R"doc(Get the transmit transducer registered for a transducer channel.
 
 Args:
     channel_id: The ID of the transducer channel.
 
 Returns:
-    The transmit transducer ID.
+    The transmit transducer as a (target_id, default_subarray) pair.
 
 )doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_transmit_receive_id =
-R"doc(Get the combined transmit-receive transducer ID for a transducer
-channel.
+R"doc(Get the combined transmit-receive transducer for a transducer channel.
 
 Args:
     channel_id: The ID of the transducer channel.
 
 Returns:
-    The combined transmit-receive transducer ID.
+    The combined transmit-receive transducer as a (target_id,
+    default_subarray) pair.
 
 )doc";
 
@@ -644,13 +644,19 @@ set_printer_style / print(optionA=...).)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_register_transducer_channel =
 R"doc(Register a transducer channel with its corresponding transducer IDs
-(tx, rx, trx).
+(tx, rx, trx) and their default subarrays.
 
 Args:
     channel_id: The ID of the transducer channel.
     tx_id: The ID of the transmit transducer.
+    tx_default_sub: The default subarray of the transmit transducer
+                    (empty for none).
     rx_id: The ID of the receive transducer.
+    rx_default_sub: The default subarray of the receive transducer
+                    (empty for none).
     trx_id: The ID of the combined transmit-receive transducer.
+    trx_default_sub: The default subarray of the transmit-receive
+                     transducer (empty for none).
 
 )doc";
 
@@ -839,7 +845,7 @@ R"doc(Mapping from transducer channel to rx reference, and optionall
 subarray)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_trx =
-R"doc(Mapping from transducer channel to target reference, and optionall
+R"doc(Mapping from transducer channel to target reference, optionall
 subarray)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_tx =

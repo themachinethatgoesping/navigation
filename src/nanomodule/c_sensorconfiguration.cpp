@@ -93,8 +93,11 @@ void init_c_sensorconfiguration(nb::module_& m)
              DOC_SensorConfiguration(register_transducer_channel),
              nb::arg("channel_id"),
              nb::arg("tx_id"),
+             nb::arg("tx_default_sub"),
              nb::arg("rx_id"),
-             nb::arg("trx_id"))
+             nb::arg("rx_default_sub"),
+             nb::arg("trx_id"),
+             nb::arg("trx_default_sub"))
         .def("unregister_transducer_channel",
              &SensorConfiguration::unregister_transducer_channel,
              DOC_SensorConfiguration(unregister_transducer_channel),

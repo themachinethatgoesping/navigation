@@ -53,23 +53,13 @@ class SensorConfiguration
 
     // transducer_channel to target mapping
     // call register_transducer_channel to populate this mapping
-    // std::map<std::string, std::pair<std::string, std::optional<std::string>>>
-    //     _transducer_channel_id_to_trx; ///< Mapping from transducer channel to target reference,
-    //     and
-    //                                    ///< optionall subarray
-    // std::map<std::string, std::pair<std::string, std::optional<std::string>>>
-    //     _transducer_channel_id_to_tx; ///< Mapping from transducer channel to tx reference, and
-    //                                   ///< optionall subarray
-    // std::map<std::string, std::pair<std::string, std::optional<std::string>>>
-    //     _transducer_channel_id_to_rx; ///< Mapping from transducer channel to rx reference, and
-    //                                   ///< optionall subarray
-    std::map<std::string, std::string>
-        _transducer_channel_id_to_trx; ///< Mapping from transducer channel to target reference, and
+    std::map<std::string, std::pair<std::string, std::string>>
+        _transducer_channel_id_to_trx; ///< Mapping from transducer channel to target reference,
                                        ///< optionall subarray
-    std::map<std::string, std::string>
+    std::map<std::string, std::pair<std::string, std::string>>
         _transducer_channel_id_to_tx; ///< Mapping from transducer channel to tx reference, and
                                       ///< optionall subarray
-    std::map<std::string, std::string>
+    std::map<std::string, std::pair<std::string, std::string>>
         _transducer_channel_id_to_rx; ///< Mapping from transducer channel to rx reference, and
                                       ///< optionall subarray
 
@@ -315,17 +305,25 @@ class SensorConfiguration
     bool has_transducer_channel(const std::string& channel_id) const;
 
     /**
-     * @brief Register a transducer channel with its corresponding transducer IDs (tx, rx, trx).
+     * @brief Register a transducer channel with its corresponding transducer IDs (tx, rx, trx) and
+     * their default subarrays.
      *
      * @param channel_id The ID of the transducer channel.
      * @param tx_id The ID of the transmit transducer.
+     * @param tx_default_sub The default subarray of the transmit transducer (empty for none).
      * @param rx_id The ID of the receive transducer.
+     * @param rx_default_sub The default subarray of the receive transducer (empty for none).
      * @param trx_id The ID of the combined transmit-receive transducer.
+     * @param trx_default_sub The default subarray of the transmit-receive transducer (empty for
+     * none).
      */
     void register_transducer_channel(const std::string& channel_id,
                                      const std::string& tx_id,
+                                     const std::string& tx_default_sub,
                                      const std::string& rx_id,
-                                     const std::string& trx_id);
+                                     const std::string& rx_default_sub,
+                                     const std::string& trx_id,
+                                     const std::string& trx_default_sub);
 
     /**
      * @brief Unregister a transducer channel with the specified ID.
@@ -341,28 +339,31 @@ class SensorConfiguration
     void unregister_all_transducer_channels();
 
     /**
-     * @brief Get the transmit transducer ID registered for a transducer channel.
+     * @brief Get the transmit transducer registered for a transducer channel.
      *
      * @param channel_id The ID of the transducer channel.
-     * @return The transmit transducer ID.
+     * @return The transmit transducer as a (target_id, default_subarray) pair.
      */
-    const std::string& get_transducer_transmit_id(const std::string& channel_id) const;
+    const std::pair<std::string, std::string>& get_transducer_transmit_id(
+        const std::string& channel_id) const;
 
     /**
-     * @brief Get the receive transducer ID registered for a transducer channel.
+     * @brief Get the receive transducer registered for a transducer channel.
      *
      * @param channel_id The ID of the transducer channel.
-     * @return The receive transducer ID.
+     * @return The receive transducer as a (target_id, default_subarray) pair.
      */
-    const std::string& get_transducer_receive_id(const std::string& channel_id) const;
+    const std::pair<std::string, std::string>& get_transducer_receive_id(
+        const std::string& channel_id) const;
 
     /**
-     * @brief Get the combined transmit-receive transducer ID for a transducer channel.
+     * @brief Get the combined transmit-receive transducer for a transducer channel.
      *
      * @param channel_id The ID of the transducer channel.
-     * @return The combined transmit-receive transducer ID.
+     * @return The combined transmit-receive transducer as a (target_id, default_subarray) pair.
      */
-    const std::string& get_transducer_transmit_receive_id(const std::string& channel_id) const;
+    const std::pair<std::string, std::string>& get_transducer_transmit_receive_id(
+        const std::string& channel_id) const;
 
     // ----- get/set target offsets -----
 
@@ -484,7 +485,6 @@ class SensorConfiguration
     void set_target_subarrays(const std::string&                                       target_id,
                               const std::map<std::string, datastructures::SensorPose>& subarrays);
 
-
     /// @brief true if the target has any registered subarray offsets.
     bool has_target_subarrays(const std::string& target_id) const;
 
@@ -528,7 +528,6 @@ class SensorConfiguration
     static std::pair<std::map<std::string, datastructures::SensorPose>,
                      std::map<std::string, datastructures::SensorPose>>
     get_model_subarray_offsets(std::string_view model_name);
-
 
     // ----- system metadata -----
     /// @brief Set the echosounder model name (e.g. "EM2040", "EM710").
@@ -772,9 +771,12 @@ class SensorConfiguration
         for (const auto& [channel_id, trx_id] : _transducer_channel_id_to_trx)
         {
             container_to_stream(os, channel_id);
-            container_to_stream(os, _transducer_channel_id_to_tx.at(channel_id));
-            container_to_stream(os, _transducer_channel_id_to_rx.at(channel_id));
-            container_to_stream(os, trx_id);
+            container_to_stream(os, _transducer_channel_id_to_tx.at(channel_id).first);
+            container_to_stream(os, _transducer_channel_id_to_tx.at(channel_id).second);
+            container_to_stream(os, _transducer_channel_id_to_rx.at(channel_id).first);
+            container_to_stream(os, _transducer_channel_id_to_rx.at(channel_id).second);
+            container_to_stream(os, trx_id.first);
+            container_to_stream(os, trx_id.second);
         }
     }
 
@@ -832,10 +834,18 @@ class SensorConfiguration
         is.read(reinterpret_cast<char*>(&num_transducer_channels), sizeof(num_transducer_channels));
         while (num_transducer_channels--)
         {
-            std::string channel_id                       = container_from_stream<std::string>(is);
-            obj._transducer_channel_id_to_tx[channel_id] = container_from_stream<std::string>(is);
-            obj._transducer_channel_id_to_rx[channel_id] = container_from_stream<std::string>(is);
-            obj._transducer_channel_id_to_trx[std::move(channel_id)] =
+            const std::string channel_id = container_from_stream<std::string>(is);
+            obj._transducer_channel_id_to_tx[channel_id].first =
+                container_from_stream<std::string>(is);
+            obj._transducer_channel_id_to_tx[channel_id].second =
+                container_from_stream<std::string>(is);
+            obj._transducer_channel_id_to_rx[channel_id].first =
+                container_from_stream<std::string>(is);
+            obj._transducer_channel_id_to_rx[channel_id].second =
+                container_from_stream<std::string>(is);
+            obj._transducer_channel_id_to_trx[channel_id].first =
+                container_from_stream<std::string>(is);
+            obj._transducer_channel_id_to_trx[channel_id].second =
                 container_from_stream<std::string>(is);
         }
 
@@ -899,14 +909,18 @@ class SensorConfiguration
             "SensorConfiguration", float_precision, superscript_exponents);
 
         // Registered transducer channels: the transmit / receive / transmit-receive target ids
-        // each channel_id maps to. Query (keyed by channel_id) via get_transducer_transmit_id,
-        // get_transducer_receive_id and get_transducer_transmit_receive_id.
+        // (and their default subarray, shown as "target (subarray)") each channel_id maps to. Query
+        // (keyed by channel_id) via get_transducer_transmit_id, get_transducer_receive_id and
+        // get_transducer_transmit_receive_id.
+        auto fmt_ref = [](const std::pair<std::string, std::string>& ref) {
+            return ref.second.empty() ? ref.first : fmt::format("{} ({})", ref.first, ref.second);
+        };
         std::vector<std::vector<std::string>> transducer_channels;
-        for (const auto& [channel_id, trx_id] : _transducer_channel_id_to_trx)
+        for (const auto& [channel_id, trx_ref] : _transducer_channel_id_to_trx)
             transducer_channels.push_back({ channel_id,
-                                            _transducer_channel_id_to_tx.at(channel_id),
-                                            _transducer_channel_id_to_rx.at(channel_id),
-                                            trx_id });
+                                            fmt_ref(_transducer_channel_id_to_tx.at(channel_id)),
+                                            fmt_ref(_transducer_channel_id_to_rx.at(channel_id)),
+                                            fmt_ref(trx_ref) });
         if (!transducer_channels.empty())
             printer.register_table(
                 "Registered transducers (get_transducer_[transmit|receive|transmit_receive]_id)",
