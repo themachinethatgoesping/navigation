@@ -75,3 +75,39 @@ class TestNavigationSensorConfiguration:
 
         scs.remove_target("mbes")
         assert scs.get_target_ids() == ["0"]
+
+    def test_sensorconfiguration_transducer_channel_registration(self):
+        """test transducer channel registration helpers"""
+        scs = nav.SensorConfiguration()
+        scs.add_target("TX1", nav.datastructures.SensorPose("TX1", 0, 0, 0, 0, 0, 0))
+        scs.add_target("RX1", nav.datastructures.SensorPose("RX1", 0, 0, 0, 0, 0, 0))
+        scs.add_target("TRX1", nav.datastructures.SensorPose("TRX1", 0, 0, 0, 0, 0, 0))
+
+        assert not scs.has_transducer_channel("ch1")
+
+        scs.register_transducer_channel("ch1", "TX1", "RX1", "TRX1")
+        assert scs.has_transducer_channel("ch1")
+        assert scs.get_transducer_transmit_id("ch1") == "TX1"
+        assert scs.get_transducer_receive_id("ch1") == "RX1"
+        assert scs.get_transducer_transmit_receive_id("ch1") == "TRX1"
+
+        scs.register_transducer_channel("ch1", "TX2", "RX2", "TRX2")
+        assert scs.get_transducer_transmit_id("ch1") == "TX2"
+        assert scs.get_transducer_receive_id("ch1") == "RX2"
+        assert scs.get_transducer_transmit_receive_id("ch1") == "TRX2"
+
+        scs2 = nav.SensorConfiguration.from_binary(scs.to_binary())
+        assert scs2 == scs
+        assert scs2.has_transducer_channel("ch1")
+        assert scs2.get_transducer_transmit_id("ch1") == "TX2"
+        assert scs2.get_transducer_receive_id("ch1") == "RX2"
+        assert scs2.get_transducer_transmit_receive_id("ch1") == "TRX2"
+
+        scs.unregister_transducer_channel("ch1")
+        assert not scs.has_transducer_channel("ch1")
+
+        scs.register_transducer_channel("chA", "TXA", "RXA", "TRXA")
+        scs.register_transducer_channel("chB", "TXB", "RXB", "TRXB")
+        scs.unregister_all_transducer_channels()
+        assert not scs.has_transducer_channel("chA")
+        assert not scs.has_transducer_channel("chB")

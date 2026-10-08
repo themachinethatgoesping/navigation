@@ -247,6 +247,77 @@ void SensorConfiguration::ensure_subarray_poses() const
     _subarray_poses_cached = true;
 }
 
+// ----- transducer channel functions -----
+
+bool SensorConfiguration::has_transducer_channel(const std::string& channel_id) const
+{
+    return _transducer_channel_id_to_trx.contains(channel_id);
+}
+
+void SensorConfiguration::register_transducer_channel(const std::string& channel_id,
+                                                      const std::string& tx_id,
+                                                      const std::string& rx_id,
+                                                      const std::string& trx_id)
+{
+    invalidate_hash_cache();
+    _transducer_channel_id_to_tx[channel_id]  = tx_id;
+    _transducer_channel_id_to_rx[channel_id]  = rx_id;
+    _transducer_channel_id_to_trx[channel_id] = trx_id;
+}
+
+void SensorConfiguration::unregister_transducer_channel(const std::string& channel_id)
+{
+    invalidate_hash_cache();
+    _transducer_channel_id_to_tx.erase(channel_id);
+    _transducer_channel_id_to_rx.erase(channel_id);
+    _transducer_channel_id_to_trx.erase(channel_id);
+}
+
+void SensorConfiguration::unregister_all_transducer_channels()
+{
+    invalidate_hash_cache();
+    _transducer_channel_id_to_tx.clear();
+    _transducer_channel_id_to_rx.clear();
+    _transducer_channel_id_to_trx.clear();
+}
+
+const std::string& SensorConfiguration::get_transducer_transmit_id(
+    const std::string& channel_id) const
+{
+    auto it = _transducer_channel_id_to_tx.find(channel_id);
+    if (it == _transducer_channel_id_to_tx.end())
+        throw std::out_of_range(
+            fmt::format("ERROR[SensorConfiguration::get_transducer_transmit_id]: no transducer "
+                        "channel '{}' is registered",
+                        channel_id));
+    return it->second;
+}
+
+const std::string& SensorConfiguration::get_transducer_receive_id(
+    const std::string& channel_id) const
+{
+    auto it = _transducer_channel_id_to_rx.find(channel_id);
+    if (it == _transducer_channel_id_to_rx.end())
+        throw std::out_of_range(
+            fmt::format("ERROR[SensorConfiguration::get_transducer_receive_id]: no transducer "
+                        "channel '{}' is registered",
+                        channel_id));
+    return it->second;
+}
+
+const std::string& SensorConfiguration::get_transducer_transmit_receive_id(
+    const std::string& channel_id) const
+{
+    auto it = _transducer_channel_id_to_trx.find(channel_id);
+    if (it == _transducer_channel_id_to_trx.end())
+        throw std::out_of_range(fmt::format(
+            "ERROR[SensorConfiguration::get_transducer_transmit_receive_id]: no transducer "
+            "channel '{}' is registered",
+            channel_id));
+    return it->second;
+}
+
+
 datastructures::SensorPose SensorConfiguration::get_target(
     const std::string&                               target_id,
     const std::string&                               subarray_id,

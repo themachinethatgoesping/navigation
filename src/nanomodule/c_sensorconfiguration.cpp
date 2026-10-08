@@ -83,6 +83,43 @@ void init_c_sensorconfiguration(nb::module_& m)
              &SensorConfiguration::has_target,
              DOC_SensorConfiguration(has_target),
              nb::arg("target_id"))
+        .def("has_transducer_channel",
+             &SensorConfiguration::has_transducer_channel,
+             //DOC_SensorConfiguration(has_transducer_channel),
+             "Check if a transducer channel is registered.",
+             nb::arg("channel_id"))
+        .def("register_transducer_channel",
+             &SensorConfiguration::register_transducer_channel,
+             //DOC_SensorConfiguration(register_transducer_channel),
+             "Register channel -> transmit/receive/transmit-receive transducer IDs.",
+             nb::arg("channel_id"),
+             nb::arg("tx_id"),
+             nb::arg("rx_id"),
+             nb::arg("trx_id"))
+        .def("unregister_transducer_channel",
+             &SensorConfiguration::unregister_transducer_channel,
+             //DOC_SensorConfiguration(unregister_transducer_channel),
+             "Unregister one transducer channel.",
+             nb::arg("channel_id"))
+        .def("unregister_all_transducer_channels",
+             &SensorConfiguration::unregister_all_transducer_channels,
+             //DOC_SensorConfiguration(unregister_all_transducer_channels),
+             "Unregister all transducer channels.")
+        .def("get_transducer_transmit_id",
+             &SensorConfiguration::get_transducer_transmit_id,
+             "Get the transmit transducer ID registered for a channel.",
+             //DOC_SensorConfiguration(get_transducer_transmit_id),
+             nb::arg("channel_id"))
+        .def("get_transducer_receive_id",
+             &SensorConfiguration::get_transducer_receive_id,
+             "Get the receive transducer ID registered for a channel.",
+             //DOC_SensorConfiguration(get_transducer_receive_id),
+             nb::arg("channel_id"))
+        .def("get_transducer_transmit_receive_id",
+             &SensorConfiguration::get_transducer_transmit_receive_id,
+             "Get the transmit-receive transducer ID registered for a channel.",
+             //DOC_SensorConfiguration(get_transducer_transmit_receive_id),
+             nb::arg("channel_id"))
         .def("add_target",
              nb::overload_cast<const std::string&, float, float, float, float, float, float>(
                  &SensorConfiguration::add_target),

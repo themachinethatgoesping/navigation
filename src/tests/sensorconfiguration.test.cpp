@@ -91,6 +91,47 @@ TEST_CASE("sensorconfiguration compute_target_pose should match its definition",
     CHECK(pose.z == Catch::Approx(scs.compute_target_position("mbes", sd).z));
 }
 
+TEST_CASE("sensorconfiguration transducer channel registration should work", TESTTAG)
+{
+    SensorConfiguration scs;
+    scs.add_target("TX1", datastructures::SensorPose("TX1", 0.f, 0.f, 0.f, 0.f, 0.f, 0.f));
+    scs.add_target("RX1", datastructures::SensorPose("RX1", 0.f, 0.f, 0.f, 0.f, 0.f, 0.f));
+    scs.add_target("TRX1", datastructures::SensorPose("TRX1", 0.f, 0.f, 0.f, 0.f, 0.f, 0.f));
+
+    REQUIRE_FALSE(scs.has_transducer_channel("ch1"));
+    REQUIRE_THROWS_AS(scs.get_transducer_transmit_id("ch1"), std::out_of_range);
+
+    scs.register_transducer_channel("ch1", "TX1", "RX1", "TRX1");
+    REQUIRE(scs.has_transducer_channel("ch1"));
+    REQUIRE(scs.get_transducer_transmit_id("ch1") == "TX1");
+    REQUIRE(scs.get_transducer_receive_id("ch1") == "RX1");
+    REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == "TRX1");
+
+    // re-register updates an existing channel
+    scs.register_transducer_channel("ch1", "TX2", "RX2", "TRX2");
+    REQUIRE(scs.get_transducer_transmit_id("ch1") == "TX2");
+    REQUIRE(scs.get_transducer_receive_id("ch1") == "RX2");
+    REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == "TRX2");
+
+    // mapping participates in equality + binary roundtrip
+    auto scs2 = SensorConfiguration::from_binary(scs.to_binary());
+    REQUIRE(scs2 == scs);
+    REQUIRE(scs2.has_transducer_channel("ch1"));
+    REQUIRE(scs2.get_transducer_transmit_id("ch1") == "TX2");
+    REQUIRE(scs2.get_transducer_receive_id("ch1") == "RX2");
+    REQUIRE(scs2.get_transducer_transmit_receive_id("ch1") == "TRX2");
+
+    scs.unregister_transducer_channel("ch1");
+    REQUIRE_FALSE(scs.has_transducer_channel("ch1"));
+    REQUIRE_THROWS_AS(scs.get_transducer_receive_id("ch1"), std::out_of_range);
+
+    scs.register_transducer_channel("chA", "TXA", "RXA", "TRXA");
+    scs.register_transducer_channel("chB", "TXB", "RXB", "TRXB");
+    scs.unregister_all_transducer_channels();
+    REQUIRE_FALSE(scs.has_transducer_channel("chA"));
+    REQUIRE_FALSE(scs.has_transducer_channel("chB"));
+}
+
 TEST_CASE("sensorconfiguration compute_position_system_offset should match its definition", TESTTAG)
 {
     using themachinethatgoesping::tools::rotationfunctions::Rotation;
