@@ -38,37 +38,78 @@ void init_c_sensorconfiguration(nb::module_& m)
              DOC_SensorConfiguration(can_merge_targets_with),
              nb::arg("other"))
         .def("compute_target_position",
-             nb::overload_cast<const std::string&, const datastructures::SensordataLatLon&>(
+             nb::overload_cast<std::string_view, const datastructures::SensordataLatLon&>(
                  &SensorConfiguration::compute_target_position, nb::const_),
              DOC_SensorConfiguration(compute_target_position),
              nb::arg("target_id"),
              nb::arg("sensor_data"))
         .def("compute_target_position",
-             nb::overload_cast<const std::string&, const datastructures::SensordataUTM&>(
+             nb::overload_cast<std::string_view, const datastructures::SensordataUTM&>(
                  &SensorConfiguration::compute_target_position, nb::const_),
              DOC_SensorConfiguration(compute_target_position_2),
              nb::arg("target_id"),
              nb::arg("sensor_data"))
         .def("compute_target_position",
-             nb::overload_cast<const std::string&, const datastructures::SensordataLocal&>(
+             nb::overload_cast<std::string_view, const datastructures::SensordataLocal&>(
                  &SensorConfiguration::compute_target_position, nb::const_),
              DOC_SensorConfiguration(compute_target_position_3),
              nb::arg("target_id"),
              nb::arg("sensor_data"))
         .def("compute_target_position",
-             nb::overload_cast<const std::string&, const datastructures::Sensordata&>(
+             nb::overload_cast<std::string_view, const datastructures::Sensordata&>(
                  &SensorConfiguration::compute_target_position, nb::const_),
              DOC_SensorConfiguration(compute_target_position_4),
              nb::arg("target_id"),
              nb::arg("sensor_data"))
+        .def("compute_target_position",
+             nb::overload_cast<const datastructures::SensorPose&,
+                               const datastructures::SensordataLatLon&>(
+                 &SensorConfiguration::compute_target_position, nb::const_),
+             DOC_SensorConfiguration(compute_target_position_5),
+             nb::arg("target"),
+             nb::arg("sensor_data"))
+        .def("compute_target_position",
+             nb::overload_cast<const datastructures::SensorPose&,
+                               const datastructures::SensordataUTM&>(
+                 &SensorConfiguration::compute_target_position, nb::const_),
+             DOC_SensorConfiguration(compute_target_position_6),
+             nb::arg("target"),
+             nb::arg("sensor_data"))
+        .def("compute_target_position",
+             nb::overload_cast<const datastructures::SensorPose&,
+                               const datastructures::SensordataLocal&>(
+                 &SensorConfiguration::compute_target_position, nb::const_),
+             DOC_SensorConfiguration(compute_target_position_7),
+             nb::arg("target"),
+             nb::arg("sensor_data"))
+        .def("compute_target_position",
+             nb::overload_cast<const datastructures::SensorPose&,
+                               const datastructures::Sensordata&>(
+                 &SensorConfiguration::compute_target_position, nb::const_),
+             DOC_SensorConfiguration(compute_target_position_8),
+             nb::arg("target"),
+             nb::arg("sensor_data"))
         .def("compute_target_pose",
-             &SensorConfiguration::compute_target_pose,
+             nb::overload_cast<std::string_view,
+                               const datastructures::Sensordata&,
+                               float,
+                               std::string_view,
+                               const std::optional<datastructures::SensorPose>&>(
+                 &SensorConfiguration::compute_target_pose, nb::const_),
              DOC_SensorConfiguration(compute_target_pose),
              nb::arg("target_id"),
              nb::arg("sensor_data"),
              nb::arg("reference_heading_in_degrees"),
              nb::arg("subarray_id")   = "",
              nb::arg("subarray_pose") = std::optional<datastructures::SensorPose>())
+        .def("compute_target_pose",
+             nb::overload_cast<const datastructures::SensorPose&,
+                               const datastructures::Sensordata&,
+                               float>(&SensorConfiguration::compute_target_pose, nb::const_),
+             DOC_SensorConfiguration(compute_target_pose_2),
+             nb::arg("target"),
+             nb::arg("sensor_data"),
+             nb::arg("reference_heading_in_degrees"))
         .def("compute_position_system_offset",
              &SensorConfiguration::compute_position_system_offset,
              DOC_SensorConfiguration(compute_position_system_offset),
@@ -93,11 +134,12 @@ void init_c_sensorconfiguration(nb::module_& m)
              DOC_SensorConfiguration(register_transducer_channel),
              nb::arg("channel_id"),
              nb::arg("tx_id"),
-             nb::arg("tx_default_sub"),
              nb::arg("rx_id"),
-             nb::arg("rx_default_sub"),
              nb::arg("trx_id"),
-             nb::arg("trx_default_sub"))
+             nb::arg("tx_default_sub")      = "",
+             nb::arg("rx_default_sub")      = "",
+             nb::arg("trx_default_sub")     = "",
+             nb::arg("tx_sector_subarrays") = std::vector<std::string>())
         .def("unregister_transducer_channel",
              &SensorConfiguration::unregister_transducer_channel,
              DOC_SensorConfiguration(unregister_transducer_channel),
@@ -108,7 +150,8 @@ void init_c_sensorconfiguration(nb::module_& m)
         .def("get_transducer_transmit_id",
              &SensorConfiguration::get_transducer_transmit_id,
              DOC_SensorConfiguration(get_transducer_transmit_id),
-             nb::arg("channel_id"))
+             nb::arg("channel_id"),
+             nb::arg("sector") = std::optional<size_t>())
         .def("get_transducer_receive_id",
              &SensorConfiguration::get_transducer_receive_id,
              DOC_SensorConfiguration(get_transducer_receive_id),
@@ -117,8 +160,21 @@ void init_c_sensorconfiguration(nb::module_& m)
              &SensorConfiguration::get_transducer_transmit_receive_id,
              DOC_SensorConfiguration(get_transducer_transmit_receive_id),
              nb::arg("channel_id"))
+        .def("get_transducer_transmit_target",
+             &SensorConfiguration::get_transducer_transmit_target,
+             DOC_SensorConfiguration(get_transducer_transmit_target),
+             nb::arg("channel_id"),
+             nb::arg("sector") = std::optional<size_t>())
+        .def("get_transducer_receive_target",
+             &SensorConfiguration::get_transducer_receive_target,
+             DOC_SensorConfiguration(get_transducer_receive_target),
+             nb::arg("channel_id"))
+        .def("get_transducer_transmit_receive_target",
+             &SensorConfiguration::get_transducer_transmit_receive_target,
+             DOC_SensorConfiguration(get_transducer_transmit_receive_target),
+             nb::arg("channel_id"))
         .def("add_target",
-             nb::overload_cast<const std::string&, float, float, float, float, float, float>(
+             nb::overload_cast<std::string_view, float, float, float, float, float, float>(
                  &SensorConfiguration::add_target),
              DOC_SensorConfiguration(add_target),
              nb::arg("target_id"),
@@ -129,7 +185,7 @@ void init_c_sensorconfiguration(nb::module_& m)
              nb::arg("pitch"),
              nb::arg("roll"))
         .def("add_target",
-             nb::overload_cast<const std::string&, const datastructures::SensorPose&>(
+             nb::overload_cast<std::string_view, const datastructures::SensorPose&>(
                  &SensorConfiguration::add_target),
              DOC_SensorConfiguration(add_target_2),
              nb::arg("target_id"),
@@ -139,12 +195,12 @@ void init_c_sensorconfiguration(nb::module_& m)
              DOC_SensorConfiguration(add_targets),
              nb::arg("targets"))
         .def("get_target",
-             nb::overload_cast<const std::string&>(&SensorConfiguration::get_target, nb::const_),
+             nb::overload_cast<std::string_view>(&SensorConfiguration::get_target, nb::const_),
              DOC_SensorConfiguration(get_target),
              nb::arg("target_id"))
         .def("get_target",
-             nb::overload_cast<const std::string&,
-                               const std::string&,
+             nb::overload_cast<std::string_view,
+                               std::string_view,
                                const std::optional<datastructures::SensorPose>&>(
                  &SensorConfiguration::get_target, nb::const_),
              "Get a target's static pose, optionally combined with a subarray phase center "

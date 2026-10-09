@@ -7,6 +7,7 @@
 #include ".docstrings/sensorconfiguration_presets.doc.hpp"
 
 #include <cctype>
+#include <functional>
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -30,8 +31,8 @@ namespace navigation {
  *
  * @param model_name echosounder model (case-insensitive, optional leading "EM" ignored)
  */
-inline std::pair<std::map<std::string, datastructures::SensorPose>,
-                 std::map<std::string, datastructures::SensorPose>>
+inline std::pair<std::map<std::string, datastructures::SensorPose, std::less<>>,
+                 std::map<std::string, datastructures::SensorPose, std::less<>>>
 get_model_subarray_offsets(std::string_view model_name)
 {
     // normalize: lowercase, drop spaces/_/-, strip leading "em"
@@ -46,8 +47,8 @@ get_model_subarray_offsets(std::string_view model_name)
     if (m.rfind("em", 0) == 0)
         m.erase(0, 2);
 
-    std::map<std::string, datastructures::SensorPose> tx_offsets;
-    std::map<std::string, datastructures::SensorPose> rx_offsets;
+    std::map<std::string, datastructures::SensorPose, std::less<>> tx_offsets;
+    std::map<std::string, datastructures::SensorPose, std::less<>> rx_offsets;
 
     if (m.rfind("2040p", 0) == 0) // EM2040P (portable single head, appendix C)
     {

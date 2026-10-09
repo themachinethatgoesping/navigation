@@ -85,30 +85,63 @@ class TestNavigationSensorConfiguration:
 
         assert not scs.has_transducer_channel("ch1")
 
-        # each transducer maps to a (target_id, default_subarray) pair
-        scs.register_transducer_channel("ch1", "TX1", "txsub1", "RX1", "rxsub1", "TRX1", "trxsub1")
+        # signature: channel_id, tx_id, rx_id, trx_id, tx_default_sub, rx_default_sub, trx_default_sub
+        scs.register_transducer_channel("ch1", "TX1", "RX1", "TRX1", "txsub1", "rxsub1", "trxsub1")
         assert scs.has_transducer_channel("ch1")
         assert scs.get_transducer_transmit_id("ch1") == ("TX1", "txsub1")
         assert scs.get_transducer_receive_id("ch1") == ("RX1", "rxsub1")
         assert scs.get_transducer_transmit_receive_id("ch1") == ("TRX1", "trxsub1")
 
-        scs.register_transducer_channel("ch1", "TX2", "txsub2", "RX2", "rxsub2", "TRX2", "trxsub2")
-        assert scs.get_transducer_transmit_id("ch1") == ("TX2", "txsub2")
-        assert scs.get_transducer_receive_id("ch1") == ("RX2", "rxsub2")
-        assert scs.get_transducer_transmit_receive_id("ch1") == ("TRX2", "trxsub2")
+        # the default subarrays default to "" (new optional arguments)
+        scs.register_transducer_channel("ch1", "TX2", "RX2", "TRX2")
+        assert scs.get_transducer_transmit_id("ch1") == ("TX2", "")
+        assert scs.get_transducer_receive_id("ch1") == ("RX2", "")
+        assert scs.get_transducer_transmit_receive_id("ch1") == ("TRX2", "")
 
         scs2 = nav.SensorConfiguration.from_binary(scs.to_binary())
         assert scs2 == scs
         assert scs2.has_transducer_channel("ch1")
-        assert scs2.get_transducer_transmit_id("ch1") == ("TX2", "txsub2")
-        assert scs2.get_transducer_receive_id("ch1") == ("RX2", "rxsub2")
-        assert scs2.get_transducer_transmit_receive_id("ch1") == ("TRX2", "trxsub2")
+        assert scs2.get_transducer_transmit_id("ch1") == ("TX2", "")
+        assert scs2.get_transducer_receive_id("ch1") == ("RX2", "")
+        assert scs2.get_transducer_transmit_receive_id("ch1") == ("TRX2", "")
 
         scs.unregister_transducer_channel("ch1")
         assert not scs.has_transducer_channel("ch1")
 
-        scs.register_transducer_channel("chA", "TXA", "txsubA", "RXA", "rxsubA", "TRXA", "trxsubA")
-        scs.register_transducer_channel("chB", "TXB", "txsubB", "RXB", "rxsubB", "TRXB", "trxsubB")
+        scs.register_transducer_channel("chA", "TXA", "RXA", "TRXA", "txsubA", "rxsubA", "trxsubA")
+        scs.register_transducer_channel("chB", "TXB", "RXB", "TRXB", "txsubB", "rxsubB", "trxsubB")
         scs.unregister_all_transducer_channels()
         assert not scs.has_transducer_channel("chA")
         assert not scs.has_transducer_channel("chB")
+
+    def test_sensorconfiguration_transmit_sectors_and_targets(self):
+        """test per-transmit-sector subarrays and the get_transducer_*_target helpers"""
+        scs = nav.SensorConfiguration()
+        scs.add_target("TX", nav.datastructures.SensorPose("TX", 1, 0, 0, 0, 0, 0))
+        scs.add_target("RX", nav.datastructures.SensorPose("RX", 0, 2, 0, 0, 0, 0))
+        scs.add_target("TRX", nav.datastructures.SensorPose("TRX", 0, 0, 3, 0, 0, 0))
+        scs.add_target_subarray("TX", "tx_center", nav.datastructures.SensorPose("tx_center", 0, 0, 0.1, 0, 0, 0))
+        scs.add_target_subarray("TX", "s0", nav.datastructures.SensorPose("s0", 0, 0, 0.2, 0, 0, 0))
+        scs.add_target_subarray("TX", "s1", nav.datastructures.SensorPose("s1", 0, 0, 0.5, 0, 0, 0))
+
+        scs.register_transducer_channel(
+            "ch", "TX", "RX", "TRX", "tx_center", "", "", tx_sector_subarrays=["s0", "s1"]
+        )
+
+        # no sector -> default subarray; sector -> the registered sector subarray
+        assert scs.get_transducer_transmit_id("ch") == ("TX", "tx_center")
+        assert scs.get_transducer_transmit_id("ch", 0) == ("TX", "s0")
+        assert scs.get_transducer_transmit_id("ch", 1) == ("TX", "s1")
+
+        # the *_target helpers resolve the registered targets (target combined with its subarray)
+        assert scs.get_transducer_transmit_target("ch") == scs.get_target("TX", "tx_center")
+        assert scs.get_transducer_transmit_target("ch", 1) == scs.get_target("TX", "s1")
+        assert scs.get_transducer_receive_target("ch") == scs.get_target("RX")
+        assert scs.get_transducer_transmit_receive_target("ch") == scs.get_target("TRX")
+
+        # sectors survive the binary roundtrip
+        scs2 = nav.SensorConfiguration.from_binary(scs.to_binary())
+        assert scs2 == scs
+        assert scs2.get_transducer_transmit_id("ch", 1) == ("TX", "s1")
+
+

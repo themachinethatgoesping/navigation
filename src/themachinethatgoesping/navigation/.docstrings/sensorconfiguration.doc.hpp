@@ -1,4 +1,4 @@
-//sourcehash: 7c785b83d44c0c60d35db68eb67a017f886559a5bbdf8c7a603d4b9ed71dc62e
+//sourcehash: 163336b455802d9eb87a528ab553ead81584fa21e552c9c54a180a0ad66e881a
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -57,6 +57,21 @@ construction: add sensor offsets and targets (offsets) Then compute
 target positions for sensor data
 
 )doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_TransducerTransmitChannel =
+R"doc(Transmit channel registration: the transmit target id, its default
+subarray (empty for none) and an optional subarray id per transmit
+sector. If sector_subarrays is empty no per-sector subarray is
+registered and get_transducer_transmit_id always returns the default
+subarray.)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_TransducerTransmitChannel_default_subarray = R"doc(default transmit subarray (empty for none))doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_TransducerTransmitChannel_operator_eq = R"doc()doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_TransducerTransmitChannel_sector_subarrays = R"doc(subarray id per transmit sector (may be empty))doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_TransducerTransmitChannel_tx_id = R"doc(transmit target id)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_add_target =
 R"doc(add a target (e.g. MBES) with offsets to the sensor position system
@@ -197,6 +212,26 @@ Returns:
 
 )doc";
 
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_pose_2 =
+R"doc(Compute the ready-to-trace pose of a target from its (already
+resolved) offsets.
+
+Same as compute_target_pose(target_id, ...) but takes the target
+mounting offsets directly (e.g. from get_target(target_id,
+subarray_id)); the string_view overload builds on this one.
+
+Args:
+    target: target mounting offsets (optionally already combined with
+            a subarray offset)
+    sensor_data: Sensordata (heading/pitch/roll + depth/heave)
+    reference_heading_in_degrees: heading (deg) removed from the
+                                  orientation (transmit heading)
+
+Returns:
+    target pose (position + ship-frame Rotation)
+
+)doc";
+
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position =
 R"doc(Compute the position of the target "target_id" based on the sensor
 data "sensor_data"
@@ -257,6 +292,61 @@ Returns:
     datastructures::GeolocationLocal  / this structure includes
     northing and east, which are set relative to the sensor coordinate
     system center
+
+)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position_5 =
+R"doc(Compute the position of a target from its mounting offsets and the
+sensor data.
+
+Args:
+    target: target mounting offsets (e.g. from get_target)
+    sensor_data: SensordataLatLon (latitude/longitude)
+
+Returns:
+    datastructures::GeolocationLatLon
+
+)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position_6 =
+R"doc(Compute the position of a target from its mounting offsets and the
+sensor data.
+
+Args:
+    target: target mounting offsets (e.g. from get_target)
+    sensor_data: SensordataUTM (northing/easting + utm
+                 zone/hemisphere)
+
+Returns:
+    datastructures::GeolocationUTM
+
+)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position_7 =
+R"doc(Compute the position of a target from its mounting offsets and the
+sensor data.
+
+Args:
+    target: target mounting offsets (e.g. from get_target)
+    sensor_data: SensordataLocal (northing/easting, no
+                 zone/hemisphere)
+
+Returns:
+    datastructures::GeolocationLocal
+
+)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_compute_target_position_8 =
+R"doc(Compute the position of a target from its mounting offsets and the
+sensor data.
+
+Args:
+    target: target mounting offsets (e.g. from get_target)
+    sensor_data: Sensordata (no coordinate information)
+
+Returns:
+    datastructures::GeolocationLocal (relative to the position system
+    center)
 
 )doc";
 
@@ -475,14 +565,35 @@ Returns:
 
 )doc";
 
-static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_transmit_id =
-R"doc(Get the transmit transducer registered for a transducer channel.
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_receive_target =
+R"doc(Get the receive target (mounting offsets) registered for a transducer
+channel.
+
+Convenience wrapper that resolves
+get_transducer_receive_id(channel_id) and returns the matching target
+pose (get_target(target_id, subarray)).
 
 Args:
     channel_id: The ID of the transducer channel.
 
 Returns:
-    The transmit transducer as a (target_id, default_subarray) pair.
+    The receive target offsets in the vessel-static frame.
+
+)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_transmit_id =
+R"doc(Get the transmit transducer registered for a transducer channel.
+
+Args:
+    channel_id: The ID of the transducer channel.
+    sector: Optional transmit sector number. If set and per-sector
+            subarrays are registered for the channel, the returned
+            subarray is the one registered for that sector; otherwise
+            (no sector given, or no per-sector subarrays registered)
+            the default subarray is returned.
+
+Returns:
+    The transmit transducer as a (target_id, subarray) pair.
 
 )doc";
 
@@ -495,6 +606,41 @@ Args:
 Returns:
     The combined transmit-receive transducer as a (target_id,
     default_subarray) pair.
+
+)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_transmit_receive_target =
+R"doc(Get the combined transmit-receive target (mounting offsets) for a
+transducer channel.
+
+Convenience wrapper that resolves
+get_transducer_transmit_receive_id(channel_id) and returns the
+matching target pose (get_target(target_id, subarray)).
+
+Args:
+    channel_id: The ID of the transducer channel.
+
+Returns:
+    The combined transmit-receive target offsets in the vessel-static
+    frame.
+
+)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_get_transducer_transmit_target =
+R"doc(Get the transmit target (mounting offsets) registered for a transducer
+channel.
+
+Convenience wrapper that resolves
+get_transducer_transmit_id(channel_id, sector) and returns the
+matching target pose (get_target(target_id, subarray)).
+
+Args:
+    channel_id: The ID of the transducer channel.
+    sector: Optional transmit sector number (see
+            get_transducer_transmit_id).
+
+Returns:
+    The transmit target offsets in the vessel-static frame.
 
 )doc";
 
@@ -644,19 +790,25 @@ set_printer_style / print(optionA=...).)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_register_transducer_channel =
 R"doc(Register a transducer channel with its corresponding transducer IDs
-(tx, rx, trx) and their default subarrays.
+(tx, rx, trx), their default subarrays and optional per-transmit-
+sector subarrays.
 
 Args:
     channel_id: The ID of the transducer channel.
     tx_id: The ID of the transmit transducer.
+    rx_id: The ID of the receive transducer.
+    trx_id: The ID of the combined transmit-receive transducer.
     tx_default_sub: The default subarray of the transmit transducer
                     (empty for none).
-    rx_id: The ID of the receive transducer.
     rx_default_sub: The default subarray of the receive transducer
                     (empty for none).
-    trx_id: The ID of the combined transmit-receive transducer.
     trx_default_sub: The default subarray of the transmit-receive
                      transducer (empty for none).
+    tx_sector_subarrays: Optional subarray id per transmit sector.
+                         When non-empty,
+                         get_transducer_transmit_id(channel_id,
+                         sector) returns the subarray for that sector;
+                         when empty it always returns tx_default_sub.
 
 )doc";
 
@@ -841,16 +993,16 @@ Args:
 )doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_rx =
-R"doc(Mapping from transducer channel to rx reference, and optionall
+R"doc(Mapping from transducer channel to rx reference, and optionall default
 subarray)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_trx =
-R"doc(Mapping from transducer channel to target reference, optionall
+R"doc(Mapping from transducer channel to target reference, optionall default
 subarray)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_channel_id_to_tx =
-R"doc(Mapping from transducer channel to tx reference, and optionall
-subarray)doc";
+R"doc(Mapping from transducer channel to tx reference, default subarray and
+optionally a subarray per transmit sector)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_SensorConfiguration_transducer_configuration = R"doc(configuration string (e.g. "DualRx", "STC0"); set by format readers)doc";
 

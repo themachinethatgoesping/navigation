@@ -104,35 +104,130 @@ TEST_CASE("sensorconfiguration transducer channel registration should work", TES
     REQUIRE_THROWS_AS(scs.get_transducer_transmit_id("ch1"), std::out_of_range);
 
     // each transducer maps to a (target_id, default_subarray) pair
-    scs.register_transducer_channel("ch1", "TX1", "txsub1", "RX1", "rxsub1", "TRX1", "trxsub1");
+    scs.register_transducer_channel("ch1", "TX1", "RX1", "TRX1", "txsub1", "rxsub1", "trxsub1");
     REQUIRE(scs.has_transducer_channel("ch1"));
     REQUIRE(scs.get_transducer_transmit_id("ch1") == strpair{ "TX1", "txsub1" });
     REQUIRE(scs.get_transducer_receive_id("ch1") == strpair{ "RX1", "rxsub1" });
     REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == strpair{ "TRX1", "trxsub1" });
 
-    // re-register updates an existing channel
-    scs.register_transducer_channel("ch1", "TX2", "txsub2", "RX2", "rxsub2", "TRX2", "trxsub2");
-    REQUIRE(scs.get_transducer_transmit_id("ch1") == strpair{ "TX2", "txsub2" });
-    REQUIRE(scs.get_transducer_receive_id("ch1") == strpair{ "RX2", "rxsub2" });
-    REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == strpair{ "TRX2", "trxsub2" });
+    // without registered transmit sectors the sector argument falls back to the default subarray
+    REQUIRE(scs.get_transducer_transmit_id("ch1", 0) == strpair{ "TX1", "txsub1" });
+    REQUIRE(scs.get_transducer_transmit_id("ch1", 5) == strpair{ "TX1", "txsub1" });
+
+    // re-register updates an existing channel (default subarrays default to "")
+    scs.register_transducer_channel("ch1", "TX2", "RX2", "TRX2");
+    REQUIRE(scs.get_transducer_transmit_id("ch1") == strpair{ "TX2", "" });
+    REQUIRE(scs.get_transducer_receive_id("ch1") == strpair{ "RX2", "" });
+    REQUIRE(scs.get_transducer_transmit_receive_id("ch1") == strpair{ "TRX2", "" });
 
     // mapping participates in equality + binary roundtrip
     auto scs2 = SensorConfiguration::from_binary(scs.to_binary());
     REQUIRE(scs2 == scs);
     REQUIRE(scs2.has_transducer_channel("ch1"));
-    REQUIRE(scs2.get_transducer_transmit_id("ch1") == strpair{ "TX2", "txsub2" });
-    REQUIRE(scs2.get_transducer_receive_id("ch1") == strpair{ "RX2", "rxsub2" });
-    REQUIRE(scs2.get_transducer_transmit_receive_id("ch1") == strpair{ "TRX2", "trxsub2" });
+    REQUIRE(scs2.get_transducer_transmit_id("ch1") == strpair{ "TX2", "" });
+    REQUIRE(scs2.get_transducer_receive_id("ch1") == strpair{ "RX2", "" });
+    REQUIRE(scs2.get_transducer_transmit_receive_id("ch1") == strpair{ "TRX2", "" });
 
     scs.unregister_transducer_channel("ch1");
     REQUIRE_FALSE(scs.has_transducer_channel("ch1"));
     REQUIRE_THROWS_AS(scs.get_transducer_receive_id("ch1"), std::out_of_range);
 
-    scs.register_transducer_channel("chA", "TXA", "txsubA", "RXA", "rxsubA", "TRXA", "trxsubA");
-    scs.register_transducer_channel("chB", "TXB", "txsubB", "RXB", "rxsubB", "TRXB", "trxsubB");
+    scs.register_transducer_channel("chA", "TXA", "RXA", "TRXA", "txsubA", "rxsubA", "trxsubA");
+    scs.register_transducer_channel("chB", "TXB", "RXB", "TRXB", "txsubB", "rxsubB", "trxsubB");
     scs.unregister_all_transducer_channels();
     REQUIRE_FALSE(scs.has_transducer_channel("chA"));
     REQUIRE_FALSE(scs.has_transducer_channel("chB"));
+}
+
+TEST_CASE("sensorconfiguration transmit sector subarrays should work", TESTTAG)
+{
+    SensorConfiguration scs;
+
+    using strpair = std::pair<std::string, std::string>;
+
+    // register a channel with a default subarray and three per-sector subarrays
+    scs.register_transducer_channel(
+        "ch1", "TX1", "RX1", "TRX1", "tx_center", "rx_center", "", { "s0", "s1", "s2" });
+
+    // no sector requested -> default subarray
+    REQUIRE(scs.get_transducer_transmit_id("ch1") == strpair{ "TX1", "tx_center" });
+
+    // sector requested + sectors registered -> the respective subarray
+    REQUIRE(scs.get_transducer_transmit_id("ch1", 0) == strpair{ "TX1", "s0" });
+    REQUIRE(scs.get_transducer_transmit_id("ch1", 1) == strpair{ "TX1", "s1" });
+    REQUIRE(scs.get_transducer_transmit_id("ch1", 2) == strpair{ "TX1", "s2" });
+
+    // out-of-range sector while sectors are registered -> throws
+    REQUIRE_THROWS_AS(scs.get_transducer_transmit_id("ch1", 3), std::out_of_range);
+
+    // receive side is unaffected by the transmit sectors
+    REQUIRE(scs.get_transducer_receive_id("ch1") == strpair{ "RX1", "rx_center" });
+
+    // sectors survive the binary roundtrip (and hence equality)
+    auto scs2 = SensorConfiguration::from_binary(scs.to_binary());
+    REQUIRE(scs2 == scs);
+    REQUIRE(scs2.get_transducer_transmit_id("ch1", 1) == strpair{ "TX1", "s1" });
+    REQUIRE(scs2.get_transducer_transmit_id("ch1") == strpair{ "TX1", "tx_center" });
+
+    // re-registering without sectors clears them -> sector argument falls back to the default
+    scs.register_transducer_channel("ch1", "TX1", "RX1", "TRX1", "tx_center");
+    REQUIRE(scs.get_transducer_transmit_id("ch1", 0) == strpair{ "TX1", "tx_center" });
+
+    REQUIRE(scs.info_string().size() != 0);
+}
+
+TEST_CASE("sensorconfiguration SensorPose compute overloads match the target_id overloads", TESTTAG)
+{
+    SensorConfiguration scs;
+    scs.add_target("mbes", datastructures::SensorPose("mbes", 1.f, 2.f, 3.f, 10.f, 20.f, 30.f));
+    scs.set_heading_source("compass", 5.f);
+    scs.set_attitude_source("mru", 1.f, -2.f, 3.f);
+    scs.set_depth_source("dsource", 4.f, 5.f, -6.f);
+    scs.set_position_source("gps", -7.f, 0.8f, -5.f);
+    scs.set_waterline_offset(-0.5f);
+
+    const auto& target = scs.get_target("mbes");
+
+    datastructures::Sensordata       sd(7.f, 0.5f, 42.f, 4.f, -3.f);
+    datastructures::SensordataLocal  sdl(sd, 100.0, 200.0);
+    datastructures::SensordataUTM    sdu(sdl, 32, true);
+    datastructures::SensordataLatLon sdll(sd, 53.0, 8.0);
+
+    // the explicit-target overloads must give the same result as the target_id lookups
+    CHECK(scs.compute_target_position(target, sd) == scs.compute_target_position("mbes", sd));
+    CHECK(scs.compute_target_position(target, sdl) == scs.compute_target_position("mbes", sdl));
+    CHECK(scs.compute_target_position(target, sdu) == scs.compute_target_position("mbes", sdu));
+    CHECK(scs.compute_target_position(target, sdll) == scs.compute_target_position("mbes", sdll));
+
+    const float ref_heading = 42.f;
+    const auto  pose_id     = scs.compute_target_pose("mbes", sd, ref_heading);
+    const auto  pose_pose   = scs.compute_target_pose(target, sd, ref_heading);
+    CHECK(pose_pose.x == Catch::Approx(pose_id.x));
+    CHECK(pose_pose.y == Catch::Approx(pose_id.y));
+    CHECK(pose_pose.z == Catch::Approx(pose_id.z));
+    CHECK(pose_pose.rotation == pose_id.rotation);
+}
+
+TEST_CASE("sensorconfiguration get_transducer_*_target should resolve the registered targets", TESTTAG)
+{
+    SensorConfiguration scs;
+    scs.add_target("TX", datastructures::SensorPose("TX", 1.f, 0.f, 0.f, 0.f, 0.f, 0.f));
+    scs.add_target("RX", datastructures::SensorPose("RX", 0.f, 2.f, 0.f, 0.f, 0.f, 0.f));
+    scs.add_target("TRX", datastructures::SensorPose("TRX", 0.f, 0.f, 3.f, 0.f, 0.f, 0.f));
+
+    // a transmit subarray offset (target frame) and its registration as a transmit sector
+    scs.add_target_subarray("TX", "s1", datastructures::SensorPose("s1", 0.f, 0.f, 0.5f, 0.f, 0.f, 0.f));
+    scs.register_transducer_channel("ch", "TX", "RX", "TRX", "", "", "", { "s0", "s1" });
+
+    // transmit target without a sector == plain TX target
+    CHECK(scs.get_transducer_transmit_target("ch") == scs.get_target("TX"));
+    // transmit target for sector 1 == TX combined with subarray "s1"
+    CHECK(scs.get_transducer_transmit_target("ch", 1) == scs.get_target("TX", "s1"));
+    // receive / transmit-receive targets
+    CHECK(scs.get_transducer_receive_target("ch") == scs.get_target("RX"));
+    CHECK(scs.get_transducer_transmit_receive_target("ch") == scs.get_target("TRX"));
+
+    REQUIRE_THROWS_AS(scs.get_transducer_transmit_target("missing"), std::out_of_range);
 }
 
 TEST_CASE("sensorconfiguration compute_position_system_offset should match its definition", TESTTAG)
