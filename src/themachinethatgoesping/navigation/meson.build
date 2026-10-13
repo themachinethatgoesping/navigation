@@ -88,6 +88,7 @@ headers = [
   'datastructures/.docstrings/sensordatautm.doc.hpp',
   'datastructures/.docstrings/sensordatautmvector.doc.hpp',
   'datastructures/.docstrings/sensordatavector.doc.hpp',
+  'datastructures/.docstrings/sensorpose.doc.hpp',
   '.docstrings/datastructures.doc.hpp',
   '.docstrings/i_navigationinterpolator.doc.hpp',
   '.docstrings/navigationinterpolatorlatlon.doc.hpp',
