@@ -12,7 +12,7 @@
 #include <themachinethatgoesping/tools/classhelper/objectprinter.hpp>
 #include <themachinethatgoesping/tools/rotationfunctions/rotation.hpp>
 
-#include "positionaloffsets.hpp"
+#include "sensorpose.hpp"
 
 namespace themachinethatgoesping {
 namespace navigation {

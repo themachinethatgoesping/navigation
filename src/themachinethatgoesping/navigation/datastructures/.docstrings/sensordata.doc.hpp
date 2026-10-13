@@ -1,4 +1,4 @@
-//sourcehash: a457bad93dce00b68cdc787194e4985f1474263773bc7a3c05a38fe2ac72b016
+//sourcehash: c0e17542774d1086bef520fd9239945515d62bb3003b3b98b0de57179d3b7f9a
 
 /*
   This file contains docstrings for use in the Python bindings.
@@ -57,7 +57,9 @@ Args:
            upwards
     heading: from heading source, in °, 0° is north, 90° is east
     pitch: from attitude source, in °, positive means bow up
-    roll: from attitude source, in °, positive means port up)doc";
+    roll: from attitude source, in °, positive means port up
+
+)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_Sensordata_3 =
 R"doc(Construct a new Sensordata object from depth, heave and a Rotation
@@ -65,15 +67,57 @@ R"doc(Construct a new Sensordata object from depth, heave and a Rotation
 Args:
     depth: in m, positive downwards
     heave: from heave sensor, added to depth in m, positive upwards
-    rotation: combined heading/pitch/roll orientation)doc";
+    rotation: combined heading/pitch/roll orientation
+
+)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_binary_hash =
+R"doc(compute a 64 bit hash of the object using xxhash and the       \
+to_binary function. This  function is called binary because the
+\ to_binary  function of the object is used
+
+)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_depth = R"doc(in m, positive downwards)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_from_binary =
+R"doc(convert object to vector of bytes
+\ \
+
+Args:
+    check_buffer_is_read_completely: variable for interface
+                                     compatibility, does not do    \
+                                     anything
+                                     \ \
+
+Returns:
+    vector of bytes
+    \
+
+)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_from_stream = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_heading = R"doc(heading from heading source in °, 0° is north, 90° is east)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_heave = R"doc(from heave source, will be added to depth in m, positive upwards)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_info_string =
+R"doc(                                                                                           \
+return an info string using the class __printer__ object
+\
+
+Args:
+    float_precision: number of digits for floating point values
+                     \
+    superscript_exponents: print exponents in superscript
+                           \
+
+Returns:
+    std::string
+    \
+
+)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_operator_eq =
 R"doc(Check if two Sensordata objects are equal
@@ -82,11 +126,28 @@ Args:
     rhs: 
 
 Returns:
-    true if equal false if not equal)doc";
+    true if equal false if not equal
+
+)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_operator_ne = R"doc()doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_pitch = R"doc(pitch from attitude source in °, positive means bow up)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_print =
+R"doc(                                                                                           \
+print the object information to the given outpustream
+\ \
+
+Args:
+    os: output stream, e.g. file stream or std::out or std::cerr
+        \
+    float_precision: number of digits for floating point values
+                     \
+    superscript_exponents: print exponents in superscript
+                           \
+
+)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_printer = R"doc()doc";
 
@@ -101,6 +162,20 @@ static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sens
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_set_roll = R"doc(set roll (°), keeping heading and pitch)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_set_ypr = R"doc(set heading, pitch and roll (°) at once)doc";
+
+static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_to_binary =
+R"doc(convert object to vector of bytes
+\ \
+
+Args:
+    resize_buffer: variable for interface compatibility, does not do
+                   anything             \ \
+
+Returns:
+    vector of bytes
+    \
+
+)doc";
 
 static const char *mkd_doc_themachinethatgoesping_navigation_datastructures_Sensordata_to_stream = R"doc()doc";
 

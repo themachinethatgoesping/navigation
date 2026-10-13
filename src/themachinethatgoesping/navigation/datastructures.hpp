@@ -16,7 +16,7 @@
 #include "datastructures/geolocationvector.hpp"
 #include "datastructures/geolocationlocalvector.hpp"
 #include "datastructures/geolocationutmvector.hpp"
-#include "datastructures/positionaloffsets.hpp"
+#include "datastructures/sensorpose.hpp"
 #include "datastructures/sensordata.hpp"
 #include "datastructures/sensordatalatlon.hpp"
 #include "datastructures/sensordatalocal.hpp"

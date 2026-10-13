@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-#include "positionaloffsets.hpp"
+#include "sensorpose.hpp"
 
 #include <themachinethatgoesping/tools/helper/approx.hpp>
 #include <themachinethatgoesping/tools/classhelper/stream.hpp>

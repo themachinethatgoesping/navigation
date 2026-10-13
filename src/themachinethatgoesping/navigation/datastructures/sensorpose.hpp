@@ -7,7 +7,7 @@
 #pragma once
 
 /* generated doc strings */
-#include ".docstrings/positionaloffsets.doc.hpp"
+#include ".docstrings/sensorpose.doc.hpp"
 
 #include <iostream>
 #include <string>
