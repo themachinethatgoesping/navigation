@@ -36,17 +36,6 @@ boost_dep = dependency('boost', static: get_option('dynamic_boost').disabled())
 
 # geographiclib
 geographiclib_dep = dependency('geographiclib', version: '>=2.7', static: true)
-# # NOTE: the geographiclib wrap injects `-std=c++20` via declare_dependency(compile_args: ...).
-# # On the command line the last -std wins, so that stray flag silently downgrades every consumer
-# # (navigation, echosounders, ...) from the project's cpp_std=c++26 to C++20. Strip the stray
-# # compile_args here (keeping includes/links) so downstream targets stay C++26.
-# geographiclib_dep = dependency('geographiclib', version: '>=2.7', static: true).partial_dependency(
-#   compile_args: false,
-#   link_args: true,
-#   links: true,
-#   includes: true,
-#   sources: true,
-# )
 
 # proj
 # proj_dep = dependency('proj', static: true)
