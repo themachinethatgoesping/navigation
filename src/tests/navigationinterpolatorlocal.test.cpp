@@ -105,8 +105,10 @@ TEST_CASE("navigationinterpolatorlocal merging operations", TESTTAG)
     {
         auto naving2 = navint;
 
-        // cannot merge with itselve, due to duplicate timestamps
-        REQUIRE_THROWS_AS(navint.merge(naving2), std::domain_error);
+        // merging with an identical copy is a no-op: every timestamp is an exact
+        // duplicate (same x AND same y) and is dropped silently
+        navint.merge(naving2);
+        REQUIRE(navint == naving2);
 
         // merge with empty interpolator
         auto navint3 = navint;
